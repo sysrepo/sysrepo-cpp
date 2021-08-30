@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+
+Name: @PROJECT_NAME@
+Version: @SYSREPO_CPP_PKG_VERSION@
+Description: C++ bindings for sysrepo
+Requires.private: sysrepo libyang-cpp
+Libs: -L${libdir} -lsysrepo-cpp
+Libs.private: -lsysrepo -lyang-cpp
+Cflags: -I${includedir}
