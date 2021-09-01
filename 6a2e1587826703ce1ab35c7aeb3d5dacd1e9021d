@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "6a2e1587826703ce1ab35c7aeb3d5dacd1e9021d",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a370f75_d78e1ff3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-01T09:06:45Z",
+      "side": 1,
+      "message": "recheck now that the repos have been synced",
+      "revId": "6a2e1587826703ce1ab35c7aeb3d5dacd1e9021d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
