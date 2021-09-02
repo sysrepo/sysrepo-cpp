@@ -7,6 +7,7 @@
 */
 #pragma once
 
+#include <cstdint>
 namespace sysrepo {
 /**
  * Wraps sr_error_t.
@@ -28,5 +29,15 @@ enum class ErrorCode {
     Timeout,
     CallbackFailed,
     CallbackShelve
+};
+
+/**
+ * Wraps sr_datastore_t.
+ */
+enum class Datastore : uint32_t {
+    Startup,
+    Running,
+    Candidate,
+    Operational
 };
 }

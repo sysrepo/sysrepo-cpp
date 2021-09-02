@@ -7,9 +7,16 @@
 */
 
 #include <doctest/doctest.h>
+#include <optional>
 #include <sysrepo-cpp/Connection.hpp>
 
 TEST_CASE("connection")
 {
-    sysrepo::Connection conn;
+    std::optional<sysrepo::Connection> conn{std::in_place};
+    auto sess = conn->sessionStart();
+
+    // The Session should be still valid even after the Connection class gets freed.
+    conn = std::nullopt;
+
+    REQUIRE(sess.activeDatastore() == sysrepo::Datastore::Running);
 }

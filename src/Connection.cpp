@@ -11,6 +11,7 @@ extern "C" {
 }
 #include <sysrepo-cpp/Connection.hpp>
 #include <sysrepo-cpp/utils/exception.hpp>
+#include "utils/enum.hpp"
 #include "utils/exception.hpp"
 
 namespace sysrepo {
@@ -23,5 +24,14 @@ Connection::Connection()
 
     throwIfError(res, "Couldn't connect to sysrepo");
     this->ctx = std::shared_ptr<sr_conn_ctx_t>(ctx, sr_disconnect);
+}
+
+Session Connection::sessionStart(sysrepo::Datastore datastore)
+{
+    sr_session_ctx_t* sess;
+    auto res = sr_session_start(ctx.get(), toDatastore(datastore), &sess);
+
+    throwIfError(res, "Couldn't connect to sysrepo");
+    return Session{sess, ctx};
 }
 }
