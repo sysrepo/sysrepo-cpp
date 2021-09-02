@@ -12,4 +12,5 @@
 TEST_CASE("connection")
 {
     sysrepo::Connection conn;
+    auto sess = conn.sessionStart();
 }
