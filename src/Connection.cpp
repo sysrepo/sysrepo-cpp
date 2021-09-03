@@ -22,11 +22,6 @@ Connection::Connection()
     auto res = sr_connect(0, &ctx);
 
     throwIfError(res, "Couldn't connect to sysrepo");
-    this->ctx = ctx;
-}
-
-Connection::~Connection()
-{
-    sr_disconnect(ctx);
+    this->ctx = std::shared_ptr<sr_conn_ctx_t>(ctx, sr_disconnect);
 }
 }

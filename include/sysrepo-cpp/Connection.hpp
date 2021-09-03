@@ -15,8 +15,7 @@ namespace sysrepo {
 class Connection {
 public:
     Connection();
-    ~Connection();
 private:
-    sr_conn_ctx_s *ctx;
+    std::shared_ptr<sr_conn_ctx_s> ctx;
 };
 }
