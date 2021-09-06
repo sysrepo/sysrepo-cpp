@@ -1,4 +1,8 @@
 module test_module {
   namespace "http://example.com";
   prefix "test";
+
+  leaf leafInt32 {
+    type int32;
+  }
 }
