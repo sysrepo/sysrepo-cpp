@@ -35,6 +35,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_library(sysrepo-cpp
         src/Connection.cpp
         src/Session.cpp
+        src/Value.cpp
         src/utils/exception.cpp
     )
 
