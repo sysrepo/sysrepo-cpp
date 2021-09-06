@@ -9,7 +9,7 @@
 #include <doctest/doctest.h>
 #include <sysrepo-cpp/Connection.hpp>
 
-TEST_CASE("connection")
+TEST_CASE("session")
 {
     sysrepo::Connection conn;
     auto sess = conn.sessionStart();

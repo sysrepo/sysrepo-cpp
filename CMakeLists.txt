@@ -59,7 +59,7 @@ if(BUILD_TESTING)
         add_test(test_${name} test_${name})
     endfunction()
 
-    sysrepo_cpp_test(dummy)
+    sysrepo_cpp_test(session)
 endif()
 
 if(WITH_DOCS)
