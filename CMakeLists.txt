@@ -38,7 +38,7 @@ add_library(sysrepo-cpp
         src/utils/exception.cpp
     )
 
-target_link_libraries(sysrepo-cpp PRIVATE PkgConfig::SYSREPO)
+target_link_libraries(sysrepo-cpp PRIVATE PkgConfig::SYSREPO PUBLIC PkgConfig::LIBYANG_CPP)
 
 if(BUILD_TESTING)
     find_package(doctest 2.4.6 REQUIRED)
@@ -84,7 +84,7 @@ if(BUILD_TESTING)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tests/cleanup_datastore.bash.in
         ${CMAKE_CURRENT_BINARY_DIR}/cleanup_datastore.bash @ONLY)
 
-    sysrepo_cpp_test(dummy "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang")
+    sysrepo_cpp_test(session "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang")
 endif()
 
 if(WITH_DOCS)
