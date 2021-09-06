@@ -10,7 +10,7 @@
 #include <optional>
 #include <sysrepo-cpp/Connection.hpp>
 
-TEST_CASE("connection")
+TEST_CASE("session")
 {
     std::optional<sysrepo::Connection> conn{std::in_place};
     auto sess = conn->sessionStart();
