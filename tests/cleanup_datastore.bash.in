@@ -1,0 +1,14 @@
+set -eux
+
+if [[ $(dirname "$(dirname "$(realpath "$SYSREPO_REPOSITORY_PATH")")") != "@CMAKE_CURRENT_BINARY_DIR@" ]]; then
+    echo "\$SYSREPO_REPOSITORY_PATH is not inside the build dir! Aborting. ($SYSREPO_REPOSITORY_PATH)"
+    exit 1
+fi
+
+if [[ -z "$SYSREPO_SHM_PREFIX" ]]; then
+    echo '$SYSREPO_SHM_PREFIX is empty! Aborting.'
+    exit 1
+fi
+
+rm -rf "$SYSREPO_REPOSITORY_PATH"
+rm -rf "/dev/shm/$SYSREPO_SHM_PREFIX"*

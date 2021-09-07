@@ -1,0 +1,17 @@
+macro(discover_sysrepo_executables)
+    if (NOT SYSREPOCTL_EXECUTABLE)
+        find_program(SYSREPOCTL_EXECUTABLE sysrepoctl)
+    endif()
+    if (NOT SYSREPOCTL_EXECUTABLE)
+        message(FATAL_ERROR "Unable to find sysrepoctl, set SYSREPOCTL_EXECUTABLE manually.")
+    endif()
+
+    if (NOT SYSREPOCFG_EXECUTABLE)
+        find_program(SYSREPOCFG_EXECUTABLE sysrepocfg)
+    endif()
+    if (NOT SYSREPOCFG_EXECUTABLE)
+        message(FATAL_ERROR "Unable to find sysrepocfg, set SYSREPOCFG_EXECUTABLE manually.")
+    endif()
+
+    pkg_get_variable(SYSREPO_SR_REPO_PATH sysrepo SR_REPO_PATH)
+endmacro()
