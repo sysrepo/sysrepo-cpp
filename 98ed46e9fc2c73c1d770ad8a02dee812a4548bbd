@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e95a1a9c_ea209256",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-07T16:29:52Z",
+      "side": 1,
+      "message": "yeah, and the model will be obviously replaced with \"something real\" once the code supports, say, data retrieval. OK.",
+      "revId": "98ed46e9fc2c73c1d770ad8a02dee812a4548bbd",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
