@@ -33,9 +33,9 @@ set(SYSREPO_CPP_PKG_VERSION "alpha")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_library(sysrepo-cpp
-	src/Connection.cpp
+        src/Connection.cpp
         src/Session.cpp
-	src/utils/exception.cpp
+        src/utils/exception.cpp
     )
 
 target_link_libraries(sysrepo-cpp PRIVATE PkgConfig::SYSREPO)
