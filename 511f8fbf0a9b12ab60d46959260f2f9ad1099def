@@ -117,6 +117,30 @@
       },
       "revId": "511f8fbf0a9b12ab60d46959260f2f9ad1099def",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a265f94_041eab38",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-07T08:56:32Z",
+      "side": 1,
+      "message": "With std::shared_ptr\u003cConnection\u003e I would also have to use something like enable_shared_from_this, otherwise I couldn\u0027t create instances directly from the Connection class. I would also mean that the user has to ALWAYS create instances of Connection inside a shared_ptr, otherwise it wouldn\u0027t make sense... so, IMHO, this approach does not only save the allocations, it makes the code overall less complicated.",
+      "parentUuid": "223b9931_563de2ed",
+      "range": {
+        "startLine": 24,
+        "startChar": 9,
+        "endLine": 24,
+        "endChar": 34
+      },
+      "revId": "511f8fbf0a9b12ab60d46959260f2f9ad1099def",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
