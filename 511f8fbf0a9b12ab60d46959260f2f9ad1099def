@@ -141,6 +141,30 @@
       },
       "revId": "511f8fbf0a9b12ab60d46959260f2f9ad1099def",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "781ac187_94d29536",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-07T09:01:52Z",
+      "side": 1,
+      "message": "You have a good point about enable_shared_from_this. Objections retracted :).",
+      "parentUuid": "7a265f94_041eab38",
+      "range": {
+        "startLine": 24,
+        "startChar": 9,
+        "endLine": 24,
+        "endChar": 34
+      },
+      "revId": "511f8fbf0a9b12ab60d46959260f2f9ad1099def",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
