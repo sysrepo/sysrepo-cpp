@@ -24,6 +24,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5abfa66_24234faa",
+        "filename": "CMakeLists.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-07T08:36:04Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "383dbd7c_2fc39f70",
+      "range": {
+        "startLine": 35,
+        "startChar": 23,
+        "endLine": 38,
+        "endChar": 24
+      },
+      "revId": "511f8fbf0a9b12ab60d46959260f2f9ad1099def",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7ae2a9b_670bfa8d",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-09-07T00:51:45Z",
       "side": 1,
       "message": "shared_ptr\u003cConnection\u003e, and the fact that this doesn\u0027t crash suggests that a testcase is missing",
+      "range": {
+        "startLine": 24,
+        "startChar": 9,
+        "endLine": 24,
+        "endChar": 34
+      },
+      "revId": "511f8fbf0a9b12ab60d46959260f2f9ad1099def",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8586f360_c1758124",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-07T08:36:04Z",
+      "side": 1,
+      "message": "Testcase is missing, so I added it, but I think the code is correct. The C struct is a shared_ptr, not the Connection class. The C++ classes will be allocated on the stack.",
+      "parentUuid": "a7ae2a9b_670bfa8d",
       "range": {
         "startLine": 24,
         "startChar": 9,
