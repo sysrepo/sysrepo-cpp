@@ -93,6 +93,30 @@
       },
       "revId": "511f8fbf0a9b12ab60d46959260f2f9ad1099def",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "223b9931_563de2ed",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-07T08:49:23Z",
+      "side": 1,
+      "message": "You\u0027re right, this is correct because you initialize the shared_ptr from another shared_ptr which already has a proper deleter set to sr_disconnect.\n\nI think that there\u0027s a risk that someone might call this with a raw C pointer and therefore not get that sr_disconnect called later on, but that\u0027s probably a non-issue since this is a private thingy. Also, there won\u0027t be any double sr_disconnect because the Session gets a reference to the Connection\u0027s one, and it will therefore extend the lifetime of the C struct.\n\nStill, I think this is one step too many towards the insecure side of things just to save the overhead of a tiny C++ class. But you\u0027re writing this, and it\u0027s probably \"still safe\", so I won\u0027t block this.",
+      "parentUuid": "8586f360_c1758124",
+      "range": {
+        "startLine": 24,
+        "startChar": 9,
+        "endLine": 24,
+        "endChar": 34
+      },
+      "revId": "511f8fbf0a9b12ab60d46959260f2f9ad1099def",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
