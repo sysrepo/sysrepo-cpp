@@ -1,0 +1,4 @@
+module test_module {
+  namespace "http://example.com";
+  prefix "test";
+}

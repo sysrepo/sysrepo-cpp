@@ -50,16 +50,41 @@ if(BUILD_TESTING)
     target_link_libraries(DoctestIntegration doctest::doctest)
     target_compile_definitions(DoctestIntegration PUBLIC DOCTEST_CONFIG_SUPER_FAST_ASSERTS)
 
-    function(sysrepo_cpp_test name)
-        add_executable(test_${name}
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/test_repositories)
+
+    include(cmake/DiscoverSysrepoExecutables.cmake)
+    discover_sysrepo_executables()
+
+    function(sysrepo_cpp_test name module)
+        set(TESTNAME test_${name})
+
+        add_executable(${TESTNAME}
             tests/${name}.cpp
             )
         target_link_libraries(test_${name} DoctestIntegration sysrepo-cpp)
 
-        add_test(test_${name} test_${name})
+        add_test(${TESTNAME} ${TESTNAME})
+
+        set_tests_properties(${TESTNAME} PROPERTIES FIXTURES_REQUIRED ${TESTNAME}_setup)
+
+        add_test(NAME ${TESTNAME}_init COMMAND ${CMAKE_CURRENT_BINARY_DIR}/init_datastore.bash "${module}")
+        set_tests_properties(${TESTNAME}_init PROPERTIES FIXTURES_SETUP ${TESTNAME}_setup)
+        add_test(NAME ${TESTNAME}_cleanup COMMAND ${CMAKE_CURRENT_BINARY_DIR}/cleanup_datastore.bash)
+        set_tests_properties(${TESTNAME}_cleanup PROPERTIES FIXTURES_CLEANUP ${TESTNAME}_setup)
+
+        set_property(TEST ${TESTNAME} ${TESTNAME}_init ${TESTNAME}_cleanup APPEND PROPERTY ENVIRONMENT
+            "SYSREPO_REPOSITORY_PATH=${CMAKE_CURRENT_BINARY_DIR}/test_repositories/${TESTNAME}"
+            "SYSREPO_SHM_PREFIX=sysrepo-cpp_${TESTNAME}"
+            )
     endfunction()
 
-    sysrepo_cpp_test(dummy)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tests/init_datastore.bash.in
+        ${CMAKE_CURRENT_BINARY_DIR}/init_datastore.bash @ONLY)
+
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tests/cleanup_datastore.bash.in
+        ${CMAKE_CURRENT_BINARY_DIR}/cleanup_datastore.bash @ONLY)
+
+    sysrepo_cpp_test(session "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang")
 endif()
 
 if(WITH_DOCS)
