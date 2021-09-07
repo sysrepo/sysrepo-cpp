@@ -45,6 +45,54 @@
       },
       "revId": "a4daafea411bec8c2c73c3dae2d817df2676baad",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7964b8b3_0fa1dc45",
+        "filename": "CMakeLists.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-07T16:24:33Z",
+      "side": 1,
+      "message": "I explained why I included it in the commit message.",
+      "parentUuid": "51110d39_c55d0b61",
+      "range": {
+        "startLine": 87,
+        "startChar": 21,
+        "endLine": 87,
+        "endChar": 28
+      },
+      "revId": "a4daafea411bec8c2c73c3dae2d817df2676baad",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ea39e6e_d852aed8",
+        "filename": "CMakeLists.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-07T16:24:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b723ddd_c5c84569",
+      "range": {
+        "startLine": 87,
+        "startChar": 29,
+        "endLine": 87,
+        "endChar": 81
+      },
+      "revId": "a4daafea411bec8c2c73c3dae2d817df2676baad",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
