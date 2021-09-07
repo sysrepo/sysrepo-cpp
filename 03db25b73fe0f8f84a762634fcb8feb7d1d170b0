@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3032b20d_98910b94",
+        "filename": "include/sysrepo-cpp/Value.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-07T16:36:46Z",
+      "side": 1,
+      "message": "Do we actually need this class? I think that upstream prefers using libyang\u0027s structs, and the \"old-style\" sysrepo values are there just for compatibility (at least that\u0027s the way I remember the story). Since we don\u0027t care about source compatibility here at all, I think it would be nice to skip the sr_val_* bits completely, and focus on the native libyang structs only.\n\nThat said, I think it\u0027s actually very convenient to be able to \"just pass things around as strings\". And that also looks like a good start, providing something like:\n setValue(const std::string_view xpath, std::string_view value);\n std::string getItem(const std::string_view xpath) const;",
+      "revId": "03db25b73fe0f8f84a762634fcb8feb7d1d170b0",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
