@@ -52,6 +52,24 @@
       "parentUuid": "80c8a591_bd47c57a",
       "revId": "03db25b73fe0f8f84a762634fcb8feb7d1d170b0",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "515543e3_61e73fa6",
+        "filename": "include/sysrepo-cpp/Value.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-08T08:59:58Z",
+      "side": 1,
+      "message": "About the return values and libyang, though -- I wonder if there\u0027s some place for an overload which simply returns a string. It might not be as universal as the libyang-cpp thing, but especially the unit tests and also some other quick-n-dirty code is something that I think will benefit from \"a shortcut\" that returns a string directly. Consider wrapping that C function, please.",
+      "parentUuid": "80c8a591_bd47c57a",
+      "revId": "03db25b73fe0f8f84a762634fcb8feb7d1d170b0",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }

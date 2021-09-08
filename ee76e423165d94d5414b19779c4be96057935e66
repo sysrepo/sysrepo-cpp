@@ -16,6 +16,24 @@
       "message": "This needs the new libyang patch",
       "revId": "ee76e423165d94d5414b19779c4be96057935e66",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61db6759_a50dd826",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-08T08:59:58Z",
+      "side": 1,
+      "message": "you should be able to add a Depends-on footer to the commit message, and the CI will do the right thing",
+      "parentUuid": "093a297d_48dc7f13",
+      "revId": "ee76e423165d94d5414b19779c4be96057935e66",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
