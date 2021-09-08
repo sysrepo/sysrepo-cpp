@@ -70,6 +70,24 @@
       "parentUuid": "80c8a591_bd47c57a",
       "revId": "03db25b73fe0f8f84a762634fcb8feb7d1d170b0",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eabafe58_0fed3923",
+        "filename": "include/sysrepo-cpp/Value.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-08T14:00:53Z",
+      "side": 1,
+      "message": "Vasek gently pointed it out to me that there\u0027s no sr_item_get_str(), so this point is moot at this time.",
+      "parentUuid": "515543e3_61e73fa6",
+      "revId": "03db25b73fe0f8f84a762634fcb8feb7d1d170b0",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
