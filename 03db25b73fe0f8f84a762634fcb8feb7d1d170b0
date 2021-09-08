@@ -34,6 +34,24 @@
       "parentUuid": "3032b20d_98910b94",
       "revId": "03db25b73fe0f8f84a762634fcb8feb7d1d170b0",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49d6ac45_5d680d92",
+        "filename": "include/sysrepo-cpp/Value.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-08T08:55:41Z",
+      "side": 1,
+      "message": "I have changed it back to const char* for arguments and updated commit message",
+      "parentUuid": "80c8a591_bd47c57a",
+      "revId": "03db25b73fe0f8f84a762634fcb8feb7d1d170b0",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
