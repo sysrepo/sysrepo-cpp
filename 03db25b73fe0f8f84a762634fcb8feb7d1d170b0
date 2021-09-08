@@ -16,6 +16,24 @@
       "message": "Do we actually need this class? I think that upstream prefers using libyang\u0027s structs, and the \"old-style\" sysrepo values are there just for compatibility (at least that\u0027s the way I remember the story). Since we don\u0027t care about source compatibility here at all, I think it would be nice to skip the sr_val_* bits completely, and focus on the native libyang structs only.\n\nThat said, I think it\u0027s actually very convenient to be able to \"just pass things around as strings\". And that also looks like a good start, providing something like:\n setValue(const std::string_view xpath, std::string_view value);\n std::string getItem(const std::string_view xpath) const;",
       "revId": "03db25b73fe0f8f84a762634fcb8feb7d1d170b0",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80c8a591_bd47c57a",
+        "filename": "include/sysrepo-cpp/Value.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-08T07:50:38Z",
+      "side": 1,
+      "message": "You\u0027re 100% right. I will implement the sr_get_data function instead, which uses libyang trees.\n\nI think that having std::string_views here brings no value, other than implicit conversions from std::string..., but maybe that\u0027s a good thing??? I never really thought about it. I guess having a string_view here does actually save a few .c_str()s here and there.\n\nOkay, I have convinced myself",
+      "parentUuid": "3032b20d_98910b94",
+      "revId": "03db25b73fe0f8f84a762634fcb8feb7d1d170b0",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
