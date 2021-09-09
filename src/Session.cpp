@@ -10,6 +10,8 @@ extern "C" {
 #include <sysrepo.h>
 }
 #include <sysrepo-cpp/Session.hpp>
+#include <sysrepo-cpp/Subscription.hpp>
+#include "utils/enum.hpp"
 #include "utils/exception.hpp"
 
 using namespace std::string_literals;
@@ -18,6 +20,15 @@ namespace sysrepo {
 Session::Session(sr_session_ctx_s* sess, std::shared_ptr<sr_conn_ctx_s> conn)
     : m_conn(conn)
     , m_sess(sess, sr_session_stop)
+{
+}
+
+/**
+ * Constructs an unmanaged sysrepo session. Internal use only.
+ */
+Session::Session(sr_session_ctx_s* unmanagedSession)
+    : m_conn(nullptr)
+    , m_sess(unmanagedSession, [] (sr_session_ctx_s*) {})
 {
 }
 
@@ -76,5 +87,12 @@ void Session::applyChanges(std::chrono::milliseconds timeout)
     auto res = sr_apply_changes(m_sess.get(), timeout.count());
 
     throwIfError(res, "Session::applyChanges: Couldn't apply changes");
+}
+
+Subscription Session::subModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath, uint32_t priority, const SubOptions opts)
+{
+    auto sub = Subscription{m_sess};
+    sub.subModuleChange(moduleName, cb, xpath, priority, opts);
+    return sub;
 }
 }

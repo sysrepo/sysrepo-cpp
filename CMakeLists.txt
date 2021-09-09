@@ -35,7 +35,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_library(sysrepo-cpp
         src/Connection.cpp
         src/Session.cpp
+        src/Subscription.cpp
         src/utils/exception.cpp
+        src/utils/utils.cpp
     )
 
 target_link_libraries(sysrepo-cpp PRIVATE PkgConfig::SYSREPO PUBLIC PkgConfig::LIBYANG_CPP)
@@ -85,6 +87,7 @@ if(BUILD_TESTING)
         ${CMAKE_CURRENT_BINARY_DIR}/cleanup_datastore.bash @ONLY)
 
     sysrepo_cpp_test(session "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang")
+    sysrepo_cpp_test(subscriptions "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang")
 endif()
 
 if(WITH_DOCS)
