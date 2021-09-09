@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "362add43_e6b1bee6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-09T10:00:38Z",
+      "side": 1,
+      "message": "Btw the [[nodiscard]] is actually very useful here. When writing the test I forgot to actually save the subscription class to a variable, which meant, that it was immediately unsubscribed",
+      "revId": "2087e4d86ee98f43aa28d65af7f5448cb564b961",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17e59882_4ed5d47b",
