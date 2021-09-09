@@ -40,4 +40,30 @@ enum class Datastore : uint32_t {
     Candidate,
     Operational
 };
+
+/**
+ * Wraps sr_event_t.
+ */
+enum class Event : uint32_t {
+    Update,
+    Change,
+    Done,
+    Abort,
+    Enabled,
+    RPC
+};
+
+/**
+ * Wraps sr_subscr_flag_t.
+ */
+enum class SubscribeOptions : uint32_t {
+    Default = 0,
+    NoThread = 2,
+    Passive = 4,
+    DoneOnly = 8,
+    Enabled = 16,
+    Update = 32,
+    OperMerge = 64,
+    ThreadSuspend = 128
+};
 }
