@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17e59882_4ed5d47b",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-09T09:04:12Z",
+      "side": 1,
+      "message": "nit: I am not thrilled by abbreviations, but yeah, I see that `subscribeModuleChange` is not pretty either. What about something like `onModuleChange`?",
+      "range": {
+        "startLine": 34,
+        "startChar": 31,
+        "endLine": 34,
+        "endChar": 46
+      },
+      "revId": "2087e4d86ee98f43aa28d65af7f5448cb564b961",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8089f81e_ddb9d382",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-09T09:04:12Z",
+      "side": 1,
+      "message": "The class needs to be non-copyable, non-assignable, and I think that the private constructor is not enough.",
+      "revId": "2087e4d86ee98f43aa28d65af7f5448cb564b961",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3298229f_e4639f99",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-09T09:04:12Z",
+      "side": 1,
+      "message": "You\u0027ve explained this in the commit message, but please add a clarification here as well saying that you need stable memory addresses.",
+      "revId": "2087e4d86ee98f43aa28d65af7f5448cb564b961",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34ff08ce_8c000374",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-09T09:04:12Z",
+      "side": 1,
+      "message": "Something like a std::atomic\u003cint\u003e is needed here.\n\nAs Vasek explained to me during the call, two callbacks are running, which explains why TSAN doesn\u0027t complain about the final REQUIRE, but about the race within the callback.",
+      "range": {
+        "startLine": 16,
+        "startChar": 4,
+        "endLine": 16,
+        "endChar": 8
+      },
+      "revId": "2087e4d86ee98f43aa28d65af7f5448cb564b961",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ab46d9a_90e851a3",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-09T09:04:12Z",
+      "side": 1,
+      "message": "this one deserves at least a comment that this is intended as a duplicate subscription because it \"doesn\u0027t make sense\" otherwise (as in, people wouldn\u0027t write code like that)",
+      "revId": "2087e4d86ee98f43aa28d65af7f5448cb564b961",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
