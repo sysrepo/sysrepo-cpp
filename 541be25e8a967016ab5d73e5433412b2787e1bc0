@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42b43c72_f7f6f54e",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-10T07:52:19Z",
+      "side": 1,
+      "message": "explicit",
+      "revId": "541be25e8a967016ab5d73e5433412b2787e1bc0",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daf383c1_e252e55d",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-10T07:52:19Z",
+      "side": 1,
+      "message": "explicit to prevent some surprises (yeah, I see it\u0027s private, but I think it\u0027s good to have it explicit nonetheless)",
+      "revId": "541be25e8a967016ab5d73e5433412b2787e1bc0",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c9f4651_295b4f6e",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-10T07:52:19Z",
+      "side": 1,
+      "message": "I see -- this is needed because Session constructs a half-usable Subscription (same way as the old-style C++ bindings used to do before you fixed them). I do not like this, but I probably see why you did it that way.\n\nI was wondering if it\u0027s possible to change the caller so that the fact that it creates only a half-usable session is explicit, like this:\n \nauto sub \u003d Subscription::halfBaked(m_sess);\nsub.onModuleChange(...);\nreturn sub;\n\n...but I think that the halfBaked() implementation will still need that constructor, so, well, yeah, no easy fix here I suppose.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 1
+      },
+      "revId": "541be25e8a967016ab5d73e5433412b2787e1bc0",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "757f50ba_8b451fb8",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-10T07:52:19Z",
+      "side": 1,
+      "message": "It\u0027s a reference, and the code is calling it \"a copy\". What about `storedCb`?",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 16
+      },
+      "revId": "541be25e8a967016ab5d73e5433412b2787e1bc0",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
