@@ -9,6 +9,27 @@
 #include <atomic>
 #include <doctest/doctest.h>
 #include <sysrepo-cpp/Connection.hpp>
+#include <trompeloeil.hpp>
+
+namespace trompeloeil {
+template <>
+    struct printer<std::optional<std::string_view>>
+    {
+        static void print(std::ostream& os, const std::optional<std::string_view>& b)
+        {
+            if (!b) {
+                os << "std::nullopt";
+            } else {
+                os << *b;
+            }
+        }
+    };
+}
+
+class Recorder {
+public:
+    TROMPELOEIL_MAKE_CONST_MOCK5(record, void(sysrepo::ChangeOperation, std::string, std::optional<std::string_view>, std::optional<std::string_view>, bool));
+};
 
 TEST_CASE("subscriptions")
 {
@@ -52,5 +73,24 @@ TEST_CASE("subscriptions")
         sess.applyChanges();
 
         REQUIRE(called == 1);
+    }
+
+    // TODO: needs more test and possibly better way of testing
+    DOCTEST_SUBCASE("Getting changes")
+    {
+        Recorder rec;
+        sysrepo::ModuleChangeCb moduleChangeCb = [&rec] (sysrepo::Session session, auto, auto, auto, auto, auto) -> sysrepo::ErrorCode {
+            for (const auto& change : session.getChanges("//.")) {
+                // FIXME: this sucks, think of something better
+                rec.record(change.operation, std::string{change.node.path()}, change.previousList, change.previousValue, change.previousDefault);
+            }
+            return sysrepo::ErrorCode::Ok;
+        };
+
+        auto sub = sess.onModuleChange("test_module", moduleChangeCb, nullptr, 0, sysrepo::SubscribeOptions::DoneOnly);
+        sess.setItem("/test_module:leafInt32", "123");
+
+        TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Modified, "/test_module:leafInt32", std::nullopt, "42", false));
+        sess.applyChanges();
     }
 }
