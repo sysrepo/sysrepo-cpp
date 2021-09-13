@@ -66,4 +66,14 @@ enum class SubscribeOptions : uint32_t {
     OperMerge = 64,
     ThreadSuspend = 128
 };
+
+/**
+ * Wraps sr_change_oper_t.
+ */
+enum class ChangeOperation {
+    Created,
+    Modified,
+    Deleted,
+    Moved,
+};
 }
