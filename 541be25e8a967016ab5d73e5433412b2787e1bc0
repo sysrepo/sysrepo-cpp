@@ -18,6 +18,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6aa7552c_f23cd16d",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-13T20:29:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42b43c72_f7f6f54e",
+      "revId": "541be25e8a967016ab5d73e5433412b2787e1bc0",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "daf383c1_e252e55d",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-09-10T07:52:19Z",
       "side": 1,
       "message": "explicit to prevent some surprises (yeah, I see it\u0027s private, but I think it\u0027s good to have it explicit nonetheless)",
+      "revId": "541be25e8a967016ab5d73e5433412b2787e1bc0",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "789920bf_901f3c3c",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-13T20:29:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "daf383c1_e252e55d",
       "revId": "541be25e8a967016ab5d73e5433412b2787e1bc0",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
@@ -71,6 +107,30 @@
       "writtenOn": "2021-09-10T07:52:19Z",
       "side": 1,
       "message": "It\u0027s a reference, and the code is calling it \"a copy\". What about `storedCb`?",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 16
+      },
+      "revId": "541be25e8a967016ab5d73e5433412b2787e1bc0",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df4184b9_89144e7f",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-13T20:29:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "757f50ba_8b451fb8",
       "range": {
         "startLine": 40,
         "startChar": 4,
