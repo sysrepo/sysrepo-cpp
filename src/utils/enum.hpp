@@ -63,4 +63,14 @@ static_assert(toSubOptions(SubscribeOptions::Enabled) == SR_SUBSCR_ENABLED);
 static_assert(toSubOptions(SubscribeOptions::Update) == SR_SUBSCR_UPDATE);
 static_assert(toSubOptions(SubscribeOptions::OperMerge) == SR_SUBSCR_OPER_MERGE);
 static_assert(toSubOptions(SubscribeOptions::ThreadSuspend) == SR_SUBSCR_THREAD_SUSPEND);
+
+constexpr ChangeOperation toChangeOper(const sr_change_oper_t oper)
+{
+    return static_cast<ChangeOperation>(oper);
+}
+
+static_assert(toChangeOper(SR_OP_CREATED) == ChangeOperation::Created);
+static_assert(toChangeOper(SR_OP_MODIFIED) == ChangeOperation::Modified);
+static_assert(toChangeOper(SR_OP_DELETED) == ChangeOperation::Deleted);
+static_assert(toChangeOper(SR_OP_MOVED) == ChangeOperation::Moved);
 }
