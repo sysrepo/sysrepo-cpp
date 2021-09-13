@@ -47,9 +47,9 @@ void Subscription::onModuleChange(const char* moduleName, ModuleChangeCb cb, con
 }
 
 Subscription::Subscription(Subscription&& other) noexcept
-    : m_sess(other.m_sess)
+    : m_moduleChangeCbs(std::move(other.m_moduleChangeCbs))
+    , m_sess(other.m_sess)
     , m_sub(other.m_sub)
-    , m_moduleChangeCbs(std::move(other.m_moduleChangeCbs))
 {
 }
 
@@ -64,5 +64,110 @@ Subscription& Subscription::operator=(Subscription&& other) noexcept
     m_moduleChangeCbs = std::move(other.m_moduleChangeCbs);
 
     return *this;
+}
+
+ChangeCollection::ChangeCollection(const char* xpath, std::shared_ptr<sr_session_ctx_s> sess)
+    : m_xpath(xpath)
+    , m_sess(sess)
+{
+}
+
+/**
+ * Creates a `begin` iterator for the iterator.
+ */
+ChangeIterator ChangeCollection::begin() const
+{
+    sr_change_iter_t* iter;
+    auto res = sr_get_changes_iter(m_sess.get(), m_xpath.c_str(), &iter);
+
+    throwIfError(res, "Couldn't create an iterator for changes");
+
+    return ChangeIterator{iter, m_sess};
+}
+
+/**
+ * Creates an `end` iterator for the iterator.
+ */
+ChangeIterator ChangeCollection::end() const
+{
+    return ChangeIterator{ChangeIterator::iterator_end_tag{}};
+}
+
+ChangeIterator::ChangeIterator(sr_change_iter_s* iter, std::shared_ptr<sr_session_ctx_s> sess)
+    : m_iter(iter, sr_free_change_iter)
+    , m_sess(sess)
+{
+    operator++();
+}
+
+ChangeIterator::ChangeIterator(const iterator_end_tag)
+    : m_current(std::nullopt)
+    , m_iter(nullptr)
+    , m_sess(nullptr)
+{
+}
+
+ChangeIterator& ChangeIterator::operator++()
+{
+    sr_change_oper_t operation;
+    const lyd_node* node;
+    const char* prevValue;
+    const char* prevList;
+    int prevDefault;
+    auto ret = sr_get_change_tree_next(m_sess.get(), m_iter.get(), &operation, &node, &prevValue, &prevList, &prevDefault);
+
+    if (ret == SR_ERR_NOT_FOUND) {
+        m_current = std::nullopt;
+        return *this;
+    }
+
+    throwIfError(ret, "Could not iterate to the next change");
+
+    // I can safely "dereference" the change here, because last change is handled by the condition above.
+    m_current.emplace(Change{
+            .operation = toChangeOper(operation),
+            .node = libyang::wrapUnmanagedRawNode(node),
+            .previousValue = prevValue ? std::optional<std::string_view>(prevValue) : std::nullopt,
+            .previousList = prevList ? std::optional<std::string_view>(prevList) : std::nullopt,
+            .previousDefault = static_cast<bool>(prevDefault),
+    });
+
+    return *this;
+}
+
+ChangeIterator ChangeIterator::operator++(int)
+{
+    auto copy = *this;
+
+    operator++();
+
+    return copy;
+}
+
+const Change& ChangeIterator::operator*() const
+{
+    if (!m_current) {
+        throw std::out_of_range("Dereferenced an .end iterator");
+    }
+    return *m_current;
+}
+
+const Change& ChangeIterator::operator->() const
+{
+    if (!m_current) {
+        throw std::out_of_range("Dereferenced an .end iterator");
+    }
+    return *m_current;
+}
+
+/**
+ * Compares two iterators.
+ */
+bool ChangeIterator::operator==(const ChangeIterator& other) const
+{
+    // Both instances need to either contain a value or both contain nothing.
+    return this->m_current.has_value() == other.m_current.has_value() &&
+        // And then either both contain nothing or contain the same thing.
+        (!this->m_current.has_value() || this->m_current->node == other.m_current->node);
 }
 }

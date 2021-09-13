@@ -20,6 +20,7 @@ struct sr_val_s;
 
 namespace sysrepo {
 class Connection;
+class ChangeCollection;
 class Session;
 
 struct unmanaged_tag {
@@ -37,6 +38,8 @@ public:
     void applyChanges(std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
 
     [[nodiscard]] Subscription onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath = nullptr, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
+
+    ChangeCollection getChanges(const char* xpath = "//.");
 
 private:
     friend Connection;
