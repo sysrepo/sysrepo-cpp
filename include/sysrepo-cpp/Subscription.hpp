@@ -7,17 +7,62 @@
 */
 #pragma once
 #include <functional>
+#include <libyang-cpp/DataNode.hpp>
 #include <list>
 #include <memory>
 #include <optional>
 #include <sysrepo-cpp/Enum.hpp>
+#include <variant>
 
 struct sr_session_ctx_s;
 struct sr_subscription_ctx_s;
+struct sr_change_iter_s;
 
 namespace sysrepo {
+class ChangeCollection;
 class Connection;
 class Session;
+
+struct Change {
+    ChangeOperation operation;
+    const libyang::DataNode node;
+    std::optional<std::string_view> previousValue;
+    std::optional<std::string_view> previousList;
+    bool previousDefault;
+};
+
+class ChangeIterator {
+public:
+    struct iterator_end_tag{
+    };
+
+    ChangeIterator& operator++();
+    const Change& operator*() const;
+    const Change& operator->() const;
+    bool operator==(const ChangeIterator& other) const;
+
+private:
+    ChangeIterator(sr_change_iter_s* iter, std::shared_ptr<sr_session_ctx_s> sess);
+    ChangeIterator(const iterator_end_tag);
+    friend ChangeCollection;
+
+    std::optional<Change> m_current;
+
+    std::shared_ptr<sr_change_iter_s> m_iter;
+    std::shared_ptr<sr_session_ctx_s> m_sess;
+};
+
+class ChangeCollection {
+public:
+    ChangeIterator begin() const;
+    ChangeIterator end() const;
+
+private:
+    ChangeCollection(const char* xpath, std::shared_ptr<sr_session_ctx_s> sess);
+    friend Session;
+    std::string m_xpath;
+    std::shared_ptr<sr_session_ctx_s> m_sess;
+};
 
 using ModuleChangeCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view moduleName, std::optional<std::string_view> subXPath, Event event, uint32_t requestId)>;
 
