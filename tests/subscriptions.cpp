@@ -10,6 +10,15 @@
 #include <doctest/doctest.h>
 #include <sysrepo-cpp/Connection.hpp>
 
+struct GetNode {
+    template <typename Type>
+    const libyang::DataNode operator()(const Type& x) const
+    {
+        return x.node;
+    }
+
+};
+
 TEST_CASE("subscriptions")
 {
     sysrepo::Connection conn;
@@ -42,6 +51,30 @@ TEST_CASE("subscriptions")
         auto sub = sess.onModuleChange("test_module", moduleChangeCb, nullptr, 0, sysrepo::SubOptions::DoneOnly);
         auto sub2 = std::move(sub);
         sess.setItem("/test_module:leafInt32", "42");
+        sess.applyChanges();
+
+        REQUIRE(called == 1);
+    }
+
+    // TODO: needs more test and possibly better way of testing
+    DOCTEST_SUBCASE("Getting changes")
+    {
+        sysrepo::ModuleChangeCb moduleChangeCb = [&called] (sysrepo::Session session, auto, auto, auto, auto, auto) -> sysrepo::ErrorCode {
+            for (const auto& change : session.getChanges("//.")) {
+                // FIXME: this sucks, think of something better
+                REQUIRE(change.operation == sysrepo::ChangeOperation::Modified);
+                REQUIRE(change.node.path() == "/test_module:leafInt32");
+                REQUIRE(change.previousDefault == false);
+                REQUIRE(change.previousList == std::nullopt);
+                REQUIRE(change.previousValue == "42");
+            }
+            called++;
+            return sysrepo::ErrorCode::Ok;
+        };
+
+        auto sub = sess.onModuleChange("test_module", moduleChangeCb, nullptr, 0, sysrepo::SubOptions::DoneOnly);
+
+        sess.setItem("/test_module:leafInt32", "123");
         sess.applyChanges();
 
         REQUIRE(called == 1);

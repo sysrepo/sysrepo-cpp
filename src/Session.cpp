@@ -110,4 +110,14 @@ Subscription Session::onModuleChange(const char* moduleName, ModuleChangeCb cb, 
     sub.onModuleChange(moduleName, cb, xpath, priority, opts);
     return sub;
 }
+
+/**
+ * Returns a collection of changes based on an `xpath`. Use "//." to get a full change subtree.
+ *
+ * @param xpath XPath selecting the changes.
+ */
+ChangeCollection Session::getChanges(const char* xpath)
+{
+    return ChangeCollection{xpath, m_sess};
+}
 }
