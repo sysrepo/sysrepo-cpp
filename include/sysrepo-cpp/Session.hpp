@@ -20,6 +20,7 @@ struct sr_val_s;
 
 namespace sysrepo {
 class Connection;
+class ChangeCollection;
 class Session;
 
 class Session {
@@ -34,6 +35,8 @@ public:
     void applyChanges(std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
 
     [[nodiscard]] Subscription onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath = nullptr, uint32_t priority = 0, const SubOptions opts = SubOptions::Default);
+
+    ChangeCollection getChanges(const char* xpath);
 
 private:
     friend Connection;
