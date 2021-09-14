@@ -26,6 +26,8 @@ public:
     // TODO: allow all arguments
     void setItem(const char* path, const char* value);
     // TODO: allow all arguments
+    void deleteItem(const char* path);
+    // TODO: allow all arguments
     std::optional<libyang::DataNode> getData(const char* path);
     void applyChanges(std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
 private:

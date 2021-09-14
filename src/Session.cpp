@@ -43,6 +43,21 @@ void Session::setItem(const char* path, const char* value)
 }
 
 /**
+ * Set a value of leaf, leaf-list, or create a list or a presence container. The changes are applied only after calling
+ * Session::applyChanges.
+ *
+ * Wraps `sr_delete_item`.
+ *
+ * @param path Path of the element to be changed.
+ */
+void Session::deleteItem(const char* path)
+{
+    auto res = sr_delete_item(m_sess.get(), path, 0);
+
+    throwIfError(res, "Session::deleteItem: Couldn't delte '"s + path + "'");
+}
+
+/**
  * Retrieves a tree specified by the provided XPath.
  *
  * Wraps `sr_get_data`.

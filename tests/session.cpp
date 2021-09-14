@@ -35,5 +35,10 @@ TEST_CASE("session")
         sess.applyChanges();
         data = sess.getData("/test_module:leafInt32");
         REQUIRE(data->asTerm().valueStr() == "420");
+
+        sess.deleteItem("/test_module:leafInt32");
+        sess.applyChanges();
+        data = sess.getData("/test_module:leafInt32");
+        REQUIRE(!data);
     }
 }
