@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "351c02d9_078f3f82",
+        "filename": "src/Session.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-14T13:43:41Z",
+      "side": 1,
+      "message": "\"delete\", and I think it\u0027s better as \"Can\u0027t\", not \"Couldn\u0027t\".",
+      "range": {
+        "startLine": 57,
+        "startChar": 53,
+        "endLine": 57,
+        "endChar": 58
+      },
+      "revId": "9fd76fb96edc09b37f5e0f66a1c859822c4862b8",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
