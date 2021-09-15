@@ -73,4 +73,15 @@ static_assert(toChangeOper(SR_OP_CREATED) == ChangeOperation::Created);
 static_assert(toChangeOper(SR_OP_MODIFIED) == ChangeOperation::Modified);
 static_assert(toChangeOper(SR_OP_DELETED) == ChangeOperation::Deleted);
 static_assert(toChangeOper(SR_OP_MOVED) == ChangeOperation::Moved);
+
+constexpr sr_log_level_t toLogLevel(const LogLevel level)
+{
+    return static_cast<sr_log_level_t>(level);
+}
+
+static_assert(toLogLevel(LogLevel::None) == SR_LL_NONE);
+static_assert(toLogLevel(LogLevel::Error) == SR_LL_ERR);
+static_assert(toLogLevel(LogLevel::Warning) == SR_LL_WRN);
+static_assert(toLogLevel(LogLevel::Information) == SR_LL_INF);
+static_assert(toLogLevel(LogLevel::Debug) == SR_LL_DBG);
 }
