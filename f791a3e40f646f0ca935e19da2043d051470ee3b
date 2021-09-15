@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80b2846c_7c67a32f",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-15T11:22:01Z",
+      "side": 1,
+      "message": "I\u0027m not happy about this. Is it allowed in the usual STL algorithms for begin() and end() to have a completely different type?",
+      "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "504f7adb_02f849bb",
+        "filename": "src/Session.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-15T11:22:01Z",
+      "side": 1,
+      "message": "make it the default value please",
+      "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb756d59_b506e6fd",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-15T11:22:01Z",
+      "side": 1,
+      "message": "This looks suspicious to me. You oshould definitely be able to call operator++ on a valid iterator, but the result might be an iterator which is the end() one. And you cannot dereference such an interator, but that\u0027s effectively what this code is doing, isn\u0027t it?\n\n-\u003e I think you can only dereference in operator*, and that precomputing and caching these values like here is not OK.",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 7
+      },
+      "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28308925_b3457586",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-15T11:22:01Z",
+      "side": 1,
+      "message": "add a \"recorder\" class and use the usual REQUIRE_CALLs up front. Then, from this loop, call recorder.record(change).\n\nSee cla-sysrepo\u0027s tests/mock/sysrepo/events.cpp and its users for an inspiration.\n\nthat way you can also lose the `called` thingy.",
+      "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
