@@ -76,4 +76,15 @@ enum class ChangeOperation {
     Deleted,
     Moved,
 };
+
+/**
+ * Wraps sr_log_level_t.
+ */
+enum class LogLevel {
+    None,
+    Err,
+    Wrn,
+    Inf,
+    Dbg
+};
 }
