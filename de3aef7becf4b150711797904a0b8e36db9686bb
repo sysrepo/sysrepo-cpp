@@ -46,6 +46,30 @@
       },
       "revId": "de3aef7becf4b150711797904a0b8e36db9686bb",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8eef9813_6b98099f",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-20T15:14:32Z",
+      "side": 1,
+      "message": "I can see some value in abbreviating these in the log output -- the space might come at a premium there, and there\u0027s value in a proper alignment, etc. However, I don\u0027t think these apply to identifiers in a C++ API.",
+      "parentUuid": "b2b397bc_6c023196",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 7
+      },
+      "revId": "de3aef7becf4b150711797904a0b8e36db9686bb",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
