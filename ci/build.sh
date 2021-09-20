@@ -71,6 +71,7 @@ build_n_test() {
 build_n_test github/CESNET/libyang -DENABLE_BUILD_TESTS=ON -DENABLE_VALGRIND_TESTS=OFF
 build_n_test github/sysrepo/sysrepo -DENABLE_BUILD_TESTS=ON -DENABLE_VALGRIND_TESTS=OFF -DREPO_PATH=${PREFIX}/etc-sysrepo
 build_n_test github/onqtam/doctest -DDOCTEST_WITH_TESTS=OFF
+build_n_test github/rollbear/trompeloeil
 build_n_test CzechLight/libyang-cpp -DBUILD_TESTING=ON
 build_n_test ${ZUUL_PROJECT_NAME} -DBUILD_TESTING=ON
 
