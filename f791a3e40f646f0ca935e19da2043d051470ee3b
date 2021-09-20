@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d55fb2ad_657f467d",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-20T13:57:00Z",
+      "side": 1,
+      "message": "The algorithms from \u003cranges\u003e library work fine, but the ones from \u003calgorithm\u003e do not. Range-based for-loop works though and I\u0027m not sure if anyone would want to use any other algorithms. I guess I\u0027ll change it anyway... However I think it really only make sense to compare against the .end iterator. Idk.",
+      "parentUuid": "80b2846c_7c67a32f",
+      "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "504f7adb_02f849bb",
         "filename": "src/Session.cpp",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2021-09-15T11:22:01Z",
       "side": 1,
       "message": "make it the default value please",
+      "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6900a177_0b8e1603",
+        "filename": "src/Session.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-20T13:57:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "504f7adb_02f849bb",
       "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
@@ -60,6 +96,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "66c513f9_f4ba27fa",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-20T13:57:00Z",
+      "side": 1,
+      "message": "The if statement above checks if it\u0027s the end iterator.",
+      "parentUuid": "eb756d59_b506e6fd",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 7
+      },
+      "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "28308925_b3457586",
         "filename": "tests/subscriptions.cpp",
         "patchSetId": 1
@@ -71,6 +131,24 @@
       "writtenOn": "2021-09-15T11:22:01Z",
       "side": 1,
       "message": "add a \"recorder\" class and use the usual REQUIRE_CALLs up front. Then, from this loop, call recorder.record(change).\n\nSee cla-sysrepo\u0027s tests/mock/sysrepo/events.cpp and its users for an inspiration.\n\nthat way you can also lose the `called` thingy.",
+      "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a1cc7c8_40189e27",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-20T13:57:00Z",
+      "side": 1,
+      "message": "Yeah, that makes sense. Although tromeploeil thingy is not available in sysrepo-cpp right now",
+      "parentUuid": "28308925_b3457586",
       "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
