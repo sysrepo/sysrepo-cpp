@@ -88,9 +88,21 @@ TEST_CASE("subscriptions")
         };
 
         auto sub = sess.onModuleChange("test_module", moduleChangeCb, nullptr, 0, sysrepo::SubscribeOptions::DoneOnly);
-        sess.setItem("/test_module:leafInt32", "123");
 
-        TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Modified, "/test_module:leafInt32", std::nullopt, "42", false));
-        sess.applyChanges();
+        DOCTEST_SUBCASE("Simple change")
+        {
+            sess.setItem("/test_module:leafInt32", "123");
+
+            TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Modified, "/test_module:leafInt32", std::nullopt, "42", false));
+            sess.applyChanges();
+
+        }
+
+        DOCTEST_SUBCASE("Simple change")
+        {
+            TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Deleted, "/test_module:leafInt32", std::nullopt, std::nullopt, false));
+
+            sess.copyConfig(sysrepo::Datastore::Startup, "test_module");
+        }
     }
 }
