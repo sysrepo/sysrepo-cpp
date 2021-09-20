@@ -106,6 +106,17 @@ void Session::applyChanges(std::chrono::milliseconds timeout)
     throwIfError(res, "Session::applyChanges: Couldn't apply changes");
 }
 
+/**
+ * Replaces configuration from `source` datastore to the current datastore. If `moduleName` is specified, the operation
+ * is limited to that module. Optionally, a timeout can be specified, otherwise the default is used.
+ */
+void Session::copyConfig(const Datastore source, const char* moduleName, std::chrono::milliseconds timeout)
+{
+    auto res = sr_copy_config(m_sess.get(), moduleName, toDatastore(source), timeout.count());
+
+    throwIfError(res, "Couldn't copy config");
+}
+
 Subscription Session::onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath, uint32_t priority, const SubscribeOptions opts)
 {
     auto sub = Subscription{m_sess};
