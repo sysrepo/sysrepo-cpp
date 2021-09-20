@@ -36,6 +36,7 @@ public:
     // TODO: allow all arguments
     std::optional<libyang::DataNode> getData(const char* path);
     void applyChanges(std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
+    void copyConfig(const Datastore source, const char* moduleName = nullptr, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
 
     [[nodiscard]] Subscription onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath = nullptr, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
 
