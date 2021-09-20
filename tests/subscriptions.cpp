@@ -33,6 +33,13 @@ TEST_CASE("subscriptions")
 
     }
 
+    DOCTEST_SUBCASE("Session's lifetime is prolonged by the subscription")
+    {
+        auto sub = sysrepo::Connection().sessionStart().onModuleChange("test_module", [] (auto, auto, auto, auto, auto, auto) -> sysrepo::ErrorCode {
+            return sysrepo::ErrorCode::Ok;
+        });
+    }
+
     DOCTEST_SUBCASE("moving ctor")
     {
         sysrepo::ModuleChangeCb moduleChangeCb = [&called] (auto, auto, auto, auto, auto, auto) -> sysrepo::ErrorCode {
