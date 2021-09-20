@@ -34,8 +34,8 @@ private:
 
     friend Session;
     explicit Subscription(std::shared_ptr<sr_session_ctx_s> sess);
-    std::shared_ptr<sr_subscription_ctx_s> m_sub;
     std::shared_ptr<sr_session_ctx_s> m_sess;
+    std::shared_ptr<sr_subscription_ctx_s> m_sub;
 
     // This saves the users' callbacks. The C-style callback takes addresses of these, so the addresses need to be
     // stable (therefore, we use an std::list).
