@@ -22,6 +22,30 @@
       },
       "revId": "de3aef7becf4b150711797904a0b8e36db9686bb",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2b397bc_6c023196",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-20T14:00:57Z",
+      "side": 1,
+      "message": "Sure, though I would think that people are familiar with these (it\u0027s also what\u0027s gonna be written out on the stderr)",
+      "parentUuid": "3bef92b0_c0944ddf",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 7
+      },
+      "revId": "de3aef7becf4b150711797904a0b8e36db9686bb",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
