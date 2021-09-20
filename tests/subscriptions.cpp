@@ -113,4 +113,20 @@ TEST_CASE("subscriptions")
         sess.setItem("/test_module:leafInt32", "123");
         sess.applyChanges();
     }
+
+    DOCTEST_SUBCASE("Copy config")
+    {
+        Recorder rec;
+        sysrepo::ModuleChangeCb moduleChangeCb = [&rec] (sysrepo::Session session, auto, auto, auto, auto, auto) -> sysrepo::ErrorCode {
+            for (const auto& change : session.getChanges("//.")) {
+                rec.record(change.operation, std::string{change.node.path()}, change.previousList, change.previousValue, change.previousDefault);
+            }
+            return sysrepo::ErrorCode::Ok;
+        };
+
+
+        TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Deleted, "/test_module:leafInt32", std::nullopt, std::nullopt, false));
+        auto sub = sess.onModuleChange("test_module", moduleChangeCb, nullptr, 0, sysrepo::SubscribeOptions::DoneOnly);
+        sess.copyConfig(sysrepo::Datastore::Startup, "test_module");
+    }
 }
