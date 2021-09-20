@@ -45,7 +45,6 @@ private:
     Session(sr_session_ctx_s* sess, std::shared_ptr<sr_conn_ctx_s> conn);
     explicit Session(sr_session_ctx_s* unmanagedSession, const unmanaged_tag);
 
-    std::shared_ptr<sr_conn_ctx_s> m_conn;
     std::shared_ptr<sr_session_ctx_s> m_sess;
 };
 }
