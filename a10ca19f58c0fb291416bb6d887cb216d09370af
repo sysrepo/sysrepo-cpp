@@ -24,6 +24,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37a1a516_f2dfbfbf",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-20T13:28:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02a428d8_8d3c9aa8",
+      "range": {
+        "startLine": 59,
+        "startChar": 11,
+        "endLine": 59,
+        "endChar": 21
+      },
+      "revId": "a10ca19f58c0fb291416bb6d887cb216d09370af",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f481d0c2_d9271f12",
@@ -37,6 +61,24 @@
       "writtenOn": "2021-09-14T14:26:53Z",
       "side": 1,
       "message": "consider making this explicit via a tag:\n \nstruct unmanaged_tag {};\nclass Session {\n  // ...\n  explicit Session(sr_session_ctx_s* session, const unmanaged_tag);\n  //...\n}",
+      "revId": "a10ca19f58c0fb291416bb6d887cb216d09370af",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea5e28ea_75c663ac",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-20T13:28:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f481d0c2_d9271f12",
       "revId": "a10ca19f58c0fb291416bb6d887cb216d09370af",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
