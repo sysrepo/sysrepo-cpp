@@ -54,6 +54,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a632ef5_f16c3247",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-21T15:21:03Z",
+      "side": 1,
+      "message": "Yeah I already changed that. But as a node, the ranged library does (can) use a different type for the .end iterator, I think they call it \"sentinel\"",
+      "parentUuid": "37155662_3bff8606",
+      "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "504f7adb_02f849bb",
@@ -162,6 +180,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c8c5d48e_be39b377",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-21T15:21:03Z",
+      "side": 1,
+      "message": "I don\u0027t know, it seems pretty clear to me...",
+      "parentUuid": "3be431a8_d3904463",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 7
+      },
+      "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "28308925_b3457586",
         "filename": "tests/subscriptions.cpp",
         "patchSetId": 1
@@ -209,6 +251,24 @@
       "side": 1,
       "message": "https://gerrit.cesnet.cz/c/CzechLight/sysrepo-cpp/+/4769",
       "parentUuid": "4a1cc7c8_40189e27",
+      "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf4c8032_5e564a80",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-21T15:21:03Z",
+      "side": 1,
+      "message": "thanks",
+      "parentUuid": "eb2a7f7a_da601de2",
       "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
