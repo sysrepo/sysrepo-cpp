@@ -70,6 +70,30 @@
       },
       "revId": "de3aef7becf4b150711797904a0b8e36db9686bb",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "177af810_d0859a3b",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-21T14:37:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8eef9813_6b98099f",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 7
+      },
+      "revId": "de3aef7becf4b150711797904a0b8e36db9686bb",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
