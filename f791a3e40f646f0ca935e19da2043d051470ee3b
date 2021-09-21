@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "37155662_3bff8606",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-21T09:51:56Z",
+      "side": 1,
+      "message": "I think it\u0027s better to use just one type for \"an iterator\", no matter if it\u0027s the begin() one (possibly incremented) or the end() one",
+      "parentUuid": "d55fb2ad_657f467d",
+      "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "504f7adb_02f849bb",
         "filename": "src/Session.cpp",
         "patchSetId": 1
@@ -120,6 +138,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3be431a8_d3904463",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-21T09:51:56Z",
+      "side": 1,
+      "message": "Ah right, thanks. That looks like a good candidate for a comment.",
+      "parentUuid": "66c513f9_f4ba27fa",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 7
+      },
+      "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "28308925_b3457586",
         "filename": "tests/subscriptions.cpp",
         "patchSetId": 1
@@ -149,6 +191,24 @@
       "side": 1,
       "message": "Yeah, that makes sense. Although tromeploeil thingy is not available in sysrepo-cpp right now",
       "parentUuid": "28308925_b3457586",
+      "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb2a7f7a_da601de2",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-21T09:51:56Z",
+      "side": 1,
+      "message": "https://gerrit.cesnet.cz/c/CzechLight/sysrepo-cpp/+/4769",
+      "parentUuid": "4a1cc7c8_40189e27",
       "revId": "f791a3e40f646f0ca935e19da2043d051470ee3b",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
