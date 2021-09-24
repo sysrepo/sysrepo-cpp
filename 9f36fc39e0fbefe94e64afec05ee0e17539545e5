@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49b9879d_4520d35e",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-24T09:33:00Z",
+      "side": 1,
+      "message": "this is a bit confusing -- I like the tag as a parameter to the constructor, but let\u0027s call it \"end_tag\" or something like that. The current way implies to me that the ChangeIterator::ChangeIteratorEnd is the iterator itself, which is not the case.",
+      "revId": "9f36fc39e0fbefe94e64afec05ee0e17539545e5",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e06fe04d_77a1976e",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-24T09:33:00Z",
+      "side": 1,
+      "message": "isn\u0027t this (and also the comment a few lines up) already fixed by that trompeloeil thingy?",
+      "revId": "9f36fc39e0fbefe94e64afec05ee0e17539545e5",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
