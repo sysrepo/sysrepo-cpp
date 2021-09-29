@@ -18,6 +18,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee0df54a_d6697eea",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-29T08:52:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49b9879d_4520d35e",
+      "revId": "9f36fc39e0fbefe94e64afec05ee0e17539545e5",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e06fe04d_77a1976e",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-09-24T09:33:00Z",
       "side": 1,
       "message": "isn\u0027t this (and also the comment a few lines up) already fixed by that trompeloeil thingy?",
+      "revId": "9f36fc39e0fbefe94e64afec05ee0e17539545e5",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07855903_137d6f3b",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-29T08:52:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e06fe04d_77a1976e",
       "revId": "9f36fc39e0fbefe94e64afec05ee0e17539545e5",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
