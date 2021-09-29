@@ -18,6 +18,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72d040fe_2c4f28b4",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-29T22:28:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b122ab4e_461f5d40",
+      "revId": "3c6a0e2c3618812c39d279f90fa1e4a2a107d610",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0239a734_807f5a65",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-09-29T09:03:07Z",
       "side": 1,
       "message": "...and this one needs changing as well. Maybe you can compare the address of the data node?",
+      "revId": "3c6a0e2c3618812c39d279f90fa1e4a2a107d610",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a398397a_f6c29ff3",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-09-29T22:28:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0239a734_807f5a65",
       "revId": "3c6a0e2c3618812c39d279f90fa1e4a2a107d610",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
