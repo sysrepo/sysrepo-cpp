@@ -47,9 +47,9 @@ void Subscription::onModuleChange(const char* moduleName, ModuleChangeCb cb, con
 }
 
 Subscription::Subscription(Subscription&& other) noexcept
-    : m_sess(other.m_sess)
+    : m_moduleChangeCbs(std::move(other.m_moduleChangeCbs))
+    , m_sess(other.m_sess)
     , m_sub(other.m_sub)
-    , m_moduleChangeCbs(std::move(other.m_moduleChangeCbs))
 {
 }
 
