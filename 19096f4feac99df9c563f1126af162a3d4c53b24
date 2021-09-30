@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9988d4e_97b8f57e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-30T08:10:51Z",
+      "side": 1,
+      "message": "Is this a leftover from something?",
+      "range": {
+        "startLine": 10,
+        "startChar": 67,
+        "endLine": 11,
+        "endChar": 12
+      },
+      "revId": "19096f4feac99df9c563f1126af162a3d4c53b24",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12dd09e0_f9bababe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-09-30T08:10:51Z",
+      "side": 1,
+      "message": "This makes sense to me, but I wonder if you can add an explicit test for that.",
+      "revId": "19096f4feac99df9c563f1126af162a3d4c53b24",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
