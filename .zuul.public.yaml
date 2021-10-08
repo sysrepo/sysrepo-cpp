@@ -9,7 +9,7 @@
               - name: github/sysrepo/sysrepo
                 override-checkout: devel
               - name: github/onqtam/doctest
-                override-checkout: cesnet/fix-gcc11
+                override-checkout: cesnet/2021-10-08
               - name: github/rollbear/trompeloeil
                 override-checkout: v41
               - name: CzechLight/libyang-cpp
