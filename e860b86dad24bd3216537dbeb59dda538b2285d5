@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae16f149_8cf87dd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-10-08T12:35:44Z",
+      "side": 1,
+      "message": "This looks like something that resolves the always-reproducible TSAN failures. We\u0027re still using a build of clang+sanitizers which mishandles the \"other process died\" status from the robust mutexes, so it isn\u0027t foolproof.",
+      "revId": "e860b86dad24bd3216537dbeb59dda538b2285d5",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
