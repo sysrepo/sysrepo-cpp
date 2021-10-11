@@ -40,6 +40,12 @@ Datastore Session::activeDatastore() const
     return static_cast<Datastore>(sr_session_get_ds(m_sess.get()));
 }
 
+void Session::switchDatastore(const Datastore ds) const
+{
+    auto res = sr_session_switch_ds(m_sess.get(), toDatastore(ds));
+    throwIfError(res, "Couldn't switch datastore");
+}
+
 /**
  * Set a value of leaf, leaf-list, or create a list or a presence container. The changes are applied only after calling
  * Session::applyChanges.
