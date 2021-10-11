@@ -10,6 +10,7 @@
 #include <chrono>
 #include <memory>
 #include <optional>
+#include <libyang-cpp/Context.hpp>
 #include <libyang-cpp/DataNode.hpp>
 #include <sysrepo-cpp/Enum.hpp>
 #include <sysrepo-cpp/Subscription.hpp>
@@ -41,6 +42,8 @@ public:
     [[nodiscard]] Subscription onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath = nullptr, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
 
     ChangeCollection getChanges(const char* xpath = "//.");
+
+    const libyang::Context getContext() const;
 
 private:
     friend Connection;
