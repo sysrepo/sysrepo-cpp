@@ -9,6 +9,7 @@
 extern "C" {
 #include <sysrepo.h>
 }
+#include <libyang-cpp/Context.hpp>
 #include <sysrepo-cpp/Session.hpp>
 #include <sysrepo-cpp/Subscription.hpp>
 #include "utils/enum.hpp"
@@ -133,5 +134,11 @@ Subscription Session::onModuleChange(const char* moduleName, ModuleChangeCb cb, 
 ChangeCollection Session::getChanges(const char* xpath)
 {
     return ChangeCollection{xpath, m_sess};
+}
+
+const libyang::Context Session::getContext() const
+{
+    auto ctx = sr_get_context(sr_session_get_connection(m_sess.get()));
+    return libyang::createUnmanagedContext(const_cast<ly_ctx*>(ctx));
 }
 }
