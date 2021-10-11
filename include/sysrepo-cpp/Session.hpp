@@ -42,6 +42,8 @@ public:
 
     ChangeCollection getChanges(const char* xpath = "//.");
 
+    const libyang::Context getContext() const;
+
 private:
     friend Connection;
     friend Session wrapUnmanagedSession(sr_session_ctx_s* session);
