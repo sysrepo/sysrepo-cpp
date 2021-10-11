@@ -41,4 +41,16 @@ TEST_CASE("session")
         data = sess.getData("/test_module:leafInt32");
         REQUIRE(!data);
     }
+
+    DOCTEST_SUBCASE("switching datastore")
+    {
+        sess.switchDatastore(sysrepo::Datastore::Startup);
+        REQUIRE(sess.activeDatastore() == sysrepo::Datastore::Startup);
+        sess.switchDatastore(sysrepo::Datastore::Candidate);
+        REQUIRE(sess.activeDatastore() == sysrepo::Datastore::Candidate);
+        sess.switchDatastore(sysrepo::Datastore::Operational);
+        REQUIRE(sess.activeDatastore() == sysrepo::Datastore::Operational);
+        sess.switchDatastore(sysrepo::Datastore::Running);
+        REQUIRE(sess.activeDatastore() == sysrepo::Datastore::Running);
+    }
 }
