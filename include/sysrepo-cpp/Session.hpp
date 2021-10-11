@@ -30,6 +30,7 @@ struct unmanaged_tag {
 class Session {
 public:
     Datastore activeDatastore() const;
+    void switchDatastore(const Datastore ds) const;
     // TODO: allow all arguments
     void setItem(const char* path, const char* value);
     // TODO: allow all arguments
