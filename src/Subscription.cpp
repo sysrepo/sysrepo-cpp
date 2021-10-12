@@ -49,8 +49,7 @@ int operGetItemsCb(sr_session_ctx_t* session, uint32_t subscriptionId, const cha
                     requestId,
                     node));
     } catch (std::exception& ex) {
-        // TODO: how to log the message? sysrepo does not expose it's logging functions...
-        //std::cerr << "sysrepo-cpp: User callback threw an exception: " << ex.what() << "\n";
+        SRPLG_LOG_ERR("sysrepo-cpp", "User callback threw an exception: %s\n", ex.what());
         return static_cast<int>(sysrepo::ErrorCode::Internal);
     }
 
@@ -61,6 +60,30 @@ int operGetItemsCb(sr_session_ctx_t* session, uint32_t subscriptionId, const cha
     } else {
         *parent = libyang::releaseRawNode(*node);
     }
+
+    return static_cast<int>(ret);
+}
+
+int rpcActionCb(sr_session_ctx_t* session, uint32_t subscriptionId, const char* operationPath, const struct lyd_node* input, sr_event_t event, uint32_t requestId, struct lyd_node* output, void* privateData)
+{
+    auto cb = reinterpret_cast<RpcActionCb*>(privateData);
+    auto outputNode = libyang::wrapRawNode(output);
+    sysrepo::ErrorCode ret;
+    try {
+        ret = (*cb)(wrapUnmanagedSession(session),
+                        subscriptionId,
+                        operationPath,
+                        libyang::wrapUnmanagedRawNode(input),
+                        toEvent(event),
+                        requestId,
+                        outputNode
+                );
+
+    } catch (std::exception& ex) {
+        ret = sysrepo::ErrorCode::Internal;
+    }
+
+    output = libyang::releaseRawNode(outputNode);
 
     return static_cast<int>(ret);
 }
@@ -83,6 +106,16 @@ void Subscription::onOperGetItems(const char* moduleName, OperGetItemsCb cb, con
     sr_subscription_ctx_s* ctx = m_sub.get();
     auto res = sr_oper_get_items_subscribe(m_sess.get(), moduleName, xpath, operGetItemsCb, reinterpret_cast<void*>(&cbRef), toSubscribeOptions(opts), &ctx);
     throwIfError(res, "Couldn't create operational get items subscription");
+
+    saveContext(ctx);
+}
+
+void Subscription::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority, const SubscribeOptions opts)
+{
+    auto& cbRef = m_RPCActionCbs.emplace_back(cb);
+    sr_subscription_ctx_s* ctx = m_sub.get();
+    auto res = sr_rpc_subscribe_tree(m_sess.get(), xpath, rpcActionCb, reinterpret_cast<void*>(&cbRef), priority, toSubscribeOptions(opts), &ctx);
+    throwIfError(res, "Couldn't create RPC/action subscription");
 
     saveContext(ctx);
 }
