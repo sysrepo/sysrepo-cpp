@@ -66,6 +66,7 @@ private:
 };
 
 using ModuleChangeCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view moduleName, std::optional<std::string_view> subXPath, Event event, uint32_t requestId)>;
+using OperGetItemsCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view moduleName, std::optional<std::string_view> subXPath, std::optional<std::string_view> requestXPath, uint32_t requestId, std::optional<libyang::DataNode>& output)>;
 
 class Subscription {
 public:
@@ -75,6 +76,7 @@ public:
     Subscription& operator=(Subscription&&) noexcept;
 
     void onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath = nullptr, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
+    void onOperGetItems(const char* moduleName, OperGetItemsCb cb, const char* xpath = nullptr, const SubscribeOptions opts = SubscribeOptions::Default);
 private:
     void saveContext(sr_subscription_ctx_s* ctx);
 
@@ -83,6 +85,7 @@ private:
     // This saves the users' callbacks. The C-style callback takes addresses of these, so the addresses need to be
     // stable (therefore, we use an std::list).
     std::list<ModuleChangeCb> m_moduleChangeCbs;
+    std::list<OperGetItemsCb> m_operGetItemsCbs;
 
     std::shared_ptr<sr_session_ctx_s> m_sess;
 
