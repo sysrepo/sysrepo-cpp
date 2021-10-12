@@ -11,6 +11,7 @@
 #include <sysrepo-cpp/Connection.hpp>
 #include <trompeloeil.hpp>
 
+using namespace std::string_view_literals;
 namespace trompeloeil {
 template <>
     struct printer<std::optional<std::string_view>>
@@ -29,6 +30,7 @@ template <>
 class Recorder {
 public:
     TROMPELOEIL_MAKE_CONST_MOCK5(record, void(sysrepo::ChangeOperation, std::string, std::optional<std::string_view>, std::optional<std::string_view>, bool));
+    TROMPELOEIL_MAKE_CONST_MOCK1(recordRPC, void(std::string_view));
 };
 
 TEST_CASE("subscriptions")
@@ -196,6 +198,105 @@ TEST_CASE("subscriptions")
             }
 
             REQUIRE_THROWS(sess.getData("/test_module:stateLeaf"));
+        }
+    }
+
+    DOCTEST_SUBCASE("RPC/action")
+    {
+        Recorder rec;
+        const char* rpcPath;
+        sysrepo::ErrorCode ret;
+        std::atomic<bool> shouldThrow = false;
+        std::function<void(libyang::DataNode&)> setFunction;
+        sysrepo::RpcActionCb rpcActionCb = [&] (sysrepo::Session, auto, auto path, auto, auto, auto, libyang::DataNode output) {
+            rec.recordRPC(path);
+            if (setFunction) {
+                setFunction(output);
+            }
+
+            if (shouldThrow) {
+                throw std::runtime_error("Test callback throw");
+            }
+            return ret;
+        };
+
+        DOCTEST_SUBCASE("ok return / test_module:noop / no output")
+        {
+            rpcPath = "/test_module:noop";
+            ret = sysrepo::ErrorCode::Ok;
+            setFunction = nullptr;
+        }
+        DOCTEST_SUBCASE("ok return / test_module:shutdown / no output")
+        {
+            rpcPath = "/test_module:shutdown";
+            ret = sysrepo::ErrorCode::Ok;
+            setFunction = nullptr;
+        }
+        DOCTEST_SUBCASE("ok return / test_module:shutdown / some output")
+        {
+            rpcPath = "/test_module:shutdown";
+            ret = sysrepo::ErrorCode::Ok;
+            setFunction = [] (auto node) {
+                node.newPath("/test_module:shutdown/success", "true", libyang::CreationOptions::Output);
+            };
+        }
+        DOCTEST_SUBCASE("error return / test_module:noop / no output")
+        {
+            rpcPath = "/test_module:noop";
+            ret = sysrepo::ErrorCode::Internal;
+            setFunction = nullptr;
+        }
+        DOCTEST_SUBCASE("error return / test_module:shutdown / no output")
+        {
+            rpcPath = "/test_module:shutdown";
+            ret = sysrepo::ErrorCode::Internal;
+            setFunction = nullptr;
+        }
+        DOCTEST_SUBCASE("error return / test_module:shutdown / some output")
+        {
+            rpcPath = "/test_module:shutdown";
+            ret = sysrepo::ErrorCode::Internal;
+            setFunction = [] (auto node) {
+                node.newPath("/test_module:shutdown/success", "true", libyang::CreationOptions::Output);
+            };
+        }
+        DOCTEST_SUBCASE("exception / test_module:noop / no output")
+        {
+            rpcPath = "/test_module:noop";
+            ret = sysrepo::ErrorCode::Internal;
+            setFunction = nullptr;
+            shouldThrow = true;
+        }
+        DOCTEST_SUBCASE("exception / test_module:shutdown / no output")
+        {
+            rpcPath = "/test_module:shutdown";
+            ret = sysrepo::ErrorCode::Internal;
+            setFunction = nullptr;
+            shouldThrow = true;
+        }
+        DOCTEST_SUBCASE("exception / test_module:shutdown / some output")
+        {
+            rpcPath = "/test_module:shutdown";
+            ret = sysrepo::ErrorCode::Internal;
+            setFunction = [] (auto node) {
+                node.newPath("/test_module:shutdown/success", "true", libyang::CreationOptions::Output);
+            };
+            shouldThrow = true;
+        }
+
+        auto sub = sess.onRPCAction(rpcPath, rpcActionCb);
+        REQUIRE_CALL(rec, recordRPC(rpcPath));
+        if (ret == sysrepo::ErrorCode::Ok) {
+            auto output = sess.sendRPC(sess.getContext().newPath(rpcPath));
+            if (setFunction) {
+                REQUIRE(output.findPath("/test_module:shutdown/success", libyang::OutputNodes::Yes));
+            } else {
+                if (rpcPath == "/test_module:shutdown"sv) { // FIXME: why is this needed? Why does the find_path throw when there's another RPC
+                    REQUIRE(!output.findPath("/test_module:shutdown/success", libyang::OutputNodes::Yes).has_value());
+                }
+            }
+        } else {
+            REQUIRE_THROWS(sess.sendRPC(sess.getContext().newPath(rpcPath)));
         }
     }
 }
