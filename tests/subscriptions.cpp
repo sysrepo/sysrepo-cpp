@@ -129,4 +129,17 @@ TEST_CASE("subscriptions")
         auto sub = sess.onModuleChange("test_module", moduleChangeCb, nullptr, 0, sysrepo::SubscribeOptions::DoneOnly);
         sess.copyConfig(sysrepo::Datastore::Startup, "test_module");
     }
+
+    DOCTEST_SUBCASE("Operational get items")
+    {
+        sysrepo::OperGetItemsCb operGetItemsCb = [] (sysrepo::Session session, auto, auto, auto, auto, auto, std::optional<libyang::DataNode>& parent) {
+            parent = session.getContext().newPath("/test_module:stateLeaf", "123");
+            return sysrepo::ErrorCode::Ok;
+        };
+
+        auto sub = sess.onOperGetItems("test_module", operGetItemsCb, "/test_module:stateLeaf");
+        sess.switchDatastore(sysrepo::Datastore::Operational);
+        REQUIRE(sess.getData("/test_module:stateLeaf")->path() == "/test_module:stateLeaf");
+
+    }
 }
