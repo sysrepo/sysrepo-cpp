@@ -1,3 +1,4 @@
+#include <iostream>
 /*
  * Copyright (C) 2021 CESNET, https://photonics.cesnet.cz/
  *
@@ -29,6 +30,7 @@ template <>
 class Recorder {
 public:
     TROMPELOEIL_MAKE_CONST_MOCK5(record, void(sysrepo::ChangeOperation, std::string, std::optional<std::string_view>, std::optional<std::string_view>, bool));
+    TROMPELOEIL_MAKE_CONST_MOCK1(recordRPC, void(std::string_view));
 };
 
 TEST_CASE("subscriptions")
@@ -141,5 +143,20 @@ TEST_CASE("subscriptions")
         sess.switchDatastore(sysrepo::Datastore::Operational);
         REQUIRE(sess.getData("/test_module:stateLeaf")->path() == "/test_module:stateLeaf");
 
+    }
+
+    DOCTEST_SUBCASE("RPC/action")
+    {
+        Recorder rec;
+        sysrepo::RpcActionCb rpcActionCb = [&rec] (sysrepo::Session, auto, auto path, auto, auto, auto, libyang::DataNode output) {
+            rec.recordRPC(path);
+            std::cerr << "output.schema().asActionRpc().output().child()->path() = " << output.schema().asActionRpc().output().child()->path() << "\n";
+            output.newPath("/test_module:noop/success", "true", libyang::CreationOptions::Output);
+            return sysrepo::ErrorCode::Ok;
+        };
+
+        auto sub = sess.onRPCAction("/test_module:noop", rpcActionCb);
+        REQUIRE_CALL(rec, recordRPC("/test_module:noop"));
+        REQUIRE(sess.sendRPC(sess.getContext().newPath("/test_module:noop")).findPath("/test_module:noop/success")->asTerm().valueStr() == "true");
     }
 }
