@@ -142,4 +142,18 @@ TEST_CASE("subscriptions")
         REQUIRE(sess.getData("/test_module:stateLeaf")->path() == "/test_module:stateLeaf");
 
     }
+
+    DOCTEST_SUBCASE("RPC/action")
+    {
+        sysrepo::RpcActionCb rpcActionCb = [] (sysrepo::Session, auto, auto path, auto, auto, auto, auto) {
+            if (path == "/test_module:noop")
+            {
+                return sysrepo::ErrorCode::Ok;
+            }
+
+            return sysrepo::ErrorCode::NotFound;
+        };
+
+        auto sub = sess.onRPCAction("/test_module:noop", rpcActionCb);
+    }
 }
