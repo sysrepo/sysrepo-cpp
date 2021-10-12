@@ -5,4 +5,9 @@ module test_module {
   leaf leafInt32 {
     type int32;
   }
+
+  leaf stateLeaf {
+    config false;
+    type int32;
+  }
 }
