@@ -67,6 +67,7 @@ private:
 
 using ModuleChangeCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view moduleName, std::optional<std::string_view> subXPath, Event event, uint32_t requestId)>;
 using OperGetItemsCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view moduleName, std::optional<std::string_view> subXPath, std::optional<std::string_view> requestXPath, uint32_t requestId, std::optional<libyang::DataNode>& output)>;
+using RpcActionCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view path, const libyang::DataNode input, Event event, uint32_t requestId, libyang::DataNode output)>;
 
 class Subscription {
 public:
@@ -77,6 +78,7 @@ public:
 
     void onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath = nullptr, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
     void onOperGetItems(const char* moduleName, OperGetItemsCb cb, const char* xpath = nullptr, const SubscribeOptions opts = SubscribeOptions::Default);
+    void onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
 private:
     void saveContext(sr_subscription_ctx_s* ctx);
 
@@ -86,6 +88,7 @@ private:
     // stable (therefore, we use an std::list).
     std::list<ModuleChangeCb> m_moduleChangeCbs;
     std::list<OperGetItemsCb> m_operGetItemsCbs;
+    std::list<RpcActionCb> m_RPCActionCbs;
 
     std::shared_ptr<sr_session_ctx_s> m_sess;
 

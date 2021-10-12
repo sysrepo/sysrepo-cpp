@@ -68,6 +68,31 @@ int operGetItemsCb(sr_session_ctx_t* session, uint32_t subscriptionId, const cha
 
     return static_cast<int>(ret);
 }
+
+int rpcActionCb(sr_session_ctx_t* session, uint32_t subscriptionId, const char* operationPath, const struct lyd_node* input, sr_event_t event, uint32_t requestId, struct lyd_node* output, void* privateData)
+{
+    auto cb = reinterpret_cast<RpcActionCb*>(privateData);
+    auto outputNode = libyang::wrapRawNode(output);
+    sysrepo::ErrorCode ret;
+    try {
+        ret = (*cb)(wrapUnmanagedSession(session),
+                        subscriptionId,
+                        operationPath,
+                        libyang::wrapUnmanagedRawNode(input),
+                        toEvent(event),
+                        requestId,
+                        outputNode
+                );
+
+    } catch (std::exception& ex) {
+        logExceptionFromCb(ex);
+        ret = sysrepo::ErrorCode::Internal;
+    }
+
+    output = libyang::releaseRawNode(outputNode);
+
+    return static_cast<int>(ret);
+}
 }
 
 void Subscription::onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath, uint32_t priority, const SubscribeOptions opts)
@@ -87,6 +112,16 @@ void Subscription::onOperGetItems(const char* moduleName, OperGetItemsCb cb, con
     sr_subscription_ctx_s* ctx = m_sub.get();
     auto res = sr_oper_get_items_subscribe(m_sess.get(), moduleName, xpath, operGetItemsCb, reinterpret_cast<void*>(&cbRef), toSubscribeOptions(opts), &ctx);
     throwIfError(res, "Couldn't create operational get items subscription");
+
+    saveContext(ctx);
+}
+
+void Subscription::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority, const SubscribeOptions opts)
+{
+    auto& cbRef = m_RPCActionCbs.emplace_back(cb);
+    sr_subscription_ctx_s* ctx = m_sub.get();
+    auto res = sr_rpc_subscribe_tree(m_sess.get(), xpath, rpcActionCb, reinterpret_cast<void*>(&cbRef), priority, toSubscribeOptions(opts), &ctx);
+    throwIfError(res, "Couldn't create RPC/action subscription");
 
     saveContext(ctx);
 }

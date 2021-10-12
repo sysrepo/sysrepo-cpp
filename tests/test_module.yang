@@ -10,4 +10,15 @@ module test_module {
     config false;
     type int32;
   }
+
+  rpc noop {
+  }
+
+  rpc shutdown {
+    output {
+      leaf success {
+        type boolean;
+      }
+    }
+  }
 }
