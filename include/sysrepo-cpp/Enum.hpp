@@ -12,7 +12,7 @@ namespace sysrepo {
 /**
  * Wraps sr_error_t.
  */
-enum class ErrorCode {
+enum class ErrorCode : uint32_t {
     Ok = 0,
     InvalidArgument,
     Libyang,

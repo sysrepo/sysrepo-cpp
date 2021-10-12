@@ -84,4 +84,21 @@ static_assert(toLogLevel(LogLevel::Error) == SR_LL_ERR);
 static_assert(toLogLevel(LogLevel::Warning) == SR_LL_WRN);
 static_assert(toLogLevel(LogLevel::Information) == SR_LL_INF);
 static_assert(toLogLevel(LogLevel::Debug) == SR_LL_DBG);
+
+static_assert(static_cast<ErrorCode>(SR_ERR_OK) == ErrorCode::Ok);
+static_assert(static_cast<ErrorCode>(SR_ERR_INVAL_ARG) == ErrorCode::InvalidArgument);
+static_assert(static_cast<ErrorCode>(SR_ERR_LY) == ErrorCode::Libyang);
+static_assert(static_cast<ErrorCode>(SR_ERR_SYS) == ErrorCode::SyscallFailed);
+static_assert(static_cast<ErrorCode>(SR_ERR_NO_MEMORY) == ErrorCode::NotEnoughMemory);
+static_assert(static_cast<ErrorCode>(SR_ERR_NOT_FOUND) == ErrorCode::NotFound);
+static_assert(static_cast<ErrorCode>(SR_ERR_EXISTS) == ErrorCode::ItemAlreadyExists);
+static_assert(static_cast<ErrorCode>(SR_ERR_INTERNAL) == ErrorCode::Internal);
+static_assert(static_cast<ErrorCode>(SR_ERR_UNSUPPORTED) == ErrorCode::Unsupported);
+static_assert(static_cast<ErrorCode>(SR_ERR_VALIDATION_FAILED) == ErrorCode::ValidationFailed);
+static_assert(static_cast<ErrorCode>(SR_ERR_OPERATION_FAILED) == ErrorCode::OperationFailed);
+static_assert(static_cast<ErrorCode>(SR_ERR_UNAUTHORIZED) == ErrorCode::Unauthorized);
+static_assert(static_cast<ErrorCode>(SR_ERR_LOCKED) == ErrorCode::Locked);
+static_assert(static_cast<ErrorCode>(SR_ERR_TIME_OUT) == ErrorCode::Timeout);
+static_assert(static_cast<ErrorCode>(SR_ERR_CALLBACK_FAILED) == ErrorCode::CallbackFailed);
+static_assert(static_cast<ErrorCode>(SR_ERR_CALLBACK_SHELVE) == ErrorCode::CallbackShelve);
 }
