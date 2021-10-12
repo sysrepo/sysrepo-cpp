@@ -138,6 +138,13 @@ Subscription Session::onOperGetItems(const char* moduleName, OperGetItemsCb cb, 
     return sub;
 }
 
+[[nodiscard]] Subscription Session::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority, const SubscribeOptions opts)
+{
+    auto sub = Subscription{m_sess};
+    sub.onRPCAction(xpath, cb, priority, opts);
+    return sub;
+}
+
 /**
  * Returns a collection of changes based on an `xpath`. Use "//." to get a full change subtree.
  *
