@@ -28,10 +28,45 @@ void Subscription::saveContext(sr_subscription_ctx_s* ctx)
 }
 
 namespace {
+void logExceptionFromCb(const std::exception& ex)
+{
+    SRPLG_LOG_ERR("sysrepo-cpp", "User callback threw an exception: %s\n", ex.what());
+
+}
 int moduleChangeCb(sr_session_ctx_t* session, uint32_t subscriptionId, const char* moduleName, const char* subXPath, sr_event_t event, uint32_t requestId, void* privateData)
 {
     auto cb = reinterpret_cast<ModuleChangeCb*>(privateData);
     return static_cast<int>((*cb)(wrapUnmanagedSession(session), subscriptionId, moduleName, subXPath ? std::optional<std::string_view>{subXPath} : std::nullopt, toEvent(event), requestId));
+}
+
+int operGetItemsCb(sr_session_ctx_t* session, uint32_t subscriptionId, const char* moduleName, const char* subXPath, const char* requestXPath, uint32_t requestId, lyd_node** parent, void* privateData)
+{
+    auto cb = reinterpret_cast<OperGetItemsCb*>(privateData);
+    auto node = *parent ? std::optional{libyang::wrapRawNode(*parent)} : std::nullopt;
+    sysrepo::ErrorCode ret;
+    try {
+        ret = ((*cb)(
+                    wrapUnmanagedSession(session),
+                    subscriptionId,
+                    moduleName,
+                    subXPath ? std::optional{subXPath} : std::nullopt,
+                    requestXPath ? std::optional{requestXPath} : std::nullopt,
+                    requestId,
+                    node));
+    } catch (std::exception& ex) {
+        logExceptionFromCb(ex);
+        return static_cast<int>(sysrepo::ErrorCode::Internal);
+    }
+
+    // The user can return no data or some data, which means std::nullopt or DataNode. We will map this to nullptr or a
+    // lyd_node*.
+    if (!node) {
+        *parent = nullptr;
+    } else {
+        *parent = libyang::releaseRawNode(*node);
+    }
+
+    return static_cast<int>(ret);
 }
 }
 
@@ -42,6 +77,16 @@ void Subscription::onModuleChange(const char* moduleName, ModuleChangeCb cb, con
 
     auto res = sr_module_change_subscribe(m_sess.get(), moduleName, xpath, moduleChangeCb, reinterpret_cast<void*>(&cbRef), priority, toSubscribeOptions(opts), &ctx);
     throwIfError(res, "Couldn't create module change subscription");
+
+    saveContext(ctx);
+}
+
+void Subscription::onOperGetItems(const char* moduleName, OperGetItemsCb cb, const char* xpath, const SubscribeOptions opts)
+{
+    auto& cbRef = m_operGetItemsCbs.emplace_back(cb);
+    sr_subscription_ctx_s* ctx = m_sub.get();
+    auto res = sr_oper_get_items_subscribe(m_sess.get(), moduleName, xpath, operGetItemsCb, reinterpret_cast<void*>(&cbRef), toSubscribeOptions(opts), &ctx);
+    throwIfError(res, "Couldn't create operational get items subscription");
 
     saveContext(ctx);
 }

@@ -129,4 +129,73 @@ TEST_CASE("subscriptions")
         auto sub = sess.onModuleChange("test_module", moduleChangeCb, nullptr, 0, sysrepo::SubscribeOptions::DoneOnly);
         sess.copyConfig(sysrepo::Datastore::Startup, "test_module");
     }
+
+    DOCTEST_SUBCASE("Operational get items")
+    {
+        sysrepo::ErrorCode retCode;
+        std::optional<libyang::DataNode> toSet;
+        std::atomic<bool> shouldThrow = false;
+        sysrepo::OperGetItemsCb operGetItemsCb = [&] (sysrepo::Session, auto, auto, auto, auto, auto, std::optional<libyang::DataNode>& parent) {
+            parent = toSet;
+            if (shouldThrow) {
+                throw std::runtime_error("Test callback throw");
+            }
+            return retCode;
+        };
+
+        auto sub = sess.onOperGetItems("test_module", operGetItemsCb, "/test_module:stateLeaf");
+        sess.switchDatastore(sysrepo::Datastore::Operational);
+
+        DOCTEST_SUBCASE("ok code")
+        {
+            retCode = sysrepo::ErrorCode::Ok;
+
+            DOCTEST_SUBCASE("set nullopt")
+            {
+                toSet = std::nullopt;
+                REQUIRE(sess.getData("/test_module:stateLeaf") == std::nullopt);
+            }
+
+            DOCTEST_SUBCASE("set a return node")
+            {
+                toSet = sess.getContext().newPath("/test_module:stateLeaf", "123");
+                REQUIRE(sess.getData("/test_module:stateLeaf")->path() == "/test_module:stateLeaf");
+            }
+        }
+
+        DOCTEST_SUBCASE("error code")
+        {
+            retCode = sysrepo::ErrorCode::Internal;
+
+            DOCTEST_SUBCASE("set nullopt")
+            {
+                toSet = std::nullopt;
+            }
+
+            DOCTEST_SUBCASE("set a return node")
+            {
+                toSet = sess.getContext().newPath("/test_module:stateLeaf", "123");
+            }
+
+            REQUIRE_THROWS(sess.getData("/test_module:stateLeaf"));
+        }
+
+        DOCTEST_SUBCASE("exception")
+        {
+            retCode = sysrepo::ErrorCode::Ok;
+
+            shouldThrow = true;
+            DOCTEST_SUBCASE("set nullopt")
+            {
+                toSet = std::nullopt;
+            }
+
+            DOCTEST_SUBCASE("set a return node")
+            {
+                toSet = sess.getContext().newPath("/test_module:stateLeaf", "123");
+            }
+
+            REQUIRE_THROWS(sess.getData("/test_module:stateLeaf"));
+        }
+    }
 }
