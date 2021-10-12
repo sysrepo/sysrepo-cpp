@@ -131,6 +131,13 @@ Subscription Session::onModuleChange(const char* moduleName, ModuleChangeCb cb, 
     return sub;
 }
 
+Subscription Session::onOperGetItems(const char* moduleName, OperGetItemsCb cb, const char* xpath, const SubscribeOptions opts)
+{
+    auto sub = Subscription{m_sess};
+    sub.onOperGetItems(moduleName, cb, xpath, opts);
+    return sub;
+}
+
 /**
  * Returns a collection of changes based on an `xpath`. Use "//." to get a full change subtree.
  *
