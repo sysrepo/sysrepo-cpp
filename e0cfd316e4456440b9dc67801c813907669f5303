@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec4a9c53_2686ae49",
+        "filename": "tests/test_module.yang",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-10-12T10:21:33Z",
+      "side": 1,
+      "message": "please add more tests (see the operational data CB patch for the 2x3 matrix); also please keep this test with a no-output RPC (so perhaps a 3x3 matrix of possible outcomes)",
+      "revId": "e0cfd316e4456440b9dc67801c813907669f5303",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
