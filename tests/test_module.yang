@@ -10,4 +10,12 @@ module test_module {
     config false;
     type int32;
   }
+
+  rpc noop {
+    output {
+      leaf success {
+        type boolean;
+      }
+    }
+  }
 }

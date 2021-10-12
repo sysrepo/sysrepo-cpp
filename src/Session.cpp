@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
 */
 
+#include <cassert>
 extern "C" {
 #include <sysrepo.h>
 }
@@ -124,6 +125,16 @@ void Session::copyConfig(const Datastore source, const char* moduleName, std::ch
     throwIfError(res, "Couldn't copy config");
 }
 
+libyang::DataNode Session::sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout)
+{
+    lyd_node* output;
+    auto res = sr_rpc_send_tree(m_sess.get(), libyang::getRawNode(input), timeout.count(), &output);
+    throwIfError(res, "Couldn't send RPC");
+
+    assert(output); // TODO: sysrepo always gives the RPC node? (even when it has not output or output nodes?)
+    return libyang::wrapRawNode(output);
+}
+
 Subscription Session::onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath, uint32_t priority, const SubscribeOptions opts)
 {
     auto sub = Subscription{m_sess};
@@ -135,6 +146,13 @@ Subscription Session::onOperGetItems(const char* moduleName, OperGetItemsCb cb, 
 {
     auto sub = Subscription{m_sess};
     sub.onOperGetItems(moduleName, cb, xpath, opts);
+    return sub;
+}
+
+Subscription Session::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority, const SubscribeOptions opts)
+{
+    auto sub = Subscription{m_sess};
+    sub.onRPCAction(xpath, cb, priority, opts);
     return sub;
 }
 
