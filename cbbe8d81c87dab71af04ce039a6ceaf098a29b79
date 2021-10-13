@@ -22,6 +22,30 @@
       },
       "revId": "cbbe8d81c87dab71af04ce039a6ceaf098a29b79",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c05195ac_384f8345",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-10-13T09:15:05Z",
+      "side": 1,
+      "message": "\u003e Is the question \"why find_pand throws when I\u0027m invoking it on the RPC result of /test_module:noop, asking for the /test_module:shutdown/success\"?\n\nyes\n\nIt should return nullopt, but it just throws, I\u0027m not sure why, will investigate",
+      "parentUuid": "edca46e3_0c6cf48a",
+      "range": {
+        "startLine": 244,
+        "startChar": 63,
+        "endLine": 244,
+        "endChar": 143
+      },
+      "revId": "cbbe8d81c87dab71af04ce039a6ceaf098a29b79",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
