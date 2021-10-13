@@ -46,6 +46,30 @@
       },
       "revId": "cbbe8d81c87dab71af04ce039a6ceaf098a29b79",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "205d83ef_24a3e190",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-10-13T20:30:22Z",
+      "side": 1,
+      "message": "Okay it seems that libyang works a little bit differently when working with RPC nodes... I\u0027ll open an issue on GH for that",
+      "parentUuid": "c05195ac_384f8345",
+      "range": {
+        "startLine": 244,
+        "startChar": 63,
+        "endLine": 244,
+        "endChar": 143
+      },
+      "revId": "cbbe8d81c87dab71af04ce039a6ceaf098a29b79",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
