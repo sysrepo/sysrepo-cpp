@@ -70,6 +70,30 @@
       },
       "revId": "cbbe8d81c87dab71af04ce039a6ceaf098a29b79",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0d09bc4_06e5a308",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-10-13T20:55:32Z",
+      "side": 1,
+      "message": "https://github.com/CESNET/libyang/issues/1714",
+      "parentUuid": "205d83ef_24a3e190",
+      "range": {
+        "startLine": 244,
+        "startChar": 63,
+        "endLine": 244,
+        "endChar": 143
+      },
+      "revId": "cbbe8d81c87dab71af04ce039a6ceaf098a29b79",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
