@@ -34,6 +34,24 @@
       "parentUuid": "ec4a9c53_2686ae49",
       "revId": "e0cfd316e4456440b9dc67801c813907669f5303",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b8fab89_3d8934c8",
+        "filename": "tests/test_module.yang",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-10-13T09:12:41Z",
+      "side": 1,
+      "message": "also the throwing part needs a test",
+      "parentUuid": "e9293760_67396a13",
+      "revId": "e0cfd316e4456440b9dc67801c813907669f5303",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }

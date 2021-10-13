@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edca46e3_0c6cf48a",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-10-13T09:12:41Z",
+      "side": 1,
+      "message": "Is the question \"why find_pand throws when I\u0027m invoking it on the RPC result of /test_module:noop, asking for the /test_module:shutdown/success\"?\n\nThis behavior should be tested (so please add an elseif branch testing for the other RPC, checking that it fails with a REQUIRE_THROWS). As of whether it\u0027s better to return a nullopt or throw, that\u0027s for libyang + libyang-cpp to decide I guess.",
+      "range": {
+        "startLine": 244,
+        "startChar": 63,
+        "endLine": 244,
+        "endChar": 143
+      },
+      "revId": "cbbe8d81c87dab71af04ce039a6ceaf098a29b79",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
