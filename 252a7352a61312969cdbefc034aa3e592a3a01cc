@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5c7707f1_a3c6bd8a",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-10-13T07:18:36Z",
+      "side": 1,
+      "message": "The throwing test is a difficult, because the callback runs in a separate thread, so the usual REQUIRE_THROWS wont work",
+      "parentUuid": "afc23c5f_38528032",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 5
+      },
+      "revId": "252a7352a61312969cdbefc034aa3e592a3a01cc",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "188dfb97_fd819c1f",
         "filename": "tests/subscriptions.cpp",
         "patchSetId": 3
@@ -37,6 +61,24 @@
       "writtenOn": "2021-10-12T10:19:57Z",
       "side": 1,
       "message": "please also test errors returned from the user CB, and a CB that throws; also any of the three scenarios (OK, error code, exception) should be tested for \"set something\" and \"hasn\u0027t set anything\"",
+      "revId": "252a7352a61312969cdbefc034aa3e592a3a01cc",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25bb3716_3560cb19",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-10-13T07:18:36Z",
+      "side": 1,
+      "message": "I have added the ok/err code, but the exceptions are more difficult, see my other comment",
+      "parentUuid": "188dfb97_fd819c1f",
       "revId": "252a7352a61312969cdbefc034aa3e592a3a01cc",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
