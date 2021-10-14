@@ -33,6 +33,24 @@
       "message": "use that sr plugin logging here",
       "revId": "6117e857c6abc86bdce6c7e71912e766750bd6a3",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce2acb0a_1e08110d",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-10-14T13:39:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "294b4dd3_996b437f",
+      "revId": "6117e857c6abc86bdce6c7e71912e766750bd6a3",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
