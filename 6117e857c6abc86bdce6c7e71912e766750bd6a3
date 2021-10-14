@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc68abb6_d73897d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-10-14T12:52:56Z",
+      "side": 1,
+      "message": "please port this to sr plugin logging, then it\u0027s good to go",
+      "revId": "6117e857c6abc86bdce6c7e71912e766750bd6a3",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "294b4dd3_996b437f",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-10-14T12:52:56Z",
+      "side": 1,
+      "message": "use that sr plugin logging here",
+      "revId": "6117e857c6abc86bdce6c7e71912e766750bd6a3",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
