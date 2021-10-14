@@ -36,7 +36,21 @@ void logExceptionFromCb(const std::exception& ex)
 int moduleChangeCb(sr_session_ctx_t* session, uint32_t subscriptionId, const char* moduleName, const char* subXPath, sr_event_t event, uint32_t requestId, void* privateData)
 {
     auto cb = reinterpret_cast<ModuleChangeCb*>(privateData);
-    return static_cast<int>((*cb)(wrapUnmanagedSession(session), subscriptionId, moduleName, subXPath ? std::optional<std::string_view>{subXPath} : std::nullopt, toEvent(event), requestId));
+    sysrepo::ErrorCode ret;
+    try {
+        ret = (*cb)(
+                wrapUnmanagedSession(session),
+                subscriptionId,
+                moduleName,
+                subXPath ? std::optional<std::string_view>{subXPath} : std::nullopt,
+                toEvent(event),
+                requestId);
+    } catch (std::exception& ex) {
+        logExceptionFromCb(ex);
+        ret = ErrorCode::Internal;
+    }
+
+    return static_cast<int>(ret);
 }
 
 int operGetItemsCb(sr_session_ctx_t* session, uint32_t subscriptionId, const char* moduleName, const char* subXPath, const char* requestXPath, uint32_t requestId, lyd_node** parent, void* privateData)
