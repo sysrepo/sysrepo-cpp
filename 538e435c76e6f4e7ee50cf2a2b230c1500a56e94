@@ -48,6 +48,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d33ff57_1de9fea0",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-10-14T13:42:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8aacd319_31b6c318",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 90
+      },
+      "revId": "538e435c76e6f4e7ee50cf2a2b230c1500a56e94",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "727bc8c6_43c86e41",
@@ -61,6 +85,24 @@
       "writtenOn": "2021-10-14T12:42:10Z",
       "side": 1,
       "message": "add sr plugin error logging here",
+      "revId": "538e435c76e6f4e7ee50cf2a2b230c1500a56e94",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc487395_f2f13cd8",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-10-14T13:42:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "727bc8c6_43c86e41",
       "revId": "538e435c76e6f4e7ee50cf2a2b230c1500a56e94",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
