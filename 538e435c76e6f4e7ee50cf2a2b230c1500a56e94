@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aef045c0_02166cad",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-10-14T12:16:44Z",
+      "side": 1,
+      "message": "Now we have exception logging. I should probably add this to all the other callbacks",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 90
+      },
+      "revId": "538e435c76e6f4e7ee50cf2a2b230c1500a56e94",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
