@@ -94,6 +94,30 @@
       },
       "revId": "cbbe8d81c87dab71af04ce039a6ceaf098a29b79",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f756f0a0_9b5d959f",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-10-14T08:11:33Z",
+      "side": 1,
+      "message": "Okay, it was a bug, now fixed in upstream, but have to wait for gerrit to fetch it",
+      "parentUuid": "a0d09bc4_06e5a308",
+      "range": {
+        "startLine": 244,
+        "startChar": 63,
+        "endLine": 244,
+        "endChar": 143
+      },
+      "revId": "cbbe8d81c87dab71af04ce039a6ceaf098a29b79",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
