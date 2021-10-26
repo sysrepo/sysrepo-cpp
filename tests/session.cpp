@@ -40,6 +40,11 @@ TEST_CASE("session")
         sess.applyChanges();
         data = sess.getData("/test_module:leafInt32");
         REQUIRE(!data);
+
+        sess.setItem("/test_module:leafInt32", "123");
+        sess.discardChanges();
+        data = sess.getData("/test_module:leafInt32");
+        REQUIRE(!data);
     }
 
     DOCTEST_SUBCASE("switching datastore")
