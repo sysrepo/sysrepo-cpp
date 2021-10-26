@@ -34,6 +34,7 @@ public:
     // TODO: allow all arguments
     void setItem(const char* path, const char* value);
     void deleteItem(const char* path, const EditOptions opts = sysrepo::EditOptions::Default);
+    void moveItem(const char* path, const MovePosition move, const char* keys_or_value, const char* origin = nullptr, const EditOptions opts = sysrepo::EditOptions::Default);
     // TODO: allow all arguments
     std::optional<libyang::DataNode> getData(const char* path);
     void applyChanges(std::chrono::milliseconds timeout = std::chrono::milliseconds{0});

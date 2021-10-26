@@ -118,4 +118,16 @@ static_assert(static_cast<ErrorCode>(SR_ERR_LOCKED) == ErrorCode::Locked);
 static_assert(static_cast<ErrorCode>(SR_ERR_TIME_OUT) == ErrorCode::Timeout);
 static_assert(static_cast<ErrorCode>(SR_ERR_CALLBACK_FAILED) == ErrorCode::CallbackFailed);
 static_assert(static_cast<ErrorCode>(SR_ERR_CALLBACK_SHELVE) == ErrorCode::CallbackShelve);
+
+constexpr sr_move_position_t toMovePosition(const MovePosition opts)
+{
+    return static_cast<sr_move_position_t>(opts);
+}
+
+static_assert(std::is_same_v<std::underlying_type_t<sr_move_position_t>, std::underlying_type_t<MovePosition>>);
+
+static_assert(toMovePosition(MovePosition::Before) == SR_MOVE_BEFORE);
+static_assert(toMovePosition(MovePosition::After) == SR_MOVE_AFTER);
+static_assert(toMovePosition(MovePosition::First) == SR_MOVE_FIRST);
+static_assert(toMovePosition(MovePosition::Last) == SR_MOVE_LAST);
 }
