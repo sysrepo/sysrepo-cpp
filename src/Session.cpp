@@ -87,7 +87,7 @@ void Session::deleteItem(const char* path)
  *
  * @returns std::nullopt if no matching data found, otherwise the requested data.
  */
-std::optional<libyang::DataNode> Session::getData(const char* path)
+std::optional<libyang::DataNode> Session::getData(const char* path) const
 {
     lyd_node* node;
     auto res = sr_get_data(m_sess.get(), path, 0, 0, 0, &node);
