@@ -116,6 +116,18 @@ void Session::applyChanges(std::chrono::milliseconds timeout)
 }
 
 /**
+ * Discards changes made in this Session.
+ *
+ * Wraps `sr_discard_changes`.
+ */
+void Session::discardChanges()
+{
+    auto res = sr_discard_changes(m_sess.get());
+
+    throwIfError(res, "Session::discardChanges: Couldn't discard changes");
+}
+
+/**
  * Replaces configuration from `source` datastore to the current datastore. If `moduleName` is specified, the operation
  * is limited to that module. Optionally, a timeout can be specified, otherwise the default is used.
  */
