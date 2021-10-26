@@ -9,6 +9,7 @@
 #include <doctest/doctest.h>
 #include <optional>
 #include <sysrepo-cpp/Connection.hpp>
+#include <sysrepo-cpp/utils/exception.hpp>
 
 TEST_CASE("session")
 {
@@ -40,6 +41,15 @@ TEST_CASE("session")
         sess.applyChanges();
         data = sess.getData("/test_module:leafInt32");
         REQUIRE(!data);
+
+        sess.setItem("/test_module:leafInt32", "123");
+        sess.discardChanges();
+        data = sess.getData("/test_module:leafInt32");
+        REQUIRE(!data);
+
+        REQUIRE_THROWS_WITH_AS(sess.setItem("/test_module:non-existent", nullptr),
+                "Session::setItem: Couldn't set '/test_module:non-existent (1)",
+                sysrepo::ErrorWithCode);;
     }
 
     DOCTEST_SUBCASE("switching datastore")

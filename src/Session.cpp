@@ -60,7 +60,7 @@ void Session::setItem(const char* path, const char* value)
 {
     auto res = sr_set_item_str(m_sess.get(), path, value, nullptr, 0);
 
-    throwIfError(res, "Session::setItem: Couldn't set '"s + path + "' to '" + "'" + value + "'");
+    throwIfError(res, "Session::setItem: Couldn't set '"s + path + (value ? ("' to '"s + "'" + value + "'") : ""));
 }
 
 /**
@@ -88,7 +88,7 @@ void Session::deleteItem(const char* path, const EditOptions opts)
  *
  * @returns std::nullopt if no matching data found, otherwise the requested data.
  */
-std::optional<libyang::DataNode> Session::getData(const char* path)
+std::optional<libyang::DataNode> Session::getData(const char* path) const
 {
     lyd_node* node;
     auto res = sr_get_data(m_sess.get(), path, 0, 0, 0, &node);
@@ -113,6 +113,18 @@ void Session::applyChanges(std::chrono::milliseconds timeout)
     auto res = sr_apply_changes(m_sess.get(), timeout.count());
 
     throwIfError(res, "Session::applyChanges: Couldn't apply changes");
+}
+
+/**
+ * Discards changes made in this Session.
+ *
+ * Wraps `sr_discard_changes`.
+ */
+void Session::discardChanges()
+{
+    auto res = sr_discard_changes(m_sess.get());
+
+    throwIfError(res, "Session::discardChanges: Couldn't discard changes");
 }
 
 /**
