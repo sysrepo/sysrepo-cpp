@@ -78,6 +78,16 @@ enum class EditOptions : uint32_t {
 };
 
 /**
+ * Wraps sr_move_position_t.
+ */
+enum class MovePosition : uint32_t {
+    Before,
+    After,
+    First,
+    Last
+};
+
+/**
  * Wraps sr_change_oper_t.
  */
 enum class ChangeOperation {
