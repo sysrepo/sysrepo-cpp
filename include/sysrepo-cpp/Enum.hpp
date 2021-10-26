@@ -68,6 +68,16 @@ enum class SubscribeOptions : uint32_t {
 };
 
 /**
+ * Wraps sr_edit_flag_t.
+ */
+enum class EditOptions : uint32_t {
+    Default = 0,
+    NonRecursive = 1,
+    Strict = 2,
+    Isolate = 4
+};
+
+/**
  * Wraps sr_change_oper_t.
  */
 enum class ChangeOperation {

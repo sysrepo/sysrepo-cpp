@@ -70,10 +70,11 @@ void Session::setItem(const char* path, const char* value)
  * Wraps `sr_delete_item`.
  *
  * @param path Path of the element to be deleted.
+ * @param opts Options changing the behavior of this method.
  */
-void Session::deleteItem(const char* path)
+void Session::deleteItem(const char* path, const EditOptions opts)
 {
-    auto res = sr_delete_item(m_sess.get(), path, 0);
+    auto res = sr_delete_item(m_sess.get(), path, toEditOptions(opts));
 
     throwIfError(res, "Session::deleteItem: Can't delete '"s + path + "'");
 }

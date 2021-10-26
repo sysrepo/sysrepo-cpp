@@ -33,8 +33,7 @@ public:
     void switchDatastore(const Datastore ds) const;
     // TODO: allow all arguments
     void setItem(const char* path, const char* value);
-    // TODO: allow all arguments
-    void deleteItem(const char* path);
+    void deleteItem(const char* path, const EditOptions opts = sysrepo::EditOptions::Default);
     // TODO: allow all arguments
     std::optional<libyang::DataNode> getData(const char* path);
     void applyChanges(std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
