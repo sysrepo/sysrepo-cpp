@@ -80,7 +80,7 @@ enum class EditOptions : uint32_t {
 /**
  * Wraps sr_change_oper_t.
  */
-enum class ChangeOperation {
+enum class ChangeOperation : uint32_t {
     Created,
     Modified,
     Deleted,
@@ -90,7 +90,7 @@ enum class ChangeOperation {
 /**
  * Wraps sr_log_level_t.
  */
-enum class LogLevel {
+enum class LogLevel : uint32_t {
     None,
     Error,
     Warning,
