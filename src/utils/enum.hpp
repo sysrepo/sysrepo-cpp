@@ -71,6 +71,8 @@ constexpr SubscribeOptions operator|(const SubscribeOptions a, const SubscribeOp
     return implEnumBitOr(a, b);
 }
 
+static_assert(std::is_same_v<std::underlying_type_t<sr_subscr_flag_t>, std::underlying_type_t<SubscribeOptions>>);
+
 static_assert(toSubscribeOptions(SubscribeOptions::Default) == SR_SUBSCR_DEFAULT);
 static_assert(toSubscribeOptions(SubscribeOptions::NoThread) == SR_SUBSCR_NO_THREAD);
 static_assert(toSubscribeOptions(SubscribeOptions::Passive) == SR_SUBSCR_PASSIVE);
@@ -85,6 +87,8 @@ constexpr ChangeOperation toChangeOper(const sr_change_oper_t oper)
     return static_cast<ChangeOperation>(oper);
 }
 
+static_assert(std::is_same_v<std::underlying_type_t<sr_change_oper_t>, std::underlying_type_t<ChangeOperation>>);
+
 static_assert(toChangeOper(SR_OP_CREATED) == ChangeOperation::Created);
 static_assert(toChangeOper(SR_OP_MODIFIED) == ChangeOperation::Modified);
 static_assert(toChangeOper(SR_OP_DELETED) == ChangeOperation::Deleted);
@@ -94,6 +98,8 @@ constexpr sr_log_level_t toLogLevel(const LogLevel level)
 {
     return static_cast<sr_log_level_t>(level);
 }
+
+static_assert(std::is_same_v<std::underlying_type_t<sr_log_level_t>, std::underlying_type_t<LogLevel>>);
 
 static_assert(toLogLevel(LogLevel::None) == SR_LL_NONE);
 static_assert(toLogLevel(LogLevel::Error) == SR_LL_ERR);
