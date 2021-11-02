@@ -63,6 +63,13 @@ void Session::setItem(const char* path, const char* value)
     throwIfError(res, "Session::setItem: Couldn't set '"s + path + (value ? ("' to '"s + "'" + value + "'") : ""));
 }
 
+void Session::editBatch(libyang::DataNode edit, const DefaultOperation op)
+{
+    auto res = sr_edit_batch(m_sess.get(), libyang::getRawNode(edit), toDefaultOperation(op));
+
+    throwIfError(res, "Session::editBatch: Couldn't apply the edit batch");
+}
+
 /**
  * Delete a leaf, leaf-list, list or a presence container. The changes are applied only after calling
  * Session::applyChanges.
@@ -77,6 +84,24 @@ void Session::deleteItem(const char* path, const EditOptions opts)
     auto res = sr_delete_item(m_sess.get(), path, toEditOptions(opts));
 
     throwIfError(res, "Session::deleteItem: Can't delete '"s + path + "'");
+}
+
+/**
+ * Moves item (a list or a leaf-list) specified by `path`.
+ * @param path Node to move.
+ * @param move Specifies the type of the move.
+ * @param keys_or_value list instance specified on the format [key1="val1"][key2="val2"] or a leaf-list value. Can be
+ * nullptr for the `First` `Last` move types.
+ * @param origin Origin of the value.
+ * @param opts Options modifying the behavior of this method.
+ */
+void Session::moveItem(const char* path, const MovePosition move, const char* keys_or_value, const char* origin, const EditOptions opts)
+{
+    // sr_move_item has separate arguments for list keys and leaf-list values, but the C++ api has just one. It is OK if
+    // both of the arguments are the same. https://github.com/sysrepo/sysrepo/issues/2621
+    auto res = sr_move_item(m_sess.get(), path, toMovePosition(move), keys_or_value, keys_or_value, origin, toEditOptions(opts));
+
+    throwIfError(res, "Session::moveItem: Can't move '"s + path + "'");
 }
 
 /**
