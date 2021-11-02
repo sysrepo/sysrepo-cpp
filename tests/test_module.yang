@@ -11,6 +11,11 @@ module test_module {
     type int32;
   }
 
+  leaf-list values {
+    ordered-by user;
+    type int32;
+  }
+
   rpc noop {
   }
 
