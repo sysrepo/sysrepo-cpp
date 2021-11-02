@@ -7,7 +7,9 @@
 */
 
 #include <atomic>
+#include <cassert>
 #include <doctest/doctest.h>
+#include <pretty_printers.hpp>
 #include <sysrepo-cpp/Connection.hpp>
 #include <trompeloeil.hpp>
 
@@ -114,6 +116,80 @@ TEST_CASE("subscriptions")
         auto sub = sess.onModuleChange("test_module", moduleChangeCb, nullptr, 0, sysrepo::SubscribeOptions::DoneOnly);
         sess.setItem("/test_module:leafInt32", "123");
         sess.applyChanges();
+    }
+
+    DOCTEST_SUBCASE("Moving items")
+    {
+        auto getNumberOrder = [&] {
+            std::vector<int32_t> res;
+            auto data = sess.getData("/test_module:values");
+            auto siblings = data->firstSibling().siblings();
+            for (const auto& sibling : siblings)
+            {
+                assert(sibling.schema().path() == "/test_module:values");
+                res.emplace_back(std::get<int32_t>(sibling.asTerm().value()));
+
+            }
+            return res;
+        };
+
+        sess.deleteItem("/test_module:values[.='10']");
+        sess.deleteItem("/test_module:values[.='20']");
+        sess.deleteItem("/test_module:values[.='30']");
+        sess.deleteItem("/test_module:values[.='40']");
+        sess.applyChanges();
+        sess.setItem("/test_module:values[.='10']", nullptr);
+        sess.setItem("/test_module:values[.='20']", nullptr);
+        sess.setItem("/test_module:values[.='30']", nullptr);
+        sess.setItem("/test_module:values[.='40']", nullptr);
+        sess.applyChanges();
+        Recorder rec;
+        sysrepo::ModuleChangeCb moduleChangeCb = [&rec] (sysrepo::Session session, auto, auto, auto, auto, auto) -> sysrepo::ErrorCode {
+            for (const auto& change : session.getChanges()) {
+                // FIXME: nothing appears here for some reason? no moves, nothing. But the callback IS called.
+                rec.record(change.operation, std::string{change.node.path()}, change.previousList, change.previousValue, change.previousDefault);
+            }
+            return sysrepo::ErrorCode::Ok;
+        };
+
+        auto sub = sess.onModuleChange("test_module", moduleChangeCb, nullptr, 0, sysrepo::SubscribeOptions::DoneOnly);
+
+        std::vector<int32_t> expected;
+
+        DOCTEST_SUBCASE("don't move")
+        {
+            expected = {10, 20, 30, 40};
+        }
+
+        DOCTEST_SUBCASE("first")
+        {
+            sess.moveItem("/test_module:values[.='40']", sysrepo::MovePosition::First, nullptr);
+            expected = {40, 10, 20, 30};
+            sess.applyChanges();
+        }
+
+        DOCTEST_SUBCASE("last")
+        {
+            sess.moveItem("/test_module:values[.='20']", sysrepo::MovePosition::Last, nullptr);
+            expected = {10, 30, 40, 20};
+            sess.applyChanges();
+        }
+
+        DOCTEST_SUBCASE("after")
+        {
+            sess.moveItem("/test_module:values[.='20']", sysrepo::MovePosition::After, "30");
+            expected = {10, 30, 20, 40};
+            sess.applyChanges();
+        }
+
+        DOCTEST_SUBCASE("before")
+        {
+            sess.moveItem("/test_module:values[.='30']", sysrepo::MovePosition::Before, "20");
+            expected = {10, 30, 20, 40};
+            sess.applyChanges();
+        }
+
+        REQUIRE(getNumberOrder() == expected);
     }
 
     DOCTEST_SUBCASE("Copy config")
