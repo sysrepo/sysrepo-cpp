@@ -15,7 +15,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "-Werror ${CMAKE_CXX_FLAGS_DEBUG}")
 
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Woverloaded-virtual -Wimplicit-fallthrough -Wsuggest-override ${CMAKE_CXX_FLAGS}")
 
-add_custom_target(libyang-cpp-version-cmake
+add_custom_target(sysrepo-cpp-version-cmake
         cmake/ProjectGitVersion.cmake
         cmake/ProjectGitVersionRunner.cmake
         )
