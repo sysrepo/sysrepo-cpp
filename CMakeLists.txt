@@ -32,7 +32,7 @@ set(SYSREPO_CPP_PKG_VERSION "alpha")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-add_library(sysrepo-cpp
+add_library(sysrepo-cpp SHARED
         src/Connection.cpp
         src/Session.cpp
         src/Subscription.cpp
