@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0aed4bc1_2d6e614c",
+        "filename": "src/Session.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-03T10:02:14Z",
+      "side": 1,
+      "message": "please add one sentence for this",
+      "revId": "63aa123083b4ebf4f6f5bf580efb08d37cf39fec",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a75d412_f746754f",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-03T10:02:14Z",
+      "side": 1,
+      "message": "it\u0027s a unit test, there\u0027s absolutely no need for a C-style assert(), just REQUIRE(...) something",
+      "revId": "63aa123083b4ebf4f6f5bf580efb08d37cf39fec",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "541dd978_18ae13cc",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-03T10:02:14Z",
+      "side": 1,
+      "message": "what\u0027s the point of this? Why this test case just doesn\u0027t start with the desired state of the tree?",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 61
+      },
+      "revId": "63aa123083b4ebf4f6f5bf580efb08d37cf39fec",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebaa4534_c1500675",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-03T10:02:14Z",
+      "side": 1,
+      "message": "please open a sysrepo bug for this",
+      "revId": "63aa123083b4ebf4f6f5bf580efb08d37cf39fec",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
