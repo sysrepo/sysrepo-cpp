@@ -30,7 +30,7 @@ void Subscription::saveContext(sr_subscription_ctx_s* ctx)
 namespace {
 void logExceptionFromCb(const std::exception& ex)
 {
-    SRPLG_LOG_ERR("sysrepo-cpp", "User callback threw an exception: %s\n", ex.what());
+    SRPLG_LOG_ERR("sysrepo-cpp", "User callback threw an exception: %s", ex.what());
 
 }
 int moduleChangeCb(sr_session_ctx_t* session, uint32_t subscriptionId, const char* moduleName, const char* subXPath, sr_event_t event, uint32_t requestId, void* privateData)
