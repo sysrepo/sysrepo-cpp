@@ -37,6 +37,7 @@ TEST_CASE("subscriptions")
 {
     sysrepo::Connection conn;
     auto sess = conn.sessionStart();
+    sess.copyConfig(sysrepo::Datastore::Startup, "test_module");
     std::atomic<int> called = 0;
 
     DOCTEST_SUBCASE("simple case")
@@ -126,6 +127,9 @@ TEST_CASE("subscriptions")
             return sysrepo::ErrorCode::Ok;
         };
 
+        // Add something to the datastore, so that the copyConfig call can delete it.
+        sess.setItem("/test_module:leafInt32", "123");
+        sess.applyChanges();
 
         TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Deleted, "/test_module:leafInt32", std::nullopt, std::nullopt, false));
         auto sub = sess.onModuleChange("test_module", moduleChangeCb, nullptr, 0, sysrepo::SubscribeOptions::DoneOnly);
