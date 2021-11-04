@@ -56,11 +56,12 @@ int moduleChangeCb(sr_session_ctx_t* session, uint32_t subscriptionId, const cha
 int operGetItemsCb(sr_session_ctx_t* session, uint32_t subscriptionId, const char* moduleName, const char* subXPath, const char* requestXPath, uint32_t requestId, lyd_node** parent, void* privateData)
 {
     auto cb = reinterpret_cast<OperGetItemsCb*>(privateData);
-    auto node = *parent ? std::optional{libyang::wrapRawNode(*parent)} : std::nullopt;
+    auto unmanagedSession = wrapUnmanagedSession(session);
+    auto node = *parent ? std::optional{libyang::wrapRawNode(unmanagedSession.getContext(), *parent)} : std::nullopt;
     sysrepo::ErrorCode ret;
     try {
         ret = ((*cb)(
-                    wrapUnmanagedSession(session),
+                    unmanagedSession,
                     subscriptionId,
                     moduleName,
                     subXPath ? std::optional{subXPath} : std::nullopt,
@@ -86,13 +87,14 @@ int operGetItemsCb(sr_session_ctx_t* session, uint32_t subscriptionId, const cha
 int rpcActionCb(sr_session_ctx_t* session, uint32_t subscriptionId, const char* operationPath, const struct lyd_node* input, sr_event_t event, uint32_t requestId, struct lyd_node* output, void* privateData)
 {
     auto cb = reinterpret_cast<RpcActionCb*>(privateData);
-    auto outputNode = libyang::wrapRawNode(output);
+    auto unmanagedSession = wrapUnmanagedSession(session);
+    auto outputNode = libyang::wrapRawNode(unmanagedSession.getContext(), output);
     sysrepo::ErrorCode ret;
     try {
-        ret = (*cb)(wrapUnmanagedSession(session),
+        ret = (*cb)(unmanagedSession,
                         subscriptionId,
                         operationPath,
-                        libyang::wrapUnmanagedRawNode(input),
+                        libyang::wrapUnmanagedRawNode(unmanagedSession.getContext(), input),
                         toEvent(event),
                         requestId,
                         outputNode
@@ -220,7 +222,7 @@ ChangeIterator& ChangeIterator::operator++()
     // I can safely "dereference" the change here, because last change is handled by the condition above.
     m_current.emplace(Change{
             .operation = toChangeOper(operation),
-            .node = libyang::wrapUnmanagedRawNode(node),
+            .node = libyang::wrapUnmanagedRawNode(wrapUnmanagedSession(m_sess.get()).getContext(), node),
             .previousValue = prevValue ? std::optional<std::string_view>(prevValue) : std::nullopt,
             .previousList = prevList ? std::optional<std::string_view>(prevList) : std::nullopt,
             .previousDefault = static_cast<bool>(prevDefault),

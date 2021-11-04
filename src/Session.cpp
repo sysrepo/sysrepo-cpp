@@ -117,7 +117,7 @@ std::optional<libyang::DataNode> Session::getData(const char* path) const
         return std::nullopt;
     }
 
-    return libyang::wrapRawNode(node);
+    return libyang::wrapRawNode(getContext(), node);
 }
 
 /**
@@ -163,7 +163,7 @@ libyang::DataNode Session::sendRPC(libyang::DataNode input, std::chrono::millise
     throwIfError(res, "Couldn't send RPC");
 
     assert(output); // TODO: sysrepo always gives the RPC node? (even when it has not output or output nodes?)
-    return libyang::wrapRawNode(output);
+    return libyang::wrapRawNode(getContext(), output);
 }
 
 Subscription Session::onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath, uint32_t priority, const SubscribeOptions opts)
