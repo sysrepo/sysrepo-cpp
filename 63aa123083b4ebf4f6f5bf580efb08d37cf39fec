@@ -142,6 +142,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cf6fe70_733f5df0",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-04T09:00:16Z",
+      "side": 1,
+      "message": "I guess it wasn\u0027t as empty as it seemed. I added another patch that always resets the datastore. Items are no longer deleted here.",
+      "parentUuid": "d5035a6b_3de74756",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 61
+      },
+      "revId": "63aa123083b4ebf4f6f5bf580efb08d37cf39fec",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ebaa4534_c1500675",
