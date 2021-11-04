@@ -18,6 +18,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64d105f8_d8982b32",
+        "filename": "src/Session.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-04T01:22:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0aed4bc1_2d6e614c",
+      "revId": "63aa123083b4ebf4f6f5bf580efb08d37cf39fec",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a75d412_f746754f",
@@ -35,6 +53,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca7e4718_9f9c5623",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-04T01:22:29Z",
+      "side": 1,
+      "message": "Oh yeah! :D :fail:",
+      "parentUuid": "6a75d412_f746754f",
+      "revId": "63aa123083b4ebf4f6f5bf580efb08d37cf39fec",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "541dd978_18ae13cc",
@@ -48,6 +84,30 @@
       "writtenOn": "2021-11-03T10:02:14Z",
       "side": 1,
       "message": "what\u0027s the point of this? Why this test case just doesn\u0027t start with the desired state of the tree?",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 61
+      },
+      "revId": "63aa123083b4ebf4f6f5bf580efb08d37cf39fec",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc288ba1_58bc2077",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-04T01:22:29Z",
+      "side": 1,
+      "message": "The test starts with an empty data repository, the point of this is to initialize the sysrepo data repository with something.",
+      "parentUuid": "541dd978_18ae13cc",
       "range": {
         "startLine": 136,
         "startChar": 0,
