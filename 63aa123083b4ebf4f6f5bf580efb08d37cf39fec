@@ -181,6 +181,24 @@
       "message": "please open a sysrepo bug for this",
       "revId": "63aa123083b4ebf4f6f5bf580efb08d37cf39fec",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba192831_cb0a1732",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-08T15:56:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebaa4534_c1500675",
+      "revId": "63aa123083b4ebf4f6f5bf580efb08d37cf39fec",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
