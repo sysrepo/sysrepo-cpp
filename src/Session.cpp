@@ -56,14 +56,14 @@ void Session::switchDatastore(const Datastore ds) const
  * @param path Path of the element to be changed.
  * @param value Value of the element to be changed. Can be `nullptr`.
  */
-void Session::setItem(const char* path, const char* value)
+void Session::setItem(const char* path, const char* value) const
 {
     auto res = sr_set_item_str(m_sess.get(), path, value, nullptr, 0);
 
     throwIfError(res, "Session::setItem: Couldn't set '"s + path + (value ? ("' to '"s + "'" + value + "'") : ""));
 }
 
-void Session::editBatch(libyang::DataNode edit, const DefaultOperation op)
+void Session::editBatch(libyang::DataNode edit, const DefaultOperation op) const
 {
     auto res = sr_edit_batch(m_sess.get(), libyang::getRawNode(edit), toDefaultOperation(op));
 
@@ -79,7 +79,7 @@ void Session::editBatch(libyang::DataNode edit, const DefaultOperation op)
  * @param path Path of the element to be deleted.
  * @param opts Options changing the behavior of this method.
  */
-void Session::deleteItem(const char* path, const EditOptions opts)
+void Session::deleteItem(const char* path, const EditOptions opts) const
 {
     auto res = sr_delete_item(m_sess.get(), path, toEditOptions(opts));
 
@@ -95,7 +95,7 @@ void Session::deleteItem(const char* path, const EditOptions opts)
  * @param origin Origin of the value.
  * @param opts Options modifying the behavior of this method.
  */
-void Session::moveItem(const char* path, const MovePosition move, const char* keys_or_value, const char* origin, const EditOptions opts)
+void Session::moveItem(const char* path, const MovePosition move, const char* keys_or_value, const char* origin, const EditOptions opts) const
 {
     // sr_move_item has separate arguments for list keys and leaf-list values, but the C++ api has just one. It is OK if
     // both of the arguments are the same. https://github.com/sysrepo/sysrepo/issues/2621
@@ -133,7 +133,7 @@ std::optional<libyang::DataNode> Session::getData(const char* path) const
  * Wraps `sr_apply_changes`.
  * @param timeout Optional timeout for change callbacks.
  */
-void Session::applyChanges(std::chrono::milliseconds timeout)
+void Session::applyChanges(std::chrono::milliseconds timeout) const
 {
     auto res = sr_apply_changes(m_sess.get(), timeout.count());
 
@@ -145,7 +145,7 @@ void Session::applyChanges(std::chrono::milliseconds timeout)
  *
  * Wraps `sr_discard_changes`.
  */
-void Session::discardChanges()
+void Session::discardChanges() const
 {
     auto res = sr_discard_changes(m_sess.get());
 
@@ -156,14 +156,14 @@ void Session::discardChanges()
  * Replaces configuration from `source` datastore to the current datastore. If `moduleName` is specified, the operation
  * is limited to that module. Optionally, a timeout can be specified, otherwise the default is used.
  */
-void Session::copyConfig(const Datastore source, const char* moduleName, std::chrono::milliseconds timeout)
+void Session::copyConfig(const Datastore source, const char* moduleName, std::chrono::milliseconds timeout) const
 {
     auto res = sr_copy_config(m_sess.get(), moduleName, toDatastore(source), timeout.count());
 
     throwIfError(res, "Couldn't copy config");
 }
 
-libyang::DataNode Session::sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout)
+libyang::DataNode Session::sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout) const
 {
     lyd_node* output;
     auto res = sr_rpc_send_tree(m_sess.get(), libyang::getRawNode(input), timeout.count(), &output);
@@ -173,21 +173,21 @@ libyang::DataNode Session::sendRPC(libyang::DataNode input, std::chrono::millise
     return libyang::wrapRawNode(getContext(), output);
 }
 
-Subscription Session::onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath, uint32_t priority, const SubscribeOptions opts)
+Subscription Session::onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath, uint32_t priority, const SubscribeOptions opts) const
 {
     auto sub = Subscription{m_sess};
     sub.onModuleChange(moduleName, cb, xpath, priority, opts);
     return sub;
 }
 
-Subscription Session::onOperGetItems(const char* moduleName, OperGetItemsCb cb, const char* xpath, const SubscribeOptions opts)
+Subscription Session::onOperGetItems(const char* moduleName, OperGetItemsCb cb, const char* xpath, const SubscribeOptions opts) const
 {
     auto sub = Subscription{m_sess};
     sub.onOperGetItems(moduleName, cb, xpath, opts);
     return sub;
 }
 
-Subscription Session::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority, const SubscribeOptions opts)
+Subscription Session::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority, const SubscribeOptions opts) const
 {
     auto sub = Subscription{m_sess};
     sub.onRPCAction(xpath, cb, priority, opts);
@@ -200,7 +200,7 @@ Subscription Session::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t pr
  * @param xpath XPath selecting the changes. The default selects all changes, possibly including those you didn't
  * subscribe to.
  */
-ChangeCollection Session::getChanges(const char* xpath)
+ChangeCollection Session::getChanges(const char* xpath) const
 {
     return ChangeCollection{xpath, m_sess};
 }

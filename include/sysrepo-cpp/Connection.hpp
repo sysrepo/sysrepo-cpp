@@ -16,7 +16,7 @@ namespace sysrepo {
 class Connection {
 public:
     Connection();
-    Session sessionStart(sysrepo::Datastore datastore = sysrepo::Datastore::Running);
+    Session sessionStart(sysrepo::Datastore datastore = sysrepo::Datastore::Running) const;
 
 private:
     std::shared_ptr<sr_conn_ctx_s> ctx;
