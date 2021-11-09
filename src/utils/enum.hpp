@@ -133,4 +133,19 @@ constexpr const char* toDefaultOperation(const DefaultOperation op) {
 
     __builtin_unreachable();
 }
+
+constexpr NotificationType toNotificationType(const sr_ev_notif_type_t type)
+{
+    return static_cast<NotificationType>(type);
+}
+
+static_assert(std::is_same_v<std::underlying_type_t<sr_ev_notif_type_t>, std::underlying_type_t<NotificationType>>);
+
+static_assert(toNotificationType(SR_EV_NOTIF_REALTIME) == NotificationType::Realtime);
+static_assert(toNotificationType(SR_EV_NOTIF_REPLAY) == NotificationType::Replay);
+static_assert(toNotificationType(SR_EV_NOTIF_REPLAY_COMPLETE) == NotificationType::ReplayComplete);
+static_assert(toNotificationType(SR_EV_NOTIF_TERMINATED) == NotificationType::Terminated);
+static_assert(toNotificationType(SR_EV_NOTIF_MODIFIED) == NotificationType::Modified);
+static_assert(toNotificationType(SR_EV_NOTIF_SUSPENDED) == NotificationType::Suspended);
+static_assert(toNotificationType(SR_EV_NOTIF_RESUMED) == NotificationType::Resumed);
 }
