@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
 */
 #pragma once
+#include <chrono>
 #include <functional>
 #include <libyang-cpp/DataNode.hpp>
 #include <list>
@@ -65,9 +66,12 @@ private:
     std::shared_ptr<sr_session_ctx_s> m_sess;
 };
 
+using NotificationTimeStamp = std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>;
+
 using ModuleChangeCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view moduleName, std::optional<std::string_view> subXPath, Event event, uint32_t requestId)>;
 using OperGetItemsCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view moduleName, std::optional<std::string_view> subXPath, std::optional<std::string_view> requestXPath, uint32_t requestId, std::optional<libyang::DataNode>& output)>;
 using RpcActionCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view path, const libyang::DataNode input, Event event, uint32_t requestId, libyang::DataNode output)>;
+using NotifCb = std::function<void(Session session, uint32_t subscriptionId, const NotificationType type, const std::optional<libyang::DataNode> notificationTree, const NotificationTimeStamp timestamp)>;
 
 using ExceptionHandler = std::function<void(std::exception& ex)>;
 
@@ -89,6 +93,13 @@ public:
     void onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath = nullptr, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
     void onOperGetItems(const char* moduleName, OperGetItemsCb cb, const char* xpath = nullptr, const SubscribeOptions opts = SubscribeOptions::Default);
     void onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
+    void onNotification(
+            const char* moduleName,
+            NotifCb cb,
+            const char* xpath = nullptr,
+            const std::optional<NotificationTimeStamp>& startTime = std::nullopt,
+            const std::optional<NotificationTimeStamp>& stopTime = std::nullopt,
+            const SubscribeOptions opts = SubscribeOptions::Default);
 private:
     void saveContext(sr_subscription_ctx_s* ctx);
 
@@ -100,6 +111,7 @@ private:
     std::list<PrivData<ModuleChangeCb>> m_moduleChangeCbs;
     std::list<PrivData<OperGetItemsCb>> m_operGetItemsCbs;
     std::list<PrivData<RpcActionCb>> m_RPCActionCbs;
+    std::list<PrivData<NotifCb>> m_notificationCbs;
 
     // Need a stable address, so need to save it on the heap.
     std::shared_ptr<ExceptionHandler> m_exceptionHandler;

@@ -173,6 +173,12 @@ libyang::DataNode Session::sendRPC(libyang::DataNode input, std::chrono::millise
     return libyang::wrapRawNode(output);
 }
 
+void Session::sendNotification(libyang::DataNode notification, const Wait wait, std::chrono::milliseconds timeout)
+{
+    auto res = sr_event_notif_send_tree(m_sess.get(), libyang::getRawNode(notification), timeout.count(), wait == Wait::Yes ? 1 : 0);
+    throwIfError(res, "Couldn't send notification");
+}
+
 Subscription Session::onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath, uint32_t priority, const SubscribeOptions opts, ExceptionHandler handler)
 {
     auto sub = Subscription{m_sess, handler};
@@ -191,6 +197,20 @@ Subscription Session::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t pr
 {
     auto sub = Subscription{m_sess, handler};
     sub.onRPCAction(xpath, cb, priority, opts);
+    return sub;
+}
+
+Subscription Session::onNotification(
+        const char* moduleName,
+        NotifCb cb,
+        const char* xpath,
+        const std::optional<NotificationTimeStamp>& startTime,
+        const std::optional<NotificationTimeStamp>& stopTime,
+        const SubscribeOptions opts,
+        ExceptionHandler handler)
+{
+    auto sub = Subscription{m_sess, handler};
+    sub.onNotification(moduleName, cb, xpath, startTime, stopTime, opts);
     return sub;
 }
 

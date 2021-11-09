@@ -26,4 +26,10 @@ module test_module {
       }
     }
   }
+
+  notification ping {
+    leaf myLeaf {
+      type int32;
+    }
+  }
 }
