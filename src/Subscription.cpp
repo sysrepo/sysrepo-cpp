@@ -119,6 +119,24 @@ int rpcActionCb(sr_session_ctx_t* session, uint32_t subscriptionId, const char* 
 
     return static_cast<int>(ret);
 }
+
+void eventNotifCb(sr_session_ctx_t* session, uint32_t subscriptionId, const sr_ev_notif_type_t type, const struct lyd_node* notification, struct timespec* timestamp, void *privateData)
+{
+    auto priv = reinterpret_cast<PrivData<NotifCb>*>(privateData);
+    auto unmanagedSession = wrapUnmanagedSession(session);
+    auto wrappedNotification = notification ? std::optional{libyang::wrapUnmanagedRawNode(unmanagedSession.getContext(), notification)} : std::nullopt;
+    try {
+        priv->callback(unmanagedSession,
+                        subscriptionId,
+                        toNotificationType(type),
+                        wrappedNotification,
+                        toTimePoint(*timestamp)
+                );
+
+    } catch (std::exception& ex) {
+        handleExceptionFromCb(ex, priv->exceptionHandler);
+    }
+}
 }
 
 void Subscription::onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath, uint32_t priority, const SubscribeOptions opts)
@@ -152,10 +170,38 @@ void Subscription::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t prior
     saveContext(ctx);
 }
 
+void Subscription::onNotification(
+        const char* moduleName,
+        NotifCb cb,
+        const char* xpath,
+        const std::optional<NotificationTimeStamp>& startTime,
+        const std::optional<NotificationTimeStamp>& stopTime,
+        const SubscribeOptions opts)
+{
+    auto& privRef = m_notificationCbs.emplace_back(PrivData{cb, &m_exceptionHandler});
+    sr_subscription_ctx_s* ctx = m_sub.get();
+    auto startSpec = startTime ? std::optional{toTimespec(*startTime)} :std::nullopt;
+    auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} :std::nullopt;
+    auto res = sr_notif_subscribe_tree(
+            m_sess.get(),
+            moduleName,
+            xpath,
+            startSpec ? &startSpec.value() : nullptr,
+            stopSpec ? &stopSpec.value() : nullptr,
+            eventNotifCb,
+            reinterpret_cast<void*>(&privRef),
+            toSubscribeOptions(opts),
+            &ctx);
+    throwIfError(res, "Couldn't create notification subscription");
+
+    saveContext(ctx);
+}
+
 Subscription::Subscription(Subscription&& other) noexcept
     : m_moduleChangeCbs(std::move(other.m_moduleChangeCbs))
     , m_operGetItemsCbs(std::move(other.m_operGetItemsCbs))
     , m_RPCActionCbs(std::move(other.m_RPCActionCbs))
+    , m_notificationCbs(std::move(other.m_notificationCbs))
     , m_sess(other.m_sess)
     , m_sub(other.m_sub)
 {
@@ -172,6 +218,7 @@ Subscription& Subscription::operator=(Subscription&& other) noexcept
     m_moduleChangeCbs = std::move(other.m_moduleChangeCbs);
     m_operGetItemsCbs = std::move(other.m_operGetItemsCbs);
     m_RPCActionCbs = std::move(other.m_RPCActionCbs);
+    m_notificationCbs = std::move(other.m_notificationCbs);
 
     return *this;
 }

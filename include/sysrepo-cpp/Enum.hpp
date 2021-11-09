@@ -131,4 +131,17 @@ enum class LogLevel : uint32_t {
     Information,
     Debug
 };
+
+/**
+ * Wraps sr_ev_notif_type_t.
+ */
+enum class NotificationType : uint32_t {
+    Realtime,
+    Replay,
+    ReplayComplete,
+    Terminated,
+    Modified,
+    Suspended,
+    Resumed
+};
 }
