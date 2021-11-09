@@ -26,7 +26,7 @@ Connection::Connection()
     this->ctx = std::shared_ptr<sr_conn_ctx_t>(ctx, sr_disconnect);
 }
 
-Session Connection::sessionStart(sysrepo::Datastore datastore)
+Session Connection::sessionStart(sysrepo::Datastore datastore) const
 {
     sr_session_ctx_t* sess;
     auto res = sr_session_start(ctx.get(), toDatastore(datastore), &sess);
