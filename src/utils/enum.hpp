@@ -48,28 +48,11 @@ constexpr uint32_t toEditOptions(const EditOptions opts)
     return static_cast<uint32_t>(opts);
 }
 
-template <typename Enum>
-constexpr Enum implEnumBitOr(const Enum a, const Enum b)
-{
-    using Type = std::underlying_type_t<Enum>;
-    return static_cast<Enum>(static_cast<Type>(a) | static_cast<Type>(b));
-}
-
-constexpr EditOptions operator|(const EditOptions a, const EditOptions b)
-{
-    return implEnumBitOr(a, b);
-}
-
 static_assert(std::is_same_v<std::underlying_type_t<sr_edit_flag_t>, std::underlying_type_t<EditOptions>>);
 static_assert(toEditOptions(EditOptions::Default) == SR_EDIT_DEFAULT);
 static_assert(toEditOptions(EditOptions::NonRecursive) == SR_EDIT_NON_RECURSIVE);
 static_assert(toEditOptions(EditOptions::Strict) == SR_EDIT_STRICT);
 static_assert(toEditOptions(EditOptions::Isolate) == SR_EDIT_ISOLATE);
-
-constexpr SubscribeOptions operator|(const SubscribeOptions a, const SubscribeOptions b)
-{
-    return implEnumBitOr(a, b);
-}
 
 static_assert(std::is_same_v<std::underlying_type_t<sr_subscr_flag_t>, std::underlying_type_t<SubscribeOptions>>);
 
