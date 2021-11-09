@@ -27,6 +27,11 @@ class Session;
 struct unmanaged_tag {
 };
 
+enum class Wait {
+    Yes,
+    No
+};
+
 class Session {
 public:
     Datastore activeDatastore() const;
@@ -41,11 +46,20 @@ public:
     void applyChanges(std::chrono::milliseconds timeout = std::chrono::milliseconds{0}) const;
     void discardChanges() const;
     void copyConfig(const Datastore source, const char* moduleName = nullptr, std::chrono::milliseconds timeout = std::chrono::milliseconds{0}) const;
+
     libyang::DataNode sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout = std::chrono::milliseconds{0}) const;
+    void sendNotification(libyang::DataNode notification, const Wait wait, std::chrono::milliseconds timeout = std::chrono::milliseconds{0}) const;
 
     [[nodiscard]] Subscription onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath = nullptr, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default) const;
     [[nodiscard]] Subscription onOperGetItems(const char* moduleName, OperGetItemsCb cb, const char* xpath = nullptr, const SubscribeOptions opts = SubscribeOptions::Default) const;
     [[nodiscard]] Subscription onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default) const;
+    [[nodiscard]] Subscription onNotification(
+            const char* moduleName,
+            NotifCb cb,
+            const char* xpath = nullptr,
+            const std::optional<NotificationTimeStamp>& startTime = std::nullopt,
+            const std::optional<NotificationTimeStamp>& stopTime = std::nullopt,
+            const SubscribeOptions opts = SubscribeOptions::Default) const;
 
     ChangeCollection getChanges(const char* xpath = "//.") const;
 

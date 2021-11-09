@@ -34,6 +34,7 @@ public:
     TROMPELOEIL_MAKE_CONST_MOCK5(record, void(sysrepo::ChangeOperation, std::string, std::optional<std::string_view>, std::optional<std::string_view>, bool));
     TROMPELOEIL_MAKE_CONST_MOCK1(recordRPC, void(std::string_view));
     TROMPELOEIL_MAKE_CONST_MOCK1(recordException, void(std::string));
+    TROMPELOEIL_MAKE_CONST_MOCK2(recordNotification, void(sysrepo::NotificationType, std::optional<std::string_view>));
 };
 
 TEST_CASE("subscriptions")
@@ -388,5 +389,20 @@ TEST_CASE("subscriptions")
         } else {
             REQUIRE_THROWS(sess.sendRPC(sess.getContext().newPath(rpcPath)));
         }
+    }
+
+    DOCTEST_SUBCASE("notifications")
+    {
+        Recorder rec;
+        sysrepo::NotifCb cb = [&rec] (auto, auto, auto type, auto notification, auto) {
+            rec.recordNotification(type, notification ? std::optional{std::string{notification->path()}} : std::nullopt);
+        };
+
+        auto sub = std::optional{sess.onNotification("test_module", cb)};
+
+        REQUIRE_CALL(rec, recordNotification(sysrepo::NotificationType::Realtime, "/test_module:ping"));
+        REQUIRE_CALL(rec, recordNotification(sysrepo::NotificationType::Terminated, std::nullopt));
+        sess.sendNotification(sess.getContext().newPath("/test_module:ping"), sysrepo::Wait::Yes);
+        sub = std::nullopt;
     }
 }
