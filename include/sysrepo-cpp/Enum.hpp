@@ -8,6 +8,7 @@
 #pragma once
 
 #include <cstdint>
+#include <type_traits>
 namespace sysrepo {
 /**
  * Wraps sr_error_t.
@@ -67,6 +68,18 @@ enum class SubscribeOptions : uint32_t {
     ThreadSuspend = 128
 };
 
+template <typename Enum>
+constexpr Enum implEnumBitOr(const Enum a, const Enum b)
+{
+    using Type = std::underlying_type_t<Enum>;
+    return static_cast<Enum>(static_cast<Type>(a) | static_cast<Type>(b));
+}
+
+constexpr SubscribeOptions operator|(const SubscribeOptions a, const SubscribeOptions b)
+{
+    return implEnumBitOr(a, b);
+}
+
 /**
  * Wraps sr_edit_flag_t.
  */
@@ -76,6 +89,11 @@ enum class EditOptions : uint32_t {
     Strict = 2,
     Isolate = 4
 };
+
+constexpr EditOptions operator|(const EditOptions a, const EditOptions b)
+{
+    return implEnumBitOr(a, b);
+}
 
 /**
  * Wraps sr_move_position_t.
