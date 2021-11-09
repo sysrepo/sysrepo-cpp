@@ -109,6 +109,23 @@ int rpcActionCb(sr_session_ctx_t* session, uint32_t subscriptionId, const char* 
 
     return static_cast<int>(ret);
 }
+
+void eventNotifCb(sr_session_ctx_t* session, uint32_t subscriptionId, const sr_ev_notif_type_t type, const struct lyd_node* notification, struct timespec* timestamp, void *privateData)
+{
+    auto cb = reinterpret_cast<NotifCb*>(privateData);
+    auto unmanagedSession = wrapUnmanagedSession(session);
+    try {
+        (*cb)(unmanagedSession,
+                        subscriptionId,
+                        toNotificationType(type),
+                        libyang::wrapUnmanagedRawNode(unmanagedSession.getContext(), notification),
+                        toTimePoint(*timestamp)
+                );
+
+    } catch (std::exception& ex) {
+        logExceptionFromCb(ex);
+    }
+}
 }
 
 void Subscription::onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath, uint32_t priority, const SubscribeOptions opts)
@@ -138,6 +155,33 @@ void Subscription::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t prior
     sr_subscription_ctx_s* ctx = m_sub.get();
     auto res = sr_rpc_subscribe_tree(m_sess.get(), xpath, rpcActionCb, reinterpret_cast<void*>(&cbRef), priority, toSubscribeOptions(opts), &ctx);
     throwIfError(res, "Couldn't create RPC/action subscription");
+
+    saveContext(ctx);
+}
+
+void Subscription::onNotification(
+        const char* moduleName,
+        NotifCb cb,
+        const char* xpath,
+        const std::optional<NotificationTimeStamp>& startTime,
+        const std::optional<NotificationTimeStamp>& stopTime,
+        const SubscribeOptions opts)
+{
+    auto& cbRef = m_notificationCbs.emplace_back(cb);
+    sr_subscription_ctx_s* ctx = m_sub.get();
+    auto startSpec = startTime ? std::optional{toTimespec(*startTime)} :std::nullopt;
+    auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} :std::nullopt;
+    auto res = sr_notif_subscribe_tree(
+            m_sess.get(),
+            moduleName,
+            xpath,
+            startSpec ? &startSpec.value() : nullptr,
+            stopSpec ? &stopSpec.value() : nullptr,
+            eventNotifCb,
+            reinterpret_cast<void*>(&cbRef),
+            toSubscribeOptions(opts),
+            &ctx);
+    throwIfError(res, "Couldn't create notification subscription");
 
     saveContext(ctx);
 }
