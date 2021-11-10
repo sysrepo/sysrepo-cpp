@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f9e1921_f12b8bcf",
+        "filename": "src/Session.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-10T09:19:40Z",
+      "side": 1,
+      "message": "this looks unrelated to the commit as described in the log message",
+      "revId": "76b0285a60e11f2d84891ea6fb0311503816e262",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2e15e9a_53df590a",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-10T09:19:40Z",
+      "side": 1,
+      "message": "I don\u0027t understand this because there\u0027s no throw in the test. I\u0027m not sure I understand you correctly, but what about:\n \n// The correct behavior of this test depends on trompeloeil throwing. If the expectations do not match and trompeloeil throws, the test will still succeeed. Implement this via a pre-commit check.",
+      "range": {
+        "startLine": 145,
+        "startChar": 0,
+        "endLine": 146,
+        "endChar": 45
+      },
+      "revId": "76b0285a60e11f2d84891ea6fb0311503816e262",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
