@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3200da4_26a573be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-10T09:21:23Z",
+      "side": 1,
+      "message": "What\u0027s the reason for this? Conceptually, I would have expected \"something which modified something else\" to not be a const, even though there\u0027s no actual change of members of this class.",
+      "revId": "ff15f900ec40fb985482133c2982cfd76e675d99",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
