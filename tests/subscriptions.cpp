@@ -88,7 +88,7 @@ TEST_CASE("subscriptions")
         DOCTEST_SUBCASE("Getting changes")
         {
             moduleChangeCb = [&rec] (sysrepo::Session session, auto, auto, auto, auto, auto) -> sysrepo::ErrorCode {
-                TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Modified, "/test_module:leafInt32", std::nullopt, "42", false));
+                TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafInt32", std::nullopt, std::nullopt, false));
                 for (const auto& change : session.getChanges("//.")) {
                     rec.record(change.operation, std::string{change.node.path()}, change.previousList, change.previousValue, change.previousDefault);
                 }
@@ -220,12 +220,8 @@ TEST_CASE("subscriptions")
     {
         sysrepo::ErrorCode retCode;
         std::optional<libyang::DataNode> toSet;
-        std::atomic<bool> shouldThrow = false;
         sysrepo::OperGetItemsCb operGetItemsCb = [&] (sysrepo::Session, auto, auto, auto, auto, auto, std::optional<libyang::DataNode>& parent) {
             parent = toSet;
-            if (shouldThrow) {
-                throw std::runtime_error("Test callback throw");
-            }
             return retCode;
         };
 
@@ -265,24 +261,6 @@ TEST_CASE("subscriptions")
 
             REQUIRE_THROWS(sess.getData("/test_module:stateLeaf"));
         }
-
-        DOCTEST_SUBCASE("exception")
-        {
-            retCode = sysrepo::ErrorCode::Ok;
-
-            shouldThrow = true;
-            DOCTEST_SUBCASE("set nullopt")
-            {
-                toSet = std::nullopt;
-            }
-
-            DOCTEST_SUBCASE("set a return node")
-            {
-                toSet = sess.getContext().newPath("/test_module:stateLeaf", "123");
-            }
-
-            REQUIRE_THROWS(sess.getData("/test_module:stateLeaf"));
-        }
     }
 
     DOCTEST_SUBCASE("RPC/action")
@@ -290,16 +268,11 @@ TEST_CASE("subscriptions")
         Recorder rec;
         const char* rpcPath;
         sysrepo::ErrorCode ret;
-        std::atomic<bool> shouldThrow = false;
         std::function<void(libyang::DataNode&)> setFunction;
         sysrepo::RpcActionCb rpcActionCb = [&] (sysrepo::Session, auto, auto path, auto, auto, auto, libyang::DataNode output) {
             rec.recordRPC(path);
             if (setFunction) {
                 setFunction(output);
-            }
-
-            if (shouldThrow) {
-                throw std::runtime_error("Test callback throw");
             }
             return ret;
         };
@@ -343,29 +316,6 @@ TEST_CASE("subscriptions")
             setFunction = [] (auto node) {
                 node.newPath("/test_module:shutdown/success", "true", libyang::CreationOptions::Output);
             };
-        }
-        DOCTEST_SUBCASE("exception / test_module:noop / no output")
-        {
-            rpcPath = "/test_module:noop";
-            ret = sysrepo::ErrorCode::Internal;
-            setFunction = nullptr;
-            shouldThrow = true;
-        }
-        DOCTEST_SUBCASE("exception / test_module:shutdown / no output")
-        {
-            rpcPath = "/test_module:shutdown";
-            ret = sysrepo::ErrorCode::Internal;
-            setFunction = nullptr;
-            shouldThrow = true;
-        }
-        DOCTEST_SUBCASE("exception / test_module:shutdown / some output")
-        {
-            rpcPath = "/test_module:shutdown";
-            ret = sysrepo::ErrorCode::Internal;
-            setFunction = [] (auto node) {
-                node.newPath("/test_module:shutdown/success", "true", libyang::CreationOptions::Output);
-            };
-            shouldThrow = true;
         }
 
         auto sub = sess.onRPCAction(rpcPath, rpcActionCb);
