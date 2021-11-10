@@ -16,6 +16,24 @@
       "message": "let\u0027s test that the notification\u0027s data tree is available, please (this will require having some schema nodes below the `ping` notification)",
       "revId": "8477fb7fadf0d1c4fea16ee58884f0a71179d4e5",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "674e096a_92406adb",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-10T20:17:05Z",
+      "side": 1,
+      "message": "It is already tested, the `auto notification` is a libyang tree, but I added a leaf under the notification, so that it clearer",
+      "parentUuid": "a943338c_c727b458",
+      "revId": "8477fb7fadf0d1c4fea16ee58884f0a71179d4e5",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
