@@ -69,12 +69,22 @@ using ModuleChangeCb = std::function<ErrorCode(Session session, uint32_t subscri
 using OperGetItemsCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view moduleName, std::optional<std::string_view> subXPath, std::optional<std::string_view> requestXPath, uint32_t requestId, std::optional<libyang::DataNode>& output)>;
 using RpcActionCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view path, const libyang::DataNode input, Event event, uint32_t requestId, libyang::DataNode output)>;
 
+template <typename Callback>
+struct PrivData {
+    Callback callback;
+    std::function<void(std::exception& ex)>* exceptionHandler;
+};
+
+template<typename Callback> PrivData(Callback, std::function<void(std::exception& ex)>*) -> PrivData<Callback>;
+
 class Subscription {
 public:
     Subscription(const Subscription&) = delete;
     Subscription& operator=(const Subscription&) = delete;
     Subscription(Subscription&&) noexcept;
     Subscription& operator=(Subscription&&) noexcept;
+
+    void setExceptionHandler(std::function<void(std::exception& ex)> handler);
 
     void onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath = nullptr, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
     void onOperGetItems(const char* moduleName, OperGetItemsCb cb, const char* xpath = nullptr, const SubscribeOptions opts = SubscribeOptions::Default);
@@ -84,11 +94,15 @@ private:
 
     friend Session;
     explicit Subscription(std::shared_ptr<sr_session_ctx_s> sess);
+
     // This saves the users' callbacks. The C-style callback takes addresses of these, so the addresses need to be
     // stable (therefore, we use an std::list).
-    std::list<ModuleChangeCb> m_moduleChangeCbs;
-    std::list<OperGetItemsCb> m_operGetItemsCbs;
-    std::list<RpcActionCb> m_RPCActionCbs;
+    std::list<PrivData<ModuleChangeCb>> m_moduleChangeCbs;
+    std::list<PrivData<OperGetItemsCb>> m_operGetItemsCbs;
+    std::list<PrivData<RpcActionCb>> m_RPCActionCbs;
+
+    // FIXME: This probably needs some sort of a synchronization.
+    std::function<void(std::exception& ex)> m_exceptionHandler;
 
     std::shared_ptr<sr_session_ctx_s> m_sess;
 
