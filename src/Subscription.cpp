@@ -28,10 +28,10 @@ void Subscription::saveContext(sr_subscription_ctx_s* ctx)
 }
 
 namespace {
-void logExceptionFromCb(const std::exception& ex)
+void handleExceptionFromCb(const std::exception& ex)
 {
     SRPLG_LOG_ERR("sysrepo-cpp", "User callback threw an exception: %s", ex.what());
-
+    std::terminate();
 }
 int moduleChangeCb(sr_session_ctx_t* session, uint32_t subscriptionId, const char* moduleName, const char* subXPath, sr_event_t event, uint32_t requestId, void* privateData)
 {
@@ -46,8 +46,7 @@ int moduleChangeCb(sr_session_ctx_t* session, uint32_t subscriptionId, const cha
                 toEvent(event),
                 requestId);
     } catch (std::exception& ex) {
-        logExceptionFromCb(ex);
-        ret = ErrorCode::Internal;
+        handleExceptionFromCb(ex);
     }
 
     return static_cast<int>(ret);
@@ -69,8 +68,7 @@ int operGetItemsCb(sr_session_ctx_t* session, uint32_t subscriptionId, const cha
                     requestId,
                     node));
     } catch (std::exception& ex) {
-        logExceptionFromCb(ex);
-        return static_cast<int>(sysrepo::ErrorCode::Internal);
+        handleExceptionFromCb(ex);
     }
 
     // The user can return no data or some data, which means std::nullopt or DataNode. We will map this to nullptr or a
@@ -101,8 +99,7 @@ int rpcActionCb(sr_session_ctx_t* session, uint32_t subscriptionId, const char* 
                 );
 
     } catch (std::exception& ex) {
-        logExceptionFromCb(ex);
-        ret = sysrepo::ErrorCode::Internal;
+        handleExceptionFromCb(ex);
     }
 
     output = libyang::releaseRawNode(outputNode);
