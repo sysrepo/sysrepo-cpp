@@ -16,6 +16,24 @@
       "message": "I would prefer if this was configurable. Instead of calling std::terminate, each Subscription should have a std::function which is invoked upon an unhandled exception instead of calling handleExceptionFromCb().",
       "revId": "8a49ac67724d16773ac3132327e5e61a10edc992",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9b52294_cc2dba68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-10T19:18:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd6b1f7a_27e2530a",
+      "revId": "8a49ac67724d16773ac3132327e5e61a10edc992",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
