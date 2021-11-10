@@ -142,6 +142,8 @@ void Subscription::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t prior
 
 Subscription::Subscription(Subscription&& other) noexcept
     : m_moduleChangeCbs(std::move(other.m_moduleChangeCbs))
+    , m_operGetItemsCbs(std::move(other.m_operGetItemsCbs))
+    , m_RPCActionCbs(std::move(other.m_RPCActionCbs))
     , m_sess(other.m_sess)
     , m_sub(other.m_sub)
 {
@@ -156,6 +158,8 @@ Subscription& Subscription::operator=(Subscription&& other) noexcept
     m_sub = other.m_sub;
     m_sess = other.m_sess;
     m_moduleChangeCbs = std::move(other.m_moduleChangeCbs);
+    m_operGetItemsCbs = std::move(other.m_operGetItemsCbs);
+    m_RPCActionCbs = std::move(other.m_RPCActionCbs);
 
     return *this;
 }
