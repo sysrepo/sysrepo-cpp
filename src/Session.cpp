@@ -11,6 +11,7 @@ extern "C" {
 #include <sysrepo.h>
 }
 #include <libyang-cpp/Context.hpp>
+#include <span>
 #include <sysrepo-cpp/Session.hpp>
 #include <sysrepo-cpp/Subscription.hpp>
 #include "utils/enum.hpp"
@@ -222,6 +223,34 @@ Subscription Session::onNotification(
 ChangeCollection Session::getChanges(const char* xpath) const
 {
     return ChangeCollection{xpath, m_sess};
+}
+
+void Session::setErrorMessage(const char* msg) const
+{
+    auto res = sr_session_set_error_message(m_sess.get(), msg);
+    throwIfError(res, "Couldn't set error message");
+}
+
+std::vector<ErrorInfo> Session::getErrors() const
+{
+    const sr_error_info_t* errInfo;
+    auto res = sr_session_get_error(m_sess.get(), &errInfo);
+    throwIfError(res, "Couldn't retrieve errors");
+
+    std::vector<ErrorInfo> errors;
+
+    if (!errInfo) {
+        return errors;
+    }
+
+    for (const auto& error : std::span(errInfo->err, errInfo->err_count)) {
+        errors.push_back(ErrorInfo{
+            .code = static_cast<ErrorCode>(error.err_code),
+            .errorMessage = error.message ? std::optional{error.message} : std::nullopt
+        });
+    }
+
+    return errors;
 }
 
 const libyang::Context Session::getContext() const
