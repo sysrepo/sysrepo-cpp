@@ -87,6 +87,12 @@ enum class ChangeOperation : uint32_t {
     Moved,
 };
 
+enum class DefaultOperation {
+    Merge,
+    Replace,
+    None
+};
+
 /**
  * Wraps sr_log_level_t.
  */

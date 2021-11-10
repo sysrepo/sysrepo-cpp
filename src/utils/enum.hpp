@@ -125,4 +125,15 @@ static_assert(static_cast<ErrorCode>(SR_ERR_LOCKED) == ErrorCode::Locked);
 static_assert(static_cast<ErrorCode>(SR_ERR_TIME_OUT) == ErrorCode::Timeout);
 static_assert(static_cast<ErrorCode>(SR_ERR_CALLBACK_FAILED) == ErrorCode::CallbackFailed);
 static_assert(static_cast<ErrorCode>(SR_ERR_CALLBACK_SHELVE) == ErrorCode::CallbackShelve);
+
+constexpr const char* toDefaultOperation(const DefaultOperation op) {
+    switch (op) {
+    case DefaultOperation::Merge:
+        return "merge";
+    case DefaultOperation::Replace:
+        return "replace";
+    case DefaultOperation::None:
+        return "none";
+    }
+}
 }
