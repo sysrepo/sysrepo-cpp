@@ -27,6 +27,11 @@ class Session;
 struct unmanaged_tag {
 };
 
+struct ErrorInfo {
+    ErrorCode code;
+    std::optional<std::string> errorMessage;
+};
+
 enum class Wait {
     Yes,
     No
@@ -61,6 +66,8 @@ public:
             ExceptionHandler handler = nullptr);
 
     ChangeCollection getChanges(const char* xpath = "//.");
+    void setErrorMessage(const char* msg);
+    std::vector<ErrorInfo> getErrors();
 
     const libyang::Context getContext() const;
 
