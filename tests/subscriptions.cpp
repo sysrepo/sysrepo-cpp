@@ -11,6 +11,7 @@
 #include <pretty_printers.hpp>
 #include <sysrepo-cpp/Connection.hpp>
 #include <sysrepo-cpp/utils/utils.hpp>
+#include <sysrepo-cpp/utils/exception.hpp>
 #include <trompeloeil.hpp>
 
 using namespace std::string_view_literals;
@@ -421,5 +422,38 @@ TEST_CASE("subscriptions")
         notification.newPath("myLeaf", "132");
         sess.sendNotification(notification, sysrepo::Wait::Yes);
         sub = std::nullopt;
+    }
+
+    DOCTEST_SUBCASE("error info")
+    {
+        sysrepo::ModuleChangeCb moduleChangeCb = [fail = true] (auto session, auto, auto, auto, auto, auto) mutable -> sysrepo::ErrorCode {
+            if (fail) {
+                // FIXME if the error message has a "%s", sysrepo segfaults
+                // Issue: https://github.com/sysrepo/sysrepo/issues/2634
+                session.setErrorMessage("Test error message.");
+                fail = false;
+                return sysrepo::ErrorCode::OperationFailed;
+            }
+
+            return sysrepo::ErrorCode::Ok;
+        };
+
+        auto sub = sess.onModuleChange("test_module", moduleChangeCb);
+        sess.setItem("/test_module:leafInt32", "123");
+        try {
+            sess.applyChanges();
+        } catch (sysrepo::ErrorWithCode&) {
+            auto errors = sess.getErrors();
+            REQUIRE(errors.size() == 2);
+            REQUIRE(*errors.at(0).errorMessage == "Test error message.");
+            REQUIRE(errors.at(0).code == sysrepo::ErrorCode::OperationFailed);
+            REQUIRE(*errors.at(1).errorMessage == "User callback failed.");
+            REQUIRE(errors.at(1).code == sysrepo::ErrorCode::CallbackFailed);
+        }
+
+        // The callback does not fail the second time.
+        sess.applyChanges();
+        auto errors = sess.getErrors();
+        REQUIRE(errors.size() == 0);
     }
 }
