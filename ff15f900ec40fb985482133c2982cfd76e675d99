@@ -16,6 +16,24 @@
       "message": "What\u0027s the reason for this? Conceptually, I would have expected \"something which modified something else\" to not be a const, even though there\u0027s no actual change of members of this class.",
       "revId": "ff15f900ec40fb985482133c2982cfd76e675d99",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8ae72da_4bfab255",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-10T20:09:52Z",
+      "side": 1,
+      "message": "Maybe it isn\u0027t such a good change... I thought that unique_ptr.get() returns a const pointer if the unique_ptr itself is const. Guess not!",
+      "parentUuid": "b3200da4_26a573be",
+      "revId": "ff15f900ec40fb985482133c2982cfd76e675d99",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
