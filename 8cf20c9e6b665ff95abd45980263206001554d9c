@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00fc52f2_6c4ab2ac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-10T13:57:32Z",
+      "side": 1,
+      "message": "since we aren\u0027t using trunk gating via zuul yet, let me mark this as CR-1 for now before that change gets merged",
+      "revId": "8cf20c9e6b665ff95abd45980263206001554d9c",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
