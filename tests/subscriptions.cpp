@@ -9,6 +9,7 @@
 #include <atomic>
 #include <doctest/doctest.h>
 #include <sysrepo-cpp/Connection.hpp>
+#include <sysrepo-cpp/utils/utils.hpp>
 #include <trompeloeil.hpp>
 
 using namespace std::string_view_literals;
@@ -31,10 +32,12 @@ class Recorder {
 public:
     TROMPELOEIL_MAKE_CONST_MOCK5(record, void(sysrepo::ChangeOperation, std::string, std::optional<std::string_view>, std::optional<std::string_view>, bool));
     TROMPELOEIL_MAKE_CONST_MOCK1(recordRPC, void(std::string_view));
+    TROMPELOEIL_MAKE_CONST_MOCK1(recordException, void(std::string));
 };
 
 TEST_CASE("subscriptions")
 {
+    sysrepo::setLogLevelStderr(sysrepo::LogLevel::Information);
     sysrepo::Connection conn;
     auto sess = conn.sessionStart();
     sess.copyConfig(sysrepo::Datastore::Startup, "test_module");
@@ -86,7 +89,7 @@ TEST_CASE("subscriptions")
         DOCTEST_SUBCASE("Getting changes")
         {
             moduleChangeCb = [&rec] (sysrepo::Session session, auto, auto, auto, auto, auto) -> sysrepo::ErrorCode {
-                TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Modified, "/test_module:leafInt32", std::nullopt, "42", false));
+                TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafInt32", std::nullopt, std::nullopt, false));
                 for (const auto& change : session.getChanges("//.")) {
                     rec.record(change.operation, std::string{change.node.path()}, change.previousList, change.previousValue, change.previousDefault);
                 }
@@ -149,12 +152,13 @@ TEST_CASE("subscriptions")
             return retCode;
         };
 
-        auto sub = sess.onOperGetItems("test_module", operGetItemsCb, "/test_module:stateLeaf");
-        sess.switchDatastore(sysrepo::Datastore::Operational);
+        std::optional<sysrepo::Subscription> sub;
 
         DOCTEST_SUBCASE("ok code")
         {
+            sub = sess.onOperGetItems("test_module", operGetItemsCb, "/test_module:stateLeaf");
             retCode = sysrepo::ErrorCode::Ok;
+            sess.switchDatastore(sysrepo::Datastore::Operational);
 
             DOCTEST_SUBCASE("set nullopt")
             {
@@ -171,7 +175,9 @@ TEST_CASE("subscriptions")
 
         DOCTEST_SUBCASE("error code")
         {
+            sub = sess.onOperGetItems("test_module", operGetItemsCb, "/test_module:stateLeaf");
             retCode = sysrepo::ErrorCode::Internal;
+            sess.switchDatastore(sysrepo::Datastore::Operational);
 
             DOCTEST_SUBCASE("set nullopt")
             {
@@ -188,9 +194,18 @@ TEST_CASE("subscriptions")
 
         DOCTEST_SUBCASE("exception")
         {
+            Recorder rec;
             retCode = sysrepo::ErrorCode::Ok;
-
             shouldThrow = true;
+            sub = sess.onOperGetItems(
+                    "test_module",
+                    operGetItemsCb,
+                    "/test_module:stateLeaf",
+                    sysrepo::SubscribeOptions::Default, [&rec] (std::exception& ex) { rec.recordException(ex.what()); });
+            sess.switchDatastore(sysrepo::Datastore::Operational);
+
+            REQUIRE_CALL(rec, recordException("Test callback throw"));
+
             DOCTEST_SUBCASE("set nullopt")
             {
                 toSet = std::nullopt;
@@ -288,7 +303,15 @@ TEST_CASE("subscriptions")
             shouldThrow = true;
         }
 
-        auto sub = sess.onRPCAction(rpcPath, rpcActionCb);
+        auto sub = sess.onRPCAction(
+                rpcPath,
+                rpcActionCb,
+                0,
+                sysrepo::SubscribeOptions::Default,
+                shouldThrow ? std::function{[&rec] (std::exception& ex) { rec.recordException(ex.what()); }} : nullptr);
+
+        auto throwExpectation =
+            shouldThrow ? NAMED_REQUIRE_CALL(rec, recordException("Test callback throw")) : nullptr;
         REQUIRE_CALL(rec, recordRPC(rpcPath));
         if (ret == sysrepo::ErrorCode::Ok) {
             auto output = sess.sendRPC(sess.getContext().newPath(rpcPath));

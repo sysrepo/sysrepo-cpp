@@ -155,23 +155,23 @@ libyang::DataNode Session::sendRPC(libyang::DataNode input, std::chrono::millise
     return libyang::wrapRawNode(output);
 }
 
-Subscription Session::onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath, uint32_t priority, const SubscribeOptions opts)
+Subscription Session::onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath, uint32_t priority, const SubscribeOptions opts, ExceptionHandler handler)
 {
-    auto sub = Subscription{m_sess};
+    auto sub = Subscription{m_sess, handler};
     sub.onModuleChange(moduleName, cb, xpath, priority, opts);
     return sub;
 }
 
-Subscription Session::onOperGetItems(const char* moduleName, OperGetItemsCb cb, const char* xpath, const SubscribeOptions opts)
+Subscription Session::onOperGetItems(const char* moduleName, OperGetItemsCb cb, const char* xpath, const SubscribeOptions opts, ExceptionHandler handler)
 {
-    auto sub = Subscription{m_sess};
+    auto sub = Subscription{m_sess, handler};
     sub.onOperGetItems(moduleName, cb, xpath, opts);
     return sub;
 }
 
-Subscription Session::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority, const SubscribeOptions opts)
+Subscription Session::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority, const SubscribeOptions opts, ExceptionHandler handler)
 {
-    auto sub = Subscription{m_sess};
+    auto sub = Subscription{m_sess, handler};
     sub.onRPCAction(xpath, cb, priority, opts);
     return sub;
 }
