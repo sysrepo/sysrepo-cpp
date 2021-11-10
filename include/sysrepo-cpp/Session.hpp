@@ -33,6 +33,7 @@ public:
     void switchDatastore(const Datastore ds) const;
     // TODO: allow all arguments
     void setItem(const char* path, const char* value);
+    void editBatch(libyang::DataNode edit, const DefaultOperation op);
     void deleteItem(const char* path, const EditOptions opts = sysrepo::EditOptions::Default);
     // TODO: allow all arguments
     std::optional<libyang::DataNode> getData(const char* path) const;

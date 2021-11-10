@@ -63,6 +63,13 @@ void Session::setItem(const char* path, const char* value)
     throwIfError(res, "Session::setItem: Couldn't set '"s + path + (value ? ("' to '"s + "'" + value + "'") : ""));
 }
 
+void Session::editBatch(libyang::DataNode edit, const DefaultOperation op)
+{
+    auto res = sr_edit_batch(m_sess.get(), libyang::getRawNode(edit), toDefaultOperation(op));
+
+    throwIfError(res, "Session::editBatch: Couldn't apply the edit batch");
+}
+
 /**
  * Delete a leaf, leaf-list, list or a presence container. The changes are applied only after calling
  * Session::applyChanges.

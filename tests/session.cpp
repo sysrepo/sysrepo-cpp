@@ -52,6 +52,18 @@ TEST_CASE("session")
                 sysrepo::ErrorWithCode);;
     }
 
+    DOCTEST_SUBCASE("edit batch")
+    {
+        auto data = sess.getData("/test_module:leafInt32");
+        REQUIRE(!data);
+
+        auto batch = sess.getContext().newPath("/test_module:leafInt32", "1230");
+        sess.editBatch(batch, sysrepo::DefaultOperation::Merge);
+        sess.applyChanges();
+        data = sess.getData("/test_module:leafInt32");
+        REQUIRE(data->asTerm().valueStr() == "1230");
+    }
+
     DOCTEST_SUBCASE("switching datastore")
     {
         sess.switchDatastore(sysrepo::Datastore::Startup);
