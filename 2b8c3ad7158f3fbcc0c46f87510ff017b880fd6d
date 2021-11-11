@@ -51,6 +51,80 @@
       "message": "recheck",
       "revId": "2b8c3ad7158f3fbcc0c46f87510ff017b880fd6d",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f805f6bf_a550d91d",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-11T10:08:49Z",
+      "side": 1,
+      "message": "also preserve XPath, please",
+      "revId": "2b8c3ad7158f3fbcc0c46f87510ff017b880fd6d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13c3a052_efe15b51",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-11T10:08:49Z",
+      "side": 1,
+      "message": "Who frees the underlying char* and when? Let\u0027s just use std::string here to avoid nasty surprises.",
+      "range": {
+        "startLine": 32,
+        "startChar": 18,
+        "endLine": 32,
+        "endChar": 34
+      },
+      "revId": "2b8c3ad7158f3fbcc0c46f87510ff017b880fd6d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d062d299_dfb96c07",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-11T10:08:49Z",
+      "side": 1,
+      "message": "an optional XPath",
+      "revId": "2b8c3ad7158f3fbcc0c46f87510ff017b880fd6d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "585d6d66_6d462622",
+        "filename": "src/Session.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-11T10:08:49Z",
+      "side": 1,
+      "message": "From the docs it looks like upstream is using a printf-like syntax. If that\u0027s indeed the case, you should pass \"%s\" as the \"message\", and the actual message as a subsequent argument, otherwise you\u0027ll get into UB when a user logs \"%s\" or anything like that. Please also add a test for this.",
+      "revId": "2b8c3ad7158f3fbcc0c46f87510ff017b880fd6d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
