@@ -125,7 +125,6 @@ TEST_CASE("subscriptions")
 
     DOCTEST_SUBCASE("Moving items")
     {
-        sysrepo::setLogLevelStderr(sysrepo::LogLevel::Information);
         auto getNumberOrder = [&] {
             std::vector<int32_t> res;
             auto data = sess.getData("/test_module:values");
