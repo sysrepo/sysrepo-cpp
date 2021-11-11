@@ -16,6 +16,41 @@
       "message": "tsan strikes again",
       "revId": "2b8c3ad7158f3fbcc0c46f87510ff017b880fd6d",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00331ea9_3da25a3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-11T10:03:25Z",
+      "side": 1,
+      "message": "there\u0027s no error reported by TSAN, so I suspect it\u0027s more like a fragile test in sysrepo",
+      "parentUuid": "51dff5cf_9673b3f6",
+      "revId": "2b8c3ad7158f3fbcc0c46f87510ff017b880fd6d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63f63681_fa68841b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-11T10:03:25Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "2b8c3ad7158f3fbcc0c46f87510ff017b880fd6d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
