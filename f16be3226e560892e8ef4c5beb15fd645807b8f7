@@ -67,6 +67,24 @@
       "message": "Have you manually tested the test code to see what happens when an unexpected exception is thrown? Does the test fail (possibly in a non-recoverable way, that\u0027s fine to me)?",
       "revId": "f16be3226e560892e8ef4c5beb15fd645807b8f7",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07b231dd_1794e561",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-11T10:29:20Z",
+      "side": 1,
+      "message": "yes",
+      "parentUuid": "fb054fd9_2654ad73",
+      "revId": "f16be3226e560892e8ef4c5beb15fd645807b8f7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
