@@ -16,6 +16,57 @@
       "message": "recheck",
       "revId": "f16be3226e560892e8ef4c5beb15fd645807b8f7",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7effcf71_261458e9",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-11T09:46:06Z",
+      "side": 1,
+      "message": "I think that it would be cleaner to store a pointer to Subscription here instead, but I don\u0027t care that much.",
+      "revId": "f16be3226e560892e8ef4c5beb15fd645807b8f7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b87b1de_257be176",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-11T09:46:06Z",
+      "side": 1,
+      "message": "This will need locking if you intend to change the exception handler after the first subscription is in place. Since the user can only instantiate a Subscription via Session, I think it\u0027s OK to change signature of these Session::onXXX() methods to accept a second argument, the exception handler. That way you can get by without supporting later changes of the exception handler -- and frankly, I don\u0027t see a use case for that. You can always set up a handler up front and change *its* behavior via open coding that.",
+      "revId": "f16be3226e560892e8ef4c5beb15fd645807b8f7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb054fd9_2654ad73",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-11T09:46:06Z",
+      "side": 1,
+      "message": "Have you manually tested the test code to see what happens when an unexpected exception is thrown? Does the test fail (possibly in a non-recoverable way, that\u0027s fine to me)?",
+      "revId": "f16be3226e560892e8ef4c5beb15fd645807b8f7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
