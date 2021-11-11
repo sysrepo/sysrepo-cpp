@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "249d2c10_4a0f5700",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-11T11:08:46Z",
+      "side": 1,
+      "message": "No xpath in new sysrepo",
+      "parentUuid": "f805f6bf_a550d91d",
+      "revId": "2b8c3ad7158f3fbcc0c46f87510ff017b880fd6d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "13c3a052_efe15b51",
         "filename": "include/sysrepo-cpp/Session.hpp",
         "patchSetId": 5
@@ -83,6 +101,30 @@
       "writtenOn": "2021-11-11T10:08:49Z",
       "side": 1,
       "message": "Who frees the underlying char* and when? Let\u0027s just use std::string here to avoid nasty surprises.",
+      "range": {
+        "startLine": 32,
+        "startChar": 18,
+        "endLine": 32,
+        "endChar": 34
+      },
+      "revId": "2b8c3ad7158f3fbcc0c46f87510ff017b880fd6d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "952536ee_b215947e",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-11T11:08:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13c3a052_efe15b51",
       "range": {
         "startLine": 32,
         "startChar": 18,
@@ -112,6 +154,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "642afc55_2f7c9b72",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-11T11:08:46Z",
+      "side": 1,
+      "message": "no xpath in new sysrepo",
+      "parentUuid": "d062d299_dfb96c07",
+      "revId": "2b8c3ad7158f3fbcc0c46f87510ff017b880fd6d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "585d6d66_6d462622",
         "filename": "src/Session.cpp",
         "patchSetId": 5
@@ -123,6 +183,24 @@
       "writtenOn": "2021-11-11T10:08:49Z",
       "side": 1,
       "message": "From the docs it looks like upstream is using a printf-like syntax. If that\u0027s indeed the case, you should pass \"%s\" as the \"message\", and the actual message as a subsequent argument, otherwise you\u0027ll get into UB when a user logs \"%s\" or anything like that. Please also add a test for this.",
+      "revId": "2b8c3ad7158f3fbcc0c46f87510ff017b880fd6d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b0f5b2c_434cd0b2",
+        "filename": "src/Session.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-11T11:08:46Z",
+      "side": 1,
+      "message": "Yeah, I guess it does. that sucks.",
+      "parentUuid": "585d6d66_6d462622",
       "revId": "2b8c3ad7158f3fbcc0c46f87510ff017b880fd6d",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
