@@ -52,6 +52,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ac391aa_5fc148ac",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-11T11:00:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b87b1de_257be176",
+      "revId": "f16be3226e560892e8ef4c5beb15fd645807b8f7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb054fd9_2654ad73",
