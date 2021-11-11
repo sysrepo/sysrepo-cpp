@@ -9,10 +9,12 @@
 #include <doctest/doctest.h>
 #include <optional>
 #include <sysrepo-cpp/Connection.hpp>
+#include <sysrepo-cpp/utils/utils.hpp>
 #include <sysrepo-cpp/utils/exception.hpp>
 
 TEST_CASE("session")
 {
+    sysrepo::setLogLevelStderr(sysrepo::LogLevel::Information);
     std::optional<sysrepo::Connection> conn{std::in_place};
     auto sess = conn->sessionStart();
 
