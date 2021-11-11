@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "15feea08cc5e86a149acc937b3c71393a7fab50e",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bda32776_d2462b93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-11T10:16:22Z",
+      "side": 1,
+      "message": "The API changes were removed",
+      "revId": "15feea08cc5e86a149acc937b3c71393a7fab50e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
