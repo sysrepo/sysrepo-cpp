@@ -57,9 +57,9 @@ void Session::switchDatastore(const Datastore ds) const
  * @param path Path of the element to be changed.
  * @param value Value of the element to be changed. Can be `nullptr`.
  */
-void Session::setItem(const char* path, const char* value)
+void Session::setItem(const char* path, const char* value, const EditOptions opts)
 {
-    auto res = sr_set_item_str(m_sess.get(), path, value, nullptr, 0);
+    auto res = sr_set_item_str(m_sess.get(), path, value, nullptr, toEditOptions(opts));
 
     throwIfError(res, "Session::setItem: Couldn't set '"s + path + (value ? ("' to '"s + "'" + value + "'") : ""));
 }

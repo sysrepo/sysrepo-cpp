@@ -41,8 +41,7 @@ class Session {
 public:
     Datastore activeDatastore() const;
     void switchDatastore(const Datastore ds) const;
-    // TODO: allow all arguments
-    void setItem(const char* path, const char* value);
+    void setItem(const char* path, const char* value, const EditOptions opts = sysrepo::EditOptions::Default);
     void editBatch(libyang::DataNode edit, const DefaultOperation op);
     void deleteItem(const char* path, const EditOptions opts = sysrepo::EditOptions::Default);
     void moveItem(const char* path, const MovePosition move, const char* keys_or_value, const char* origin = nullptr, const EditOptions opts = sysrepo::EditOptions::Default);
