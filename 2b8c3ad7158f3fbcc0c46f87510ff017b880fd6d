@@ -88,6 +88,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0587ae5b_e86e7ea9",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-12T12:49:50Z",
+      "side": 1,
+      "message": "this depends on some future work in sysrepo, let\u0027s keep this one as-is for now",
+      "parentUuid": "249d2c10_4a0f5700",
+      "revId": "2b8c3ad7158f3fbcc0c46f87510ff017b880fd6d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13c3a052_efe15b51",
@@ -166,6 +184,24 @@
       "side": 1,
       "message": "no xpath in new sysrepo",
       "parentUuid": "d062d299_dfb96c07",
+      "revId": "2b8c3ad7158f3fbcc0c46f87510ff017b880fd6d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1616171b_c51ff203",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-12T12:49:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "642afc55_2f7c9b72",
       "revId": "2b8c3ad7158f3fbcc0c46f87510ff017b880fd6d",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
