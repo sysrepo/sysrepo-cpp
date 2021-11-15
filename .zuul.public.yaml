@@ -7,7 +7,7 @@
               - name: github/CESNET/libyang
                 override-checkout: devel
               - name: github/sysrepo/sysrepo
-                override-checkout: master
+                override-checkout: devel
               - name: github/onqtam/doctest
                 override-checkout: cesnet/2021-10-08
               - name: github/rollbear/trompeloeil

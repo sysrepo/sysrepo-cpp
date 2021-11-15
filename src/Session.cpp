@@ -13,14 +13,13 @@ extern "C" {
 #include <libyang-cpp/Context.hpp>
 #include <sysrepo-cpp/Connection.hpp>
 #include <span>
-#include <sysrepo-cpp/Session.hpp>
 #include <sysrepo-cpp/Subscription.hpp>
 #include "utils/enum.hpp"
 #include "utils/exception.hpp"
+#include "utils/utils.hpp"
 
 using namespace std::string_literals;
 namespace sysrepo {
-
 Session::Session(sr_session_ctx_s* sess, std::shared_ptr<sr_conn_ctx_s> conn)
     // The connection `conn` is saved here in the deleter (as a capture). This means that copies of this shared_ptr will
     // automatically hold a reference to `conn`.
@@ -106,6 +105,24 @@ void Session::moveItem(const char* path, const MovePosition move, const char* ke
     throwIfError(res, "Session::moveItem: Can't move '"s + path + "'");
 }
 
+namespace {
+libyang::DataNode wrapSrData(std::shared_ptr<sr_session_ctx_s> sess, sr_data_t* data)
+{
+    // Since the lyd_node came from sysrepo and it is wrapped in a sr_data_t, we have to postpone calling the
+    // sr_release_data() until after we're "done" with the libyang::DataNode.
+    //
+    // Normally, sr_release_data() would free the lyd_data as well. However, it is possible that the user wants to
+    // manipulate the data tree (think unlink()) in a way which might have needed to overwrite the tree->data pointer.
+    // Just delegate all the freeing to the C++ wrapper around lyd_data. The sysrepo library doesn't care about this.
+    data->tree = nullptr;
+
+    // Use wrapRawNode, not wrapUnmanagedRawNode because we want to let the C++ wrapper manage memory.
+    return libyang::wrapRawNode(data->tree, std::shared_ptr<sr_data_t>(data, [sess] (sr_data_s* data) {
+        sr_release_data(data);
+    }));
+}
+}
+
 /**
  * Retrieves a tree specified by the provided XPath.
  *
@@ -117,16 +134,16 @@ void Session::moveItem(const char* path, const MovePosition move, const char* ke
  */
 std::optional<libyang::DataNode> Session::getData(const char* path) const
 {
-    lyd_node* node;
-    auto res = sr_get_data(m_sess.get(), path, 0, 0, 0, &node);
+    sr_data_t* data;
+    auto res = sr_get_data(m_sess.get(), path, 0, 0, 0, &data);
 
     throwIfError(res, "Session::getData: Couldn't get '"s + path + "'");
 
-    if (!node) {
+    if (!data) {
         return std::nullopt;
     }
 
-    return libyang::wrapRawNode(node);
+    return wrapSrData(m_sess, data);
 }
 
 /**
@@ -167,17 +184,17 @@ void Session::copyConfig(const Datastore source, const char* moduleName, std::ch
 
 libyang::DataNode Session::sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout)
 {
-    lyd_node* output;
+    sr_data_t* output;
     auto res = sr_rpc_send_tree(m_sess.get(), libyang::getRawNode(input), timeout.count(), &output);
     throwIfError(res, "Couldn't send RPC");
 
     assert(output); // TODO: sysrepo always gives the RPC node? (even when it has not output or output nodes?)
-    return libyang::wrapRawNode(output);
+    return wrapSrData(m_sess, output);
 }
 
 void Session::sendNotification(libyang::DataNode notification, const Wait wait, std::chrono::milliseconds timeout)
 {
-    auto res = sr_event_notif_send_tree(m_sess.get(), libyang::getRawNode(notification), timeout.count(), wait == Wait::Yes ? 1 : 0);
+    auto res = sr_notif_send_tree(m_sess.get(), libyang::getRawNode(notification), timeout.count(), wait == Wait::Yes ? 1 : 0);
     throwIfError(res, "Couldn't send notification");
 }
 
@@ -188,10 +205,10 @@ Subscription Session::onModuleChange(const char* moduleName, ModuleChangeCb cb, 
     return sub;
 }
 
-Subscription Session::onOperGetItems(const char* moduleName, OperGetItemsCb cb, const char* xpath, const SubscribeOptions opts, ExceptionHandler handler)
+Subscription Session::onOperGet(const char* moduleName, OperGetCb cb, const char* xpath, const SubscribeOptions opts, ExceptionHandler handler)
 {
     auto sub = Subscription{m_sess, handler};
-    sub.onOperGetItems(moduleName, cb, xpath, opts);
+    sub.onOperGet(moduleName, cb, xpath, opts);
     return sub;
 }
 
@@ -257,7 +274,7 @@ std::vector<ErrorInfo> Session::getErrors()
 
 const libyang::Context Session::getContext() const
 {
-    auto ctx = sr_get_context(sr_session_get_connection(m_sess.get()));
-    return libyang::createUnmanagedContext(const_cast<ly_ctx*>(ctx));
+    auto ctx = sr_session_acquire_context(m_sess.get());
+    return libyang::createUnmanagedContext(const_cast<ly_ctx*>(ctx), [sess = m_sess] (ly_ctx*) { sr_session_release_context(sess.get()); });
 }
 }
