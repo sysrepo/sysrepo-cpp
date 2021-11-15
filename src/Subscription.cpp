@@ -152,7 +152,7 @@ void Subscription::onOperGetItems(const char* moduleName, OperGetItemsCb cb, con
 {
     auto& privRef = m_operGetItemsCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
     sr_subscription_ctx_s* ctx = m_sub.get();
-    auto res = sr_oper_get_items_subscribe(m_sess.get(), moduleName, xpath, operGetItemsCb, reinterpret_cast<void*>(&privRef), toSubscribeOptions(opts), &ctx);
+    auto res = sr_oper_get_subscribe(m_sess.get(), moduleName, xpath, operGetItemsCb, reinterpret_cast<void*>(&privRef), toSubscribeOptions(opts), &ctx);
     throwIfError(res, "Couldn't create operational get items subscription");
 
     saveContext(ctx);

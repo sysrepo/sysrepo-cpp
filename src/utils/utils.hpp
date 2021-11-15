@@ -7,6 +7,7 @@
 */
 #pragma once
 #include <chrono>
+#include <sysrepo-cpp/Connection.hpp>
 #include <sysrepo-cpp/Session.hpp>
 struct sr_session_ctx_s;
 
