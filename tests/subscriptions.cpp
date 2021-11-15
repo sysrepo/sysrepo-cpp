@@ -79,7 +79,7 @@ TEST_CASE("subscriptions")
 
         auto sub = sess.onOperGetItems("test_module", operGetItemsCb, "/test_module:stateLeaf");
         sess.switchDatastore(sysrepo::Datastore::Operational);
-        REQUIRE(sess.getData("/test_module:stateLeaf")->path() == "/test_module:stateLeaf");
+        REQUIRE(sess.getData("/test_module:stateLeaf")->tree().path() == "/test_module:stateLeaf");
     }
 
     DOCTEST_SUBCASE("moving ctor")
@@ -140,7 +140,7 @@ TEST_CASE("subscriptions")
         auto getNumberOrder = [&] {
             std::vector<int32_t> res;
             auto data = sess.getData("/test_module:values");
-            auto siblings = data->firstSibling().siblings();
+            auto siblings = data->tree().firstSibling().siblings();
             for (const auto& sibling : siblings)
             {
                 REQUIRE(sibling.schema().path() == "/test_module:values");
@@ -256,7 +256,7 @@ TEST_CASE("subscriptions")
             DOCTEST_SUBCASE("set a return node")
             {
                 toSet = sess.getContext().newPath("/test_module:stateLeaf", "123");
-                REQUIRE(sess.getData("/test_module:stateLeaf")->path() == "/test_module:stateLeaf");
+                REQUIRE(sess.getData("/test_module:stateLeaf")->tree().path() == "/test_module:stateLeaf");
             }
         }
 
@@ -403,9 +403,9 @@ TEST_CASE("subscriptions")
         if (ret == sysrepo::ErrorCode::Ok) {
             auto output = sess.sendRPC(sess.getContext().newPath(rpcPath));
             if (setFunction) {
-                REQUIRE(output.findPath("/test_module:shutdown/success", libyang::OutputNodes::Yes));
+                REQUIRE(output.tree().findPath("/test_module:shutdown/success", libyang::OutputNodes::Yes));
             } else {
-                REQUIRE(!output.findPath("/test_module:shutdown/success", libyang::OutputNodes::Yes).has_value());
+                REQUIRE(!output.tree().findPath("/test_module:shutdown/success", libyang::OutputNodes::Yes).has_value());
             }
         } else {
             REQUIRE_THROWS(sess.sendRPC(sess.getContext().newPath(rpcPath)));
