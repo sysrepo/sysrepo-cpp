@@ -18,6 +18,11 @@ Session wrapUnmanagedSession(sr_session_ctx_s* session)
     return Session{session, unmanaged_tag{}};
 }
 
+Connection wrapUnmanagedConnection(std::shared_ptr<sr_conn_ctx_s> conn)
+{
+    return Connection{conn};
+}
+
 void setLogLevelStderr(const LogLevel level)
 {
     sr_log_stderr(toLogLevel(level));

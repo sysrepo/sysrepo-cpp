@@ -25,6 +25,14 @@ TEST_CASE("session")
         REQUIRE(sess.activeDatastore() == sysrepo::Datastore::Running);
     }
 
+    DOCTEST_SUBCASE("Session lifetime is prolonged with the sysrepo::Data class")
+    {
+        sess.setItem("/test_module:leafInt32", "123");
+        sess.applyChanges();
+        auto data = sysrepo::Connection{}.sessionStart().getData("/test_module:leafInt32");
+        REQUIRE(data->tree().asTerm().valueStr() == "123");
+    }
+
     DOCTEST_SUBCASE("basic data manipulation")
     {
         auto data = sess.getData("/test_module:leafInt32");
@@ -33,12 +41,12 @@ TEST_CASE("session")
         sess.setItem("/test_module:leafInt32", "123");
         sess.applyChanges();
         data = sess.getData("/test_module:leafInt32");
-        REQUIRE(data->asTerm().valueStr() == "123");
+        REQUIRE(data->tree().asTerm().valueStr() == "123");
 
         sess.setItem("/test_module:leafInt32", "420");
         sess.applyChanges();
         data = sess.getData("/test_module:leafInt32");
-        REQUIRE(data->asTerm().valueStr() == "420");
+        REQUIRE(data->tree().asTerm().valueStr() == "420");
 
         sess.deleteItem("/test_module:leafInt32");
         sess.applyChanges();
@@ -64,7 +72,7 @@ TEST_CASE("session")
         sess.editBatch(batch, sysrepo::DefaultOperation::Merge);
         sess.applyChanges();
         data = sess.getData("/test_module:leafInt32");
-        REQUIRE(data->asTerm().valueStr() == "1230");
+        REQUIRE(data->tree().asTerm().valueStr() == "1230");
     }
 
     DOCTEST_SUBCASE("switching datastore")
