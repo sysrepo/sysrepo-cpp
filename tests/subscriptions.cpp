@@ -72,14 +72,14 @@ TEST_CASE("subscriptions")
 
     DOCTEST_SUBCASE("getting libyang ctx from subscription")
     {
-        sysrepo::OperGetItemsCb operGetItemsCb = [&] (sysrepo::Session session, auto, auto, auto, auto, auto, std::optional<libyang::DataNode>& parent) {
+        sysrepo::OperGetCb operGetCb = [&] (sysrepo::Session session, auto, auto, auto, auto, auto, std::optional<libyang::DataNode>& parent) {
             parent = session.getContext().newPath("/test_module:stateLeaf", "1");
             return sysrepo::ErrorCode::Ok;
         };
 
-        auto sub = sess.onOperGetItems("test_module", operGetItemsCb, "/test_module:stateLeaf");
+        auto sub = sess.onOperGet("test_module", operGetCb, "/test_module:stateLeaf");
         sess.switchDatastore(sysrepo::Datastore::Operational);
-        REQUIRE(sess.getData("/test_module:stateLeaf")->path() == "/test_module:stateLeaf");
+        REQUIRE(sess.getData("/test_module:stateLeaf")->tree().path() == "/test_module:stateLeaf");
     }
 
     DOCTEST_SUBCASE("moving ctor")
@@ -140,7 +140,7 @@ TEST_CASE("subscriptions")
         auto getNumberOrder = [&] {
             std::vector<int32_t> res;
             auto data = sess.getData("/test_module:values");
-            auto siblings = data->firstSibling().siblings();
+            auto siblings = data->tree().firstSibling().siblings();
             for (const auto& sibling : siblings)
             {
                 REQUIRE(sibling.schema().path() == "/test_module:values");
@@ -231,7 +231,7 @@ TEST_CASE("subscriptions")
         sysrepo::ErrorCode retCode;
         std::optional<libyang::DataNode> toSet;
         std::atomic<bool> shouldThrow = false;
-        sysrepo::OperGetItemsCb operGetItemsCb = [&] (sysrepo::Session, auto, auto, auto, auto, auto, std::optional<libyang::DataNode>& parent) {
+        sysrepo::OperGetCb operGetCb = [&] (sysrepo::Session, auto, auto, auto, auto, auto, std::optional<libyang::DataNode>& parent) {
             parent = toSet;
             if (shouldThrow) {
                 throw std::runtime_error("Test callback throw");
@@ -243,7 +243,7 @@ TEST_CASE("subscriptions")
 
         DOCTEST_SUBCASE("ok code")
         {
-            sub = sess.onOperGetItems("test_module", operGetItemsCb, "/test_module:stateLeaf");
+            sub = sess.onOperGet("test_module", operGetCb, "/test_module:stateLeaf");
             retCode = sysrepo::ErrorCode::Ok;
             sess.switchDatastore(sysrepo::Datastore::Operational);
 
@@ -256,13 +256,13 @@ TEST_CASE("subscriptions")
             DOCTEST_SUBCASE("set a return node")
             {
                 toSet = sess.getContext().newPath("/test_module:stateLeaf", "123");
-                REQUIRE(sess.getData("/test_module:stateLeaf")->path() == "/test_module:stateLeaf");
+                REQUIRE(sess.getData("/test_module:stateLeaf")->tree().path() == "/test_module:stateLeaf");
             }
         }
 
         DOCTEST_SUBCASE("error code")
         {
-            sub = sess.onOperGetItems("test_module", operGetItemsCb, "/test_module:stateLeaf");
+            sub = sess.onOperGet("test_module", operGetCb, "/test_module:stateLeaf");
             retCode = sysrepo::ErrorCode::Internal;
             sess.switchDatastore(sysrepo::Datastore::Operational);
 
@@ -284,9 +284,9 @@ TEST_CASE("subscriptions")
             Recorder rec;
             retCode = sysrepo::ErrorCode::Ok;
             shouldThrow = true;
-            sub = sess.onOperGetItems(
+            sub = sess.onOperGet(
                     "test_module",
-                    operGetItemsCb,
+                    operGetCb,
                     "/test_module:stateLeaf",
                     sysrepo::SubscribeOptions::Default, [&rec] (std::exception& ex) { rec.recordException(ex.what()); });
             sess.switchDatastore(sysrepo::Datastore::Operational);
@@ -403,9 +403,9 @@ TEST_CASE("subscriptions")
         if (ret == sysrepo::ErrorCode::Ok) {
             auto output = sess.sendRPC(sess.getContext().newPath(rpcPath));
             if (setFunction) {
-                REQUIRE(output.findPath("/test_module:shutdown/success", libyang::OutputNodes::Yes));
+                REQUIRE(output.tree().findPath("/test_module:shutdown/success", libyang::OutputNodes::Yes));
             } else {
-                REQUIRE(!output.findPath("/test_module:shutdown/success", libyang::OutputNodes::Yes).has_value());
+                REQUIRE(!output.tree().findPath("/test_module:shutdown/success", libyang::OutputNodes::Yes).has_value());
             }
         } else {
             REQUIRE_THROWS(sess.sendRPC(sess.getContext().newPath(rpcPath)));
@@ -445,11 +445,10 @@ TEST_CASE("subscriptions")
             message = "Test error message.";
         }
 
-        // FIXME: enable this test, after we unpin from master
-        // DOCTEST_SUBCASE("%s in error message")
-        // {
-        //     message = "%s";
-        // }
+        DOCTEST_SUBCASE("%s in error message")
+        {
+            message = "%s";
+        }
 
         sysrepo::ModuleChangeCb moduleChangeCb = [message, fail = true] (auto session, auto, auto, auto, auto, auto) mutable -> sysrepo::ErrorCode {
             if (fail) {
