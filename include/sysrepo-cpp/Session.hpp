@@ -14,8 +14,10 @@
 #include <libyang-cpp/DataNode.hpp>
 #include <sysrepo-cpp/Enum.hpp>
 #include <sysrepo-cpp/Subscription.hpp>
+#include <sysrepo-cpp/Connection.hpp>
 
 struct sr_conn_ctx_s;
+struct sr_data_s;
 struct sr_session_ctx_s;
 struct sr_val_s;
 
@@ -54,7 +56,7 @@ public:
     void sendNotification(libyang::DataNode notification, const Wait wait, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
 
     [[nodiscard]] Subscription onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath = nullptr, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default, ExceptionHandler handler = nullptr);
-    [[nodiscard]] Subscription onOperGetItems(const char* moduleName, OperGetItemsCb cb, const char* xpath = nullptr, const SubscribeOptions opts = SubscribeOptions::Default, ExceptionHandler handler = nullptr);
+    [[nodiscard]] Subscription onOperGet(const char* moduleName, OperGetCb cb, const char* xpath = nullptr, const SubscribeOptions opts = SubscribeOptions::Default, ExceptionHandler handler = nullptr);
     [[nodiscard]] Subscription onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default, ExceptionHandler handler = nullptr);
     [[nodiscard]] Subscription onNotification(
             const char* moduleName,
