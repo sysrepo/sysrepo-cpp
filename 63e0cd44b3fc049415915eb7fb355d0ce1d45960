@@ -16,6 +16,24 @@
       "message": "needs that (..., \"%s\", error) formatting",
       "revId": "63e0cd44b3fc049415915eb7fb355d0ce1d45960",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3628105d_63315056",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-15T08:49:34Z",
+      "side": 1,
+      "message": "I did that, but now I get a segfault if the message has a %s...",
+      "parentUuid": "fe336b9d_6e3e8191",
+      "revId": "63e0cd44b3fc049415915eb7fb355d0ce1d45960",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
