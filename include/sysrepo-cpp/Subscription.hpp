@@ -69,7 +69,7 @@ private:
 using NotificationTimeStamp = std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>;
 
 using ModuleChangeCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view moduleName, std::optional<std::string_view> subXPath, Event event, uint32_t requestId)>;
-using OperGetItemsCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view moduleName, std::optional<std::string_view> subXPath, std::optional<std::string_view> requestXPath, uint32_t requestId, std::optional<libyang::DataNode>& output)>;
+using OperGetCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view moduleName, std::optional<std::string_view> subXPath, std::optional<std::string_view> requestXPath, uint32_t requestId, std::optional<libyang::DataNode>& output)>;
 using RpcActionCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view path, const libyang::DataNode input, Event event, uint32_t requestId, libyang::DataNode output)>;
 using NotifCb = std::function<void(Session session, uint32_t subscriptionId, const NotificationType type, const std::optional<libyang::DataNode> notificationTree, const NotificationTimeStamp timestamp)>;
 
@@ -91,7 +91,7 @@ public:
     Subscription& operator=(Subscription&&) noexcept;
 
     void onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath = nullptr, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
-    void onOperGetItems(const char* moduleName, OperGetItemsCb cb, const char* xpath, const SubscribeOptions opts = SubscribeOptions::Default);
+    void onOperGet(const char* moduleName, OperGetCb cb, const char* xpath, const SubscribeOptions opts = SubscribeOptions::Default);
     void onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
     void onNotification(
             const char* moduleName,
@@ -109,7 +109,7 @@ private:
     // This saves the users' callbacks. The C-style callback takes addresses of these, so the addresses need to be
     // stable (therefore, we use an std::list).
     std::list<PrivData<ModuleChangeCb>> m_moduleChangeCbs;
-    std::list<PrivData<OperGetItemsCb>> m_operGetItemsCbs;
+    std::list<PrivData<OperGetCb>> m_operGetCbs;
     std::list<PrivData<RpcActionCb>> m_RPCActionCbs;
     std::list<PrivData<NotifCb>> m_notificationCbs;
 
