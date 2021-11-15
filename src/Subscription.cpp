@@ -66,7 +66,7 @@ int moduleChangeCb(sr_session_ctx_t* session, uint32_t subscriptionId, const cha
 
 int operGetItemsCb(sr_session_ctx_t* session, uint32_t subscriptionId, const char* moduleName, const char* subXPath, const char* requestXPath, uint32_t requestId, lyd_node** parent, void* privateData)
 {
-    auto priv = reinterpret_cast<PrivData<OperGetItemsCb>*>(privateData);
+    auto priv = reinterpret_cast<PrivData<OperGetCb>*>(privateData);
     auto node = *parent ? std::optional{libyang::wrapRawNode(*parent)} : std::nullopt;
     sysrepo::ErrorCode ret;
     try {
@@ -148,11 +148,11 @@ void Subscription::onModuleChange(const char* moduleName, ModuleChangeCb cb, con
     saveContext(ctx);
 }
 
-void Subscription::onOperGetItems(const char* moduleName, OperGetItemsCb cb, const char* xpath, const SubscribeOptions opts)
+void Subscription::onOperGetItems(const char* moduleName, OperGetCb cb, const char* xpath, const SubscribeOptions opts)
 {
-    auto& privRef = m_operGetItemsCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
+    auto& privRef = m_operGetCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
     sr_subscription_ctx_s* ctx = m_sub.get();
-    auto res = sr_oper_get_items_subscribe(m_sess.get(), moduleName, xpath, operGetItemsCb, reinterpret_cast<void*>(&privRef), toSubscribeOptions(opts), &ctx);
+    auto res = sr_oper_get_subscribe(m_sess.get(), moduleName, xpath, operGetItemsCb, reinterpret_cast<void*>(&privRef), toSubscribeOptions(opts), &ctx);
     throwIfError(res, "Couldn't create operational get items subscription");
 
     saveContext(ctx);
@@ -197,7 +197,7 @@ void Subscription::onNotification(
 
 Subscription::Subscription(Subscription&& other) noexcept
     : m_moduleChangeCbs(std::move(other.m_moduleChangeCbs))
-    , m_operGetItemsCbs(std::move(other.m_operGetItemsCbs))
+    , m_operGetCbs(std::move(other.m_operGetCbs))
     , m_RPCActionCbs(std::move(other.m_RPCActionCbs))
     , m_notificationCbs(std::move(other.m_notificationCbs))
     , m_exceptionHandler(std::move(other.m_exceptionHandler))
@@ -215,7 +215,7 @@ Subscription& Subscription::operator=(Subscription&& other) noexcept
     m_sub = other.m_sub;
     m_sess = other.m_sess;
     m_moduleChangeCbs = std::move(other.m_moduleChangeCbs);
-    m_operGetItemsCbs = std::move(other.m_operGetItemsCbs);
+    m_operGetCbs = std::move(other.m_operGetCbs);
     m_RPCActionCbs = std::move(other.m_RPCActionCbs);
     m_notificationCbs = std::move(other.m_notificationCbs);
     m_exceptionHandler = std::move(other.m_exceptionHandler);
