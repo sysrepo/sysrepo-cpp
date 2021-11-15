@@ -11,13 +11,37 @@ extern "C" {
 #include <sysrepo.h>
 }
 #include <libyang-cpp/Context.hpp>
+#include <sysrepo-cpp/Connection.hpp>
 #include <sysrepo-cpp/Session.hpp>
 #include <sysrepo-cpp/Subscription.hpp>
 #include "utils/enum.hpp"
 #include "utils/exception.hpp"
+#include "utils/utils.hpp"
 
 using namespace std::string_literals;
 namespace sysrepo {
+Data::Data(sr_data_s* data)
+    : m_data(data, [] (sr_data_s* data) {
+        sr_release_data(data);
+    })
+    , m_tree(libyang::wrapRawNode(data->tree, m_data))
+{
+    // We will be managing the tree by ourselves, we don't want sr_release_data to release it.
+    m_data->tree = nullptr;
+}
+
+libyang::DataNode Data::tree()
+{
+    return m_tree;
+}
+
+Connection Data::connection()
+{
+    return wrapUnmanagedConnection(std::shared_ptr<sr_conn_ctx_t>(const_cast<sr_conn_ctx_t*>(m_data->conn),
+        [data = m_data] (sr_conn_ctx_t*) {
+        // Nothing is freed here, I am using the deleter to save the m_data field, which deletes the sr_conn_ctx_t.
+    }));
+}
 
 Session::Session(sr_session_ctx_s* sess, std::shared_ptr<sr_conn_ctx_s> conn)
     // The connection `conn` is saved here in the deleter (as a capture). This means that copies of this shared_ptr will
@@ -113,18 +137,18 @@ void Session::moveItem(const char* path, const MovePosition move, const char* ke
  *
  * @returns std::nullopt if no matching data found, otherwise the requested data.
  */
-std::optional<libyang::DataNode> Session::getData(const char* path) const
+std::optional<Data> Session::getData(const char* path) const
 {
-    lyd_node* node;
-    auto res = sr_get_data(m_sess.get(), path, 0, 0, 0, &node);
+    sr_data_t* data;
+    auto res = sr_get_data(m_sess.get(), path, 0, 0, 0, &data);
 
     throwIfError(res, "Session::getData: Couldn't get '"s + path + "'");
 
-    if (!node) {
+    if (!data) {
         return std::nullopt;
     }
 
-    return libyang::wrapRawNode(node);
+    return Data{data};
 }
 
 /**
@@ -163,19 +187,19 @@ void Session::copyConfig(const Datastore source, const char* moduleName, std::ch
     throwIfError(res, "Couldn't copy config");
 }
 
-libyang::DataNode Session::sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout)
+Data Session::sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout)
 {
-    lyd_node* output;
+    sr_data_t* output;
     auto res = sr_rpc_send_tree(m_sess.get(), libyang::getRawNode(input), timeout.count(), &output);
     throwIfError(res, "Couldn't send RPC");
 
     assert(output); // TODO: sysrepo always gives the RPC node? (even when it has not output or output nodes?)
-    return libyang::wrapRawNode(output);
+    return Data{output};
 }
 
 void Session::sendNotification(libyang::DataNode notification, const Wait wait, std::chrono::milliseconds timeout)
 {
-    auto res = sr_event_notif_send_tree(m_sess.get(), libyang::getRawNode(notification), timeout.count(), wait == Wait::Yes ? 1 : 0);
+    auto res = sr_notif_send_tree(m_sess.get(), libyang::getRawNode(notification), timeout.count(), wait == Wait::Yes ? 1 : 0);
     throwIfError(res, "Couldn't send notification");
 }
 
@@ -227,7 +251,7 @@ ChangeCollection Session::getChanges(const char* xpath)
 
 const libyang::Context Session::getContext() const
 {
-    auto ctx = sr_get_context(sr_session_get_connection(m_sess.get()));
-    return libyang::createUnmanagedContext(const_cast<ly_ctx*>(ctx));
+    auto ctx = sr_session_acquire_context(m_sess.get());
+    return libyang::createUnmanagedContext(const_cast<ly_ctx*>(ctx), [this] (ly_ctx*) { sr_session_release_context(m_sess.get()); });
 }
 }
