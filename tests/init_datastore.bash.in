@@ -21,4 +21,4 @@ YANG_DIR=$(dirname "$1")
 shift
 
 # Install the module
-"$SYSREPOCTL" --search-dirs "$YANG_DIR" --install "$MODULE" -a
+"$SYSREPOCTL" --search-dirs "$YANG_DIR" --install "$MODULE"
