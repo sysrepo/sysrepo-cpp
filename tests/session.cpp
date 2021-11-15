@@ -25,6 +25,14 @@ TEST_CASE("session")
         REQUIRE(sess.activeDatastore() == sysrepo::Datastore::Running);
     }
 
+    DOCTEST_SUBCASE("Session lifetime is prolonged with data from getData")
+    {
+        sess.setItem("/test_module:leafInt32", "123");
+        sess.applyChanges();
+        auto data = sysrepo::Connection{}.sessionStart().getData("/test_module:leafInt32");
+        REQUIRE(data->asTerm().valueStr() == "123");
+    }
+
     DOCTEST_SUBCASE("basic data manipulation")
     {
         auto data = sess.getData("/test_module:leafInt32");
