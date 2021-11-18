@@ -70,6 +70,18 @@ TEST_CASE("subscriptions")
         });
     }
 
+    DOCTEST_SUBCASE("getting libyang ctx from subscription")
+    {
+        sysrepo::OperGetItemsCb operGetItemsCb = [&] (sysrepo::Session session, auto, auto, auto, auto, auto, std::optional<libyang::DataNode>& parent) {
+            parent = session.getContext().newPath("/test_module:stateLeaf", "1");
+            return sysrepo::ErrorCode::Ok;
+        };
+
+        auto sub = sess.onOperGetItems("test_module", operGetItemsCb, "/test_module:stateLeaf");
+        sess.switchDatastore(sysrepo::Datastore::Operational);
+        REQUIRE(sess.getData("/test_module:stateLeaf")->path() == "/test_module:stateLeaf");
+    }
+
     DOCTEST_SUBCASE("moving ctor")
     {
         sysrepo::ModuleChangeCb moduleChangeCb = [&called] (auto, auto, auto, auto, auto, auto) -> sysrepo::ErrorCode {
