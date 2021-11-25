@@ -18,6 +18,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa03a36e_e4d817e0",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-25T11:09:42Z",
+      "side": 1,
+      "message": "\u003e If there\u0027s \"no result\", then data-\u003etree is nullptr.\n\nNo, this is not true, the `data` struct itself will be nullptr to signify there are no data",
+      "parentUuid": "da8ab292_9ba1ed76",
+      "revId": "1deb12506a05c9e9ac1f367e5ec226554df79f4d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4bfa143_1066de30",
@@ -35,6 +53,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0a1bffa_9b3a33a2",
+        "filename": "src/utils/utils.hpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-25T11:09:42Z",
+      "side": 1,
+      "message": "This include HAS to be added somewhere, but this is probably not right place, so I removed it from here.",
+      "parentUuid": "b4bfa143_1066de30",
+      "revId": "1deb12506a05c9e9ac1f367e5ec226554df79f4d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50d7d1b0_af9b7fb9",
@@ -48,6 +84,30 @@
       "writtenOn": "2021-11-25T10:36:55Z",
       "side": 1,
       "message": "I wonder if this is \"enough\". Is the following a valid code?\n auto tree \u003d sysrepo::Connection{}.sessionStart().getData(\"/test_module:leafInt32\")-\u003etree();\n REQUIRE(tree.asTerm().valueStr() \u003d\u003d \"123\");\n\nIf it\u0027s valid, please add a test. If it is not valid, please document that, and can you think of a way to prevent that from happening? Can you, e.g., invalidate the tree via its refcounting mechanism?",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 5
+      },
+      "revId": "1deb12506a05c9e9ac1f367e5ec226554df79f4d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc8c3a27_a44ab0a4",
+        "filename": "tests/session.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-25T11:09:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50d7d1b0_af9b7fb9",
       "range": {
         "startLine": 28,
         "startChar": 0,
