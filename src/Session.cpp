@@ -24,7 +24,7 @@ namespace sysrepo {
 Session::Session(sr_session_ctx_s* sess, std::shared_ptr<sr_conn_ctx_s> conn)
     // The connection `conn` is saved here in the deleter (as a capture). This means that copies of this shared_ptr will
     // automatically hold a reference to `conn`.
-    : m_sess(sess, [conn] (auto* sess) {
+    : m_sess(sess, [extend_connection_lifetime = conn] (auto* sess) {
         sr_session_stop(sess);
     })
 {
