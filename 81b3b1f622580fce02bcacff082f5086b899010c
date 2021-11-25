@@ -18,6 +18,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a62f8d14_c3d9b3b7",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-25T12:09:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "507b0b3d_62c02248",
+      "revId": "81b3b1f622580fce02bcacff082f5086b899010c",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "01744960_4ccc7f6a",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-11-25T11:53:58Z",
       "side": 1,
       "message": "this is correct, but please go into more detail in the comment so that I can still understand it six months in future",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 27
+      },
+      "revId": "81b3b1f622580fce02bcacff082f5086b899010c",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "796bcb2d_bab200e4",
+        "filename": "src/Session.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-25T12:09:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01744960_4ccc7f6a",
       "range": {
         "startLine": 30,
         "startChar": 0,
