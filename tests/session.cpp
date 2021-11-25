@@ -17,6 +17,7 @@ TEST_CASE("session")
     sysrepo::setLogLevelStderr(sysrepo::LogLevel::Information);
     std::optional<sysrepo::Connection> conn{std::in_place};
     auto sess = conn->sessionStart();
+    sess.copyConfig(sysrepo::Datastore::Startup);
 
     DOCTEST_SUBCASE("Session should be still valid even after the Connection class gets freed")
     {
