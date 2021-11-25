@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "507b0b3d_62c02248",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-25T11:53:58Z",
+      "side": 1,
+      "message": "we talked about this, and it turns out that this class can be removed. It will be OK to just return an optional\u003cDataNode\u003e which has been adjusted with a shared_ptr that prolongs the lifetime of sr_data_t via deferring that call to sr_release_data until the lyd_tree gets destroyed.",
+      "revId": "81b3b1f622580fce02bcacff082f5086b899010c",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01744960_4ccc7f6a",
+        "filename": "src/Session.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-25T11:53:58Z",
+      "side": 1,
+      "message": "this is correct, but please go into more detail in the comment so that I can still understand it six months in future",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 27
+      },
+      "revId": "81b3b1f622580fce02bcacff082f5086b899010c",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
