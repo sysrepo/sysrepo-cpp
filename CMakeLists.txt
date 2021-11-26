@@ -34,6 +34,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_library(sysrepo-cpp SHARED
         src/Connection.cpp
+        src/Enum.cpp
         src/Session.cpp
         src/Subscription.cpp
         src/utils/exception.cpp
