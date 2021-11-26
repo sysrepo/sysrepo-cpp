@@ -9,6 +9,7 @@
 #include <cassert>
 extern "C" {
 #include <sysrepo.h>
+#include <sysrepo/error_format.h>
 }
 #include <libyang-cpp/Context.hpp>
 #include <sysrepo-cpp/Connection.hpp>
@@ -251,26 +252,105 @@ void Session::setErrorMessage(const char* msg)
     throwIfError(res, "Couldn't set error message");
 }
 
-std::vector<ErrorInfo> Session::getErrors()
+/**
+ * Set NETCONF callback error.
+ */
+void Session::setNetconfError(const NetconfErrorInfo& info)
+{
+    auto res = sr_session_set_netconf_error(
+            m_sess.get(),
+            info.type.c_str(),
+            info.tag.c_str(),
+            info.appTag ? info.appTag->c_str() : nullptr,
+            info.path ? info.path->c_str() : nullptr,
+            info.message.c_str(), 0);
+    throwIfError(res, "Couldn't set error messsage");
+
+    // Unfortunately, there is no way to transform the vector to the variadic arguments, so I need to push the info
+    // elements manually.
+    for (const auto& infoElem : info.infoElements) {
+        res = sr_session_push_error_data(m_sess.get(), infoElem.element.size() + /*NULL byte*/ 1, infoElem.element.c_str());
+        throwIfError(res, "Couldn't set error messsage");
+        res = sr_session_push_error_data(m_sess.get(), infoElem.value.size() + /*NULL byte*/ 1, infoElem.value.c_str());
+        throwIfError(res, "Couldn't set error messsage");
+    }
+}
+
+namespace {
+template <typename ErrType>
+std::vector<ErrType> impl_getErrors(sr_session_ctx_s* sess)
 {
     const sr_error_info_t* errInfo;
-    auto res = sr_session_get_error(m_sess.get(), &errInfo);
+    auto res = sr_session_get_error(sess, &errInfo);
     throwIfError(res, "Couldn't retrieve errors");
 
-    std::vector<ErrorInfo> errors;
+    std::vector<ErrType> errors;
 
     if (!errInfo) {
         return errors;
     }
 
     for (const auto& error : std::span(errInfo->err, errInfo->err_count)) {
-        errors.push_back(ErrorInfo{
-            .code = static_cast<ErrorCode>(error.err_code),
-            .errorMessage = error.message
-        });
+        using namespace std::string_view_literals;
+        if constexpr (std::is_same<ErrType, NetconfErrorInfo>()) {
+            if (!error.error_format || error.error_format != "NETCONF"sv) {
+                continue;
+            }
+
+            const char* type;
+            const char* tag;
+            const char* appTag;
+            const char* path;
+            const char* message;
+            const char** infoElements;
+            const char** infoValues;
+            uint32_t infoCount;
+
+            auto res = sr_err_get_netconf_error(&error, &type, &tag, &appTag, &path, &message, &infoElements, &infoValues, &infoCount);
+            throwIfError(res, "Couldn't retrieve errors");
+
+            auto& netconfErr = errors.emplace_back();
+            netconfErr.type = type;
+            netconfErr.tag = tag;
+            if (appTag) {
+                netconfErr.appTag = appTag;
+            }
+            if (path) {
+                netconfErr.path = path;
+            }
+            netconfErr.message = message;
+            if (infoElements) {
+                auto infoElemsDeleter = std::unique_ptr<const char*, decltype(&std::free)>(infoElements, std::free);
+                auto infoValuesDeleter = std::unique_ptr<const char*, decltype(&std::free)>(infoValues, std::free);
+                auto elems = std::span(infoElements, infoCount);
+                auto vals = std::span(infoValues, infoCount);
+
+                for (auto [elem, val] = std::tuple{elems.begin(), vals.begin()}; elem != elems.end(); elem++, val++) {
+                    netconfErr.infoElements.push_back(NetconfErrorInfo::InfoElement{*elem, *val});
+                }
+            }
+
+        } else  {
+            static_assert(std::is_same<ErrType, ErrorInfo>());
+            errors.push_back(ErrorInfo{
+                .code = static_cast<ErrorCode>(error.err_code),
+                .errorMessage = error.message
+            });
+        }
     }
 
     return errors;
+}
+};
+
+std::vector<ErrorInfo> Session::getErrors()
+{
+    return impl_getErrors<ErrorInfo>(m_sess.get());
+}
+
+std::vector<NetconfErrorInfo> Session::getNetconfErrors() const
+{
+    return impl_getErrors<NetconfErrorInfo>(m_sess.get());
 }
 
 const libyang::Context Session::getContext() const

@@ -30,8 +30,24 @@ struct unmanaged_tag {
 };
 
 struct ErrorInfo {
+    bool operator==(const ErrorInfo& other) const = default;
     ErrorCode code;
     std::string errorMessage;
+};
+
+struct NetconfErrorInfo {
+    bool operator==(const NetconfErrorInfo& other) const = default;
+    struct InfoElement {
+        bool operator==(const InfoElement& other) const = default;
+        std::string element;
+        std::string value;
+    };
+    std::string type;
+    std::string tag;
+    std::optional<std::string> appTag;
+    std::optional<std::string> path;
+    std::string message;
+    std::vector<InfoElement> infoElements;
 };
 
 enum class Wait {
@@ -69,7 +85,10 @@ public:
 
     ChangeCollection getChanges(const char* xpath = "//.");
     void setErrorMessage(const char* msg);
+    void setNetconfError(const NetconfErrorInfo& info);
+
     std::vector<ErrorInfo> getErrors();
+    std::vector<NetconfErrorInfo> getNetconfErrors() const;
 
     const libyang::Context getContext() const;
 
