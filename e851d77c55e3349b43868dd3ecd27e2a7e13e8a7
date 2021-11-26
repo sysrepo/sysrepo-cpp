@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "010cda2f_d2f038b6",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-26T14:13:33Z",
+      "side": 1,
+      "message": "I think \u003ciosfwd\u003e should be enough here if choose so.",
+      "revId": "e851d77c55e3349b43868dd3ecd27e2a7e13e8a7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
