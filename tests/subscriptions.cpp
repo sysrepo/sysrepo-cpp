@@ -436,7 +436,7 @@ TEST_CASE("subscriptions")
         sub = std::nullopt;
     }
 
-    DOCTEST_SUBCASE("error info")
+    DOCTEST_SUBCASE("Session::setErrorMessage")
     {
         const char* message = nullptr;
 
@@ -477,5 +477,27 @@ TEST_CASE("subscriptions")
         sess.applyChanges();
         auto errors = sess.getErrors();
         REQUIRE(errors.size() == 0);
+    }
+
+    DOCTEST_SUBCASE("Session::setNetconfError")
+    {
+        std::function<void(sysrepo::Session)> makeError;
+        DOCTEST_SUBCASE("without info elements")
+        {
+            makeError = [] (sysrepo::Session sess) {
+                sess.setNetconfError("application", "operation-failed", nullptr, nullptr, "Test callback failure.");
+            };
+        }
+        sysrepo::ModuleChangeCb moduleChangeCb = [&makeError, fail = true] (auto session, auto, auto, auto, auto, auto) mutable -> sysrepo::ErrorCode {
+            if (fail) {
+                makeError(session);
+                fail = false;
+                return sysrepo::ErrorCode::OperationFailed;
+            }
+
+            return sysrepo::ErrorCode::Ok;
+        };
+
+        // TODO
     }
 }

@@ -34,6 +34,19 @@ struct ErrorInfo {
     std::optional<std::string> errorMessage;
 };
 
+struct NetconfErrorInfo {
+    struct InfoElement {
+        std::string element;
+        std::string value;
+    };
+    std::string type;
+    std::optional<std::string> tag;
+    std::optional<std::string> appTag;
+    std::string path;
+    std::string message;
+    std::vector<InfoElement> infoElements;
+};
+
 enum class Wait {
     Yes,
     No
@@ -69,7 +82,16 @@ public:
 
     ChangeCollection getChanges(const char* xpath = "//.");
     void setErrorMessage(const char* msg);
+    void setNetconfError(
+            const char* type,
+            const char* tag,
+            const char* appTag,
+            const char* path,
+            const char* message,
+            std::same_as<const char*> auto... infoElements);
+
     std::vector<ErrorInfo> getErrors();
+    std::vector<NetconfErrorInfo> getNetconfErrors();
 
     const libyang::Context getContext() const;
 
