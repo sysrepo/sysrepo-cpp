@@ -58,14 +58,15 @@ enum class Event : uint32_t {
  * Wraps sr_subscr_flag_t.
  */
 enum class SubscribeOptions : uint32_t {
-    Default = 0,
-    NoThread = 1,
-    Passive = 2,
-    DoneOnly = 4,
-    Enabled = 8,
-    Update = 16,
-    OperMerge = 32,
-    ThreadSuspend = 64
+    Default       = 0,
+    Reuse         = 1
+    NoThread      = 2,
+    Passive       = 4,
+    DoneOnly      = 8,
+    Enabled       = 16,
+    Update        = 32,
+    OperMerge     = 64,
+    ThreadSuspend = 128
 };
 
 template <typename Enum>
