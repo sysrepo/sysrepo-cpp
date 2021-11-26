@@ -9,6 +9,7 @@
 #include <cassert>
 extern "C" {
 #include <sysrepo.h>
+#include <sysrepo/error_format.h>
 }
 #include <libyang-cpp/Context.hpp>
 #include <sysrepo-cpp/Connection.hpp>
@@ -251,26 +252,88 @@ void Session::setErrorMessage(const char* msg)
     throwIfError(res, "Couldn't set error message");
 }
 
-std::vector<ErrorInfo> Session::getErrors()
+void Session::setNetconfError(
+        const char* type,
+        const char* tag,
+        const char* appTag,
+        const char* path,
+        const char* message,
+        std::same_as<const char*> auto... infoElements)
+{
+    static_assert(sizeof...(infoElements) % 2 == 0, "Session::setNetconfError: info elements must come in pairs.");
+
+    auto res = sr_session_set_netconf_error(type, tag, appTag, path, message, infoElements...);
+    throwIfError(res, "Couldn't set error messsage");
+}
+
+namespace {
+template <typename ErrType>
+std::vector<ErrType> impl_getErrors(sr_session_ctx_s* sess)
 {
     const sr_error_info_t* errInfo;
-    auto res = sr_session_get_error(m_sess.get(), &errInfo);
+    auto res = sr_session_get_error(sess, &errInfo);
     throwIfError(res, "Couldn't retrieve errors");
 
-    std::vector<ErrorInfo> errors;
+    std::vector<ErrType> errors;
 
     if (!errInfo) {
         return errors;
     }
 
     for (const auto& error : std::span(errInfo->err, errInfo->err_count)) {
-        errors.push_back(ErrorInfo{
-            .code = static_cast<ErrorCode>(error.err_code),
-            .errorMessage = error.message ? std::optional{error.message} : std::nullopt
-        });
+        if constexpr (std::is_same<ErrType, NetconfErrorInfo>()) {
+            const char* type;
+            const char* tag;
+            const char* appTag;
+            const char* path;
+            const char* message;
+            const char** infoElements;
+            const char** infoValues;
+            uint32_t infoCount;
+
+            auto res = sr_err_get_netconf_error(&error, &type, &tag, &appTag, &path, &message, &infoElements, &infoValues, &infoCount);
+            throwIfError(res, "Couldn't retrieve errors");
+
+            auto& netconfErr = errors.emplace_back();
+            netconfErr.type = type;
+            netconfErr.tag = tag;
+            if (appTag) {
+                netconfErr.appTag = appTag;
+            }
+            if (path) {
+                netconfErr.path = path;
+            }
+            netconfErr.message = message;
+            if (infoElements) {
+                auto elems = std::span(infoElements, infoCount);
+                auto vals = std::span(infoValues, infoCount);
+
+                for (auto [elem, val] = std::tuple{elems.begin(), vals.begin()}; elem != elems.end(); elem++, val++) {
+                    netconfErr.infoElements.emplace_back(*elem, *val);
+                }
+            }
+
+        } else  {
+            static_assert(std::is_same<ErrType, ErrorInfo>());
+            errors.push_back(ErrorInfo{
+                .code = static_cast<ErrorCode>(error.err_code),
+                .errorMessage = error.message ? std::optional{error.message} : std::nullopt
+            });
+        }
     }
 
     return errors;
+}
+};
+
+std::vector<ErrorInfo> Session::getErrors()
+{
+    return impl_getErrors<ErrorInfo>(m_sess.get());
+}
+
+std::vector<NetconfErrorInfo> Session::getNetconfErrors()
+{
+    return impl_getErrors<NetconfErrorInfo>(m_sess.get());
 }
 
 const libyang::Context Session::getContext() const
