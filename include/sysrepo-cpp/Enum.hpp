@@ -8,6 +8,7 @@
 #pragma once
 
 #include <cstdint>
+#include <ostream>
 #include <type_traits>
 namespace sysrepo {
 /**
@@ -144,4 +145,6 @@ enum class NotificationType : uint32_t {
     Suspended,
     Resumed
 };
+
+std::ostream& operator<<(std::ostream& os, const NotificationType& type);
 }
