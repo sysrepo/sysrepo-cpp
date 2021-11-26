@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffb41fd0_015b0a22",
+        "filename": "src/Enum.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-26T15:12:36Z",
+      "side": 1,
+      "message": "please move this outside of the switch; that way you\u0027ll get a compiler warning if new enum values are ever added",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 44
+      },
+      "revId": "c0d9e9e1dea340cb9cb289a274fde49d70ea17ac",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
