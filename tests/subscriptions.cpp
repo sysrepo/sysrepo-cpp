@@ -436,7 +436,7 @@ TEST_CASE("subscriptions")
         sub = std::nullopt;
     }
 
-    DOCTEST_SUBCASE("error info")
+    DOCTEST_SUBCASE("Session::setErrorMessage")
     {
         const char* message = nullptr;
 
@@ -477,5 +477,53 @@ TEST_CASE("subscriptions")
         sess.applyChanges();
         auto errors = sess.getErrors();
         REQUIRE(errors.size() == 0);
+    }
+
+    DOCTEST_SUBCASE("Session::setNetconfError")
+    {
+        sysrepo::NetconfErrorInfo errToSet;
+
+        DOCTEST_SUBCASE("without info elements")
+        {
+            errToSet = {
+                .type = "application",
+                .tag = "operation-failed",
+                .appTag = std::nullopt,
+                .path = std::nullopt,
+                .message = "Test callback failure.",
+                .infoElements = {}
+            };
+        }
+
+        DOCTEST_SUBCASE("with info elements")
+        {
+            errToSet = {
+                .type = "application",
+                .tag = "operation-failed",
+                .appTag = std::nullopt,
+                .path = std::nullopt,
+                .message = "Test callback failure.",
+                .infoElements = {{"MyElement", "MyValue"}, {"AnotherElement", "AnotherValue"}}
+            };
+        }
+        sysrepo::ModuleChangeCb moduleChangeCb = [&errToSet, fail = true] (auto session, auto, auto, auto, auto, auto) mutable -> sysrepo::ErrorCode {
+            if (fail) {
+                session.setNetconfError(errToSet);
+                fail = false;
+                return sysrepo::ErrorCode::OperationFailed;
+            }
+
+            return sysrepo::ErrorCode::Ok;
+        };
+
+        auto sub = sess.onModuleChange("test_module", moduleChangeCb);
+        sess.setItem("/test_module:leafInt32", "123");
+        try {
+            sess.applyChanges();
+        } catch (sysrepo::ErrorWithCode&) {
+            auto errors = sess.getNetconfErrors();
+            REQUIRE(errors.size() == 1);
+            REQUIRE(errors.front() == errToSet);
+        }
     }
 }
