@@ -86,7 +86,7 @@ public:
     void setErrorMessage(const char* msg);
     void setNetconfError(const NetconfErrorInfo& info);
 
-    std::vector<ErrorInfo> getErrors();
+    std::vector<ErrorInfo> getErrors() const;
     std::vector<NetconfErrorInfo> getNetconfErrors() const;
 
     const libyang::Context getContext() const;
