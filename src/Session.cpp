@@ -358,6 +358,23 @@ std::vector<NetconfErrorInfo> Session::getNetconfErrors() const
     return impl_getErrors<NetconfErrorInfo>(m_sess.get());
 }
 
+/**
+ * Gets the event originator name. If it hasn't been set, the name is empty.
+ */
+std::string_view Session::getOriginatorName() const
+{
+    return sr_session_get_orig_name(m_sess.get());
+}
+
+/**
+ * Sets the event originator name.
+ */
+void Session::setOriginatorName(const char* originatorName)
+{
+    auto res = sr_session_set_orig_name(m_sess.get(), originatorName);
+    throwIfError(res, "Couldn't switch datastore");
+}
+
 const libyang::Context Session::getContext() const
 {
     auto ctx = sr_session_acquire_context(m_sess.get());
