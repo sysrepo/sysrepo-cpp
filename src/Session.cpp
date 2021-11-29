@@ -343,7 +343,7 @@ std::vector<ErrType> impl_getErrors(sr_session_ctx_s* sess)
 }
 };
 
-std::vector<ErrorInfo> Session::getErrors()
+std::vector<ErrorInfo> Session::getErrors() const
 {
     return impl_getErrors<ErrorInfo>(m_sess.get());
 }
