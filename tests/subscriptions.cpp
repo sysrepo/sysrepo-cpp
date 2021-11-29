@@ -533,4 +533,29 @@ TEST_CASE("subscriptions")
         REQUIRE(ncErrors.size() == 1);
         REQUIRE(ncErrors.front() == errToSet);
     }
+
+    DOCTEST_SUBCASE("Originator name")
+    {
+        std::string_view originatorName;
+
+        DOCTEST_SUBCASE("Originator name set")
+        {
+            originatorName = "Test originator";
+            sess.setOriginatorName(originatorName.data());
+        }
+
+        DOCTEST_SUBCASE("Originator name not set")
+        {
+            originatorName = "";
+        }
+
+        sysrepo::ModuleChangeCb moduleChangeCb = [&] (sysrepo::Session session, auto, auto, auto, auto, auto) mutable -> sysrepo::ErrorCode {
+            REQUIRE(session.getOriginatorName() == originatorName);
+            return sysrepo::ErrorCode::Ok;
+        };
+
+        auto sub = sess.onModuleChange("test_module", moduleChangeCb);
+        sess.setItem("/test_module:leafInt32", "123");
+        sess.applyChanges();
+    }
 }
