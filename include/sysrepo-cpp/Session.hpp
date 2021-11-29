@@ -89,6 +89,9 @@ public:
     std::vector<ErrorInfo> getErrors();
     std::vector<NetconfErrorInfo> getNetconfErrors();
 
+    std::string_view getOriginatorName() const;
+    void setOriginatorName(const char* originatorName);
+
     const libyang::Context getContext() const;
 
 private:
