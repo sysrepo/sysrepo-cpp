@@ -339,7 +339,7 @@ std::vector<ErrType> impl_getErrors(sr_session_ctx_s* sess)
             static_assert(std::is_same<ErrType, ErrorInfo>());
             errors.push_back(ErrorInfo{
                 .code = static_cast<ErrorCode>(error.err_code),
-                .errorMessage = error.message ? std::optional{error.message} : std::nullopt
+                .errorMessage = error.message
             });
         }
     }
