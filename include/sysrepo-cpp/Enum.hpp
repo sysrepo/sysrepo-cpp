@@ -76,9 +76,21 @@ constexpr Enum implEnumBitOr(const Enum a, const Enum b)
     return static_cast<Enum>(static_cast<Type>(a) | static_cast<Type>(b));
 }
 
+template <typename Enum>
+constexpr bool implEnumBitAnd(const Enum a, const Enum b)
+{
+    using Type = std::underlying_type_t<Enum>;
+    return static_cast<Type>(a) & static_cast<Type>(b);
+}
+
 constexpr SubscribeOptions operator|(const SubscribeOptions a, const SubscribeOptions b)
 {
     return implEnumBitOr(a, b);
+}
+
+constexpr bool operator&(const SubscribeOptions a, const SubscribeOptions b)
+{
+    return implEnumBitAnd(a, b);
 }
 
 /**
