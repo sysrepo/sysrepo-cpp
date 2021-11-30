@@ -22,6 +22,30 @@
       },
       "revId": "a503a8dbb0dd433666160abb1f8538a2f4990576",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5ace61c_2cfd5c1d",
+        "filename": "src/Session.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-30T22:14:22Z",
+      "side": 1,
+      "message": "I removed this, but it kinda works weirdly idk why... like, you actually have the error.message and error.code even in the NETCONF errors. I\u0027ll investigate tomorrow",
+      "parentUuid": "709bf697_394e0da8",
+      "range": {
+        "startLine": 334,
+        "startChar": 0,
+        "endLine": 337,
+        "endChar": 13
+      },
+      "revId": "a503a8dbb0dd433666160abb1f8538a2f4990576",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
