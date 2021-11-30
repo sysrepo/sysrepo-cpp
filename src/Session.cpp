@@ -200,23 +200,45 @@ void Session::sendNotification(libyang::DataNode notification, const Wait wait, 
     throwIfError(res, "Couldn't send notification");
 }
 
-Subscription Session::onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath, uint32_t priority, const SubscribeOptions opts, ExceptionHandler handler)
+Subscription Session::onModuleChange(
+        const char* moduleName,
+        ModuleChangeCb cb,
+        const char* xpath,
+        uint32_t priority,
+        const SubscribeOptions opts,
+        ExceptionHandler handler,
+        const std::optional<FDHandling>& callbacks)
 {
-    auto sub = Subscription{m_sess, handler};
+    checkNoThreadFlag(opts, callbacks);
+    auto sub = Subscription{m_sess, handler, callbacks};
     sub.onModuleChange(moduleName, cb, xpath, priority, opts);
     return sub;
 }
 
-Subscription Session::onOperGet(const char* moduleName, OperGetCb cb, const char* xpath, const SubscribeOptions opts, ExceptionHandler handler)
+Subscription Session::onOperGet(
+        const char* moduleName,
+        OperGetCb cb,
+        const char* xpath,
+        const SubscribeOptions opts,
+        ExceptionHandler handler,
+        const std::optional<FDHandling>& callbacks)
 {
-    auto sub = Subscription{m_sess, handler};
+    checkNoThreadFlag(opts, callbacks);
+    auto sub = Subscription{m_sess, handler, callbacks};
     sub.onOperGet(moduleName, cb, xpath, opts);
     return sub;
 }
 
-Subscription Session::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority, const SubscribeOptions opts, ExceptionHandler handler)
+Subscription Session::onRPCAction(
+        const char* xpath,
+        RpcActionCb cb,
+        uint32_t priority,
+        const SubscribeOptions opts,
+        ExceptionHandler handler,
+        const std::optional<FDHandling>& callbacks)
 {
-    auto sub = Subscription{m_sess, handler};
+    checkNoThreadFlag(opts, callbacks);
+    auto sub = Subscription{m_sess, handler, callbacks};
     sub.onRPCAction(xpath, cb, priority, opts);
     return sub;
 }
@@ -228,9 +250,11 @@ Subscription Session::onNotification(
         const std::optional<NotificationTimeStamp>& startTime,
         const std::optional<NotificationTimeStamp>& stopTime,
         const SubscribeOptions opts,
-        ExceptionHandler handler)
+        ExceptionHandler handler,
+        const std::optional<FDHandling>& callbacks)
 {
-    auto sub = Subscription{m_sess, handler};
+    checkNoThreadFlag(opts, callbacks);
+    auto sub = Subscription{m_sess, handler, callbacks};
     sub.onNotification(moduleName, cb, xpath, startTime, stopTime, opts);
     return sub;
 }
