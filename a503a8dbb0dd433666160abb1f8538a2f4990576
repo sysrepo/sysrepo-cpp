@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "709bf697_394e0da8",
+        "filename": "src/Session.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-30T09:16:08Z",
+      "side": 1,
+      "message": "Is this a good thing to do? The `err_code` and `message` are still available, which means that this code potentially ignores useful information. Would it make sense to make that available to the C++ bindings?\n\nPerhaps your intention was to not return the NETCONF-formatted error info, and perhaps the reason for this is to make sure that there are no duplicates when you first ask for \"NETCONF errors\" and then next time for \"any errors\". Can you perhaps filter out just these \"known\" error records? Or maybe even better, extend ErrorInfo with an `error_format`, and delegate this filtering to whoever called us.\n\nThis, BTW, is the cost of that protocol-agnostic error reporting in sysrepo :(.",
+      "range": {
+        "startLine": 334,
+        "startChar": 0,
+        "endLine": 337,
+        "endChar": 13
+      },
+      "revId": "a503a8dbb0dd433666160abb1f8538a2f4990576",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
