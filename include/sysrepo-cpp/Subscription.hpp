@@ -83,12 +83,29 @@ struct PrivData {
 
 template<typename Callback> PrivData(Callback, std::function<void(std::exception& ex)>*) -> PrivData<Callback>;
 
+struct FDHandling {
+    /**
+     * Called on the construction of the Subscription class.
+     * This function is supposed to register polling of file descriptor `fd`. When reading is available on the file
+     * descriptor, Subscription::processEvents is supposed to be called.
+     */
+    std::function<void(int fd)> registerFd;
+    /*
+     * Called on the destruction of the Subscription class.
+     * This function is supposed to unregister polling of the `fd` file descriptor.
+     */
+    std::function<void(int fd)> unregisterFd;
+};
+
 class Subscription {
 public:
+    ~Subscription();
     Subscription(const Subscription&) = delete;
     Subscription& operator=(const Subscription&) = delete;
     Subscription(Subscription&&) noexcept;
     Subscription& operator=(Subscription&&) noexcept;
+
+    void processEvents();
 
     void onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath = nullptr, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
     void onOperGet(const char* moduleName, OperGetCb cb, const char* xpath, const SubscribeOptions opts = SubscribeOptions::Default);
@@ -101,10 +118,13 @@ public:
             const std::optional<NotificationTimeStamp>& stopTime = std::nullopt,
             const SubscribeOptions opts = SubscribeOptions::Default);
 private:
+    int eventPipe() const;
     void saveContext(sr_subscription_ctx_s* ctx);
 
     friend Session;
-    explicit Subscription(std::shared_ptr<sr_session_ctx_s> sess, ExceptionHandler handler);
+    explicit Subscription(std::shared_ptr<sr_session_ctx_s> sess, ExceptionHandler handler, const std::optional<FDHandling>& callbacks);
+
+    std::optional<FDHandling> m_customEventLoopCbs;
 
     // This saves the users' callbacks. The C-style callback takes addresses of these, so the addresses need to be
     // stable (therefore, we use an std::list).

@@ -45,9 +45,12 @@ target_link_libraries(sysrepo-cpp PRIVATE PkgConfig::SYSREPO PUBLIC PkgConfig::L
 
 if(BUILD_TESTING)
     find_package(doctest 2.4.6 REQUIRED)
+    set(THREADS_PREFER_PTHREAD_FLAG ON)
+    find_package(Threads REQUIRED)
 
     add_library(DoctestIntegration STATIC
         tests/doctest-integration.cpp
+        tests/utils.cpp
         )
     target_include_directories(DoctestIntegration PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/tests/ ${CMAKE_CURRENT_SOURCE_DIR}/src/ "${CMAKE_CURRENT_BINARY_DIR}")
     target_link_libraries(DoctestIntegration doctest::doctest)
@@ -89,6 +92,7 @@ if(BUILD_TESTING)
 
     sysrepo_cpp_test(session "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang")
     sysrepo_cpp_test(subscriptions "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang")
+    target_link_libraries(test_subscriptions Threads::Threads)
     sysrepo_cpp_test(unsafe "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang")
     target_link_libraries(test_unsafe PkgConfig::SYSREPO)
 endif()
