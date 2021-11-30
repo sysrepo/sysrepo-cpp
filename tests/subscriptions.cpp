@@ -12,7 +12,9 @@
 #include <sysrepo-cpp/Connection.hpp>
 #include <sysrepo-cpp/utils/utils.hpp>
 #include <sysrepo-cpp/utils/exception.hpp>
+#include <thread>
 #include <trompeloeil.hpp>
+#include "utils.hpp"
 
 using namespace std::string_view_literals;
 namespace trompeloeil {
@@ -550,5 +552,75 @@ TEST_CASE("subscriptions")
         auto sub = sess.onModuleChange("test_module", moduleChangeCb);
         sess.setItem("/test_module:leafInt32", "123");
         sess.applyChanges();
+    }
+
+    DOCTEST_SUBCASE("Custom event loop subscription")
+    {
+        Recorder rec;
+        sysrepo::ModuleChangeCb moduleChangeCb = [&rec] (sysrepo::Session session, auto, auto, auto, auto, auto) -> sysrepo::ErrorCode {
+            for (const auto& change : session.getChanges("//.")) {
+                rec.record(change.operation, std::string{change.node.path()}, change.previousList, change.previousValue, change.previousDefault);
+            }
+            return sysrepo::ErrorCode::Ok;
+        };
+
+        // The Subscription must be destroyed before we can call x.join(), because the Subscription needs to stop the
+        // while loop.
+        std::thread x;
+        std::atomic<bool> continueLooping = true;
+
+        {
+            int fdSave;
+
+            auto sub = sess.onModuleChange("test_module",
+                    moduleChangeCb,
+                    nullptr,
+                    0,
+                    sysrepo::SubscribeOptions::DoneOnly | sysrepo::SubscribeOptions::NoThread,
+                    nullptr,
+                    sysrepo::CustomEventLoopCallbacks{
+                        .registerFd = [&fdSave] (int fd) {
+                            fdSave = fd;
+                        },
+                        .unregisterFd = [&continueLooping] (int) {
+                            continueLooping = false;
+                        }
+                    });
+
+            x = std::thread([&] {
+                while (continueLooping) {
+                    fd_set rfds;
+                    struct timeval tv;
+                    FD_ZERO(&rfds);
+                    FD_SET((fdSave), &rfds);
+                    tv.tv_sec = 1;
+                    tv.tv_usec = 0;
+                    auto ret = select(fdSave + 1, &rfds, nullptr, nullptr, &tv);
+
+                    switch (ret) {
+                    case -1:
+                        throw std::runtime_error("select() failed.");
+                    case 0:
+                        continue;
+                    default:
+                        sub.processEvents();
+                    }
+                }
+            });
+
+            trompeloeil::sequence seq;
+
+            TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafInt32", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
+            sess.setItem("/test_module:leafInt32", "123");
+            sess.applyChanges();
+            TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Deleted, "/test_module:leafInt32", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
+            sess.deleteItem("/test_module:leafInt32");
+            sess.applyChanges();
+            TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafInt32", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
+            sess.setItem("/test_module:leafInt32", "123");
+            sess.applyChanges();
+            waitForCompletionAndBitMore(seq);
+        }
+        x.join();
     }
 }
