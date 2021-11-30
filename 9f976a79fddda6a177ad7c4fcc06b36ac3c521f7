@@ -18,6 +18,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2853efb8_2f6a9535",
+        "filename": "CMakeLists.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-30T22:27:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de3f5744_b2693214",
+      "revId": "9f976a79fddda6a177ad7c4fcc06b36ac3c521f7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f806a67c_876993c5",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-11-30T19:34:09Z",
       "side": 1,
       "message": "This looks like something coming from cla-sysrepo that I wrote. Feel free to list Tomas and yourself as well because you\u0027ve all contributed there.",
+      "revId": "9f976a79fddda6a177ad7c4fcc06b36ac3c521f7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "077b7f64_aff03d83",
+        "filename": "tests/utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-30T22:27:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f806a67c_876993c5",
       "revId": "9f976a79fddda6a177ad7c4fcc06b36ac3c521f7",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }

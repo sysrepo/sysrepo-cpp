@@ -48,6 +48,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6118a0d3_b5d85559",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-30T22:27:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4430455_b4aafe67",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 2
+      },
+      "revId": "e1001916f9f959537550145cbb26ade3b6c70f3c",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bacb7bef_d0a4060d",
@@ -61,6 +85,30 @@
       "writtenOn": "2021-11-30T12:53:57Z",
       "side": 1,
       "message": "nit: I prefer a more STL-ish naming with `eventPipe()` because I think that the \"get\" prefix is redundant",
+      "range": {
+        "startLine": 120,
+        "startChar": 8,
+        "endLine": 120,
+        "endChar": 20
+      },
+      "revId": "e1001916f9f959537550145cbb26ade3b6c70f3c",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a1cdd30_1a61760a",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-11-30T22:27:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bacb7bef_d0a4060d",
       "range": {
         "startLine": 120,
         "startChar": 8,
