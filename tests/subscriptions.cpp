@@ -12,7 +12,9 @@
 #include <sysrepo-cpp/Connection.hpp>
 #include <sysrepo-cpp/utils/utils.hpp>
 #include <sysrepo-cpp/utils/exception.hpp>
+#include <thread>
 #include <trompeloeil.hpp>
+#include "utils.hpp"
 
 using namespace std::string_view_literals;
 namespace trompeloeil {
@@ -550,5 +552,61 @@ TEST_CASE("subscriptions")
         auto sub = sess.onModuleChange("test_module", moduleChangeCb);
         sess.setItem("/test_module:leafInt32", "123");
         sess.applyChanges();
+    }
+
+    DOCTEST_SUBCASE("Custom event loop subscription")
+    {
+        Recorder rec;
+        sysrepo::ModuleChangeCb moduleChangeCb = [&rec] (sysrepo::Session session, auto, auto, auto, auto, auto) -> sysrepo::ErrorCode {
+            for (const auto& change : session.getChanges("//.")) {
+                rec.record(change.operation, std::string{change.node.path()}, change.previousList, change.previousValue, change.previousDefault);
+            }
+            return sysrepo::ErrorCode::Ok;
+        };
+
+        int fdSave;
+        std::function<void()> processEventsSave;
+
+        auto sub = sess.onModuleChange("test_module",
+                moduleChangeCb,
+                nullptr,
+                0,
+                sysrepo::SubscribeOptions::DoneOnly | sysrepo::SubscribeOptions::NoThread,
+                nullptr,
+                sysrepo::CustomEventLoopCallbacks{
+                    .m_registration = [&fdSave, &processEventsSave] (int fd, std::function<void()> processEvents) {
+                        fdSave = fd;
+                        processEventsSave = processEvents;
+                    }, .m_unregistration = [] (int) {
+                    // Don't need to unregister anything, the thread is not a loop, it just ends.
+                    }
+                });
+
+        auto x = std::thread([&] {
+            fd_set rfds;
+            struct timeval tv;
+            FD_ZERO(&rfds);
+            FD_SET(fdSave, &rfds);
+            tv.tv_sec = 5;
+            tv.tv_usec = 0;
+            int ret = select(1, &rfds, nullptr, nullptr, &tv);
+
+            switch (ret) {
+            case -1:
+                throw std::runtime_error("select() failed.");
+            case 0:
+                throw std::runtime_error("No FDs are available for reading");
+            default:
+                processEventsSave();
+            }
+        });
+
+        trompeloeil::sequence seq;
+
+        TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafInt32", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
+        sess.setItem("/test_module:leafInt32", "123");
+        sess.applyChanges();
+        waitForCompletionAndBitMore(seq);
+        x.join();
     }
 }
