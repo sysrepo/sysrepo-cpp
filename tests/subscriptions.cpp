@@ -467,9 +467,9 @@ TEST_CASE("subscriptions")
         } catch (sysrepo::ErrorWithCode&) {
             auto errors = sess.getErrors();
             REQUIRE(errors.size() == 2);
-            REQUIRE(*errors.at(0).errorMessage == message);
+            REQUIRE(errors.at(0).errorMessage == message);
             REQUIRE(errors.at(0).code == sysrepo::ErrorCode::OperationFailed);
-            REQUIRE(*errors.at(1).errorMessage == "User callback failed.");
+            REQUIRE(errors.at(1).errorMessage == "User callback failed.");
             REQUIRE(errors.at(1).code == sysrepo::ErrorCode::CallbackFailed);
         }
 

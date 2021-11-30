@@ -266,7 +266,7 @@ std::vector<ErrorInfo> Session::getErrors()
     for (const auto& error : std::span(errInfo->err, errInfo->err_count)) {
         errors.push_back(ErrorInfo{
             .code = static_cast<ErrorCode>(error.err_code),
-            .errorMessage = error.message ? std::optional{error.message} : std::nullopt
+            .errorMessage = error.message
         });
     }
 
