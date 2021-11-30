@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e4430455_b4aafe67",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-30T19:34:09Z",
+      "side": 1,
+      "message": "the FIXME line needs removing",
+      "parentUuid": "43fb67e8_27768908",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 2
+      },
+      "revId": "e1001916f9f959537550145cbb26ade3b6c70f3c",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bacb7bef_d0a4060d",
         "filename": "include/sysrepo-cpp/Subscription.hpp",
         "patchSetId": 1

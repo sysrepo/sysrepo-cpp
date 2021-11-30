@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de3f5744_b2693214",
+        "filename": "CMakeLists.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-30T19:34:09Z",
+      "side": 1,
+      "message": "The GCC build failure needs something like:\n\nset(THREADS_PREFER_PTHREAD_FLAG ON)\nfind_package(Threads REQUIRED)\n \ntarget_link_libraries(... PRIVATE Threads::Threads)",
+      "revId": "9f976a79fddda6a177ad7c4fcc06b36ac3c521f7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f806a67c_876993c5",
+        "filename": "tests/utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-11-30T19:34:09Z",
+      "side": 1,
+      "message": "This looks like something coming from cla-sysrepo that I wrote. Feel free to list Tomas and yourself as well because you\u0027ve all contributed there.",
+      "revId": "9f976a79fddda6a177ad7c4fcc06b36ac3c521f7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
