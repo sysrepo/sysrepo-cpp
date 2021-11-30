@@ -48,6 +48,7 @@ if(BUILD_TESTING)
 
     add_library(DoctestIntegration STATIC
         tests/doctest-integration.cpp
+        tests/utils.cpp
         )
     target_include_directories(DoctestIntegration PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/tests/ ${CMAKE_CURRENT_SOURCE_DIR}/src/ "${CMAKE_CURRENT_BINARY_DIR}")
     target_link_libraries(DoctestIntegration doctest::doctest)

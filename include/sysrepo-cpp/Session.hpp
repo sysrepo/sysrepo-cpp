@@ -71,9 +71,27 @@ public:
     libyang::DataNode sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
     void sendNotification(libyang::DataNode notification, const Wait wait, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
 
-    [[nodiscard]] Subscription onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath = nullptr, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default, ExceptionHandler handler = nullptr);
-    [[nodiscard]] Subscription onOperGet(const char* moduleName, OperGetCb cb, const char* xpath = nullptr, const SubscribeOptions opts = SubscribeOptions::Default, ExceptionHandler handler = nullptr);
-    [[nodiscard]] Subscription onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default, ExceptionHandler handler = nullptr);
+    [[nodiscard]] Subscription onModuleChange(
+            const char* moduleName,
+            ModuleChangeCb cb,
+            const char* xpath = nullptr,
+            uint32_t priority = 0,
+            const SubscribeOptions opts = SubscribeOptions::Default,
+            ExceptionHandler handler = nullptr,
+            const std::optional<CustomEventLoopCallbacks>& callbacks = std::nullopt);
+    [[nodiscard]] Subscription onOperGet(
+            const char* moduleName,
+            OperGetCb cb,
+            const char* xpath = nullptr,
+            const SubscribeOptions opts = SubscribeOptions::Default,
+            ExceptionHandler handler = nullptr,
+            const std::optional<CustomEventLoopCallbacks>& callbacks = std::nullopt);
+    [[nodiscard]] Subscription onRPCAction(const char* xpath,
+            RpcActionCb cb,
+            uint32_t priority = 0,
+            const SubscribeOptions opts = SubscribeOptions::Default,
+            ExceptionHandler handler = nullptr,
+            const std::optional<CustomEventLoopCallbacks>& callbacks = std::nullopt);
     [[nodiscard]] Subscription onNotification(
             const char* moduleName,
             NotifCb cb,
@@ -81,7 +99,8 @@ public:
             const std::optional<NotificationTimeStamp>& startTime = std::nullopt,
             const std::optional<NotificationTimeStamp>& stopTime = std::nullopt,
             const SubscribeOptions opts = SubscribeOptions::Default,
-            ExceptionHandler handler = nullptr);
+            ExceptionHandler handler = nullptr,
+            const std::optional<CustomEventLoopCallbacks>& callbacks = std::nullopt);
 
     ChangeCollection getChanges(const char* xpath = "//.");
     void setErrorMessage(const char* msg);

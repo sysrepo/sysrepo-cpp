@@ -15,16 +15,37 @@ extern "C" {
 #include "utils/utils.hpp"
 
 namespace sysrepo {
-Subscription::Subscription(std::shared_ptr<sr_session_ctx_s> sess, ExceptionHandler handler)
-    : m_exceptionHandler(std::make_unique<ExceptionHandler>(handler))
+Subscription::Subscription(std::shared_ptr<sr_session_ctx_s> sess, ExceptionHandler handler, const std::optional<CustomEventLoopCallbacks>& callbacks)
+    : m_customEventLoopCbs(callbacks)
+    , m_exceptionHandler(std::make_unique<ExceptionHandler>(handler))
     , m_sess(sess)
 {
+}
+
+
+int Subscription::getEventPipe() const
+{
+    int pipe;
+    auto res = sr_get_event_pipe(m_sub.get(), &pipe);
+    throwIfError(res, "Couldn't retrieve event pipe");
+
+    return pipe;
+}
+
+Subscription::~Subscription()
+{
+    if (m_customEventLoopCbs) {
+        m_customEventLoopCbs->unregisterFd(getEventPipe());
+    }
 }
 
 void Subscription::saveContext(sr_subscription_ctx_s* ctx)
 {
     if (!m_sub) {
         m_sub = std::shared_ptr<sr_subscription_ctx_s>(ctx, sr_unsubscribe);
+        if (m_customEventLoopCbs) {
+            m_customEventLoopCbs->registerFd(getEventPipe());
+        }
     }
 }
 
@@ -137,8 +158,20 @@ void eventNotifCb(sr_session_ctx_t* session, uint32_t subscriptionId, const sr_e
 }
 }
 
+void Subscription::processEvents()
+{
+    if (!m_customEventLoopCbs) {
+        throw Error("This Subscription does not use a custom event loop ");
+    }
+
+    auto res = sr_subscription_process_events(m_sub.get(), nullptr, nullptr);
+    throwIfError(res, "Couldn't process events");
+}
+
 void Subscription::onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath, uint32_t priority, const SubscribeOptions opts)
 {
+    checkNoThreadFlag(opts, m_customEventLoopCbs);
+
     auto& privRef = m_moduleChangeCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
     sr_subscription_ctx_s* ctx = m_sub.get();
 
@@ -150,6 +183,8 @@ void Subscription::onModuleChange(const char* moduleName, ModuleChangeCb cb, con
 
 void Subscription::onOperGet(const char* moduleName, OperGetCb cb, const char* xpath, const SubscribeOptions opts)
 {
+    checkNoThreadFlag(opts, m_customEventLoopCbs);
+
     auto& privRef = m_operGetCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
     sr_subscription_ctx_s* ctx = m_sub.get();
     auto res = sr_oper_get_subscribe(m_sess.get(), moduleName, xpath, operGetItemsCb, reinterpret_cast<void*>(&privRef), toSubscribeOptions(opts), &ctx);
@@ -160,6 +195,8 @@ void Subscription::onOperGet(const char* moduleName, OperGetCb cb, const char* x
 
 void Subscription::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority, const SubscribeOptions opts)
 {
+    checkNoThreadFlag(opts, m_customEventLoopCbs);
+
     auto& privRef = m_RPCActionCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
     sr_subscription_ctx_s* ctx = m_sub.get();
     auto res = sr_rpc_subscribe_tree(m_sess.get(), xpath, rpcActionCb, reinterpret_cast<void*>(&privRef), priority, toSubscribeOptions(opts), &ctx);
@@ -176,6 +213,8 @@ void Subscription::onNotification(
         const std::optional<NotificationTimeStamp>& stopTime,
         const SubscribeOptions opts)
 {
+    checkNoThreadFlag(opts, m_customEventLoopCbs);
+
     auto& privRef = m_notificationCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
     sr_subscription_ctx_s* ctx = m_sub.get();
     auto startSpec = startTime ? std::optional{toTimespec(*startTime)} : std::nullopt;
