@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
 */
 
+#include "sysrepo-cpp/utils/exception.hpp"
 extern "C" {
 #include <sysrepo.h>
 }
@@ -45,4 +46,23 @@ std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> toT
     auto duration = seconds{ts.tv_sec} + nanoseconds{ts.tv_nsec};
     return time_point<system_clock, nanoseconds>{duration};
 }
+
+/**
+ * Checks whether opts include the the NoThread flag.
+ * Throws if:
+ * - callbacks are available, but NoThread flag is not present.
+ * - NoThread flag is present, but callbacks are not available.
+ */
+void checkNoThreadFlag(const SubscribeOptions opts, const std::optional<CustomEventLoopCallbacks>& callbacks)
+{
+    auto includesFlag = opts & SubscribeOptions::NoThread;
+    if (callbacks && !includesFlag) {
+        throw Error("Setting custom event loop callbacks requires the SubscribeOptions::NoThread flag");
+    }
+
+    if (includesFlag && !callbacks) {
+        throw Error("CustomEventLoopCallbacks must be present when using SubscribeOptions::NoThread");
+    }
+}
+
 }
