@@ -195,33 +195,9 @@ void Subscription::onNotification(
     saveContext(ctx);
 }
 
-Subscription::Subscription(Subscription&& other) noexcept
-    : m_moduleChangeCbs(std::move(other.m_moduleChangeCbs))
-    , m_operGetCbs(std::move(other.m_operGetCbs))
-    , m_RPCActionCbs(std::move(other.m_RPCActionCbs))
-    , m_notificationCbs(std::move(other.m_notificationCbs))
-    , m_exceptionHandler(std::move(other.m_exceptionHandler))
-    , m_sess(other.m_sess)
-    , m_sub(other.m_sub)
-{
-}
+Subscription::Subscription(Subscription&& other) noexcept = default;
 
-Subscription& Subscription::operator=(Subscription&& other) noexcept
-{
-    if (this == &other) {
-        return *this;
-    }
-
-    m_sub = other.m_sub;
-    m_sess = other.m_sess;
-    m_moduleChangeCbs = std::move(other.m_moduleChangeCbs);
-    m_operGetCbs = std::move(other.m_operGetCbs);
-    m_RPCActionCbs = std::move(other.m_RPCActionCbs);
-    m_notificationCbs = std::move(other.m_notificationCbs);
-    m_exceptionHandler = std::move(other.m_exceptionHandler);
-
-    return *this;
-}
+Subscription& Subscription::operator=(Subscription&& other) noexcept = default;
 
 ChangeCollection::ChangeCollection(const char* xpath, std::shared_ptr<sr_session_ctx_s> sess)
     : m_xpath(xpath)
