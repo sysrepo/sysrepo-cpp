@@ -89,6 +89,8 @@ if(BUILD_TESTING)
 
     sysrepo_cpp_test(session "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang")
     sysrepo_cpp_test(subscriptions "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang")
+    sysrepo_cpp_test(unsafe "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang")
+    target_link_libraries(test_unsafe PkgConfig::SYSREPO)
 endif()
 
 if(WITH_DOCS)

@@ -11,8 +11,6 @@
 struct sr_session_ctx_s;
 
 namespace sysrepo {
-Session wrapUnmanagedSession(sr_session_ctx_s* session);
-
 std::timespec toTimespec(std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>);
 std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> toTimePoint(std::timespec ts);
 }

@@ -7,6 +7,7 @@
 */
 
 #include <sysrepo-cpp/Subscription.hpp>
+#include <sysrepo-cpp/utils/utils.hpp>
 extern "C" {
 #include <sysrepo.h>
 }
