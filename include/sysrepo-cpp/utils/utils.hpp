@@ -7,7 +7,9 @@
 */
 #pragma once
 #include <sysrepo-cpp/Enum.hpp>
+#include <sysrepo-cpp/Session.hpp>
 
 namespace sysrepo {
+Session wrapUnmanagedSession(sr_session_ctx_s* session);
 void setLogLevelStderr(const LogLevel);
 }

@@ -13,6 +13,9 @@ extern "C" {
 #include "utils.hpp"
 
 namespace sysrepo {
+/**
+ * Wraps a session pointer without managing it. Use at your own risk.
+ */
 Session wrapUnmanagedSession(sr_session_ctx_s* session)
 {
     return Session{session, unmanaged_tag{}};
