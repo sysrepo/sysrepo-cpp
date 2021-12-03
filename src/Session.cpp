@@ -21,6 +21,12 @@ extern "C" {
 
 using namespace std::string_literals;
 namespace sysrepo {
+/**
+ * Wraps a pointer to sr_session_ctx_s and manages the lifetime of it. Also extends the lifetime of the connection
+ * specified by the `conn` argument.
+ *
+ * Internal use only.
+ */
 Session::Session(sr_session_ctx_s* sess, std::shared_ptr<sr_conn_ctx_s> conn)
     : m_conn(conn)
     // The connection `conn` is saved here in the deleter (as a capture). This means that copies of this shared_ptr will
@@ -40,11 +46,22 @@ Session::Session(sr_session_ctx_s* unmanagedSession, const unmanaged_tag)
 {
 }
 
+/**
+ * Retrieves the current active datastore.
+ *
+ * Wraps `sr_session_get_ds`.
+ */
 Datastore Session::activeDatastore() const
 {
     return static_cast<Datastore>(sr_session_get_ds(m_sess.get()));
 }
 
+/**
+ * Sets a new active datastore. All subsequent actions will apply to this new datastore. Previous actions won't be
+ * affected.
+ *
+ * Wraps `sr_session_switch_ds`.
+ */
 void Session::switchDatastore(const Datastore ds) const
 {
     auto res = sr_session_switch_ds(m_sess.get(), toDatastore(ds));
@@ -67,6 +84,15 @@ void Session::setItem(const char* path, const char* value, const EditOptions opt
     throwIfError(res, "Session::setItem: Couldn't set '"s + path + (value ? ("' to '"s + "'" + value + "'") : ""));
 }
 
+/**
+ * Add a prepared edit data tree to be applied. The changes are applied only after calling Session::applyChanges.
+ *
+ * Wraps `sr_edit_batch`.
+ *
+ * @param edit Data to apply.
+ * @param op Default operation for nodes that do not have an operation specified. To specify the operation on a given
+ * node, use libyang::DataNode::newMeta.
+ */
 void Session::editBatch(libyang::DataNode edit, const DefaultOperation op)
 {
     auto res = sr_edit_batch(m_sess.get(), libyang::getRawNode(edit), toDefaultOperation(op));
@@ -178,6 +204,12 @@ void Session::discardChanges()
 /**
  * Replaces configuration from `source` datastore to the current datastore. If `moduleName` is specified, the operation
  * is limited to that module. Optionally, a timeout can be specified, otherwise the default is used.
+ *
+ * Wraps `sr_copy_config`.
+ *
+ * @param The source datastore.
+ * @optional moduleName Optional module name, limits the operation on that module.
+ * @optional timeout Optional timeout.
  */
 void Session::copyConfig(const Datastore source, const char* moduleName, std::chrono::milliseconds timeout)
 {
@@ -186,6 +218,14 @@ void Session::copyConfig(const Datastore source, const char* moduleName, std::ch
     throwIfError(res, "Couldn't copy config");
 }
 
+/**
+ * Send an RPC/action and return the result.
+ *
+ * Wraps `sr_rpc_send_tree`.
+ *
+ * @param input Libyang tree representing the RPC/action.
+ * @param timeout Optional timeout.
+ */
 libyang::DataNode Session::sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout)
 {
     sr_data_t* output;
@@ -196,12 +236,38 @@ libyang::DataNode Session::sendRPC(libyang::DataNode input, std::chrono::millise
     return wrapSrData(m_sess, output);
 }
 
+/**
+ * Send a notification.
+ *
+ * Wraps `sr_notif_send_tree`.
+ *
+ * @param notification Libyang tree representing the notification.
+ * @param wait Specifies whether to wait until all (if any) notification callbacks were called.
+ * @param timeout Optional timeout. Only meaningful if we're waiting for the notification callbacks.
+ */
 void Session::sendNotification(libyang::DataNode notification, const Wait wait, std::chrono::milliseconds timeout)
 {
     auto res = sr_notif_send_tree(m_sess.get(), libyang::getRawNode(notification), timeout.count(), wait == Wait::Yes ? 1 : 0);
     throwIfError(res, "Couldn't send notification");
 }
 
+/**
+ * Subscribe for changes made in the specified module.
+ *
+ * Wraps `sr_module_change_subscribe`.
+ *
+ * @param moduleName Name of the module to suscribe to.
+ * @param cb A callback to be called when a change in the datastore occurs.
+ * @param xpath Optional XPath that filters changes handled by this subscription.
+ * @param priority Optional priority in which the callbacks within a module are called.
+ * @param opts Options further changing the behavior of this method.
+ * @param handler Optional exception handler that will be called when an exception occurs in a user callback. It is tied
+ * to all of the callbacks in a Subscription instance.
+ * @param callbacks Custom event loop callbacks that are called when the Subscription is created and when it is
+ * destroyed. This argument must be used with `sysrepo::SubscribeOptions::NoThread` flag.
+ *
+ * @return The Subscription handle.
+ */
 Subscription Session::onModuleChange(
         const char* moduleName,
         ModuleChangeCb cb,
@@ -217,6 +283,22 @@ Subscription Session::onModuleChange(
     return sub;
 }
 
+/**
+ * Subscribe for providing operational data at the given xpath.
+ *
+ * Wraps `sr_oper_get_subscribe`.
+ *
+ * @param moduleName Name of the module to suscribe to.
+ * @param cb A callback to be called when the operaional data for the given xpath are requested.
+ * @param xpath XPath that identifies which data this subscription is able to provide.
+ * @param opts Options further changing the behavior of this method.
+ * @param handler Optional exception handler that will be called when an exception occurs in a user callback. It is tied
+ * to all of the callbacks in a Subscription instance.
+ * @param callbacks Custom event loop callbacks that are called when the Subscription is created and when it is
+ * destroyed. This argument must be used with `sysrepo::SubscribeOptions::NoThread` flag.
+ *
+ * @return The Subscription handle.
+ */
 Subscription Session::onOperGet(
         const char* moduleName,
         OperGetCb cb,
@@ -231,6 +313,22 @@ Subscription Session::onOperGet(
     return sub;
 }
 
+/**
+ * Subscribe for the delivery of an RPC/action.
+ *
+ * Wraps `sr_rpc_subscribe_tree`.
+ *
+ * @param xpath XPath identifying the RPC/action.
+ * @param cb A callback to be called to handle the RPC/action.
+ * @param priority Optional priority in which the callbacks within a module are called.
+ * @param opts Options further changing the behavior of this method.
+ * @param handler Optional exception handler that will be called when an exception occurs in a user callback. It is tied
+ * to all of the callbacks in a Subscription instance.
+ * @param callbacks Custom event loop callbacks that are called when the Subscription is created and when it is
+ * destroyed. This argument must be used with `sysrepo::SubscribeOptions::NoThread` flag.
+ *
+ * @return The Subscription handle.
+ */
 Subscription Session::onRPCAction(
         const char* xpath,
         RpcActionCb cb,
@@ -245,6 +343,24 @@ Subscription Session::onRPCAction(
     return sub;
 }
 
+/**
+ * Subscribe for the delivery of a notification
+ *
+ * Wraps `sr_notif_subscribe`.
+ *
+ * @param moduleName Name of the module to suscribe to.
+ * @param cb A callback to be called to process the notification.
+ * @param xpath Optional XPath that filters received notification.
+ * @param startTime Optional start time of the subscription. Used for replaying stored notifications.
+ * @param stopTime Optional stop time ending the notification subscription.
+ * @param opts Options further changing the behavior of this method.
+ * @param handler Optional exception handler that will be called when an exception occurs in a user callback. It is tied
+ * to all of the callbacks in a Subscription instance.
+ * @param callbacks Custom event loop callbacks that are called when the Subscription is created and when it is
+ * destroyed. This argument must be used with `sysrepo::SubscribeOptions::NoThread` flag.
+ *
+ * @return The Subscription handle.
+ */
 Subscription Session::onNotification(
         const char* moduleName,
         NotifCb cb,
@@ -272,6 +388,13 @@ ChangeCollection Session::getChanges(const char* xpath)
     return ChangeCollection{xpath, m_sess};
 }
 
+/**
+ * Sets a generic sysrepo error message.
+ *
+ * Wraps `sr_session_set_error_message`.
+ *
+ * @param msg The message to be set.
+ */
 void Session::setErrorMessage(const char* msg)
 {
     auto res = sr_session_set_error_message(m_sess.get(), "%s", msg);
@@ -280,6 +403,10 @@ void Session::setErrorMessage(const char* msg)
 
 /**
  * Set NETCONF callback error.
+ *
+ * Wraps `sr_session_set_netconf_error`.
+ *
+ * @param info An object that specifies the error.
  */
 void Session::setNetconfError(const NetconfErrorInfo& info)
 {
@@ -369,11 +496,23 @@ std::vector<ErrType> impl_getErrors(sr_session_ctx_s* sess)
 }
 };
 
+/**
+ * Retrieve all generic sysrepo errors.
+ *
+ * Wraps `sr_session_get_error`.
+ * @return A vector of all errors.
+ */
 std::vector<ErrorInfo> Session::getErrors() const
 {
     return impl_getErrors<ErrorInfo>(m_sess.get());
 }
 
+/**
+ * Retrieve all NETCONF-style errors.
+ *
+ * Wraps `sr_err_get_netconf_error`.
+ * @return A vector of all NETCONF errors.
+ */
 std::vector<NetconfErrorInfo> Session::getNetconfErrors() const
 {
     return impl_getErrors<NetconfErrorInfo>(m_sess.get());
@@ -381,6 +520,9 @@ std::vector<NetconfErrorInfo> Session::getNetconfErrors() const
 
 /**
  * Gets the event originator name. If it hasn't been set, the name is empty.
+ *
+ * Wraps `sr_session_get_orig_name`.
+ * @return The originator name.
  */
 std::string_view Session::getOriginatorName() const
 {
@@ -389,6 +531,9 @@ std::string_view Session::getOriginatorName() const
 
 /**
  * Sets the event originator name.
+ *
+ * Wraps `sr_session_set_orig_name`.
+ * @param originatorName The new originator name.
  */
 void Session::setOriginatorName(const char* originatorName)
 {
@@ -404,6 +549,11 @@ Connection Session::getConnection()
     return Connection{m_conn};
 }
 
+/**
+ * Returns the libyang context associated with this Session.
+ * Wraps `sr_session_acquire_context`.
+ * @return The context.
+ */
 const libyang::Context Session::getContext() const
 {
     auto ctx = sr_session_acquire_context(m_sess.get());

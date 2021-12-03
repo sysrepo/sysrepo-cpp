@@ -16,6 +16,9 @@ extern "C" {
 #include "utils/utils.hpp"
 
 namespace sysrepo {
+/**
+ * Creates a Subscription instance with no actual underlying subscription associated with it. Internal use only.
+ */
 Subscription::Subscription(std::shared_ptr<sr_session_ctx_s> sess, ExceptionHandler handler, const std::optional<FDHandling>& callbacks)
     : m_customEventLoopCbs(callbacks)
     , m_exceptionHandler(std::make_unique<ExceptionHandler>(handler))
@@ -33,6 +36,9 @@ int Subscription::eventPipe() const
     return pipe;
 }
 
+/**
+ * Removes all subscriptions handled by this instance.
+ */
 Subscription::~Subscription()
 {
     if (m_sub && m_customEventLoopCbs) {
@@ -40,6 +46,10 @@ Subscription::~Subscription()
     }
 }
 
+/**
+ * Saves the context on the first subscription created and also calls the custom event loop register function. Internal
+ * use only.
+ */
 void Subscription::saveContext(sr_subscription_ctx_s* ctx)
 {
     if (!m_sub) {
@@ -159,6 +169,13 @@ void eventNotifCb(sr_session_ctx_t* session, uint32_t subscriptionId, const sr_e
 }
 }
 
+/**
+ * Processes available events associated with this Subscription. This function is only intended to be used when working
+ * with a custom event loop (no sysrepo background thread). Is is supposed to be used in a custom event loop when data
+ * are available to read on the file descriptor supplied by FDHandling::registerFd.
+ *
+ * Wraps `sr_subscription_process_events`.
+ */
 void Subscription::processEvents()
 {
     if (!m_customEventLoopCbs) {
@@ -169,6 +186,17 @@ void Subscription::processEvents()
     throwIfError(res, "Couldn't process events");
 }
 
+/**
+ * Subscribe for changes made in the specified module.
+ *
+ * Wraps `sr_module_change_subscribe`.
+ *
+ * @param moduleName Name of the module to suscribe to.
+ * @param cb A callback to be called when a change in the datastore occurs.
+ * @param xpath Optional XPath that filters changes handled by this subscription.
+ * @param priority Optional priority in which the callbacks within a module are called.
+ * @param opts Options further changing the behavior of this method.
+ */
 void Subscription::onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath, uint32_t priority, const SubscribeOptions opts)
 {
     checkNoThreadFlag(opts, m_customEventLoopCbs);
@@ -182,6 +210,16 @@ void Subscription::onModuleChange(const char* moduleName, ModuleChangeCb cb, con
     saveContext(ctx);
 }
 
+/**
+ * Subscribe for providing operational data at the given xpath.
+ *
+ * Wraps `sr_oper_get_subscribe`.
+ *
+ * @param moduleName Name of the module to suscribe to.
+ * @param cb A callback to be called when the operaional data for the given xpath are requested.
+ * @param xpath XPath that identifies which data this subscription is able to provide.
+ * @param opts Options further changing the behavior of this method.
+ */
 void Subscription::onOperGet(const char* moduleName, OperGetCb cb, const char* xpath, const SubscribeOptions opts)
 {
     checkNoThreadFlag(opts, m_customEventLoopCbs);
@@ -194,6 +232,16 @@ void Subscription::onOperGet(const char* moduleName, OperGetCb cb, const char* x
     saveContext(ctx);
 }
 
+/**
+ * Subscribe for the delivery of an RPC/action.
+ *
+ * Wraps `sr_rpc_subscribe_tree`.
+ *
+ * @param xpath XPath identifying the RPC/action.
+ * @param cb A callback to be called to handle the RPC/action.
+ * @param priority Optional priority in which the callbacks within a module are called.
+ * @param opts Options further changing the behavior of this method.
+ */
 void Subscription::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority, const SubscribeOptions opts)
 {
     checkNoThreadFlag(opts, m_customEventLoopCbs);
@@ -206,6 +254,18 @@ void Subscription::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t prior
     saveContext(ctx);
 }
 
+/**
+ * Subscribe for the delivery of a notification
+ *
+ * Wraps `sr_notif_subscribe`.
+ *
+ * @param moduleName Name of the module to suscribe to.
+ * @param cb A callback to be called to process the notification.
+ * @param xpath Optional XPath that filters received notification.
+ * @param startTime Optional start time of the subscription. Used for replaying stored notifications.
+ * @param stopTime Optional stop time ending the notification subscription.
+ * @param opts Options further changing the behavior of this method.
+ */
 void Subscription::onNotification(
         const char* moduleName,
         NotifCb cb,
@@ -266,6 +326,9 @@ ChangeIterator ChangeCollection::end() const
     return ChangeIterator{ChangeIterator::iterator_end_tag{}};
 }
 
+/**
+ * Wraps `sr_change_iter_s`.
+ */
 ChangeIterator::ChangeIterator(sr_change_iter_s* iter, std::shared_ptr<sr_session_ctx_s> sess)
     : m_iter(iter, sr_free_change_iter)
     , m_sess(sess)
@@ -280,6 +343,9 @@ ChangeIterator::ChangeIterator(const iterator_end_tag)
 {
 }
 
+/**
+ * Advances this ChangeIterator.
+ */
 ChangeIterator& ChangeIterator::operator++()
 {
     sr_change_oper_t operation;
@@ -308,6 +374,9 @@ ChangeIterator& ChangeIterator::operator++()
     return *this;
 }
 
+/**
+ * Advances this ChangeIterator.
+ */
 ChangeIterator ChangeIterator::operator++(int)
 {
     auto copy = *this;
@@ -317,6 +386,9 @@ ChangeIterator ChangeIterator::operator++(int)
     return copy;
 }
 
+/**
+ * Retrieves the current change the iterator points to.
+ */
 const Change& ChangeIterator::operator*() const
 {
     if (!m_current) {
@@ -325,6 +397,9 @@ const Change& ChangeIterator::operator*() const
     return *m_current;
 }
 
+/**
+ * Retrieves the current change the iterator points to.
+ */
 const Change& ChangeIterator::operator->() const
 {
     if (!m_current) {
