@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce00118f_e6e48d1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-12-03T02:07:49Z",
+      "side": 1,
+      "message": "I think GNUInstallDirs can just be removed",
+      "revId": "ea4d1e6d820b91b005a67ca8bb72448594142549",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
