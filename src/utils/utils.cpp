@@ -27,6 +27,9 @@ Connection wrapUnmanagedConnection(std::shared_ptr<sr_conn_ctx_s> conn)
     return Connection{conn};
 }
 
+/**
+ * Sets the global loglevel for sysrepo.
+ */
 void setLogLevelStderr(const LogLevel level)
 {
     sr_log_stderr(toLogLevel(level));

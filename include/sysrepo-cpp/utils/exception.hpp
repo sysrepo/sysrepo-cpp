@@ -12,7 +12,7 @@
 
 namespace sysrepo {
 /**
- * A generic sysrepo error. All other sysrepo errors inherit from this exception type.
+ * @brief A generic sysrepo error. All other sysrepo errors inherit from this exception type.
  */
 class Error : public std::runtime_error {
 public:
@@ -20,12 +20,18 @@ public:
 };
 
 /**
- * A sysrepo error containing a message and an error code.
+ * @brief A sysrepo error containing a message and an error code.
  */
 class ErrorWithCode : public Error {
 public:
+    /**
+     * Creates a new sysrepo exception with the supplied message and code.
+     */
     explicit ErrorWithCode(const std::string& what, uint32_t errCode);
 
+    /**
+     * Returns the error code.
+     */
     ErrorCode code();
 private:
     ErrorCode m_errCode;
