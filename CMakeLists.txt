@@ -113,6 +113,6 @@ endif()
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/sysrepo-cpp.pc.in" "${CMAKE_CURRENT_BINARY_DIR}/sysrepo-cpp.pc" @ONLY)
 
 # this is not enough, but at least it will generate the `install` target so that the CI setup is less magic
-install(TARGETS sysrepo-cpp DESTINATION lib)
+install(TARGETS sysrepo-cpp)
 install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/sysrepo-cpp" TYPE INCLUDE)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/sysrepo-cpp.pc" DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
