@@ -16,6 +16,24 @@
       "message": "I think GNUInstallDirs can just be removed",
       "revId": "ea4d1e6d820b91b005a67ca8bb72448594142549",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37e9c532_16956f73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-12-03T02:08:31Z",
+      "side": 1,
+      "message": "... and then use\ninstall(TARGETS sysrepo-cpp LIBRARY)",
+      "parentUuid": "ce00118f_e6e48d1e",
+      "revId": "ea4d1e6d820b91b005a67ca8bb72448594142549",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
