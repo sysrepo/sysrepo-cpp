@@ -122,12 +122,28 @@ enum class MovePosition : uint32_t {
  * Wraps sr_change_oper_t.
  */
 enum class ChangeOperation : uint32_t {
+    /**
+     * The item has been created by the change.
+     */
     Created,
+    /**
+     * The value has been modified by the change.
+     */
     Modified,
+    /**
+     * The item has been deleted by the change.
+     */
     Deleted,
+    /**
+     * The item has been moved by the change. Only applies to user-ordered lists and leaf-lists.
+     */
     Moved,
 };
 
+/**
+ * The argument for `sysrepo::Session::editBatch`.
+ * Note: The argument is a string in the C API.
+ */
 enum class DefaultOperation {
     Merge,
     Replace,

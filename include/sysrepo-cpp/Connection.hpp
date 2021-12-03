@@ -12,11 +12,17 @@
 
 struct sr_conn_ctx_s;
 
+/**
+ * @brief The sysrepo-cpp namespace.
+ */
 namespace sysrepo {
 class Connection;
 class Session;
 
 Connection wrapUnmanagedConnection(std::shared_ptr<sr_conn_ctx_s> conn);
+/**
+ * @brief Handles a connection to sysrepo.
+ */
 class Connection {
 public:
     Connection();
