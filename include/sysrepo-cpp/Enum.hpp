@@ -128,6 +128,9 @@ enum class ChangeOperation : uint32_t {
     Moved,
 };
 
+/**
+ * The argument for `sysrepo::Session::editBatch`.
+ */
 enum class DefaultOperation {
     Merge,
     Replace,

@@ -26,15 +26,33 @@ class Connection;
 class ChangeCollection;
 class Session;
 
+/**
+ * @brief Internal use only.
+ */
 struct unmanaged_tag {
 };
 
+/**
+ * @brief Contains info about a generic sysrepo error.
+ */
 struct ErrorInfo {
     bool operator==(const ErrorInfo& other) const = default;
+    /**
+     * The error code associated with the error.
+     */
     ErrorCode code;
+    /**
+     * The error message.
+     */
     std::string errorMessage;
 };
 
+/**
+ * @brief Contains info about a NETCONF-style error.
+ *
+ * The meaning of the fields corresponds to the definition of NETCONF
+ * [rpc-error](https://tools.ietf.org/html/rfc6241#section-4.3).
+ */
 struct NetconfErrorInfo {
     bool operator==(const NetconfErrorInfo& other) const = default;
     struct InfoElement {
@@ -55,6 +73,9 @@ enum class Wait {
     No
 };
 
+/**
+ * @brief Handles a sysrepo session.
+ */
 class Session {
 public:
     Datastore activeDatastore() const;

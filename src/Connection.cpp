@@ -16,6 +16,11 @@ extern "C" {
 
 namespace sysrepo {
 
+/**
+ * Creates a new connection to sysrepo. The lifetime of it is managed automatically.
+ *
+ * Wraps `sr_connect`.
+ */
 Connection::Connection()
     : ctx(nullptr)
 {
@@ -26,11 +31,21 @@ Connection::Connection()
     this->ctx = std::shared_ptr<sr_conn_ctx_t>(ctx, sr_disconnect);
 }
 
+/**
+ * Wraps shared_ptr of an already created connection to sysrepo.
+ */
 Connection::Connection(std::shared_ptr<sr_conn_ctx_t> ctx)
     : ctx(ctx)
 {
 }
 
+/**
+ * Starts a new sysrepo session.
+ *
+ * Wraps `sr_session_start`,
+ * @param datastore The datastore which the session should operate on. Default is sysrepo::Datastore::Running.
+ * @return The newly created session.
+ */
 Session Connection::sessionStart(sysrepo::Datastore datastore)
 {
     sr_session_ctx_t* sess;
