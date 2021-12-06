@@ -1,0 +1,306 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21cf3030_6efe8f9f",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-06T19:27:29Z",
+      "side": 1,
+      "message": "refer to the C enum please",
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb32e4d1_810ea314",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-06T19:27:29Z",
+      "side": 1,
+      "message": "perhaps say something about when this is used? that the user isn\u0027t supposed to instantiate one, but get them via ChangeCollection",
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d17c5f24_e0529d0a",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-06T19:27:29Z",
+      "side": 1,
+      "message": "indeed",
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "997af86c_c7d95cdc",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-06T19:27:29Z",
+      "side": 1,
+      "message": "use a full sentence about what exactly this one means, please",
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24f1e948_e5aa5212",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-06T19:27:29Z",
+      "side": 1,
+      "message": "I think this is internal-use only (and in fact you can probably make it a private class, right?)",
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "437eeb13_ef22023a",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-06T19:27:29Z",
+      "side": 1,
+      "message": "say where these come from, please (preferably via a pointer to the relevant part of the C++ API which deals with subscriptions)",
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fcfde1b_78f34d4e",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-06T19:27:29Z",
+      "side": 1,
+      "message": "what\u0027s the point of this one? Do we require that in the C++ API when we have lambdas which make it easy to \"parametrize\" callbacks?",
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26a718ba_08006c5f",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-06T19:27:29Z",
+      "side": 1,
+      "message": "consider removing these two (in another commit); or do you see a use case for these?\n\nsame for all the other callbacks as well",
+      "range": {
+        "startLine": 106,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 71
+      },
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14bf014d_0a114834",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-06T19:27:29Z",
+      "side": 1,
+      "message": "\"the user code should call Subscription::processEvents().\"",
+      "range": {
+        "startLine": 170,
+        "startChar": 19,
+        "endLine": 170,
+        "endChar": 72
+      },
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd012a4a_f6cf6ccd",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-06T19:27:29Z",
+      "side": 1,
+      "message": "\"Manages lifetime of subscriptions\"?",
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65cfa8d3_74815c50",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-06T19:27:29Z",
+      "side": 1,
+      "message": "explain when/how that connection is closed, please",
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4529cb07_6ff6646a",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-06T19:27:29Z",
+      "side": 1,
+      "message": "perhaps capitalize this one so that it\u0027s obvious that it\u0027s about a Subscription class instance? or say \"a Subscription instance\"",
+      "range": {
+        "startLine": 20,
+        "startChar": 13,
+        "endLine": 20,
+        "endChar": 25
+      },
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b932f3f8_ee00f5a8",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-06T19:27:29Z",
+      "side": 1,
+      "message": "plural",
+      "range": {
+        "startLine": 40,
+        "startChar": 57,
+        "endLine": 40,
+        "endChar": 69
+      },
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8df3eb95_dbf2ce16",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-06T19:27:29Z",
+      "side": 1,
+      "message": "\"internal use\", perhaps?",
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "467775aa_2bb503ff",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-06T19:27:29Z",
+      "side": 1,
+      "message": "this should clarify that it\u0027s only intended to be used when working with a custom event loop (no SR background thread)",
+      "range": {
+        "startLine": 171,
+        "startChar": 3,
+        "endLine": 173,
+        "endChar": 57
+      },
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80082a64_969f369f",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-06T19:27:29Z",
+      "side": 1,
+      "message": "I think there\u0027s no point in documenting these standard iterator operations, but if you think so, your call really.",
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
