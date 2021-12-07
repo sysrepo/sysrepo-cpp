@@ -34,9 +34,6 @@ struct Change {
 
 class ChangeIterator {
 public:
-    struct iterator_end_tag{
-    };
-
     ChangeIterator& operator++();
     ChangeIterator operator++(int);
     const Change& operator*() const;
@@ -44,6 +41,9 @@ public:
     bool operator==(const ChangeIterator& other) const;
 
 private:
+    struct iterator_end_tag{
+    };
+
     ChangeIterator(sr_change_iter_s* iter, std::shared_ptr<sr_session_ctx_s> sess);
     ChangeIterator(const iterator_end_tag);
     friend ChangeCollection;
