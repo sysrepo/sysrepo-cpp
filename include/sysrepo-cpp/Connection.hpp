@@ -14,6 +14,7 @@ struct sr_conn_ctx_s;
 
 namespace sysrepo {
 class Connection;
+class Session;
 
 Connection wrapUnmanagedConnection(std::shared_ptr<sr_conn_ctx_s> conn);
 class Connection {
@@ -22,6 +23,7 @@ public:
     Session sessionStart(sysrepo::Datastore datastore = sysrepo::Datastore::Running);
 
     friend Connection wrapUnmanagedConnection(std::shared_ptr<sr_conn_ctx_s> conn);
+    friend Session;
 
 private:
     Connection(std::shared_ptr<sr_conn_ctx_s> ctx);

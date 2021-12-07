@@ -21,7 +21,6 @@ struct sr_change_iter_s;
 
 namespace sysrepo {
 class ChangeCollection;
-class Connection;
 class Session;
 
 struct Change {

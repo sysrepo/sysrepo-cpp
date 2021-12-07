@@ -6,6 +6,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
 */
 
+#include <sysrepo-cpp/Connection.hpp>
 #include "sysrepo-cpp/utils/exception.hpp"
 extern "C" {
 #include <sysrepo.h>
