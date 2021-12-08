@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2a9210c_5b176031",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-08T13:58:20Z",
+      "side": 1,
+      "message": "The .zip file is a \"resulting artifact\" of a build job, other build jobs will in future unpack these artifacts and store them \"somewhere\". If you configure this build job to create a zip file with the \"html/\" prefix, that means that either the consumers will have to strip this prefix, or have the \"html/\" part visible in user-facing URLs, or configure a webserver which will be serving these artifacts with a \"html/\" subdir. There\u0027s an existing convention in upstream Zuul jobs that the documentation is put directly under \"docs/\". I\u0027m not saying that this is unsolvable, but I\u0027d prefer to leave this as-is unless you have a strong reason for this change.",
+      "revId": "a1851a0ff1f702978eaa55ccd29b50619e0da18a",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
