@@ -79,9 +79,7 @@ build_n_test ${ZUUL_PROJECT_NAME} -DBUILD_TESTING=ON
 pushd ${BUILD_DIR}/${ZUUL_PROJECT_NAME}
 if [[ $JOB_PERFORM_EXTRA_WORK == 1 ]]; then
     ninja-build doc
-    pushd html
-    zip -r ~/zuul-output/docs/html.zip .
-    popd
+    zip -r ~/zuul-output/docs/html.zip html/
 fi
 
 if [[ $LDFLAGS =~ .*--coverage.* ]]; then
