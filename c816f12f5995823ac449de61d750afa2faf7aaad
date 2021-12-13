@@ -1,0 +1,180 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bec923c_e03841e3",
+        "filename": "examples/module_change_example.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:30:10Z",
+      "side": 1,
+      "message": "yes, this looks like something better suited for libyang",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 1
+      },
+      "revId": "c816f12f5995823ac449de61d750afa2faf7aaad",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1723b36_5d95999c",
+        "filename": "examples/module_change_example.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:30:10Z",
+      "side": 1,
+      "message": "I was thinking it\u0027s better provide operator\u003c\u003c in sysrepo-cpp for these enums. Yup, the actual behavior for this printer differs (you output a previous value if there\u0027s one in MODIFIED), but still, this make it possible to simplify this function with the same handler for created/deleted",
+      "revId": "c816f12f5995823ac449de61d750afa2faf7aaad",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0402dfa1_fc6b23d0",
+        "filename": "examples/module_change_example.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:30:10Z",
+      "side": 1,
+      "message": "yes, but perhaps preserving the Capitalization of all enum values for consistency",
+      "revId": "c816f12f5995823ac449de61d750afa2faf7aaad",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30fcd62e_d4686972",
+        "filename": "examples/module_change_example.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:30:10Z",
+      "side": 1,
+      "message": "I think this is a useless comment, remove it please",
+      "revId": "c816f12f5995823ac449de61d750afa2faf7aaad",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ce0c378_9629e186",
+        "filename": "examples/module_change_example.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:30:10Z",
+      "side": 1,
+      "message": "remove",
+      "revId": "c816f12f5995823ac449de61d750afa2faf7aaad",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b3f9e28_ce6c72b3",
+        "filename": "examples/module_change_example.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:30:10Z",
+      "side": 1,
+      "message": "don\u0027t store this, just get a session",
+      "revId": "c816f12f5995823ac449de61d750afa2faf7aaad",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d584dcea_b44b21c5",
+        "filename": "examples/module_change_example.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:30:10Z",
+      "side": 1,
+      "message": "remove",
+      "revId": "c816f12f5995823ac449de61d750afa2faf7aaad",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b416339_ab1c23a6",
+        "filename": "examples/module_change_example.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:30:10Z",
+      "side": 1,
+      "message": "remove",
+      "revId": "c816f12f5995823ac449de61d750afa2faf7aaad",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6f4db35_5d09c617",
+        "filename": "examples/module_change_example.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:30:10Z",
+      "side": 1,
+      "message": "this one is useful because it explains that it\u0027s about the running DS for \"the uninitiated\" I guess",
+      "revId": "c816f12f5995823ac449de61d750afa2faf7aaad",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a44ae9b_d1ea0584",
+        "filename": "examples/module_change_example.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:30:10Z",
+      "side": 1,
+      "message": "pause()",
+      "revId": "c816f12f5995823ac449de61d750afa2faf7aaad",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
