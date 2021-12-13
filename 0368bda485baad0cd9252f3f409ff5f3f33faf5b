@@ -36,6 +36,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c1ccc8c_b6d843a8",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:22:47Z",
+      "side": 1,
+      "message": "right, that makes sense because of NETCONF I suppose",
+      "parentUuid": "1dabe5c1_0c56ac0d",
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb32e4d1_810ea314",
@@ -283,6 +301,30 @@
       "side": 1,
       "message": "You\u0027re right that in C++, these aren\u0027t all that useful, since you can just use capture lambdas and know all of that. However, I think I\u0027ll keep them. I think it\u0027s better to keep them, since the C-api makes them available. Also, it\u0027s easier to just make them available even if it saves one \"The C-api gives the module name, how can I get it in the C++ api?\" question.\n\nAlso, although I do sometimes change the API of sysrepo, I don\u0027t think that removing the arguments makes the callback more \"C++\".",
       "parentUuid": "26a718ba_08006c5f",
+      "range": {
+        "startLine": 106,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 71
+      },
+      "revId": "0368bda485baad0cd9252f3f409ff5f3f33faf5b",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "517e74aa_66e0d47f",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:22:47Z",
+      "side": 1,
+      "message": "\u003e Also, it\u0027s easier to just make them available even if it saves one \"The C-api gives the module name, how can I get it in the C++ api?\" question.\n\nHaving a ton of arguments which are \"almost never used\" has real costs, too, though.\n\n\u003e Also, although I do sometimes change the API of sysrepo, I don\u0027t think that removing the arguments makes the callback more \"C++\".\n\nI think it\u0027s more C++ish to use trivial lambdas for stuff instead of sprinkling the code with `if (subXPath \u003d\u003d \"/foo:bar\"sv)`.",
+      "parentUuid": "9a9b717d_e9a0d41c",
       "range": {
         "startLine": 106,
         "startChar": 0,

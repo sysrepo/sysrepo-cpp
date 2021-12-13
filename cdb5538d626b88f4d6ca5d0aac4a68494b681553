@@ -1,0 +1,251 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "470b9aa1_5a1b1af5",
+        "filename": "README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:22:47Z",
+      "side": 1,
+      "message": "In general, I think that the purpose of the README is to:\n\n- Briefly explain what it\u0027s all about. This is met by the proposed first paragraphs, so far so good.\n- \"Build expectations\". I would prefer if the README showed me that this is an amazing library that makes working with sysrepo from C++ a breeze. That would be better than explaining the details of memory management. Let\u0027s just come up with a simple/trivial use case, and delegate more complex stuff to the actual docs, please.",
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ba473d0_6296de33",
+        "filename": "README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:22:47Z",
+      "side": 1,
+      "message": "nit: let\u0027s try to stick with one-line-per-sentence in markdown; that makes it easier to review diffs",
+      "range": {
+        "startLine": 7,
+        "startChar": 105,
+        "endLine": 7,
+        "endChar": 108
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77a9f6af_a07d948a",
+        "filename": "README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:22:47Z",
+      "side": 1,
+      "message": "My suggestion is to not dedicate a paragraph in a README to this, but to instead use this pattern thoroughly in the docs. Such as in the very next example where the connection is kept for some reason -- just get rid of that.",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 3
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6d71d0c_2d1aa716",
+        "filename": "README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:22:47Z",
+      "side": 1,
+      "message": "this looks like an extra thing here",
+      "range": {
+        "startLine": 82,
+        "startChar": 32,
+        "endLine": 82,
+        "endChar": 44
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8da44499_7cb17bff",
+        "filename": "README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:22:47Z",
+      "side": 1,
+      "message": "as a user, \"I don\u0027t really care\". Instead, show me how to create more subscriptions, please, and leverage these methods that are on the Subscription class:\n \nauto sub \u003d sysrepo::Connection{}.sessionStart().onModuleChange(...);\nsub.onRpc(...);",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 3
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21cd9fcc_fc78a9a4",
+        "filename": "README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:22:47Z",
+      "side": 1,
+      "message": "\"Using sysrepo-cpp in your classes\" sounds a bit more pleasant to me",
+      "range": {
+        "startLine": 85,
+        "startChar": 5,
+        "endLine": 85,
+        "endChar": 52
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af376f48_a5d7d5fb",
+        "filename": "README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:22:47Z",
+      "side": 1,
+      "message": "this is rarely needed, is it?",
+      "range": {
+        "startLine": 92,
+        "startChar": 10,
+        "endLine": 92,
+        "endChar": 16
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2765c9b_39c0ce3a",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:22:47Z",
+      "side": 1,
+      "message": "I do not understand this sentence.",
+      "range": {
+        "startLine": 35,
+        "startChar": 67,
+        "endLine": 36,
+        "endChar": 25
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8478c391_6e200ec7",
+        "filename": "src/Session.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:22:47Z",
+      "side": 1,
+      "message": "it\u0027s weird to say \"apply XYZ, but it will be only applied by ABC\"",
+      "range": {
+        "startLine": 86,
+        "startChar": 3,
+        "endLine": 86,
+        "endChar": 51
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d7ccc5a_f0604a22",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:22:47Z",
+      "side": 1,
+      "message": "what about \"Remove all subscriptions created via this instance\"?",
+      "range": {
+        "startLine": 40,
+        "startChar": 3,
+        "endLine": 40,
+        "endChar": 71
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9311c15_f6a67949",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:22:47Z",
+      "side": 1,
+      "message": "I don\u0027t feel a need for documenting this, but it\u0027s your call",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 3
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
