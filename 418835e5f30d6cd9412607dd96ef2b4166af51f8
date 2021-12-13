@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adb7d12c_ddd2e04a",
+        "filename": "src/Session.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-13T07:01:20Z",
+      "side": 1,
+      "message": "I went back-and-forth a few times on this comment, trying to figure out whether it makes sense to reword it or not. Strictly speaking, this is not needed anymore, but I think it provides added robustness if that m_conn ever gets removed.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 69
+      },
+      "revId": "418835e5f30d6cd9412607dd96ef2b4166af51f8",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
