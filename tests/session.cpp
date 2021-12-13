@@ -86,4 +86,9 @@ TEST_CASE("session")
         sess.switchDatastore(sysrepo::Datastore::Running);
         REQUIRE(sess.activeDatastore() == sysrepo::Datastore::Running);
     }
+
+    DOCTEST_SUBCASE("Session::getConnection")
+    {
+        auto connection = sess.getConnection();
+    }
 }

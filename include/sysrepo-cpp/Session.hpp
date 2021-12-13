@@ -14,7 +14,6 @@
 #include <libyang-cpp/DataNode.hpp>
 #include <sysrepo-cpp/Enum.hpp>
 #include <sysrepo-cpp/Subscription.hpp>
-#include <sysrepo-cpp/Connection.hpp>
 
 struct sr_conn_ctx_s;
 struct sr_data_s;
@@ -112,6 +111,7 @@ public:
     std::string_view getOriginatorName() const;
     void setOriginatorName(const char* originatorName);
 
+    Connection getConnection();
     const libyang::Context getContext() const;
 
 private:
@@ -121,6 +121,7 @@ private:
     Session(sr_session_ctx_s* sess, std::shared_ptr<sr_conn_ctx_s> conn);
     explicit Session(sr_session_ctx_s* unmanagedSession, const unmanaged_tag);
 
+    std::shared_ptr<sr_conn_ctx_s> m_conn;
     std::shared_ptr<sr_session_ctx_s> m_sess;
 };
 }

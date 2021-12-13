@@ -39,4 +39,11 @@ Session Connection::sessionStart(sysrepo::Datastore datastore)
     throwIfError(res, "Couldn't connect to sysrepo");
     return Session{sess, ctx};
 }
+
+void Connection::discardOperationalChanges(const char* xpath, std::optional<Session> session, std::chrono::milliseconds timeout)
+{
+    auto res = sr_discard_oper_changes(ctx.get(), session ? session->m_sess.get() : nullptr, xpath, timeout.count());
+
+    throwIfError(res, "Couldn't discard operational changes");
+}
 }

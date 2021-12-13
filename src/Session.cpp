@@ -22,9 +22,10 @@ extern "C" {
 using namespace std::string_literals;
 namespace sysrepo {
 Session::Session(sr_session_ctx_s* sess, std::shared_ptr<sr_conn_ctx_s> conn)
+    : m_conn(conn)
     // The connection `conn` is saved here in the deleter (as a capture). This means that copies of this shared_ptr will
     // automatically hold a reference to `conn`.
-    : m_sess(sess, [extend_connection_lifetime = conn] (auto* sess) {
+    , m_sess(sess, [extend_connection_lifetime = conn] (auto* sess) {
         sr_session_stop(sess);
     })
 {
@@ -34,7 +35,8 @@ Session::Session(sr_session_ctx_s* sess, std::shared_ptr<sr_conn_ctx_s> conn)
  * Constructs an unmanaged sysrepo session. Internal use only.
  */
 Session::Session(sr_session_ctx_s* unmanagedSession, const unmanaged_tag)
-    : m_sess(unmanagedSession, [] (sr_session_ctx_s*) {})
+    : m_conn(std::shared_ptr<sr_conn_ctx_s>{sr_session_get_connection(unmanagedSession), [] (sr_conn_ctx_s*) {}})
+    , m_sess(unmanagedSession, [] (sr_session_ctx_s*) {})
 {
 }
 
@@ -392,6 +394,14 @@ void Session::setOriginatorName(const char* originatorName)
 {
     auto res = sr_session_set_orig_name(m_sess.get(), originatorName);
     throwIfError(res, "Couldn't switch datastore");
+}
+
+/**
+ * Returns the connection this session was created on.
+ */
+Connection Session::getConnection()
+{
+    return Connection{m_conn};
 }
 
 const libyang::Context Session::getContext() const
