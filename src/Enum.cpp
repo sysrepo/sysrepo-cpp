@@ -50,4 +50,20 @@ std::ostream& operator<<(std::ostream& os, const Event& event)
 
     return os << "[unknown event type]";
 }
+
+std::ostream& operator<<(std::ostream& os, const ChangeOperation& changeOp)
+{
+    switch (changeOp) {
+    case sysrepo::ChangeOperation::Created:
+        return os << "sysrepo::ChangeOperation::Created";
+    case sysrepo::ChangeOperation::Deleted:
+        return os << "sysrepo::ChangeOperation::Deleted";
+    case sysrepo::ChangeOperation::Modified:
+        return os << "sysrepo::ChangeOperation::Modified";
+    case sysrepo::ChangeOperation::Moved:
+        return os << "sysrepo::ChangeOperation::Moved";
+    }
+
+    return os << "[unknown change operation type]";
+}
 }
