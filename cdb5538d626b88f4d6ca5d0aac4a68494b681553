@@ -18,6 +18,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe039fca_988ba2f4",
+        "filename": "README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-12-16T10:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "470b9aa1_5a1b1af5",
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ba473d0_6296de33",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-12-13T07:22:47Z",
       "side": 1,
       "message": "nit: let\u0027s try to stick with one-line-per-sentence in markdown; that makes it easier to review diffs",
+      "range": {
+        "startLine": 7,
+        "startChar": 105,
+        "endLine": 7,
+        "endChar": 108
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d8f82dc_841caf03",
+        "filename": "README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-12-16T10:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ba473d0_6296de33",
       "range": {
         "startLine": 7,
         "startChar": 105,
