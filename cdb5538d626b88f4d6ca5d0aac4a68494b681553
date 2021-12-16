@@ -64,6 +64,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0045866_8ea99ee1",
+        "filename": "README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-12-16T10:06:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77a9f6af_a07d948a",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 3
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6d71d0c_2d1aa716",
@@ -77,6 +101,30 @@
       "writtenOn": "2021-12-13T07:22:47Z",
       "side": 1,
       "message": "this looks like an extra thing here",
+      "range": {
+        "startLine": 82,
+        "startChar": 32,
+        "endLine": 82,
+        "endChar": 44
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ca3a168_ba6ae005",
+        "filename": "README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-12-16T10:06:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6d71d0c_2d1aa716",
       "range": {
         "startLine": 82,
         "startChar": 32,
@@ -110,6 +158,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7d2a4e6_c6dda413",
+        "filename": "README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-12-16T10:06:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8da44499_7cb17bff",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 3
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21cd9fcc_fc78a9a4",
@@ -123,6 +195,30 @@
       "writtenOn": "2021-12-13T07:22:47Z",
       "side": 1,
       "message": "\"Using sysrepo-cpp in your classes\" sounds a bit more pleasant to me",
+      "range": {
+        "startLine": 85,
+        "startChar": 5,
+        "endLine": 85,
+        "endChar": 52
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fba6b40f_614693b9",
+        "filename": "README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-12-16T10:06:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21cd9fcc_fc78a9a4",
       "range": {
         "startLine": 85,
         "startChar": 5,
@@ -156,6 +252,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72e76be9_c0e52d4c",
+        "filename": "README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-12-16T10:06:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af376f48_a5d7d5fb",
+      "range": {
+        "startLine": 92,
+        "startChar": 10,
+        "endLine": 92,
+        "endChar": 16
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2765c9b_39c0ce3a",
@@ -169,6 +289,30 @@
       "writtenOn": "2021-12-13T07:22:47Z",
       "side": 1,
       "message": "I do not understand this sentence.",
+      "range": {
+        "startLine": 35,
+        "startChar": 67,
+        "endLine": 36,
+        "endChar": 25
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ccec399_25dec842",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-12-16T10:06:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2765c9b_39c0ce3a",
       "range": {
         "startLine": 35,
         "startChar": 67,
@@ -202,6 +346,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19491048_b9db494a",
+        "filename": "src/Session.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-12-16T10:06:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8478c391_6e200ec7",
+      "range": {
+        "startLine": 86,
+        "startChar": 3,
+        "endLine": 86,
+        "endChar": 51
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d7ccc5a_f0604a22",
@@ -215,6 +383,30 @@
       "writtenOn": "2021-12-13T07:22:47Z",
       "side": 1,
       "message": "what about \"Remove all subscriptions created via this instance\"?",
+      "range": {
+        "startLine": 40,
+        "startChar": 3,
+        "endLine": 40,
+        "endChar": 71
+      },
+      "revId": "cdb5538d626b88f4d6ca5d0aac4a68494b681553",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "610f8ca1_e6d5d694",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2021-12-16T10:06:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d7ccc5a_f0604a22",
       "range": {
         "startLine": 40,
         "startChar": 3,
