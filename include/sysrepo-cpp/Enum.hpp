@@ -175,4 +175,5 @@ enum class NotificationType : uint32_t {
 };
 
 std::ostream& operator<<(std::ostream& os, const NotificationType& type);
+std::ostream& operator<<(std::ostream& os, const Event& event);
 }

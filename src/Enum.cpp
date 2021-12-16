@@ -30,4 +30,24 @@ std::ostream& operator<<(std::ostream& os, const NotificationType& type)
 
     return os << "[unknown event type]";
 }
+
+std::ostream& operator<<(std::ostream& os, const Event& event)
+{
+    switch (event) {
+    case sysrepo::Event::Change:
+        return os << "sysrepo::Event::Change";
+    case sysrepo::Event::Done:
+        return os << "sysrepo::Event::Done";
+    case sysrepo::Event::Abort:
+        return os << "sysrepo::Event::Abort";
+    case sysrepo::Event::Enabled:
+        return os << "sysrepo::Event::Enabled";
+    case sysrepo::Event::RPC:
+        return os << "sysrepo::Event::RPC";
+    case sysrepo::Event::Update:
+        return os << "sysrepo::Event::Update";
+    }
+
+    return os << "[unknown event type]";
+}
 }
