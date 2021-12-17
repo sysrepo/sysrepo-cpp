@@ -96,7 +96,7 @@ solving this:
   m_sub.onModuleChange(...);
   ```
 
-For more examples, check out the `tests/` directory.
+For more examples, check out the `examples/` and the `tests/` directory.
 
 ## Contributing
 The development is being done on Gerrit [here](https://gerrit.cesnet.cz/q/project:CzechLight/sysrepo-cpp). Instructions
