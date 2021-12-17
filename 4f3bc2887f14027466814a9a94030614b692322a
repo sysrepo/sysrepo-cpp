@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71638646_bcaaa428",
+        "filename": "CMakeLists.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-17T06:25:35Z",
+      "side": 1,
+      "message": "nit: in CMake, it\u0027s usually called \"ON\"",
+      "range": {
+        "startLine": 27,
+        "startChar": 38,
+        "endLine": 27,
+        "endChar": 42
+      },
+      "revId": "4f3bc2887f14027466814a9a94030614b692322a",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f80d9e06_5d8fe7b0",
+        "filename": "examples/module_change_example.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-17T06:25:35Z",
+      "side": 1,
+      "message": "No need to do that; this is code which you wrote.",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 35
+      },
+      "revId": "4f3bc2887f14027466814a9a94030614b692322a",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e915cd57_cfceea7f",
+        "filename": "examples/module_change_example.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2021-12-17T06:25:35Z",
+      "side": 1,
+      "message": "there\u0027s no need for this function; just call the operator\u003c\u003c directly on line 153",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 1
+      },
+      "revId": "4f3bc2887f14027466814a9a94030614b692322a",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
