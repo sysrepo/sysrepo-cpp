@@ -24,6 +24,7 @@ prepare_git_version(SYSREPO_CPP_VERSION "0.0")
 
 find_package(Doxygen)
 option(WITH_DOCS "Create and install internal documentation (needs Doxygen)" ${DOXYGEN_FOUND})
+option(WITH_EXAMPLES "Build examples" ON)
 
 find_package(PkgConfig)
 pkg_check_modules(LIBYANG_CPP REQUIRED libyang-cpp=alpha IMPORTED_TARGET libyang-cpp)
@@ -108,6 +109,18 @@ if(WITH_DOCS)
             VERBATIM
             SOURCES ${doxyfile_in}
             )
+endif()
+
+if(WITH_EXAMPLES)
+    function(sysrepo_cpp_example name)
+        add_executable(${name}
+            examples/${name}.cpp
+            )
+        target_link_libraries(${name} sysrepo-cpp)
+    endfunction()
+
+    sysrepo_cpp_example(module_change_example)
+
 endif()
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/sysrepo-cpp.pc.in" "${CMAKE_CURRENT_BINARY_DIR}/sysrepo-cpp.pc" @ONLY)
