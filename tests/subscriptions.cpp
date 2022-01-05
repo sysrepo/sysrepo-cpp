@@ -14,6 +14,7 @@
 #include <sysrepo-cpp/utils/exception.hpp>
 #include <thread>
 #include <trompeloeil.hpp>
+#include <unistd.h>
 #include "utils.hpp"
 
 using namespace std::string_view_literals;
@@ -39,6 +40,21 @@ public:
     TROMPELOEIL_MAKE_CONST_MOCK1(recordException, void(std::string));
     TROMPELOEIL_MAKE_CONST_MOCK2(recordNotification, void(sysrepo::NotificationType, std::optional<std::string_view>));
 };
+
+namespace {
+// just some poor man's IPC over pipes
+void read_something(int fd)
+{
+    char x;
+    REQUIRE(read(fd, &x, 1) == 1);
+}
+
+void write_something(int fd)
+{
+    REQUIRE(write(fd, ".", 1) == 1);
+}
+
+}
 
 TEST_CASE("subscriptions")
 {
@@ -571,63 +587,114 @@ TEST_CASE("subscriptions")
             return sysrepo::ErrorCode::Ok;
         };
 
-        // The Subscription must be destroyed before we can call x.join(), because the Subscription needs to stop the
-        // while loop.
-        std::thread x;
-        std::atomic<bool> continueLooping = true;
+        // This is an example of a very poor man's event loop. There's a bunch of pipes, one for registering FDs,
+        // the other one for deregistering FDs, and the last one for requesting thread termination. The loop, however,
+        // only supports a *single* user FD being actively watched at any given time, and this FD is passed via the
+        // sr_fd variable, not via the control FDs, along with the std::function "event handler".
+        // Did I say that this is a *very* poor man's event loop?
 
-        {
-            int fdSave;
+        int registerFD[2];
+        REQUIRE(pipe(registerFD) == 0);
+        int deregisterFD[2];
+        REQUIRE(pipe(deregisterFD) == 0);
+        int quitFD[2];
+        REQUIRE(pipe(quitFD) == 0);
 
-            auto sub = sess.onModuleChange("test_module",
-                    moduleChangeCb,
-                    nullptr,
-                    0,
-                    sysrepo::SubscribeOptions::DoneOnly | sysrepo::SubscribeOptions::NoThread,
-                    nullptr,
-                    sysrepo::FDHandling{
-                        .registerFd = [&fdSave] (int fd) {
-                            fdSave = fd;
-                        },
-                        .unregisterFd = [&continueLooping] (int) {
-                            continueLooping = false;
-                        }
-                    });
+        int sr_fd = -1;
+        std::function<void()> sr_processEvents;
+        std::mutex fd_mutex;
 
-            x = std::thread([&] {
+        std::thread x{
+            [registerFD, deregisterFD, quitFD, &sr_fd, &sr_processEvents, &fd_mutex] {
+                int active_fd = -1;
+                bool continueLooping = true;
+
                 while (continueLooping) {
                     fd_set rfds;
                     struct timeval tv;
                     FD_ZERO(&rfds);
-                    FD_SET((fdSave), &rfds);
-                    tv.tv_sec = 1;
+                    FD_SET(registerFD[0], &rfds);
+                    FD_SET(deregisterFD[0], &rfds);
+                    FD_SET(quitFD[0], &rfds);
+                    if (active_fd > -1) {
+                        FD_SET(active_fd, &rfds);
+                    }
+                    tv.tv_sec = 666; // if we ever hit this obscenely large timeout, then this code is buggy
                     tv.tv_usec = 0;
-                    auto ret = select(fdSave + 1, &rfds, nullptr, nullptr, &tv);
+                    auto ret = select(std::max(active_fd, std::max(registerFD[0], quitFD[0])) + 1, &rfds, nullptr, nullptr, &tv);
 
                     switch (ret) {
                     case -1:
-                        throw std::runtime_error("select() failed.");
+                        throw std::runtime_error("select() failed");
                     case 0:
-                        continue;
+                        throw std::runtime_error("select() timed out");
                     default:
-                        sub.processEvents();
+                        if (FD_ISSET(registerFD[0], &rfds)) {
+                            read_something(registerFD[0]);
+                            std::lock_guard lock{fd_mutex};
+                            REQUIRE(active_fd == -1);
+                            active_fd = sr_fd;
+                            sr_fd = -1;
+                        }
+                        if (FD_ISSET(deregisterFD[0], &rfds)) {
+                            read_something(deregisterFD[0]);
+                            std::lock_guard lock{fd_mutex};
+                            REQUIRE(sr_fd == active_fd);
+                            active_fd = -1;
+                        }
+                        if (FD_ISSET(quitFD[0], &rfds)) {
+                            read_something(quitFD[0]);
+                            continueLooping = false;
+                        }
+                        if (active_fd > -1 && FD_ISSET(active_fd, &rfds)) {
+                            sr_processEvents();
+                        }
                     }
                 }
-            });
+            }
+        };
 
-            trompeloeil::sequence seq;
+        trompeloeil::sequence seq;
+        TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafWithDefault", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
 
-            TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafInt32", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
-            sess.setItem("/test_module:leafInt32", "123");
-            sess.applyChanges();
-            TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Deleted, "/test_module:leafInt32", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
-            sess.deleteItem("/test_module:leafInt32");
-            sess.applyChanges();
-            TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafInt32", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
-            sess.setItem("/test_module:leafInt32", "123");
-            sess.applyChanges();
-            waitForCompletionAndBitMore(seq);
-        }
+        std::optional<sysrepo::Subscription> sub = sess.onModuleChange("test_module",
+                moduleChangeCb,
+                nullptr,
+                0,
+                sysrepo::SubscribeOptions::DoneOnly | sysrepo::SubscribeOptions::NoThread | sysrepo::SubscribeOptions::Enabled,
+                nullptr,
+                sysrepo::FDHandling{
+                    .registerFd = [registerFD, &sr_fd, &sr_processEvents, &fd_mutex] (int fd, std::function<void()> processEvents) {
+                        {
+                            std::lock_guard lock{fd_mutex};
+                            REQUIRE(sr_fd == -1);
+                            sr_fd = fd;
+                            sr_processEvents = processEvents;
+                        }
+                        write_something(registerFD[1]);
+                    },
+                    .unregisterFd = [deregisterFD, &sr_fd, &sr_processEvents, &fd_mutex] (int fd) {
+                        {
+                            std::lock_guard lock{fd_mutex};
+                            REQUIRE(sr_fd == -1);
+                            sr_fd = fd;
+                            sr_processEvents = decltype(sr_processEvents){};
+                        }
+                        write_something(deregisterFD[1]);
+                    }
+                });
+
+        TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafInt32", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
+        sess.setItem("/test_module:leafInt32", "123");
+        sess.applyChanges();
+        TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Deleted, "/test_module:leafInt32", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
+        sess.deleteItem("/test_module:leafInt32");
+        sess.applyChanges();
+        TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafInt32", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
+        sess.setItem("/test_module:leafInt32", "123");
+        sess.applyChanges();
+        waitForCompletionAndBitMore(seq);
+        write_something(quitFD[1]);
         x.join();
     }
 }
