@@ -571,38 +571,23 @@ TEST_CASE("subscriptions")
             return sysrepo::ErrorCode::Ok;
         };
 
-        // The Subscription must be destroyed before we can call x.join(), because the Subscription needs to stop the
-        // while loop.
-        std::thread x;
         std::atomic<bool> continueLooping = true;
-
-        {
-            int fdSave;
-
-            auto sub = sess.onModuleChange("test_module",
-                    moduleChangeCb,
-                    nullptr,
-                    0,
-                    sysrepo::SubscribeOptions::DoneOnly | sysrepo::SubscribeOptions::NoThread,
-                    nullptr,
-                    sysrepo::FDHandling{
-                        .registerFd = [&fdSave] (int fd) {
-                            fdSave = fd;
-                        },
-                        .unregisterFd = [&continueLooping] (int) {
-                            continueLooping = false;
-                        }
-                    });
-
-            x = std::thread([&] {
+        std::atomic<int> sr_fd = -1;
+        std::function<void()> sr_processEvents;
+        // This is an example of a very poor man's event loop, but on the other hand 20 lines of C code
+        // for a unit test looks about appropriate.
+        std::thread x {
+            [&continueLooping, &sr_fd, &sr_processEvents] {
                 while (continueLooping) {
                     fd_set rfds;
                     struct timeval tv;
                     FD_ZERO(&rfds);
-                    FD_SET((fdSave), &rfds);
-                    tv.tv_sec = 1;
-                    tv.tv_usec = 0;
-                    auto ret = select(fdSave + 1, &rfds, nullptr, nullptr, &tv);
+                    if (sr_fd > -1) {
+                        FD_SET(sr_fd, &rfds);
+                    }
+                    tv.tv_sec = 0;
+                    tv.tv_usec = 300'000;
+                    auto ret = select(sr_fd + 1, &rfds, nullptr, nullptr, &tv);
 
                     switch (ret) {
                     case -1:
@@ -610,24 +595,45 @@ TEST_CASE("subscriptions")
                     case 0:
                         continue;
                     default:
-                        sub.processEvents();
+                        sr_processEvents();
                     }
                 }
-            });
+            }
+        };
 
-            trompeloeil::sequence seq;
+        trompeloeil::sequence seq;
+        TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafWithDefault", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
 
-            TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafInt32", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
-            sess.setItem("/test_module:leafInt32", "123");
-            sess.applyChanges();
-            TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Deleted, "/test_module:leafInt32", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
-            sess.deleteItem("/test_module:leafInt32");
-            sess.applyChanges();
-            TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafInt32", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
-            sess.setItem("/test_module:leafInt32", "123");
-            sess.applyChanges();
-            waitForCompletionAndBitMore(seq);
-        }
-        x.join();
+        std::optional<sysrepo::Subscription> sub = sess.onModuleChange("test_module",
+                moduleChangeCb,
+                nullptr,
+                0,
+                sysrepo::SubscribeOptions::DoneOnly | sysrepo::SubscribeOptions::NoThread | sysrepo::SubscribeOptions::Enabled,
+                nullptr,
+                sysrepo::FDHandling{
+                    .registerFd = [&sr_fd, &sr_processEvents] (int fd, std::function<void()> processEvents) {
+                        // with a real-life implementation of the event loop, the code would simply register
+                        // a handler for this FD using the processEvents() as a callback
+                        sr_fd = fd;
+                        sr_processEvents = processEvents;
+                    },
+                    .unregisterFd = [&continueLooping, &x] (int) {
+                        // With a real-life event loop, the code should remove the previous subscription
+                        // in a blocking manner. Do not return before it's gone.
+                        continueLooping = false;
+                        x.join();
+                    }
+                });
+
+        TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafInt32", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
+        sess.setItem("/test_module:leafInt32", "123");
+        sess.applyChanges();
+        TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Deleted, "/test_module:leafInt32", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
+        sess.deleteItem("/test_module:leafInt32");
+        sess.applyChanges();
+        TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafInt32", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
+        sess.setItem("/test_module:leafInt32", "123");
+        sess.applyChanges();
+        waitForCompletionAndBitMore(seq);
     }
 }

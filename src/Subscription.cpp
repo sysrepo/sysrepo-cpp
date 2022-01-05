@@ -55,7 +55,10 @@ void Subscription::saveContext(sr_subscription_ctx_s* ctx)
     if (!m_sub) {
         m_sub = std::shared_ptr<sr_subscription_ctx_s>(ctx, sr_unsubscribe);
         if (m_customEventLoopCbs) {
-            m_customEventLoopCbs->registerFd(eventPipe());
+            m_customEventLoopCbs->registerFd(eventPipe(), [sub = m_sub] {
+                auto res = sr_subscription_process_events(sub.get(), nullptr, nullptr);
+                throwIfError(res, "Couldn't process events");
+            });
         }
     }
 }
@@ -167,23 +170,6 @@ void eventNotifCb(sr_session_ctx_t* session, uint32_t subscriptionId, const sr_e
         handleExceptionFromCb(ex, priv->exceptionHandler);
     }
 }
-}
-
-/**
- * Processes available events associated with this Subscription. This function is only intended to be used when working
- * with a custom event loop (no sysrepo background thread). Is is supposed to be used in a custom event loop when data
- * are available to read on the file descriptor supplied by FDHandling::registerFd.
- *
- * Wraps `sr_subscription_process_events`.
- */
-void Subscription::processEvents()
-{
-    if (!m_customEventLoopCbs) {
-        throw Error("This Subscription does not use a custom event loop ");
-    }
-
-    auto res = sr_subscription_process_events(m_sub.get(), nullptr, nullptr);
-    throwIfError(res, "Couldn't process events");
 }
 
 /**
