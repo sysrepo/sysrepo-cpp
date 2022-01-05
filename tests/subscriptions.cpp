@@ -578,6 +578,7 @@ TEST_CASE("subscriptions")
 
         {
             int fdSave;
+            std::function<void()> callbackSave;
 
             auto sub = sess.onModuleChange("test_module",
                     moduleChangeCb,
@@ -586,8 +587,9 @@ TEST_CASE("subscriptions")
                     sysrepo::SubscribeOptions::DoneOnly | sysrepo::SubscribeOptions::NoThread,
                     nullptr,
                     sysrepo::FDHandling{
-                        .registerFd = [&fdSave] (int fd) {
+                        .registerFd = [&fdSave, &callbackSave] (int fd, std::function<void()> processEvents) {
                             fdSave = fd;
+                            callbackSave = processEvents;
                         },
                         .unregisterFd = [&continueLooping] (int) {
                             continueLooping = false;
@@ -610,7 +612,7 @@ TEST_CASE("subscriptions")
                     case 0:
                         continue;
                     default:
-                        sub.processEvents();
+                        callbackSave();
                     }
                 }
             });
