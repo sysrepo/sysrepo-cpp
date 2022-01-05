@@ -577,45 +577,42 @@ TEST_CASE("subscriptions")
         std::atomic<bool> continueLooping = true;
 
         {
-            int fdSave;
+            trompeloeil::sequence seq;
+            TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafWithDefault", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
 
-            auto sub = sess.onModuleChange("test_module",
+            std::optional<sysrepo::Subscription> sub = sess.onModuleChange("test_module",
                     moduleChangeCb,
                     nullptr,
                     0,
-                    sysrepo::SubscribeOptions::DoneOnly | sysrepo::SubscribeOptions::NoThread,
+                    sysrepo::SubscribeOptions::DoneOnly | sysrepo::SubscribeOptions::NoThread | sysrepo::SubscribeOptions::Enabled,
                     nullptr,
                     sysrepo::FDHandling{
-                        .registerFd = [&fdSave] (int fd) {
-                            fdSave = fd;
+                        .registerFd = [&] (int fd, std::function<void()> processEvents) {
+                            x = std::thread([fd, processEvents, &continueLooping] {
+                                while (continueLooping) {
+                                    fd_set rfds;
+                                    struct timeval tv;
+                                    FD_ZERO(&rfds);
+                                    FD_SET(fd, &rfds);
+                                    tv.tv_sec = 1;
+                                    tv.tv_usec = 0;
+                                    auto ret = select(fd + 1, &rfds, nullptr, nullptr, &tv);
+
+                                    switch (ret) {
+                                    case -1:
+                                        throw std::runtime_error("select() failed.");
+                                    case 0:
+                                        continue;
+                                    default:
+                                        processEvents();
+                                    }
+                                }
+                            });
                         },
                         .unregisterFd = [&continueLooping] (int) {
                             continueLooping = false;
                         }
                     });
-
-            x = std::thread([&] {
-                while (continueLooping) {
-                    fd_set rfds;
-                    struct timeval tv;
-                    FD_ZERO(&rfds);
-                    FD_SET((fdSave), &rfds);
-                    tv.tv_sec = 1;
-                    tv.tv_usec = 0;
-                    auto ret = select(fdSave + 1, &rfds, nullptr, nullptr, &tv);
-
-                    switch (ret) {
-                    case -1:
-                        throw std::runtime_error("select() failed.");
-                    case 0:
-                        continue;
-                    default:
-                        sub.processEvents();
-                    }
-                }
-            });
-
-            trompeloeil::sequence seq;
 
             TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafInt32", std::nullopt, std::nullopt, false)).IN_SEQUENCE(seq);
             sess.setItem("/test_module:leafInt32", "123");

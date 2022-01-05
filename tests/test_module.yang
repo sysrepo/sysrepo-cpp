@@ -16,6 +16,11 @@ module test_module {
     type int32;
   }
 
+  leaf leafWithDefault {
+    type int32;
+    default 123;
+  }
+
   rpc noop {
   }
 

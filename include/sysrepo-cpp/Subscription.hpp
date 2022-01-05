@@ -210,10 +210,10 @@ template<typename Callback> PrivData(Callback, std::function<void(std::exception
 struct FDHandling {
     /**
      * Called on the construction of the Subscription class.
-     * This function is supposed to register polling of file descriptor `fd`. When reading is available on the file
-     * descriptor, the user code should call Subscription::processEvents.
+     * This function is supposed to register polling of file descriptor `fd` and save the `processEvents` callback. When
+     * reading is available on the file descriptor, the user code should call the `processEvents` callback.
      */
-    std::function<void(int fd)> registerFd;
+    std::function<void(int fd, std::function<void()> processEvents)> registerFd;
     /**
      * Called on the destruction of the Subscription class.
      * This function is supposed to unregister polling of the `fd` file descriptor.
@@ -231,8 +231,6 @@ public:
     Subscription& operator=(const Subscription&) = delete;
     Subscription(Subscription&&) noexcept;
     Subscription& operator=(Subscription&&) noexcept;
-
-    void processEvents();
 
     void onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath = nullptr, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
     void onOperGet(const char* moduleName, OperGetCb cb, const char* xpath, const SubscribeOptions opts = SubscribeOptions::Default);
