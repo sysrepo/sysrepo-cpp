@@ -3,6 +3,52 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d49114ae_38a7e920",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2022-01-06T09:52:31Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 35,
+        "startChar": 8,
+        "endLine": 35,
+        "endChar": 10
+      },
+      "revId": "d30376fd4154132ae8f513b6a13e92075cc60adb",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ddaca28_c7159d60",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2022-01-06T09:52:31Z",
+      "side": 1,
+      "message": "nit: \"do\" is missing",
+      "range": {
+        "startLine": 40,
+        "startChar": 67,
+        "endLine": 41,
+        "endChar": 4
+      },
+      "revId": "d30376fd4154132ae8f513b6a13e92075cc60adb",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "142d7929_1b0975d9",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -14,6 +60,23 @@
       "writtenOn": "2022-01-06T00:13:05Z",
       "side": 1,
       "message": "I guess this also needs a test right... 😄",
+      "revId": "d30376fd4154132ae8f513b6a13e92075cc60adb",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4a71945_0225b3d6",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2022-01-06T09:52:31Z",
+      "side": 1,
+      "message": "Since this commit fixes a race which was not triggered by this project, but only by our internal cla-sysrepo, can you extend this one to also hit that test case? Something like adding a default value of a leaf to the YANG model plus an appropriate flag here for auto-applying the initial data should do the trick, right? Bonus points if you can make it fail first (at least on your own TSAN build) so that you\u0027re 100% sure you have coverage.",
       "revId": "d30376fd4154132ae8f513b6a13e92075cc60adb",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
