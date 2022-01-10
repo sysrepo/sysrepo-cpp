@@ -43,6 +43,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1d287dc2_bbd8b089",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2022-01-10T13:51:33Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "601d7b91_6689514c",
+      "range": {
+        "startLine": 579,
+        "startChar": 21,
+        "endLine": 579,
+        "endChar": 22
+      },
+      "revId": "209087b515464237c696b749e3103415fc1a8732",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c8f7ffb2_845f69c8",
         "filename": "tests/subscriptions.cpp",
         "patchSetId": 4
@@ -54,6 +78,30 @@
       "writtenOn": "2022-01-10T10:56:29Z",
       "side": 1,
       "message": "nit nit: the unregisterFd comment has a capital and a period and this one doesn\u0027t",
+      "range": {
+        "startLine": 615,
+        "startChar": 27,
+        "endLine": 615,
+        "endChar": 28
+      },
+      "revId": "209087b515464237c696b749e3103415fc1a8732",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88695070_4d5640db",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2022-01-10T13:51:33Z",
+      "side": 1,
+      "message": "that\u0027s what I quite often do when I\u0027m not adding multiple sentences",
+      "parentUuid": "c8f7ffb2_845f69c8",
       "range": {
         "startLine": 615,
         "startChar": 27,
@@ -77,6 +125,30 @@
       "writtenOn": "2022-01-10T10:56:29Z",
       "side": 1,
       "message": "Can this lambda just set fd to -1? And then exit the eventloop at the end of the test?",
+      "range": {
+        "startLine": 623,
+        "startChar": 0,
+        "endLine": 624,
+        "endChar": 33
+      },
+      "revId": "209087b515464237c696b749e3103415fc1a8732",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0385d066_d98b7c9e",
+        "filename": "tests/subscriptions.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2022-01-10T13:51:33Z",
+      "side": 1,
+      "message": "not applicable anymore",
+      "parentUuid": "41c35339_60f41d92",
       "range": {
         "startLine": 623,
         "startChar": 0,
