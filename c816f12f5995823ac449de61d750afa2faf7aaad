@@ -48,6 +48,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ca88ae5_362cfd4c",
+        "filename": "examples/module_change_example.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2022-01-11T09:46:09Z",
+      "side": 1,
+      "message": "Moved, and the example now just uses printStr(), since that\u0027s what you would use in normal code",
+      "parentUuid": "b52befd7_8a58d175",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 1
+      },
+      "revId": "c816f12f5995823ac449de61d750afa2faf7aaad",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1723b36_5d95999c",
