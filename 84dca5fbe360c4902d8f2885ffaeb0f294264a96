@@ -16,6 +16,24 @@
       "message": "nit: extra blank",
       "revId": "84dca5fbe360c4902d8f2885ffaeb0f294264a96",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76732899_4da7f4cd",
+        "filename": "examples/module_change_example.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2022-01-17T09:55:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bedef4ec_1032eb4d",
+      "revId": "84dca5fbe360c4902d8f2885ffaeb0f294264a96",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
