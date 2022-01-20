@@ -12,6 +12,7 @@
 #include <iostream>
 #include <sysrepo-cpp/Connection.hpp>
 #include <sysrepo-cpp/utils/utils.hpp>
+#include <unistd.h>
 
 void printValue(libyang::DataNode node)
 {
