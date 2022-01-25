@@ -10,7 +10,7 @@ It uses RAII for automatic memory management.
 ## Dependencies
 - [sysrepo](https://github.com/sysrepo/sysrepo) - the `devel` branch (even for the `master` branch of *sysrepo-cpp*)
 - [libyang-cpp](https://github.com/CESNET/libyang-cpp) - C++ bindings for *libyang*
-- C++20 compiler
+- C++20 compiler (e.g., GCC 10.x+, clang 10+)
 
 ## Building
 *sysrepo-cpp* uses *CMake* for building. The standard way of building *sysrepo-cpp* looks like this:
