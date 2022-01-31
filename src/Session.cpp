@@ -81,7 +81,7 @@ void Session::setItem(const char* path, const char* value, const EditOptions opt
 {
     auto res = sr_set_item_str(m_sess.get(), path, value, nullptr, toEditOptions(opts));
 
-    throwIfError(res, "Session::setItem: Couldn't set '"s + path + (value ? ("' to '"s + "'" + value + "'") : ""));
+    throwIfError(res, "Session::setItem: Couldn't set '"s + path + "'"s + (value ? (" to '"s + value + "'") : ""));
 }
 
 /**

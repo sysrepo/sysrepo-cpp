@@ -59,7 +59,7 @@ TEST_CASE("session")
         REQUIRE(!data);
 
         REQUIRE_THROWS_WITH_AS(sess.setItem("/test_module:non-existent", nullptr),
-                "Session::setItem: Couldn't set '/test_module:non-existent (1)",
+                "Session::setItem: Couldn't set '/test_module:non-existent' (1)",
                 sysrepo::ErrorWithCode);;
     }
 
