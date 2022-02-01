@@ -16,6 +16,24 @@
       "message": "I have fixed the test failure",
       "revId": "aa1242f6bc5bc1e1948340c6c82563c30751ecfb",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83e515b3_c665a420",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2022-02-01T14:12:21Z",
+      "side": 1,
+      "message": "thanks",
+      "parentUuid": "540794e3_ed3f112c",
+      "revId": "aa1242f6bc5bc1e1948340c6c82563c30751ecfb",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
