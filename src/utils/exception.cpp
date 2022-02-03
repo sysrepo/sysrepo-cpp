@@ -5,6 +5,7 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
 */
+#include <sstream>
 #include <sysrepo.h>
 #include <sysrepo-cpp/utils/exception.hpp>
 
@@ -24,7 +25,9 @@ ErrorCode ErrorWithCode::code()
 void throwIfError(int code, std::string msg)
 {
     if (code != SR_ERR_OK) {
-        throw ErrorWithCode(msg + " (" + std::to_string(code) + ")", code);
+        std::ostringstream oss;
+        oss << msg << ": " << static_cast<ErrorCode>(code);
+        throw ErrorWithCode(oss.str(), code);
     }
 }
 }

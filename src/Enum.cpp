@@ -7,6 +7,7 @@
 */
 #include <ostream>
 #include <sysrepo-cpp/Enum.hpp>
+#include <sysrepo.h>
 
 namespace sysrepo {
 std::ostream& operator<<(std::ostream& os, const NotificationType& type)
@@ -65,5 +66,41 @@ std::ostream& operator<<(std::ostream& os, const ChangeOperation& changeOp)
     }
 
     return os << "[unknown change operation type]";
+}
+
+#define CHECK_AND_STRINGIFY(CPP_ENUM, C_ENUM) \
+    static_assert(static_cast<std::underlying_type_t<decltype(CPP_ENUM)>>(CPP_ENUM) == (C_ENUM)); \
+    case CPP_ENUM: \
+        return #C_ENUM
+
+std::string stringify(const ErrorCode err)
+{
+    using sysrepo::ErrorCode;
+    switch (err) {
+    CHECK_AND_STRINGIFY(ErrorCode::Ok, SR_ERR_OK);
+    CHECK_AND_STRINGIFY(ErrorCode::InvalidArgument, SR_ERR_INVAL_ARG);
+    CHECK_AND_STRINGIFY(ErrorCode::Libyang, SR_ERR_LY);
+    CHECK_AND_STRINGIFY(ErrorCode::SyscallFailed, SR_ERR_SYS);
+    CHECK_AND_STRINGIFY(ErrorCode::NotEnoughMemory, SR_ERR_NO_MEMORY);
+    CHECK_AND_STRINGIFY(ErrorCode::NotFound, SR_ERR_NOT_FOUND);
+    CHECK_AND_STRINGIFY(ErrorCode::ItemAlreadyExists, SR_ERR_EXISTS);
+    CHECK_AND_STRINGIFY(ErrorCode::Internal, SR_ERR_INTERNAL);
+    CHECK_AND_STRINGIFY(ErrorCode::Unsupported, SR_ERR_UNSUPPORTED);
+    CHECK_AND_STRINGIFY(ErrorCode::ValidationFailed, SR_ERR_VALIDATION_FAILED);
+    CHECK_AND_STRINGIFY(ErrorCode::OperationFailed, SR_ERR_OPERATION_FAILED);
+    CHECK_AND_STRINGIFY(ErrorCode::Unauthorized, SR_ERR_UNAUTHORIZED);
+    CHECK_AND_STRINGIFY(ErrorCode::Locked, SR_ERR_LOCKED);
+    CHECK_AND_STRINGIFY(ErrorCode::Timeout, SR_ERR_TIME_OUT);
+    CHECK_AND_STRINGIFY(ErrorCode::CallbackFailed, SR_ERR_CALLBACK_FAILED);
+    CHECK_AND_STRINGIFY(ErrorCode::CallbackShelve, SR_ERR_CALLBACK_SHELVE);
+    }
+
+    return "[unknown error code (" + std::to_string(static_cast<std::underlying_type_t<ErrorCode>>(err)) + ")]";
+}
+
+std::ostream& operator<<(std::ostream& os, const ErrorCode& err)
+{
+    os << stringify(err);
+    return os;
 }
 }
