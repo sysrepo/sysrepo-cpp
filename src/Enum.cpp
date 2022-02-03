@@ -66,4 +66,45 @@ std::ostream& operator<<(std::ostream& os, const ChangeOperation& changeOp)
 
     return os << "[unknown change operation type]";
 }
+
+std::ostream& operator<<(std::ostream& os, const ErrorCode& err)
+{
+    using enum sysrepo::ErrorCode;
+    switch (err) {
+        case ErrorCode::Ok:
+            return os << "Ok";
+        case InvalidArgument:
+            return os << "InvalidArgument";
+        case Libyang:
+            return os << "Libyang";
+        case SyscallFailed:
+            return os << "SyscallFailed";
+        case NotEnoughMemory:
+            return os << "NotEnoughMemory";
+        case NotFound:
+            return os << "NotFound";
+        case ItemAlreadyExists:
+            return os << "ItemAlreadyExists";
+        case Internal:
+            return os << "Internal";
+        case Unsupported:
+            return os << "Unsupported";
+        case ValidationFailed:
+            return os << "ValidationFailed";
+        case OperationFailed:
+            return os << "OperationFailed";
+        case Unauthorized:
+            return os << "Unauthorized";
+        case Locked:
+            return os << "Locked";
+        case Timeout:
+            return os << "Timeout";
+        case CallbackFailed:
+            return os << "CallbackFailed";
+        case CallbackShelve:
+            return os << "CallbackShelve";
+    }
+
+    return os << "[unknown error code]";
+}
 }
