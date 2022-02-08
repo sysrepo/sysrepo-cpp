@@ -16,6 +16,24 @@
       "message": "Since these strings are specific to the C++ bindings, I suggest showing the C-level enums instead. That way users of this library can easily search for relevant stuff because the report comes from the C code anyway.",
       "revId": "7269b25a4ebf768595b810b62ac88a2cab74d868",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd117266_ef6c00b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2022-02-08T10:22:14Z",
+      "side": 1,
+      "message": "I also made the same changes as in libyang-cpp here https://gerrit.cesnet.cz/c/CzechLight/libyang-cpp/+/5493",
+      "parentUuid": "51f9a71e_7c141c6b",
+      "revId": "7269b25a4ebf768595b810b62ac88a2cab74d868",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
