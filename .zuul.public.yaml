@@ -7,7 +7,7 @@
               - name: github/CESNET/libyang
                 override-checkout: devel
               - name: github/sysrepo/sysrepo
-                override-checkout: devel
+                override-checkout: cesnet/2022-02-17-systemd-unit-file
               - name: github/onqtam/doctest
                 override-checkout: cesnet/2021-10-08
               - name: github/rollbear/trompeloeil
