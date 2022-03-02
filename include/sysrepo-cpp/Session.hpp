@@ -72,6 +72,8 @@ enum class Wait {
     No
 };
 
+sr_session_ctx_s* getRawSession(Session sess);
+
 /**
  * @brief Handles a sysrepo session.
  */
@@ -138,6 +140,7 @@ public:
 private:
     friend Connection;
     friend Session wrapUnmanagedSession(sr_session_ctx_s* session);
+    friend sr_session_ctx_s* getRawSession(Session sess);
 
     Session(sr_session_ctx_s* sess, std::shared_ptr<sr_conn_ctx_s> conn);
     explicit Session(sr_session_ctx_s* unmanagedSession, const unmanaged_tag);

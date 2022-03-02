@@ -559,4 +559,9 @@ const libyang::Context Session::getContext() const
     auto ctx = sr_session_acquire_context(m_sess.get());
     return libyang::createUnmanagedContext(const_cast<ly_ctx*>(ctx), [sess = m_sess] (ly_ctx*) { sr_session_release_context(sess.get()); });
 }
+
+sr_session_ctx_s* getRawSession(Session sess)
+{
+    return sess.m_sess.get();
+}
 }
