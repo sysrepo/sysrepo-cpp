@@ -9,6 +9,7 @@
 #include <cassert>
 extern "C" {
 #include <sysrepo.h>
+#include <sysrepo/netconf_acm.h>
 #include <sysrepo/error_format.h>
 }
 #include <libyang-cpp/Context.hpp>
@@ -386,6 +387,12 @@ Subscription Session::onNotification(
 ChangeCollection Session::getChanges(const char* xpath)
 {
     return ChangeCollection{xpath, m_sess};
+}
+
+void Session::setNacmUser(const char* user)
+{
+    auto res = sr_nacm_set_user(m_sess.get(), user);
+    throwIfError(res, "Couldn't set NACM user");
 }
 
 /**
