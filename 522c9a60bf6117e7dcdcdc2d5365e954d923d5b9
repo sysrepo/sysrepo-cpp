@@ -1,0 +1,7 @@
+Code-Review+2: Jan Kundrát <jan.kundrat@cesnet.cz>
+Verified+1: Zuul CI <cesnet-zuul+public@gerrit.cesnet.cz>
+Submitted-by: Václav Kubernát <kubernat@cesnet.cz>
+Submitted-at: Wed, 02 Mar 2022 20:27:07 +0100
+Reviewed-on: https://gerrit.cesnet.cz/c/CzechLight/sysrepo-cpp/+/5540
+Project: CzechLight/sysrepo-cpp
+Branch: refs/heads/master
