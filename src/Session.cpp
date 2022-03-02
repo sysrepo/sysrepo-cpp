@@ -9,6 +9,7 @@
 #include <cassert>
 extern "C" {
 #include <sysrepo.h>
+#include <sysrepo/netconf_acm.h>
 #include <sysrepo/error_format.h>
 }
 #include <libyang-cpp/Context.hpp>
@@ -386,6 +387,36 @@ Subscription Session::onNotification(
 ChangeCollection Session::getChanges(const char* xpath)
 {
     return ChangeCollection{xpath, m_sess};
+}
+
+/**
+ * @brief Set the NACM user for this session, which enables NACM for all operations on this session.
+ */
+void Session::setNacmUser(const char* user)
+{
+    auto res = sr_nacm_set_user(m_sess.get(), user);
+    throwIfError(res, "Couldn't set NACM user");
+}
+
+/**
+ * @brief Initializes NACM callbacks.
+ *
+ * @param opts Can contain the sysrepo::SubscribeOptions::NoThread. Other flags are invalid.
+ * @param handler Can contain an exception handler for additional user subscriptions.
+ * @param callbacks If using sysrepo::SubscribeOptions::NoThread, this argument specifies the FD register/unregister
+ * callbacks.
+ * @return A Subscription that contains the NACM subscriptions. It can be used to create other subscriptions.
+ */
+[[nodiscard]] Subscription Session::initNacm(SubscribeOptions opts, ExceptionHandler handler, const std::optional<FDHandling>& callbacks)
+{
+    sr_subscription_ctx_t* sub = nullptr;
+    auto res = sr_nacm_init(m_sess.get(), toSubscribeOptions(opts), &sub);
+    throwIfError(res, "Couldn't initialize NACM");
+
+    Subscription ret(m_sess, handler, callbacks);
+    ret.saveContext(sub);
+
+    return ret;
 }
 
 /**

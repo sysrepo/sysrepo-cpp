@@ -2,6 +2,10 @@ module test_module {
   namespace "http://example.com";
   prefix "test";
 
+  import ietf-netconf-acm {
+    prefix nacm;
+  }
+
   leaf leafInt32 {
     type int32;
   }
@@ -19,6 +23,11 @@ module test_module {
   leaf leafWithDefault {
     type int32;
     default 123;
+  }
+
+  leaf denyAllLeaf {
+    nacm:default-deny-all;
+    type string;
   }
 
   rpc noop {

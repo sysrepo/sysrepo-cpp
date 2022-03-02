@@ -91,4 +91,24 @@ TEST_CASE("session")
     {
         auto connection = sess.getConnection();
     }
+
+    DOCTEST_SUBCASE("NACM")
+    {
+        // Before turning NACM on, we can set the value of the default-deny-all leaf.
+        sess.setItem("/test_module:denyAllLeaf", "AHOJ");
+        sess.applyChanges();
+        // And also retrieve the value.
+        auto data = sess.getData("/test_module:denyAllLeaf");
+        REQUIRE(data.value().findPath("/test_module:denyAllLeaf").value().asTerm().valueStr() == "AHOJ");
+
+        auto nacmSub = sess.initNacm();
+        sess.setNacmUser("nobody");
+        data = sess.getData("/test_module:denyAllLeaf");
+        // After turning on NACM, we can't access the leaf.
+        REQUIRE(!data);
+
+        // And we can't set its value.
+        sess.setItem("/test_module:denyAllLeaf", "someValue");
+        REQUIRE_THROWS_WITH_AS(sess.applyChanges(), "Session::applyChanges: Couldn't apply changes: SR_ERR_UNAUTHORIZED", sysrepo::ErrorWithCode);
+    }
 }
