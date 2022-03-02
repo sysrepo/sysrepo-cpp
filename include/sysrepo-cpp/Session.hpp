@@ -93,6 +93,12 @@ public:
     libyang::DataNode sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
     void sendNotification(libyang::DataNode notification, const Wait wait, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
 
+    void setNacmUser(const char* user);
+    [[nodiscard]] Subscription initNacm(
+            SubscribeOptions opts = SubscribeOptions::Default,
+            ExceptionHandler handler = nullptr,
+            const std::optional<FDHandling>& callbacks = std::nullopt);
+
     [[nodiscard]] Subscription onModuleChange(
             const char* moduleName,
             ModuleChangeCb cb,
