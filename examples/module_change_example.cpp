@@ -134,7 +134,7 @@ int main(int argc, char** argv)
     printCurrentConfig(session, moduleName);
 
     // subscribe for changes in running config
-    auto sub = session.onModuleChange(moduleName, moduleChangeCb);
+    auto sub = session.onModuleChange(moduleName, moduleChangeCb, xpath);
 
     std::cout << "\n\n ========== LISTENING FOR CHANGES ==========\n\n";
 
