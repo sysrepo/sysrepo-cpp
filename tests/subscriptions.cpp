@@ -106,7 +106,7 @@ TEST_CASE("subscriptions")
             called++;
             return sysrepo::ErrorCode::Ok;
         };
-        auto sub = sess.onModuleChange("test_module", moduleChangeCb, nullptr, 0, sysrepo::SubscribeOptions::DoneOnly);
+        auto sub = sess.onModuleChange("test_module", moduleChangeCb, std::nullopt, 0, sysrepo::SubscribeOptions::DoneOnly);
         auto sub2 = std::move(sub);
         sess.setItem("/test_module:leafInt32", "42");
         sess.applyChanges();
@@ -148,7 +148,7 @@ TEST_CASE("subscriptions")
 
         }
 
-        auto sub = sess.onModuleChange("test_module", moduleChangeCb, nullptr, 0, sysrepo::SubscribeOptions::DoneOnly);
+        auto sub = sess.onModuleChange("test_module", moduleChangeCb, std::nullopt, 0, sysrepo::SubscribeOptions::DoneOnly);
         sess.setItem("/test_module:leafInt32", "123");
         sess.applyChanges();
     }
@@ -168,10 +168,10 @@ TEST_CASE("subscriptions")
             return res;
         };
 
-        sess.setItem("/test_module:values[.='10']", nullptr);
-        sess.setItem("/test_module:values[.='20']", nullptr);
-        sess.setItem("/test_module:values[.='30']", nullptr);
-        sess.setItem("/test_module:values[.='40']", nullptr);
+        sess.setItem("/test_module:values[.='10']", std::nullopt);
+        sess.setItem("/test_module:values[.='20']", std::nullopt);
+        sess.setItem("/test_module:values[.='30']", std::nullopt);
+        sess.setItem("/test_module:values[.='40']", std::nullopt);
         sess.applyChanges();
         Recorder rec;
         sysrepo::ModuleChangeCb moduleChangeCb = [&rec] (sysrepo::Session session, auto, auto, auto, auto, auto) -> sysrepo::ErrorCode {
@@ -181,7 +181,7 @@ TEST_CASE("subscriptions")
             return sysrepo::ErrorCode::Ok;
         };
 
-        auto sub = sess.onModuleChange("test_module", moduleChangeCb, nullptr, 0, sysrepo::SubscribeOptions::DoneOnly);
+        auto sub = sess.onModuleChange("test_module", moduleChangeCb, std::nullopt, 0, sysrepo::SubscribeOptions::DoneOnly);
 
         std::vector<int32_t> expected;
 
@@ -193,7 +193,7 @@ TEST_CASE("subscriptions")
         DOCTEST_SUBCASE("first")
         {
             TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Moved, "/test_module:values[.='40']", std::nullopt, "", false));
-            sess.moveItem("/test_module:values[.='40']", sysrepo::MovePosition::First, nullptr);
+            sess.moveItem("/test_module:values[.='40']", sysrepo::MovePosition::First, std::nullopt);
             expected = {40, 10, 20, 30};
             sess.applyChanges();
         }
@@ -201,7 +201,7 @@ TEST_CASE("subscriptions")
         DOCTEST_SUBCASE("last")
         {
             TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Moved, "/test_module:values[.='20']", std::nullopt, "40", false));
-            sess.moveItem("/test_module:values[.='20']", sysrepo::MovePosition::Last, nullptr);
+            sess.moveItem("/test_module:values[.='20']", sysrepo::MovePosition::Last, std::nullopt);
             expected = {10, 30, 40, 20};
             sess.applyChanges();
         }
@@ -240,7 +240,7 @@ TEST_CASE("subscriptions")
         sess.applyChanges();
 
         TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Deleted, "/test_module:leafInt32", std::nullopt, std::nullopt, false));
-        auto sub = sess.onModuleChange("test_module", moduleChangeCb, nullptr, 0, sysrepo::SubscribeOptions::DoneOnly);
+        auto sub = sess.onModuleChange("test_module", moduleChangeCb, std::nullopt, 0, sysrepo::SubscribeOptions::DoneOnly);
         sess.copyConfig(sysrepo::Datastore::Startup, "test_module");
     }
 
@@ -659,7 +659,7 @@ TEST_CASE("subscriptions")
 
         std::optional<sysrepo::Subscription> sub = sess.onModuleChange("test_module",
                 moduleChangeCb,
-                nullptr,
+                std::nullopt,
                 0,
                 sysrepo::SubscribeOptions::DoneOnly | sysrepo::SubscribeOptions::NoThread | sysrepo::SubscribeOptions::Enabled,
                 nullptr,
