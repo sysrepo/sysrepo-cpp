@@ -111,8 +111,8 @@ void sigint_handler(int /*signum*/)
 
 int main(int argc, char** argv)
 {
-    const char* moduleName = nullptr;
-    const char* xpath = nullptr;
+    std::string moduleName;
+    std::optional<std::string> xpath;
 
     if ((argc < 2) || (argc > 3)) {
         std::cout << argv[0] << " <module-to-subscribe> [<xpath-to-subscribe>]\n";
@@ -124,7 +124,7 @@ int main(int argc, char** argv)
         xpath = argv[2];
     }
 
-    std::cout << "Application will watch for changes in \"" << ( xpath ? xpath : moduleName) << "\"";
+    std::cout << "Application will watch for changes in \"" << ( xpath ? *xpath : moduleName) << "\"";
 
     sysrepo::setLogLevelStderr(sysrepo::LogLevel::Warning);
 

@@ -58,7 +58,7 @@ TEST_CASE("session")
         data = sess.getData("/test_module:leafInt32");
         REQUIRE(!data);
 
-        REQUIRE_THROWS_WITH_AS(sess.setItem("/test_module:non-existent", nullptr),
+        REQUIRE_THROWS_WITH_AS(sess.setItem("/test_module:non-existent", std::nullopt),
                 "Session::setItem: Couldn't set '/test_module:non-existent': SR_ERR_INVAL_ARG",
                 sysrepo::ErrorWithCode);;
     }
