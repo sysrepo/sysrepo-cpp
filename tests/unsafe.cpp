@@ -44,7 +44,7 @@ TEST_CASE("unsafe")
                 return sysrepo::ErrorCode::Ok;
             };
 
-            auto sub = wrapped.onModuleChange("test_module", moduleChangeCb, nullptr, 0, sysrepo::SubscribeOptions::DoneOnly);
+            auto sub = wrapped.onModuleChange("test_module", moduleChangeCb, std::nullopt, 0, sysrepo::SubscribeOptions::DoneOnly);
 
             TROMPELOEIL_REQUIRE_CALL(rec, record(sysrepo::ChangeOperation::Created, "/test_module:leafInt32", std::nullopt, std::nullopt, false));
             wrapped.setItem("/test_module:leafInt32", "123");

@@ -76,13 +76,13 @@ void Session::switchDatastore(const Datastore ds) const
  * Wraps `sr_set_item_str`.
  *
  * @param path Path of the element to be changed.
- * @param value Value of the element to be changed. Can be `nullptr`.
+ * @param value Value of the element to be changed. Can be `std::nullopt`.
  */
-void Session::setItem(const char* path, const char* value, const EditOptions opts)
+void Session::setItem(const std::string& path, const std::optional<std::string>& value, const EditOptions opts)
 {
-    auto res = sr_set_item_str(m_sess.get(), path, value, nullptr, toEditOptions(opts));
+    auto res = sr_set_item_str(m_sess.get(), path.c_str(), value ? value->c_str() : nullptr, nullptr, toEditOptions(opts));
 
-    throwIfError(res, "Session::setItem: Couldn't set '"s + path + "'"s + (value ? (" to '"s + value + "'") : ""));
+    throwIfError(res, "Session::setItem: Couldn't set '"s + path + "'"s + (value ? (" to '"s + *value + "'") : ""));
 }
 
 /**
@@ -110,9 +110,9 @@ void Session::editBatch(libyang::DataNode edit, const DefaultOperation op)
  * @param path Path of the element to be deleted.
  * @param opts Options changing the behavior of this method.
  */
-void Session::deleteItem(const char* path, const EditOptions opts)
+void Session::deleteItem(const std::string& path, const EditOptions opts)
 {
-    auto res = sr_delete_item(m_sess.get(), path, toEditOptions(opts));
+    auto res = sr_delete_item(m_sess.get(), path.c_str(), toEditOptions(opts));
 
     throwIfError(res, "Session::deleteItem: Can't delete '"s + path + "'");
 }
@@ -122,15 +122,19 @@ void Session::deleteItem(const char* path, const EditOptions opts)
  * @param path Node to move.
  * @param move Specifies the type of the move.
  * @param keys_or_value list instance specified on the format [key1="val1"][key2="val2"] or a leaf-list value. Can be
- * nullptr for the `First` `Last` move types.
+ * std::nullopt for the `First` `Last` move types.
  * @param origin Origin of the value.
  * @param opts Options modifying the behavior of this method.
  */
-void Session::moveItem(const char* path, const MovePosition move, const char* keys_or_value, const char* origin, const EditOptions opts)
+void Session::moveItem(const std::string& path, const MovePosition move, const std::optional<std::string>& keys_or_value, const std::optional<std::string>& origin, const EditOptions opts)
 {
     // sr_move_item has separate arguments for list keys and leaf-list values, but the C++ api has just one. It is OK if
     // both of the arguments are the same. https://github.com/sysrepo/sysrepo/issues/2621
-    auto res = sr_move_item(m_sess.get(), path, toMovePosition(move), keys_or_value, keys_or_value, origin, toEditOptions(opts));
+    auto res = sr_move_item(m_sess.get(), path.c_str(), toMovePosition(move),
+            keys_or_value ? keys_or_value->c_str() : nullptr,
+            keys_or_value ? keys_or_value->c_str() : nullptr,
+            origin ? origin->c_str() : nullptr,
+            toEditOptions(opts));
 
     throwIfError(res, "Session::moveItem: Can't move '"s + path + "'");
 }
@@ -163,10 +167,10 @@ libyang::DataNode wrapSrData(std::shared_ptr<sr_session_ctx_s> sess, sr_data_t* 
  *
  * @returns std::nullopt if no matching data found, otherwise the requested data.
  */
-std::optional<libyang::DataNode> Session::getData(const char* path) const
+std::optional<libyang::DataNode> Session::getData(const std::string& path) const
 {
     sr_data_t* data;
-    auto res = sr_get_data(m_sess.get(), path, 0, 0, 0, &data);
+    auto res = sr_get_data(m_sess.get(), path.c_str(), 0, 0, 0, &data);
 
     throwIfError(res, "Session::getData: Couldn't get '"s + path + "'");
 
@@ -212,9 +216,9 @@ void Session::discardChanges()
  * @optional moduleName Optional module name, limits the operation on that module.
  * @optional timeout Optional timeout.
  */
-void Session::copyConfig(const Datastore source, const char* moduleName, std::chrono::milliseconds timeout)
+void Session::copyConfig(const Datastore source, const std::optional<std::string>& moduleName, std::chrono::milliseconds timeout)
 {
-    auto res = sr_copy_config(m_sess.get(), moduleName, toDatastore(source), timeout.count());
+    auto res = sr_copy_config(m_sess.get(), moduleName ? moduleName->c_str() : nullptr, toDatastore(source), timeout.count());
 
     throwIfError(res, "Couldn't copy config");
 }
@@ -270,9 +274,9 @@ void Session::sendNotification(libyang::DataNode notification, const Wait wait, 
  * @return The Subscription handle.
  */
 Subscription Session::onModuleChange(
-        const char* moduleName,
+        const std::string& moduleName,
         ModuleChangeCb cb,
-        const char* xpath,
+        const std::optional<std::string>& xpath,
         uint32_t priority,
         const SubscribeOptions opts,
         ExceptionHandler handler,
@@ -301,9 +305,9 @@ Subscription Session::onModuleChange(
  * @return The Subscription handle.
  */
 Subscription Session::onOperGet(
-        const char* moduleName,
+        const std::string& moduleName,
         OperGetCb cb,
-        const char* xpath,
+        const std::optional<std::string>& xpath,
         const SubscribeOptions opts,
         ExceptionHandler handler,
         const std::optional<FDHandling>& callbacks)
@@ -331,7 +335,7 @@ Subscription Session::onOperGet(
  * @return The Subscription handle.
  */
 Subscription Session::onRPCAction(
-        const char* xpath,
+        const std::string& xpath,
         RpcActionCb cb,
         uint32_t priority,
         const SubscribeOptions opts,
@@ -363,9 +367,9 @@ Subscription Session::onRPCAction(
  * @return The Subscription handle.
  */
 Subscription Session::onNotification(
-        const char* moduleName,
+        const std::string& moduleName,
         NotifCb cb,
-        const char* xpath,
+        const std::optional<std::string>& xpath,
         const std::optional<NotificationTimeStamp>& startTime,
         const std::optional<NotificationTimeStamp>& stopTime,
         const SubscribeOptions opts,
@@ -384,7 +388,7 @@ Subscription Session::onNotification(
  * @param xpath XPath selecting the changes. The default selects all changes, possibly including those you didn't
  * subscribe to.
  */
-ChangeCollection Session::getChanges(const char* xpath)
+ChangeCollection Session::getChanges(const std::string& xpath)
 {
     return ChangeCollection{xpath, m_sess};
 }
@@ -392,9 +396,9 @@ ChangeCollection Session::getChanges(const char* xpath)
 /**
  * @brief Set the NACM user for this session, which enables NACM for all operations on this session.
  */
-void Session::setNacmUser(const char* user)
+void Session::setNacmUser(const std::string& user)
 {
-    auto res = sr_nacm_set_user(m_sess.get(), user);
+    auto res = sr_nacm_set_user(m_sess.get(), user.c_str());
     throwIfError(res, "Couldn't set NACM user");
 }
 
@@ -426,9 +430,9 @@ void Session::setNacmUser(const char* user)
  *
  * @param msg The message to be set.
  */
-void Session::setErrorMessage(const char* msg)
+void Session::setErrorMessage(const std::string& msg)
 {
-    auto res = sr_session_set_error_message(m_sess.get(), "%s", msg);
+    auto res = sr_session_set_error_message(m_sess.get(), "%s", msg.c_str());
     throwIfError(res, "Couldn't set error message");
 }
 
@@ -566,9 +570,9 @@ std::string_view Session::getOriginatorName() const
  * Wraps `sr_session_set_orig_name`.
  * @param originatorName The new originator name.
  */
-void Session::setOriginatorName(const char* originatorName)
+void Session::setOriginatorName(const std::string& originatorName)
 {
-    auto res = sr_session_set_orig_name(m_sess.get(), originatorName);
+    auto res = sr_session_set_orig_name(m_sess.get(), originatorName.c_str());
     throwIfError(res, "Couldn't switch datastore");
 }
 

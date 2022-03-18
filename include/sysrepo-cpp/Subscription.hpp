@@ -132,7 +132,7 @@ public:
     ChangeIterator end() const;
 
 private:
-    ChangeCollection(const char* xpath, std::shared_ptr<sr_session_ctx_s> sess);
+    ChangeCollection(const std::string& xpath, std::shared_ptr<sr_session_ctx_s> sess);
     friend Session;
     std::string m_xpath;
     std::shared_ptr<sr_session_ctx_s> m_sess;
@@ -232,13 +232,13 @@ public:
     Subscription(Subscription&&) noexcept;
     Subscription& operator=(Subscription&&) noexcept;
 
-    void onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath = nullptr, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
-    void onOperGet(const char* moduleName, OperGetCb cb, const char* xpath, const SubscribeOptions opts = SubscribeOptions::Default);
-    void onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
+    void onModuleChange(const std::string& moduleName, ModuleChangeCb cb, const std::optional<std::string>& xpath = std::nullopt, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
+    void onOperGet(const std::string& moduleName, OperGetCb cb, const std::optional<std::string>& xpath, const SubscribeOptions opts = SubscribeOptions::Default);
+    void onRPCAction(const std::string& xpath, RpcActionCb cb, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
     void onNotification(
-            const char* moduleName,
+            const std::string& moduleName,
             NotifCb cb,
-            const char* xpath = nullptr,
+            const std::optional<std::string>& xpath = std::nullopt,
             const std::optional<NotificationTimeStamp>& startTime = std::nullopt,
             const std::optional<NotificationTimeStamp>& stopTime = std::nullopt,
             const SubscribeOptions opts = SubscribeOptions::Default);
