@@ -183,14 +183,14 @@ void eventNotifCb(sr_session_ctx_t* session, uint32_t subscriptionId, const sr_e
  * @param priority Optional priority in which the callbacks within a module are called.
  * @param opts Options further changing the behavior of this method.
  */
-void Subscription::onModuleChange(const char* moduleName, ModuleChangeCb cb, const char* xpath, uint32_t priority, const SubscribeOptions opts)
+void Subscription::onModuleChange(const std::string& moduleName, ModuleChangeCb cb, const std::optional<std::string>& xpath, uint32_t priority, const SubscribeOptions opts)
 {
     checkNoThreadFlag(opts, m_customEventLoopCbs);
 
     auto& privRef = m_moduleChangeCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
     sr_subscription_ctx_s* ctx = m_sub.get();
 
-    auto res = sr_module_change_subscribe(m_sess.get(), moduleName, xpath, moduleChangeCb, reinterpret_cast<void*>(&privRef), priority, toSubscribeOptions(opts), &ctx);
+    auto res = sr_module_change_subscribe(m_sess.get(), moduleName.c_str(), xpath ? xpath->c_str() : nullptr, moduleChangeCb, reinterpret_cast<void*>(&privRef), priority, toSubscribeOptions(opts), &ctx);
     throwIfError(res, "Couldn't create module change subscription");
 
     saveContext(ctx);
@@ -206,13 +206,13 @@ void Subscription::onModuleChange(const char* moduleName, ModuleChangeCb cb, con
  * @param xpath XPath that identifies which data this subscription is able to provide.
  * @param opts Options further changing the behavior of this method.
  */
-void Subscription::onOperGet(const char* moduleName, OperGetCb cb, const char* xpath, const SubscribeOptions opts)
+void Subscription::onOperGet(const std::string& moduleName, OperGetCb cb, const std::optional<std::string>& xpath, const SubscribeOptions opts)
 {
     checkNoThreadFlag(opts, m_customEventLoopCbs);
 
     auto& privRef = m_operGetCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
     sr_subscription_ctx_s* ctx = m_sub.get();
-    auto res = sr_oper_get_subscribe(m_sess.get(), moduleName, xpath, operGetItemsCb, reinterpret_cast<void*>(&privRef), toSubscribeOptions(opts), &ctx);
+    auto res = sr_oper_get_subscribe(m_sess.get(), moduleName.c_str(), xpath ? xpath->c_str() : nullptr, operGetItemsCb, reinterpret_cast<void*>(&privRef), toSubscribeOptions(opts), &ctx);
     throwIfError(res, "Couldn't create operational get items subscription");
 
     saveContext(ctx);
@@ -228,13 +228,13 @@ void Subscription::onOperGet(const char* moduleName, OperGetCb cb, const char* x
  * @param priority Optional priority in which the callbacks within a module are called.
  * @param opts Options further changing the behavior of this method.
  */
-void Subscription::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t priority, const SubscribeOptions opts)
+void Subscription::onRPCAction(const std::string& xpath, RpcActionCb cb, uint32_t priority, const SubscribeOptions opts)
 {
     checkNoThreadFlag(opts, m_customEventLoopCbs);
 
     auto& privRef = m_RPCActionCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
     sr_subscription_ctx_s* ctx = m_sub.get();
-    auto res = sr_rpc_subscribe_tree(m_sess.get(), xpath, rpcActionCb, reinterpret_cast<void*>(&privRef), priority, toSubscribeOptions(opts), &ctx);
+    auto res = sr_rpc_subscribe_tree(m_sess.get(), xpath.c_str(), rpcActionCb, reinterpret_cast<void*>(&privRef), priority, toSubscribeOptions(opts), &ctx);
     throwIfError(res, "Couldn't create RPC/action subscription");
 
     saveContext(ctx);
@@ -253,9 +253,9 @@ void Subscription::onRPCAction(const char* xpath, RpcActionCb cb, uint32_t prior
  * @param opts Options further changing the behavior of this method.
  */
 void Subscription::onNotification(
-        const char* moduleName,
+        const std::string& moduleName,
         NotifCb cb,
-        const char* xpath,
+        const std::optional<std::string>& xpath,
         const std::optional<NotificationTimeStamp>& startTime,
         const std::optional<NotificationTimeStamp>& stopTime,
         const SubscribeOptions opts)
@@ -268,8 +268,8 @@ void Subscription::onNotification(
     auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} : std::nullopt;
     auto res = sr_notif_subscribe_tree(
             m_sess.get(),
-            moduleName,
-            xpath,
+            moduleName.c_str(),
+            xpath ? xpath->c_str() : nullptr,
             startSpec ? &startSpec.value() : nullptr,
             stopSpec ? &stopSpec.value() : nullptr,
             eventNotifCb,
@@ -285,7 +285,7 @@ Subscription::Subscription(Subscription&& other) noexcept = default;
 
 Subscription& Subscription::operator=(Subscription&& other) noexcept = default;
 
-ChangeCollection::ChangeCollection(const char* xpath, std::shared_ptr<sr_session_ctx_s> sess)
+ChangeCollection::ChangeCollection(const std::string& xpath, std::shared_ptr<sr_session_ctx_s> sess)
     : m_xpath(xpath)
     , m_sess(sess)
 {

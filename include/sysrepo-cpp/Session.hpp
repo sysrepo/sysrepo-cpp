@@ -81,64 +81,64 @@ class Session {
 public:
     Datastore activeDatastore() const;
     void switchDatastore(const Datastore ds) const;
-    void setItem(const char* path, const char* value, const EditOptions opts = sysrepo::EditOptions::Default);
+    void setItem(const std::string& path, const std::optional<std::string>& value, const EditOptions opts = sysrepo::EditOptions::Default);
     void editBatch(libyang::DataNode edit, const DefaultOperation op);
-    void deleteItem(const char* path, const EditOptions opts = sysrepo::EditOptions::Default);
-    void moveItem(const char* path, const MovePosition move, const char* keys_or_value, const char* origin = nullptr, const EditOptions opts = sysrepo::EditOptions::Default);
+    void deleteItem(const std::string& path, const EditOptions opts = sysrepo::EditOptions::Default);
+    void moveItem(const std::string& path, const MovePosition move, const std::optional<std::string>& keys_or_value, const std::optional<std::string>& origin = std::nullopt, const EditOptions opts = sysrepo::EditOptions::Default);
     // TODO: allow all arguments
-    std::optional<libyang::DataNode> getData(const char* path) const;
+    std::optional<libyang::DataNode> getData(const std::string& path) const;
     void applyChanges(std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
     void discardChanges();
-    void copyConfig(const Datastore source, const char* moduleName = nullptr, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
+    void copyConfig(const Datastore source, const std::optional<std::string>& moduleName = std::nullopt, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
     libyang::DataNode sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
     void sendNotification(libyang::DataNode notification, const Wait wait, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
 
-    void setNacmUser(const char* user);
+    void setNacmUser(const std::string& user);
     [[nodiscard]] Subscription initNacm(
             SubscribeOptions opts = SubscribeOptions::Default,
             ExceptionHandler handler = nullptr,
             const std::optional<FDHandling>& callbacks = std::nullopt);
 
     [[nodiscard]] Subscription onModuleChange(
-            const char* moduleName,
+            const std::string& moduleName,
             ModuleChangeCb cb,
-            const char* xpath = nullptr,
+            const std::optional<std::string>& xpath = std::nullopt,
             uint32_t priority = 0,
             const SubscribeOptions opts = SubscribeOptions::Default,
             ExceptionHandler handler = nullptr,
             const std::optional<FDHandling>& callbacks = std::nullopt);
     [[nodiscard]] Subscription onOperGet(
-            const char* moduleName,
+            const std::string& moduleName,
             OperGetCb cb,
-            const char* xpath = nullptr,
+            const std::optional<std::string>& xpath = std::nullopt,
             const SubscribeOptions opts = SubscribeOptions::Default,
             ExceptionHandler handler = nullptr,
             const std::optional<FDHandling>& callbacks = std::nullopt);
-    [[nodiscard]] Subscription onRPCAction(const char* xpath,
+    [[nodiscard]] Subscription onRPCAction(const std::string& xpath,
             RpcActionCb cb,
             uint32_t priority = 0,
             const SubscribeOptions opts = SubscribeOptions::Default,
             ExceptionHandler handler = nullptr,
             const std::optional<FDHandling>& callbacks = std::nullopt);
     [[nodiscard]] Subscription onNotification(
-            const char* moduleName,
+            const std::string& moduleName,
             NotifCb cb,
-            const char* xpath = nullptr,
+            const std::optional<std::string>& xpath = std::nullopt,
             const std::optional<NotificationTimeStamp>& startTime = std::nullopt,
             const std::optional<NotificationTimeStamp>& stopTime = std::nullopt,
             const SubscribeOptions opts = SubscribeOptions::Default,
             ExceptionHandler handler = nullptr,
             const std::optional<FDHandling>& callbacks = std::nullopt);
 
-    ChangeCollection getChanges(const char* xpath = "//.");
-    void setErrorMessage(const char* msg);
+    ChangeCollection getChanges(const std::string& xpath = "//.");
+    void setErrorMessage(const std::string& msg);
     void setNetconfError(const NetconfErrorInfo& info);
 
     std::vector<ErrorInfo> getErrors() const;
     std::vector<NetconfErrorInfo> getNetconfErrors() const;
 
     std::string_view getOriginatorName() const;
-    void setOriginatorName(const char* originatorName);
+    void setOriginatorName(const std::string& originatorName);
 
     Connection getConnection();
     const libyang::Context getContext() const;
