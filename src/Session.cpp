@@ -176,12 +176,15 @@ libyang::DataNode wrapSrData(std::shared_ptr<sr_session_ctx_s> sess, sr_data_t* 
 }
 
 /**
- * Retrieves a tree specified by the provided XPath.
+ * @brief Retrieves data specified by the provided XPath.
+ *
+ * The method always returns a tree that corresponds to the requested XPath. This includes all needed parents of nodes.
+ * Also, the returned node is always the first top-level node of the data returned. If one wants to access another, the
+ * `findPath` method should be used on the returned data.
  *
  * Wraps `sr_get_data`.
  *
- * @param path Path of the element to be retrieved.
- *
+ * @param path XPath which corresponds to the data that should be retrieved.
  * @returns std::nullopt if no matching data found, otherwise the requested data.
  */
 std::optional<libyang::DataNode> Session::getData(const std::string& path) const

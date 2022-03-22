@@ -51,6 +51,14 @@ if (data) {
     std::cout << "no data\n";
 }
 ```
+Note: `sysrepo::Session::getData` always returns the first top-level node of the data that corresponds to the XPath you
+provided. You might need to use the `findPath` method on `data` to get the actual node you wanted:
+```cpp
+auto data = session.getData("/module:myCont/myLeaf");
+// `data` points to "/module:myCont"
+auto leaf = data.findPath("/module:myCont/myLeaf");
+// `leaf` points to "/module:myCont/myLeaf"
+```
 
 #### Creating a subscription for module changes
 ```cpp
