@@ -41,16 +41,20 @@ These are some of the most typical operations supported by sysrepo-cpp.
 #### Editing data and retrieving data
 ```cpp
 auto session = sysrepo::Connection{}.sessionStart();
-session.setItem("/module:myLeaf", "some-value");
+session.setItem("/module:myCont/myLeaf", "some-value");
 session.applyChanges();
 
 auto data = session.getData("/module:leaf");
 if (data) {
-    std::cout << data->asTerm().valueStr() << "\n";
+    // `data` points to "/module:myCont", to get the leaf, we need to use findPath
+    auto leaf = data.findPath("/module:myCont/myLeaf");
+    std::cout << leaf->asTerm().valueStr() << "\n";
 } else {
     std::cout << "no data\n";
 }
 ```
+Note: `sysrepo::Session::getData` always returns the first top-level node of the data that corresponds to the XPath you
+provided. You might need to use the `findPath` method on `data` to get the actual node you wanted.
 
 #### Creating a subscription for module changes
 ```cpp
