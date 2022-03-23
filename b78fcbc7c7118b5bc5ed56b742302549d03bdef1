@@ -39,6 +39,30 @@
       },
       "revId": "b78fcbc7c7118b5bc5ed56b742302549d03bdef1",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "717c8dec_7968b882",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2022-03-23T13:55:48Z",
+      "side": 1,
+      "message": "Done, and also, one of the paths was wrong, so I fixed that too.",
+      "parentUuid": "1bb02fb3_56af0677",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 11
+      },
+      "revId": "b78fcbc7c7118b5bc5ed56b742302549d03bdef1",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
