@@ -18,6 +18,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e098099c_ae2889d2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2022-03-23T11:25:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d231a6a8_d6d8b5c6",
+      "revId": "3fff5bff46bd0346231dbdc2c75a67a6f8daaff6",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef851c1f_b9e1436b",
@@ -41,6 +59,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be951f10_67fcbf6c",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2022-03-23T11:25:57Z",
+      "side": 1,
+      "message": "I made the example more concise",
+      "parentUuid": "ef851c1f_b9e1436b",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 3
+      },
+      "revId": "3fff5bff46bd0346231dbdc2c75a67a6f8daaff6",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6cbab72_3860789a",
@@ -54,6 +96,30 @@
       "writtenOn": "2022-03-22T15:18:06Z",
       "side": 1,
       "message": "The upstream documentation talks about trees, and indeed what is returned is a tree. It might have a \"surprisingly big number of nodes\", but it\u0027s a tree. I think that this is a good one-sentence summary:\n\n Returns a tree which contains all nodes that match the provided XPath\n\nI think that it\u0027s a good idea to also comment on the XPath, perhaps something like this:\n\n Read the documentation of the wrapped C function `sr_get_data()` for additional info on XPath handling. Notably, it is often a mistake to use the `//` XPath construct for this method.",
+      "range": {
+        "startLine": 179,
+        "startChar": 20,
+        "endLine": 179,
+        "endChar": 24
+      },
+      "revId": "3fff5bff46bd0346231dbdc2c75a67a6f8daaff6",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8b85066_8bbb18d6",
+        "filename": "src/Session.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2022-03-23T11:25:57Z",
+      "side": 1,
+      "message": "Added your suggestion. Although the XPath construct should be \"//.\" I think, so I used that.",
+      "parentUuid": "b6cbab72_3860789a",
       "range": {
         "startLine": 179,
         "startChar": 20,
