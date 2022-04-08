@@ -205,6 +205,24 @@ std::optional<libyang::DataNode> Session::getData(const std::string& path) const
 }
 
 /**
+ * @brief Retrieves changes that have not been applied yet.
+ *
+ * Do NOT change the returned data. It is possible to duplicate them. After the changes get applied or discarded, they
+ * become INVALID.
+ *
+ * @return The pending data, or std::nullopt if there are none.
+ */
+std::optional<const libyang::DataNode> Session::getPendingChanges() const
+{
+    auto changes = sr_get_changes(m_sess.get());
+    if (!changes) {
+        return std::nullopt;
+    }
+
+    return libyang::wrapUnmanagedRawNode(changes);
+}
+
+/**
  * Applies changes made in this Session.
  *
  * Wraps `sr_apply_changes`.

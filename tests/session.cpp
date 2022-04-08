@@ -148,4 +148,23 @@ TEST_CASE("session")
         sess.setItem("/test_module:denyAllLeaf", "someValue");
         REQUIRE_THROWS_WITH_AS(sess.applyChanges(), "Session::applyChanges: Couldn't apply changes: SR_ERR_UNAUTHORIZED", sysrepo::ErrorWithCode);
     }
+
+    DOCTEST_SUBCASE("Session::getPendingChanges")
+    {
+        REQUIRE(sess.getPendingChanges() == std::nullopt);
+        sess.setItem("/test_module:leafInt32", "123");
+        REQUIRE(sess.getPendingChanges().value().findPath("/test_module:leafInt32")->asTerm().valueStr() == "123");
+
+        DOCTEST_SUBCASE("apply")
+        {
+            sess.applyChanges();
+        }
+
+        DOCTEST_SUBCASE("discard")
+        {
+            sess.discardChanges();
+        }
+
+        REQUIRE(sess.getPendingChanges() == std::nullopt);
+    }
 }

@@ -88,6 +88,7 @@ public:
     void deleteOperItem(const std::string& path, const std::optional<std::string>& value = std::nullopt, const EditOptions opts = sysrepo::EditOptions::Default);
     // TODO: allow all arguments
     std::optional<libyang::DataNode> getData(const std::string& path) const;
+    std::optional<const libyang::DataNode> getPendingChanges() const;
     void applyChanges(std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
     void discardChanges();
     void copyConfig(const Datastore source, const std::optional<std::string>& moduleName = std::nullopt, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
