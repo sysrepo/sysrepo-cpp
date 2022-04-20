@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25e5412c_75cc752a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2022-04-20T16:27:33Z",
+      "side": 1,
+      "message": "This needs https://github.com/sysrepo/sysrepo/pull/2776",
+      "revId": "0d8e0c2841408b875414314c7d18e1432bfe8f42",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
