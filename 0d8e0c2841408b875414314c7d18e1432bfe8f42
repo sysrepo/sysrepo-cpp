@@ -16,6 +16,23 @@
       "message": "This needs https://github.com/sysrepo/sysrepo/pull/2776",
       "revId": "0d8e0c2841408b875414314c7d18e1432bfe8f42",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d74606e4_6997f213",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000056
+      },
+      "writtenOn": "2022-04-22T07:02:29Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "0d8e0c2841408b875414314c7d18e1432bfe8f42",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
