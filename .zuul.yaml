@@ -11,7 +11,7 @@
               - name: github/onqtam/doctest
                 override-checkout: cesnet/2021-10-08
               - name: github/rollbear/trompeloeil
-                override-checkout: v41
+                override-checkout: v42
               - name: CzechLight/libyang-cpp
         - f34-clang-asan-ubsan:
             pre-run: ci/pre.yaml
