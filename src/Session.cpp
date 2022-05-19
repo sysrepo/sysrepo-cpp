@@ -16,6 +16,7 @@ extern "C" {
 #include <sysrepo-cpp/Connection.hpp>
 #include <span>
 #include <sysrepo-cpp/Subscription.hpp>
+#include <utility>
 #include "utils/enum.hpp"
 #include "utils/exception.hpp"
 #include "utils/utils.hpp"
