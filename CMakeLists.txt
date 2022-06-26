@@ -27,8 +27,8 @@ option(WITH_DOCS "Create and install internal documentation (needs Doxygen)" ${D
 option(WITH_EXAMPLES "Build examples" ON)
 
 find_package(PkgConfig)
-pkg_check_modules(LIBYANG_CPP REQUIRED libyang-cpp=1.1.0 IMPORTED_TARGET libyang-cpp)
-pkg_check_modules(SYSREPO REQUIRED sysrepo>=2.1.42 IMPORTED_TARGET sysrepo)
+pkg_check_modules(LIBYANG_CPP REQUIRED libyang-cpp=1.1.0 IMPORTED_TARGET)
+pkg_check_modules(SYSREPO REQUIRED sysrepo>=2.1.42 IMPORTED_TARGET)
 set(SYSREPO_CPP_PKG_VERSION "1.1.0")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
