@@ -170,7 +170,7 @@ libyang::DataNode wrapSrData(std::shared_ptr<sr_session_ctx_s> sess, sr_data_t* 
 
     // Use wrapRawNode, not wrapUnmanagedRawNode because we want to let the C++ wrapper manage memory.
     // Note: We're capturing the session inside the lambda.
-    return libyang::wrapRawNode(tree, std::shared_ptr<sr_data_t>(data, [extend_session_lifetime = sess] (sr_data_s* data) {
+    return libyang::wrapRawNode(tree, std::shared_ptr<sr_data_t>(data, [extend_session_lifetime = sess] (sr_data_t* data) {
         sr_release_data(data);
     }));
 }
