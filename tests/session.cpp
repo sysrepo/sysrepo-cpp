@@ -85,13 +85,14 @@ TEST_CASE("session")
         // Not using a value for the deleted leaf is an error.
         REQUIRE_THROWS_WITH_AS(sess.deleteOperItem("/test_module:leafInt32", std::nullopt), "Session::deleteOperItem: Can't delete '/test_module:leafInt32' (value: <none>): SR_ERR_INVAL_ARG", sysrepo::ErrorWithCode);
 
-        // Using some other value than the original, does NOT make the leaf disappear.
-        sess.deleteOperItem("/test_module:leafInt32", "5433");
-        sess.applyChanges();
-        REQUIRE(sess.getData("/test_module:leafInt32")->asTerm().valueStr() == "123");
+        DOCTEST_SUBCASE("deleting via a different value") {
+            sess.deleteOperItem("/test_module:leafInt32", "5433");
+        }
 
-        // After using deleteOperItem, the leaf is no longer accesible from the operational datastore.
-        sess.deleteOperItem("/test_module:leafInt32", "123");
+        DOCTEST_SUBCASE("deleting via the original value") {
+            sess.deleteOperItem("/test_module:leafInt32", "123");
+        }
+
         sess.applyChanges();
         REQUIRE(!sess.getData("/test_module:leafInt32"));
 
