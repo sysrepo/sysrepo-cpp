@@ -16,9 +16,8 @@
 #include <sysrepo-cpp/Subscription.hpp>
 
 struct sr_conn_ctx_s;
-struct sr_data_s;
+struct sr_data_t;
 struct sr_session_ctx_s;
-struct sr_val_s;
 
 namespace sysrepo {
 class Connection;
