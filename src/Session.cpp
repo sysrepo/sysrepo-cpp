@@ -122,17 +122,16 @@ void Session::deleteItem(const std::string& path, const EditOptions opts)
  * Delete a leaf, leaf-list, list or a presence container from the operational datastore. The changes are applied only
  * after calling Session::applyChanges.
  *
- * Wraps `sr_oper_delete_item_str`.
+ * Wraps `sr_oper_delete_item`.
  *
  * @param path Path of the element to be deleted.
- * @param value String representation of the value deleted.
  * @param opts Options changing the behavior of this method. sysrepo::EditOptions::Strict is not supported.
  */
-void Session::deleteOperItem(const std::string& path, const std::optional<std::string>& value, const EditOptions opts)
+void Session::deleteOperItem(const std::string& path, const EditOptions opts)
 {
-    auto res = sr_oper_delete_item_str(m_sess.get(), path.c_str(), value ? value->c_str() : nullptr, toEditOptions(opts));
+    auto res = sr_oper_delete_item_str(m_sess.get(), path.c_str(), nullptr, toEditOptions(opts));
 
-    throwIfError(res, "Session::deleteOperItem: Can't delete '"s + path + "' (value: " + (value ? *value : "<none>") + ")");
+    throwIfError(res, "Session::deleteOperItem: Can't delete '"s + path + "'");
 }
 
 /**
