@@ -42,6 +42,7 @@ int Subscription::eventPipe() const
 Subscription::~Subscription()
 {
     if (m_sub && m_customEventLoopCbs) {
+        sr_unsubscribe_sub(m_sub.get(), 0);
         m_customEventLoopCbs->unregisterFd(eventPipe());
     }
 }
