@@ -58,8 +58,21 @@ TEST_CASE("session")
         data = sess.getData("/test_module:leafInt32");
         REQUIRE(!data);
 
+        sess.setItem("/test_module:popelnice/s", "yay 42");
+        data = sess.getData("/test_module:popelnice/s");
+        REQUIRE(!!data);
+        REQUIRE(data->path() == "/test_module:popelnice");
+        auto x = data->findPath("/test_module:popelnice/s");
+        REQUIRE(!!x);
+        REQUIRE(x->asTerm().valueStr() == "yay 42");
+        sess.discardChanges();
+
         REQUIRE_THROWS_WITH_AS(sess.setItem("/test_module:non-existent", std::nullopt),
                 "Session::setItem: Couldn't set '/test_module:non-existent': SR_ERR_INVAL_ARG",
+                sysrepo::ErrorWithCode);
+
+        REQUIRE_THROWS_WITH_AS(sess.getData("/test_module:non-existent"),
+                "Session::getData: Couldn't get '/test_module:non-existent': SR_ERR_NOT_FOUND",
                 sysrepo::ErrorWithCode);
     }
 
