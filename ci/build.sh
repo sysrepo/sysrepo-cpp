@@ -40,6 +40,10 @@ if [[ $ZUUL_JOB_NAME =~ .*-tsan ]]; then
     export CXXFLAGS="-fsanitize=thread ${CXXFLAGS}"
     export LDFLAGS="-fsanitize=thread ${LDFLAGS}"
     export TSAN_OPTIONS="suppressions=${ZUUL_PROJECT_SRC_DIR}/ci/tsan.supp"
+
+    # Our TSAN does not have interceptors for a variety of "less common" functions such as pthread_mutex_clocklock.
+    # Disable all functions which are optional in sysrepo/libnetconf2/Netopeer2.
+    CMAKE_OPTIONS="${CMAKE_OPTIONS} -DHAVE_PTHREAD_MUTEX_TIMEDLOCK=OFF -DHAVE_PTHREAD_MUTEX_CLOCKLOCK=OFF -DHAVE_PTHREAD_RWLOCK_CLOCKRDLOCK=OFF -DHAVE_PTHREAD_RWLOCK_CLOCKWRLOCK=OFF -DHAVE_PTHREAD_COND_CLOCKWAIT=OFF"
 fi
 
 if [[ $ZUUL_JOB_NAME =~ .*-cover.* ]]; then
