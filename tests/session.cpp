@@ -60,7 +60,7 @@ TEST_CASE("session")
 
         REQUIRE_THROWS_WITH_AS(sess.setItem("/test_module:non-existent", std::nullopt),
                 "Session::setItem: Couldn't set '/test_module:non-existent': SR_ERR_INVAL_ARG",
-                sysrepo::ErrorWithCode);;
+                sysrepo::ErrorWithCode);
     }
 
     DOCTEST_SUBCASE("Session::deleteOperItem")
