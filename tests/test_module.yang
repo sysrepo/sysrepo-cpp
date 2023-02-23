@@ -30,6 +30,13 @@ module test_module {
     type string;
   }
 
+  container popelnice {
+    presence true;
+    leaf s {
+      type string;
+    }
+  }
+
   rpc noop {
   }
 
