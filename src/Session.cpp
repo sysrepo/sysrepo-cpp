@@ -189,6 +189,28 @@ std::optional<libyang::DataNode> Session::getData(const std::string& path) const
 }
 
 /**
+ * @brief Returns a single value matching the provided XPath.
+ *
+ * Wraps `sr_get_node`.
+ *
+ * @param path XPath which corresponds to the data that should be retrieved.
+ * @returns std::nullopt if no matching node found, otherwise the requested data node.
+ */
+std::optional<libyang::DataNode> Session::getOneNode(const std::string& path) const
+{
+    sr_data_t* data;
+    auto res = sr_get_node(m_sess.get(), path.c_str(), 0, &data);
+
+    throwIfError(res, "Session::getOneNode: Couldn't get '"s + path + "'");
+
+    if (!data) {
+        return std::nullopt;
+    }
+
+    return wrapSrData(m_sess, data);
+}
+
+/**
  * @brief Retrieves changes that have not been applied yet.
  *
  * Do NOT change the returned data. It is possible to duplicate them. After the changes get applied or discarded, they
