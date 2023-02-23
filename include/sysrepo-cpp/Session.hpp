@@ -85,6 +85,8 @@ public:
     void moveItem(const std::string& path, const MovePosition move, const std::optional<std::string>& keys_or_value, const std::optional<std::string>& origin = std::nullopt, const EditOptions opts = sysrepo::EditOptions::Default);
     // TODO: allow all arguments
     std::optional<libyang::DataNode> getData(const std::string& path) const;
+    // TODO: allow all arguments
+    libyang::DataNode getOneNode(const std::string& path) const;
     std::optional<const libyang::DataNode> getPendingChanges() const;
     void applyChanges(std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
     void discardChanges();

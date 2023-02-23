@@ -42,6 +42,8 @@ TEST_CASE("session")
         sess.applyChanges();
         data = sess.getData("/test_module:leafInt32");
         REQUIRE(data->asTerm().valueStr() == "123");
+        auto node = sess.getOneNode("/test_module:leafInt32");
+        REQUIRE(node.asTerm().valueStr() == "123");
 
         sess.setItem("/test_module:leafInt32", "420");
         sess.applyChanges();
@@ -57,6 +59,9 @@ TEST_CASE("session")
         sess.discardChanges();
         data = sess.getData("/test_module:leafInt32");
         REQUIRE(!data);
+        REQUIRE_THROWS_WITH_AS(sess.getOneNode("/test_module:leafInt32"),
+                "Session::getOneNode: Couldn't get '/test_module:leafInt32': SR_ERR_NOT_FOUND",
+                sysrepo::ErrorWithCode);
 
         sess.setItem("/test_module:popelnice/s", "yay 42");
         data = sess.getData("/test_module:popelnice/s");
@@ -65,6 +70,13 @@ TEST_CASE("session")
         auto x = data->findPath("/test_module:popelnice/s");
         REQUIRE(!!x);
         REQUIRE(x->asTerm().valueStr() == "yay 42");
+        node = sess.getOneNode("/test_module:popelnice/s");
+        REQUIRE(node.path() == "/test_module:s");
+        REQUIRE(node.schema().path() == "/test_module:popelnice/s");
+        REQUIRE(node.asTerm().valueStr() == "yay 42");
+        node = sess.getOneNode("/test_module:popelnice");
+        REQUIRE(node.path() == "/test_module:popelnice");
+        REQUIRE(!node.isTerm());
         sess.discardChanges();
 
         REQUIRE_THROWS_WITH_AS(sess.setItem("/test_module:non-existent", std::nullopt),
@@ -73,6 +85,10 @@ TEST_CASE("session")
 
         REQUIRE_THROWS_WITH_AS(sess.getData("/test_module:non-existent"),
                 "Session::getData: Couldn't get '/test_module:non-existent': SR_ERR_NOT_FOUND",
+                sysrepo::ErrorWithCode);
+
+        REQUIRE_THROWS_WITH_AS(sess.getOneNode("/test_module:non-existent"),
+                "Session::getOneNode: Couldn't get '/test_module:non-existent': SR_ERR_NOT_FOUND",
                 sysrepo::ErrorWithCode);
     }
 

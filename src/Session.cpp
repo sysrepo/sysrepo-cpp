@@ -189,6 +189,30 @@ std::optional<libyang::DataNode> Session::getData(const std::string& path) const
 }
 
 /**
+ * @brief Returns a single value matching the provided XPath.
+ *
+ * The resulting DataNode is *disconnected* from its parent(s).
+ * This has some implications.
+ * For more details, please refer to the libyang C documentation.
+ *
+ * If there's no match, this throws ErrorWithCode(..., SR_ERR_NOT_FOUND).
+ *
+ * Wraps `sr_get_node`.
+ *
+ * @param path XPath which corresponds to the data that should be retrieved.
+ * @returns the requested data node (as a disconnected node)
+ */
+libyang::DataNode Session::getOneNode(const std::string& path) const
+{
+    sr_data_t* data;
+    auto res = sr_get_node(m_sess.get(), path.c_str(), 0, &data);
+
+    throwIfError(res, "Session::getOneNode: Couldn't get '"s + path + "'");
+
+    return wrapSrData(m_sess, data);
+}
+
+/**
  * @brief Retrieves changes that have not been applied yet.
  *
  * Do NOT change the returned data. It is possible to duplicate them. After the changes get applied or discarded, they
