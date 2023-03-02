@@ -63,6 +63,30 @@
       },
       "revId": "26153be2722b736ca2b21b2df25806191ed141e6",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eba0f7cf_95b24d08",
+        "filename": "tests/session.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-03-02T18:05:08Z",
+      "side": 1,
+      "message": "I would prefer not to duplicate stuff which is already in the C documentation, but I\u0027ve added a \"reference\" to the C docs. (It\u0027s not clickable because we don\u0027t do cross-doxygen links I\u0027m afraid).\n\nThe test IMHO makes sense, though.",
+      "parentUuid": "21ac240e_3350e696",
+      "range": {
+        "startLine": 73,
+        "startChar": 8,
+        "endLine": 74,
+        "endChar": 48
+      },
+      "revId": "26153be2722b736ca2b21b2df25806191ed141e6",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
