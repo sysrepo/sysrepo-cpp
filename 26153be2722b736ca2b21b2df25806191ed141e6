@@ -3,6 +3,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "8b795e74_47f348cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2023-03-02T08:24:07Z",
+      "side": 1,
+      "message": "Sorry for changing CR",
+      "revId": "26153be2722b736ca2b21b2df25806191ed141e6",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "0719d133_e41db4f1",
         "filename": "tests/session.cpp",
         "patchSetId": 3
@@ -14,6 +31,30 @@
       "writtenOn": "2023-03-01T13:37:27Z",
       "side": 1,
       "message": "just wow",
+      "range": {
+        "startLine": 73,
+        "startChar": 8,
+        "endLine": 74,
+        "endChar": 48
+      },
+      "revId": "26153be2722b736ca2b21b2df25806191ed141e6",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21ac240e_3350e696",
+        "filename": "tests/session.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2023-03-02T08:24:07Z",
+      "side": 1,
+      "message": "After the latest slack discussion I think we should mention why the path() returns such path or at least link to the sr/ly commit or docs?. \n\nPerhaps we shouldn\u0027t even test that if the function returns a (nondocumented) nonsense in this case.",
+      "parentUuid": "0719d133_e41db4f1",
       "range": {
         "startLine": 73,
         "startChar": 8,
