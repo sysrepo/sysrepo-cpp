@@ -8,9 +8,9 @@
               - name: github/sysrepo/sysrepo
                 override-checkout: devel
               - name: github/onqtam/doctest
-                override-checkout: cesnet/2021-10-08
+                override-checkout: v2.4.11
               - name: github/rollbear/trompeloeil
-                override-checkout: v42
+                override-checkout: v44
               - name: CzechLight/libyang-cpp
         - f38-clang-asan-ubsan:
             required-projects: *projects
