@@ -45,7 +45,7 @@ add_library(sysrepo-cpp SHARED
 target_link_libraries(sysrepo-cpp PRIVATE PkgConfig::SYSREPO PUBLIC PkgConfig::LIBYANG_CPP)
 
 if(BUILD_TESTING)
-    find_package(doctest 2.4.6 REQUIRED)
+    find_package(doctest 2.4.8 REQUIRED)
     find_package(trompeloeil 42 REQUIRED)
     set(THREADS_PREFER_PTHREAD_FLAG ON)
     find_package(Threads REQUIRED)

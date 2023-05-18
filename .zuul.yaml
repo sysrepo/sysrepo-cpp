@@ -3,19 +3,28 @@
       jobs:
         - f34-gcc-cover:
             pre-run: ci/pre.yaml
+            required-projects:
+              - name: github/CESNET/libyang
+                override-checkout: devel
+              - name: github/sysrepo/sysrepo
+                override-checkout: devel
+              - name: github/onqtam/doctest
+                override-checkout: v2.4.8
+              - name: github/rollbear/trompeloeil
+                override-checkout: v44
+              - name: CzechLight/libyang-cpp
+        - f34-clang-asan-ubsan:
+            pre-run: ci/pre.yaml
             required-projects: &projects
               - name: github/CESNET/libyang
                 override-checkout: devel
               - name: github/sysrepo/sysrepo
                 override-checkout: devel
               - name: github/onqtam/doctest
-                override-checkout: cesnet/2021-10-08
+                override-checkout: v2.4.11
               - name: github/rollbear/trompeloeil
-                override-checkout: v42
+                override-checkout: v44
               - name: CzechLight/libyang-cpp
-        - f34-clang-asan-ubsan:
-            pre-run: ci/pre.yaml
-            required-projects: *projects
         - f34-clang-tsan:
             pre-run: ci/pre.yaml
             required-projects: *projects
