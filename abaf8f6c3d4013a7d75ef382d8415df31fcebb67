@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b877fd39_4d119304",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-05-23T16:30:10Z",
+      "side": 1,
+      "message": "Let\u0027s use https://en.cppreference.com/w/cpp/language/attributes/deprecated for this (and then there\u0027s no need to write a Doxygen comment here).\n\n@Tomas, do we want to eventually kill that function altogether?",
+      "revId": "abaf8f6c3d4013a7d75ef382d8415df31fcebb67",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
