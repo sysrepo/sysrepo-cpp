@@ -116,8 +116,9 @@ TEST_CASE("session")
         sess.applyChanges();
         REQUIRE(!sess.getData("/test_module:leafInt32"));
 
-        // Using discardOperationalChanges makes the leaf visible again (in the operational datastore).
-        conn->discardOperationalChanges("/test_module:leafInt32");
+        // Using discardItems makes the leaf visible again (in the operational datastore).
+        sess.discardItems("/test_module:leafInt32");
+        sess.applyChanges();
         REQUIRE(sess.getData("/test_module:leafInt32")->asTerm().valueStr() == "123");
     }
 

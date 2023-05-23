@@ -56,6 +56,9 @@ Session Connection::sessionStart(sysrepo::Datastore datastore)
     return Session{sess, ctx};
 }
 
+/**
+ * @brief Deprecated, use sysrepo::Session::discardItems().
+ */
 void Connection::discardOperationalChanges(const std::optional<std::string>& xpath, std::optional<Session> session, std::chrono::milliseconds timeout)
 {
     auto res = sr_discard_oper_changes(ctx.get(), session ? session->m_sess.get() : nullptr, xpath ? xpath->c_str() : nullptr, timeout.count());

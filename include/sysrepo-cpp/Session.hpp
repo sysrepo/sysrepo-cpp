@@ -82,6 +82,7 @@ public:
     void setItem(const std::string& path, const std::optional<std::string>& value, const EditOptions opts = sysrepo::EditOptions::Default);
     void editBatch(libyang::DataNode edit, const DefaultOperation op);
     void deleteItem(const std::string& path, const EditOptions opts = sysrepo::EditOptions::Default);
+    void discardItems(const std::optional<std::string>& xpath);
     void moveItem(const std::string& path, const MovePosition move, const std::optional<std::string>& keys_or_value, const std::optional<std::string>& origin = std::nullopt, const EditOptions opts = sysrepo::EditOptions::Default);
     // TODO: allow all arguments
     std::optional<libyang::DataNode> getData(const std::string& path) const;
