@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "25615109_9aed61be",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-05-23T16:32:03Z",
+      "side": 1,
+      "message": "This one actually has no effect in the CI system for sysrepo-cpp directly -\u003e please remove this.\n\n(It will make that change available to other changes in projects like netconf-cli, but that\u0027s unfortunately useless due to the way it works because these projects consume sysrepo-cpp et al indirectly, via an explicit change to CzechLight/dependencies, for some technical reasons.)",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 1
+      },
+      "revId": "abaf8f6c3d4013a7d75ef382d8415df31fcebb67",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b877fd39_4d119304",
         "filename": "src/Connection.cpp",
         "patchSetId": 1
