@@ -24,6 +24,23 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a8413c3_1ee225c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2023-05-23T16:43:27Z",
+      "side": 1,
+      "message": "I think we should also bump minimum required version of sysrepo in `CMakeLists.txt`.",
+      "revId": "abaf8f6c3d4013a7d75ef382d8415df31fcebb67",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b877fd39_4d119304",
@@ -37,6 +54,24 @@
       "writtenOn": "2023-05-23T16:30:10Z",
       "side": 1,
       "message": "Let\u0027s use https://en.cppreference.com/w/cpp/language/attributes/deprecated for this (and then there\u0027s no need to write a Doxygen comment here).\n\n@Tomas, do we want to eventually kill that function altogether?",
+      "revId": "abaf8f6c3d4013a7d75ef382d8415df31fcebb67",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90d54df7_647cd423",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2023-05-23T16:43:27Z",
+      "side": 1,
+      "message": "Well in 4910b7b549d5339aaf68477abaa3ec6cf23c8516 you removed a deprecated function straight away. I have nothing against removing.",
+      "parentUuid": "b877fd39_4d119304",
       "revId": "abaf8f6c3d4013a7d75ef382d8415df31fcebb67",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
