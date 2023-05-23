@@ -119,6 +119,21 @@ void Session::deleteItem(const std::string& path, const EditOptions opts)
 }
 
 /**
+ * Prepare to discard nodes matching the specified xpath (or all if not set) previously set by the session connection.
+ * Usable only for sysrepo::Datastore::Operational. The changes are applied only after calling Session::applyChanges.
+ *
+ * Wraps `sr_discard_items`.
+ *
+ * @param xpath Expression filtering the nodes to discard, nullopt for all nodes.
+ */
+void Session::discardItems(const std::optional<std::string>& xpath)
+{
+    auto res = sr_discard_items(m_sess.get(), xpath ? xpath->c_str() : nullptr);
+
+    throwIfError(res, "Session::discardItems: Can't discard "s + (xpath ? "'"s + *xpath + "'" : "all nodes"s));
+}
+
+/**
  * Moves item (a list or a leaf-list) specified by `path`.
  * @param path Node to move.
  * @param move Specifies the type of the move.
