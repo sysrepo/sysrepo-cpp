@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "589f03d7_6eee2e41",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-05-23T19:15:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25615109_9aed61be",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 1
+      },
+      "revId": "abaf8f6c3d4013a7d75ef382d8415df31fcebb67",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "1a8413c3_1ee225c2",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -108,6 +132,24 @@
       "side": 1,
       "message": "Yeah, but in case of that other function, the porting effort needed was minimal. In this context I\u0027m afraid a little bit that all the projects which perform that annoying two-phase data purge and whose unit tests are written with that assumption, I\u0027m worried a bit that porting will need a bit more time. Let me check. (And we have -Werror in the CI anyway, so a deprecated attribute will still require some effort.)",
       "parentUuid": "90d54df7_647cd423",
+      "revId": "abaf8f6c3d4013a7d75ef382d8415df31fcebb67",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac4f7b96_ecd3a5a9",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-05-23T19:15:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67ea8ad7_22b1624c",
       "revId": "abaf8f6c3d4013a7d75ef382d8415df31fcebb67",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
