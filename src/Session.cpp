@@ -584,10 +584,14 @@ std::vector<ErrType> impl_getErrors(sr_session_ctx_s* sess)
 
         } else {
             static_assert(std::is_same<ErrType, ErrorInfo>());
-            errors.push_back(ErrorInfo{
-                .code = static_cast<ErrorCode>(error.err_code),
-                .errorMessage = error.message
-            });
+            if (error.message) {
+                // Sometimes there's no error message which would mean an invalid std::string construction.
+                // In that case just skip that thing.
+                errors.push_back(ErrorInfo{
+                    .code = static_cast<ErrorCode>(error.err_code),
+                    .errorMessage = error.message,
+                });
+            }
         }
     }
 
