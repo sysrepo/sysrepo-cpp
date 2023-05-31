@@ -8,6 +8,7 @@
 #pragma once
 
 #include <chrono>
+#include <iosfwd>
 #include <memory>
 #include <optional>
 #include <libyang-cpp/Context.hpp>
@@ -43,6 +44,7 @@ struct ErrorInfo {
      */
     std::string errorMessage;
 };
+std::ostream& operator<<(std::ostream& stream, const ErrorInfo& e);
 
 /**
  * @brief Contains info about a NETCONF-style error.
@@ -64,6 +66,7 @@ struct NetconfErrorInfo {
     std::string message;
     std::vector<InfoElement> infoElements;
 };
+std::ostream& operator<<(std::ostream& stream, const NetconfErrorInfo& e);
 
 enum class Wait {
     Yes,

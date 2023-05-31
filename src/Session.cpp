@@ -617,6 +617,27 @@ std::vector<NetconfErrorInfo> Session::getNetconfErrors() const
     return impl_getErrors<NetconfErrorInfo>(m_sess.get());
 }
 
+std::ostream& operator<<(std::ostream& stream, const ErrorInfo& e)
+{
+    return stream << e.errorMessage << " (" << e.code << ")";
+}
+
+std::ostream& operator<<(std::ostream& stream, const NetconfErrorInfo& e)
+{
+    stream << e.type << ": " << e.tag << ": ";
+    if (e.appTag) {
+        stream << *e.appTag << ": ";
+    }
+    if (e.path) {
+        stream << *e.path << ": ";
+    }
+    stream << e.message;
+    for (const auto& info : e.infoElements) {
+        stream << " \"" << info.element << "\": value \"" << info.value << "\"";
+    }
+    return stream;
+}
+
 /**
  * Gets the event originator name. If it hasn't been set, the name is empty.
  *
