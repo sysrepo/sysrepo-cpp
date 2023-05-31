@@ -7,7 +7,8 @@
 */
 #include <sstream>
 #include <sysrepo.h>
-#include <sysrepo-cpp/utils/exception.hpp>
+#include <sysrepo-cpp/Session.hpp>
+#include "exception.hpp"
 
 namespace sysrepo {
 ErrorWithCode::ErrorWithCode(const std::string& what, uint32_t errCode)
@@ -22,12 +23,21 @@ ErrorCode ErrorWithCode::code()
 }
 
 // TODO: Idea for improvement: (maybe) use std::source_location when Clang supports it
-void throwIfError(int code, std::string msg)
+void throwIfError(int code, const std::string& msg, sr_session_ctx_s *c_session)
 {
-    if (code != SR_ERR_OK) {
-        std::ostringstream oss;
-        oss << msg << ": " << static_cast<ErrorCode>(code);
-        throw ErrorWithCode(oss.str(), code);
+    if (code == SR_ERR_OK)
+        return;
+
+    std::ostringstream oss;
+    oss << msg << ": " << static_cast<ErrorCode>(code);
+    if (c_session) {
+        for (const auto& err : impl_getErrors<ErrorInfo>(c_session)) {
+            oss << "\n " << err;
+        }
+        for (const auto& err : impl_getErrors<NetconfErrorInfo>(c_session)) {
+            oss << "\n NETCONF: " << err;
+        }
     }
+    throw ErrorWithCode(oss.str(), code);
 }
 }

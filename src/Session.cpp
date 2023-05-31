@@ -67,7 +67,7 @@ Datastore Session::activeDatastore() const
 void Session::switchDatastore(const Datastore ds) const
 {
     auto res = sr_session_switch_ds(m_sess.get(), toDatastore(ds));
-    throwIfError(res, "Couldn't switch datastore");
+    throwIfError(res, "Couldn't switch datastore", m_sess.get());
 }
 
 /**
@@ -83,7 +83,7 @@ void Session::setItem(const std::string& path, const std::optional<std::string>&
 {
     auto res = sr_set_item_str(m_sess.get(), path.c_str(), value ? value->c_str() : nullptr, nullptr, toEditOptions(opts));
 
-    throwIfError(res, "Session::setItem: Couldn't set '"s + path + "'"s + (value ? (" to '"s + *value + "'") : ""));
+    throwIfError(res, "Session::setItem: Couldn't set '"s + path + "'"s + (value ? (" to '"s + *value + "'") : ""), m_sess.get());
 }
 
 /**
@@ -99,7 +99,7 @@ void Session::editBatch(libyang::DataNode edit, const DefaultOperation op)
 {
     auto res = sr_edit_batch(m_sess.get(), libyang::getRawNode(edit), toDefaultOperation(op));
 
-    throwIfError(res, "Session::editBatch: Couldn't apply the edit batch");
+    throwIfError(res, "Session::editBatch: Couldn't apply the edit batch", m_sess.get());
 }
 
 /**
@@ -115,7 +115,7 @@ void Session::deleteItem(const std::string& path, const EditOptions opts)
 {
     auto res = sr_delete_item(m_sess.get(), path.c_str(), toEditOptions(opts));
 
-    throwIfError(res, "Session::deleteItem: Can't delete '"s + path + "'");
+    throwIfError(res, "Session::deleteItem: Can't delete '"s + path + "'", m_sess.get());
 }
 
 /**
@@ -130,7 +130,7 @@ void Session::discardItems(const std::optional<std::string>& xpath)
 {
     auto res = sr_discard_items(m_sess.get(), xpath ? xpath->c_str() : nullptr);
 
-    throwIfError(res, "Session::discardItems: Can't discard "s + (xpath ? "'"s + *xpath + "'" : "all nodes"s));
+    throwIfError(res, "Session::discardItems: Can't discard "s + (xpath ? "'"s + *xpath + "'" : "all nodes"s), m_sess.get());
 }
 
 /**
@@ -152,7 +152,7 @@ void Session::moveItem(const std::string& path, const MovePosition move, const s
             origin ? origin->c_str() : nullptr,
             toEditOptions(opts));
 
-    throwIfError(res, "Session::moveItem: Can't move '"s + path + "'");
+    throwIfError(res, "Session::moveItem: Can't move '"s + path + "'", m_sess.get());
 }
 
 namespace {
@@ -194,7 +194,7 @@ std::optional<libyang::DataNode> Session::getData(const std::string& path) const
     sr_data_t* data;
     auto res = sr_get_data(m_sess.get(), path.c_str(), 0, 0, 0, &data);
 
-    throwIfError(res, "Session::getData: Couldn't get '"s + path + "'");
+    throwIfError(res, "Session::getData: Couldn't get '"s + path + "'", m_sess.get());
 
     if (!data) {
         return std::nullopt;
@@ -222,7 +222,7 @@ libyang::DataNode Session::getOneNode(const std::string& path) const
     sr_data_t* data;
     auto res = sr_get_node(m_sess.get(), path.c_str(), 0, &data);
 
-    throwIfError(res, "Session::getOneNode: Couldn't get '"s + path + "'");
+    throwIfError(res, "Session::getOneNode: Couldn't get '"s + path + "'", m_sess.get());
 
     return wrapSrData(m_sess, data);
 }
@@ -255,7 +255,7 @@ void Session::applyChanges(std::chrono::milliseconds timeout)
 {
     auto res = sr_apply_changes(m_sess.get(), timeout.count());
 
-    throwIfError(res, "Session::applyChanges: Couldn't apply changes");
+    throwIfError(res, "Session::applyChanges: Couldn't apply changes", m_sess.get());
 }
 
 /**
@@ -267,7 +267,7 @@ void Session::discardChanges()
 {
     auto res = sr_discard_changes(m_sess.get());
 
-    throwIfError(res, "Session::discardChanges: Couldn't discard changes");
+    throwIfError(res, "Session::discardChanges: Couldn't discard changes", m_sess.get());
 }
 
 /**
@@ -284,7 +284,7 @@ void Session::copyConfig(const Datastore source, const std::optional<std::string
 {
     auto res = sr_copy_config(m_sess.get(), moduleName ? moduleName->c_str() : nullptr, toDatastore(source), timeout.count());
 
-    throwIfError(res, "Couldn't copy config");
+    throwIfError(res, "Couldn't copy config", m_sess.get());
 }
 
 /**
@@ -299,7 +299,7 @@ libyang::DataNode Session::sendRPC(libyang::DataNode input, std::chrono::millise
 {
     sr_data_t* output;
     auto res = sr_rpc_send_tree(m_sess.get(), libyang::getRawNode(input), timeout.count(), &output);
-    throwIfError(res, "Couldn't send RPC");
+    throwIfError(res, "Couldn't send RPC", m_sess.get());
 
     assert(output); // TODO: sysrepo always gives the RPC node? (even when it has not output or output nodes?)
     return wrapSrData(m_sess, output);
@@ -317,7 +317,7 @@ libyang::DataNode Session::sendRPC(libyang::DataNode input, std::chrono::millise
 void Session::sendNotification(libyang::DataNode notification, const Wait wait, std::chrono::milliseconds timeout)
 {
     auto res = sr_notif_send_tree(m_sess.get(), libyang::getRawNode(notification), timeout.count(), wait == Wait::Yes ? 1 : 0);
-    throwIfError(res, "Couldn't send notification");
+    throwIfError(res, "Couldn't send notification", m_sess.get());
 }
 
 /**
@@ -463,7 +463,7 @@ ChangeCollection Session::getChanges(const std::string& xpath)
 void Session::setNacmUser(const std::string& user)
 {
     auto res = sr_nacm_set_user(m_sess.get(), user.c_str());
-    throwIfError(res, "Couldn't set NACM user");
+    throwIfError(res, "Couldn't set NACM user", m_sess.get());
 }
 
 /**
@@ -479,7 +479,7 @@ void Session::setNacmUser(const std::string& user)
 {
     sr_subscription_ctx_t* sub = nullptr;
     auto res = sr_nacm_init(m_sess.get(), toSubscribeOptions(opts), &sub);
-    throwIfError(res, "Couldn't initialize NACM");
+    throwIfError(res, "Couldn't initialize NACM", m_sess.get());
 
     Subscription ret(m_sess, handler, callbacks);
     ret.saveContext(sub);
@@ -528,7 +528,6 @@ void Session::setNetconfError(const NetconfErrorInfo& info)
     }
 }
 
-namespace {
 template <typename ErrType>
 std::vector<ErrType> impl_getErrors(sr_session_ctx_s* sess)
 {
@@ -597,7 +596,6 @@ std::vector<ErrType> impl_getErrors(sr_session_ctx_s* sess)
 
     return errors;
 }
-};
 
 /**
  * Retrieve all generic sysrepo errors.
@@ -662,7 +660,7 @@ std::string_view Session::getOriginatorName() const
 void Session::setOriginatorName(const std::string& originatorName)
 {
     auto res = sr_session_set_orig_name(m_sess.get(), originatorName.c_str());
-    throwIfError(res, "Couldn't switch datastore");
+    throwIfError(res, "Couldn't switch datastore", m_sess.get());
 }
 
 /**

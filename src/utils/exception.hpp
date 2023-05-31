@@ -7,8 +7,14 @@
 */
 #pragma once
 
+#include <vector>
 #include <sysrepo-cpp/utils/exception.hpp>
 
+struct sr_session_ctx_s;
+
 namespace sysrepo {
-    void throwIfError(int code, std::string msg);
+    void throwIfError(int code, const std::string& msg, sr_session_ctx_s *c_session = nullptr);
+
+    template <typename ErrType>
+    std::vector<ErrType> impl_getErrors(sr_session_ctx_s* sess);
 }

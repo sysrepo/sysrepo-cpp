@@ -192,7 +192,7 @@ void Subscription::onModuleChange(const std::string& moduleName, ModuleChangeCb 
     sr_subscription_ctx_s* ctx = m_sub.get();
 
     auto res = sr_module_change_subscribe(m_sess.get(), moduleName.c_str(), xpath ? xpath->c_str() : nullptr, moduleChangeCb, reinterpret_cast<void*>(&privRef), priority, toSubscribeOptions(opts), &ctx);
-    throwIfError(res, "Couldn't create module change subscription");
+    throwIfError(res, "Couldn't create module change subscription", m_sess.get());
 
     saveContext(ctx);
 }
@@ -214,7 +214,7 @@ void Subscription::onOperGet(const std::string& moduleName, OperGetCb cb, const 
     auto& privRef = m_operGetCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
     sr_subscription_ctx_s* ctx = m_sub.get();
     auto res = sr_oper_get_subscribe(m_sess.get(), moduleName.c_str(), xpath ? xpath->c_str() : nullptr, operGetItemsCb, reinterpret_cast<void*>(&privRef), toSubscribeOptions(opts), &ctx);
-    throwIfError(res, "Couldn't create operational get items subscription");
+    throwIfError(res, "Couldn't create operational get items subscription", m_sess.get());
 
     saveContext(ctx);
 }
@@ -236,7 +236,7 @@ void Subscription::onRPCAction(const std::string& xpath, RpcActionCb cb, uint32_
     auto& privRef = m_RPCActionCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
     sr_subscription_ctx_s* ctx = m_sub.get();
     auto res = sr_rpc_subscribe_tree(m_sess.get(), xpath.c_str(), rpcActionCb, reinterpret_cast<void*>(&privRef), priority, toSubscribeOptions(opts), &ctx);
-    throwIfError(res, "Couldn't create RPC/action subscription");
+    throwIfError(res, "Couldn't create RPC/action subscription", m_sess.get());
 
     saveContext(ctx);
 }
@@ -277,7 +277,7 @@ void Subscription::onNotification(
             reinterpret_cast<void*>(&privRef),
             toSubscribeOptions(opts),
             &ctx);
-    throwIfError(res, "Couldn't create notification subscription");
+    throwIfError(res, "Couldn't create notification subscription", m_sess.get());
 
     saveContext(ctx);
 }
@@ -300,7 +300,7 @@ ChangeIterator ChangeCollection::begin() const
     sr_change_iter_t* iter;
     auto res = sr_get_changes_iter(m_sess.get(), m_xpath.c_str(), &iter);
 
-    throwIfError(res, "Couldn't create an iterator for changes");
+    throwIfError(res, "Couldn't create an iterator for changes", m_sess.get());
 
     return ChangeIterator{iter, m_sess};
 }
@@ -347,7 +347,7 @@ ChangeIterator& ChangeIterator::operator++()
         return *this;
     }
 
-    throwIfError(ret, "Could not iterate to the next change");
+    throwIfError(ret, "Could not iterate to the next change", m_sess.get());
 
     // I can safely "dereference" the change here, because last change is handled by the condition above.
     m_current.emplace(Change{

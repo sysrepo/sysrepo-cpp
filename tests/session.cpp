@@ -80,7 +80,9 @@ TEST_CASE("session")
         sess.discardChanges();
 
         REQUIRE_THROWS_WITH_AS(sess.setItem("/test_module:non-existent", std::nullopt),
-                "Session::setItem: Couldn't set '/test_module:non-existent': SR_ERR_INVAL_ARG",
+                "Session::setItem: Couldn't set '/test_module:non-existent': SR_ERR_INVAL_ARG\n"
+                " Not found node \"non-existent\" in path. (SR_ERR_LY)\n"
+                " Invalid datastore edit. (SR_ERR_INVAL_ARG)",
                 sysrepo::ErrorWithCode);
 
         REQUIRE_THROWS_WITH_AS(sess.getData("/test_module:non-existent"),
@@ -168,7 +170,12 @@ TEST_CASE("session")
 
         // And we can't set its value.
         sess.setItem("/test_module:denyAllLeaf", "someValue");
-        REQUIRE_THROWS_WITH_AS(sess.applyChanges(), "Session::applyChanges: Couldn't apply changes: SR_ERR_UNAUTHORIZED", sysrepo::ErrorWithCode);
+        REQUIRE_THROWS_WITH_AS(sess.applyChanges(),
+                "Session::applyChanges: Couldn't apply changes: SR_ERR_UNAUTHORIZED\n"
+                " NACM access denied. (SR_ERR_UNAUTHORIZED)\n"
+                " NETCONF: protocol: access-denied: /test_module:denyAllLeaf: Access to the data model \"test_module\" "
+                "is denied because \"nobody\" NACM authorization failed.",
+                sysrepo::ErrorWithCode);
     }
 
     DOCTEST_SUBCASE("Session::getPendingChanges")
