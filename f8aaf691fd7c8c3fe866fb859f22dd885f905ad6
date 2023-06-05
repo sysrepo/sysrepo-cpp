@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a796b483_c01aee41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-06-05T10:57:58Z",
+      "side": 1,
+      "message": "recheck after libyang and libyang-cpp update",
+      "revId": "f8aaf691fd7c8c3fe866fb859f22dd885f905ad6",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
