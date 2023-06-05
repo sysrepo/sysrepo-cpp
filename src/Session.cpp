@@ -509,23 +509,25 @@ void Session::setErrorMessage(const std::string& msg)
  */
 void Session::setNetconfError(const NetconfErrorInfo& info)
 {
-    auto res = sr_session_set_netconf_error(
+    std::vector<const char*> elements, values;
+    elements.reserve(info.infoElements.size() + 1 /* trailing null */);
+    values.reserve(elements.size());
+
+    for (const auto& infoElem : info.infoElements) {
+        elements.emplace_back(infoElem.element.c_str());
+        values.emplace_back(infoElem.value.c_str());
+    }
+
+    auto res = sr_session_set_netconf_error2(
             m_sess.get(),
             info.type.c_str(),
             info.tag.c_str(),
             info.appTag ? info.appTag->c_str() : nullptr,
             info.path ? info.path->c_str() : nullptr,
-            info.message.c_str(), 0);
+            info.message.c_str(),
+            info.infoElements.size(), elements.data(), values.data()
+            );
     throwIfError(res, "Couldn't set error messsage");
-
-    // Unfortunately, there is no way to transform the vector to the variadic arguments, so I need to push the info
-    // elements manually.
-    for (const auto& infoElem : info.infoElements) {
-        res = sr_session_push_error_data(m_sess.get(), infoElem.element.size() + /*NULL byte*/ 1, infoElem.element.c_str());
-        throwIfError(res, "Couldn't set error messsage");
-        res = sr_session_push_error_data(m_sess.get(), infoElem.value.size() + /*NULL byte*/ 1, infoElem.value.c_str());
-        throwIfError(res, "Couldn't set error messsage");
-    }
 }
 
 template <typename ErrType>
