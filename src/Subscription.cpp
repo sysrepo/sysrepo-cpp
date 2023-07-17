@@ -10,6 +10,7 @@
 #include <sysrepo-cpp/utils/utils.hpp>
 extern "C" {
 #include <sysrepo.h>
+#include <sysrepo/netconf_acm.h>
 }
 #include "utils/enum.hpp"
 #include "utils/exception.hpp"
@@ -23,6 +24,7 @@ Subscription::Subscription(std::shared_ptr<sr_session_ctx_s> sess, ExceptionHand
     : m_customEventLoopCbs(callbacks)
     , m_exceptionHandler(std::make_unique<ExceptionHandler>(handler))
     , m_sess(sess)
+    , m_didNacmInit(false)
 {
 }
 
@@ -44,6 +46,9 @@ Subscription::~Subscription()
     if (m_sub && m_customEventLoopCbs) {
         sr_unsubscribe_sub(m_sub.get(), 0);
         m_customEventLoopCbs->unregisterFd(eventPipe());
+    }
+    if (m_didNacmInit) {
+        sr_nacm_destroy();
     }
 }
 

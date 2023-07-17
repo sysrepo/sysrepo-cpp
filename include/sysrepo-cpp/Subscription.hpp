@@ -264,5 +264,7 @@ private:
     std::shared_ptr<sr_session_ctx_s> m_sess;
 
     std::shared_ptr<sr_subscription_ctx_s> m_sub;
+
+    bool m_didNacmInit;
 };
 }
