@@ -162,20 +162,23 @@ TEST_CASE("session")
         auto data = sess.getData("/test_module:denyAllLeaf");
         REQUIRE(data.value().findPath("/test_module:denyAllLeaf").value().asTerm().valueStr() == "AHOJ");
 
-        auto nacmSub = sess.initNacm();
-        sess.setNacmUser("nobody");
-        data = sess.getData("/test_module:denyAllLeaf");
-        // After turning on NACM, we can't access the leaf.
-        REQUIRE(!data);
+        // check that repeated NACM initialization still works
+        for (int i = 0; i < 3; ++i) {
+            auto nacmSub = sess.initNacm();
+            sess.setNacmUser("nobody");
+            data = sess.getData("/test_module:denyAllLeaf");
+            // After turning on NACM, we can't access the leaf.
+            REQUIRE(!data);
 
-        // And we can't set its value.
-        sess.setItem("/test_module:denyAllLeaf", "someValue");
-        REQUIRE_THROWS_WITH_AS(sess.applyChanges(),
-                "Session::applyChanges: Couldn't apply changes: SR_ERR_UNAUTHORIZED\n"
-                " NACM access denied. (SR_ERR_UNAUTHORIZED)\n"
-                " NETCONF: protocol: access-denied: /test_module:denyAllLeaf: Access to the data model \"test_module\" "
-                "is denied because \"nobody\" NACM authorization failed.",
-                sysrepo::ErrorWithCode);
+            // And we can't set its value.
+            sess.setItem("/test_module:denyAllLeaf", "someValue");
+            REQUIRE_THROWS_WITH_AS(sess.applyChanges(),
+                    "Session::applyChanges: Couldn't apply changes: SR_ERR_UNAUTHORIZED\n"
+                    " NACM access denied. (SR_ERR_UNAUTHORIZED)\n"
+                    " NETCONF: protocol: access-denied: /test_module:denyAllLeaf: Access to the data model \"test_module\" "
+                    "is denied because \"nobody\" NACM authorization failed.",
+                    sysrepo::ErrorWithCode);
+        }
     }
 
     DOCTEST_SUBCASE("Session::getPendingChanges")
