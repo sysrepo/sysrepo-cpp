@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "797b8832_a2b55df4",
+        "filename": "tests/session.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2023-07-17T16:32:48Z",
+      "side": 1,
+      "message": "Perhaps we can check that setNacmUser throws when called after the for-loop.",
+      "revId": "bde11d6134c80c47f0f9ff3d4d78c4c0be8300af",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
