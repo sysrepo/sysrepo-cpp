@@ -483,6 +483,7 @@ void Session::setNacmUser(const std::string& user)
 
     Subscription ret(m_sess, handler, callbacks);
     ret.saveContext(sub);
+    ret.m_didNacmInit = true;
 
     return ret;
 }
