@@ -482,7 +482,7 @@ TEST_CASE("subscriptions")
         sess.setItem("/test_module:leafInt32", "123");
         try {
             sess.applyChanges();
-        } catch (sysrepo::ErrorWithCode&) {
+        } catch (const sysrepo::ErrorWithCode&) {
             auto errors = sess.getErrors();
             REQUIRE(errors.size() == 2);
             REQUIRE(errors.at(0).errorMessage == message);
