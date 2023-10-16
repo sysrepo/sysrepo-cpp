@@ -81,8 +81,7 @@ TEST_CASE("session")
 
         REQUIRE_THROWS_WITH_AS(sess.setItem("/test_module:non-existent", std::nullopt),
                 "Session::setItem: Couldn't set '/test_module:non-existent': SR_ERR_INVAL_ARG\n"
-                " Not found node \"non-existent\" in path. (SR_ERR_LY)\n"
-                " Invalid datastore edit. (SR_ERR_INVAL_ARG)",
+                " Invalid XPath. (SR_ERR_INVAL_ARG)",
                 sysrepo::ErrorWithCode);
 
         REQUIRE_THROWS_WITH_AS(sess.getData("/test_module:non-existent"),
