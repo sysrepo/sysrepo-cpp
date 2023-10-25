@@ -32,7 +32,7 @@ public:
     /**
      * Returns the error code.
      */
-    ErrorCode code();
+    ErrorCode code() const;
 private:
     ErrorCode m_errCode;
 };

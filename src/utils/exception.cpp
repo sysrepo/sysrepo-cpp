@@ -17,7 +17,7 @@ ErrorWithCode::ErrorWithCode(const std::string& what, uint32_t errCode)
 {
 }
 
-ErrorCode ErrorWithCode::code()
+ErrorCode ErrorWithCode::code() const
 {
     return m_errCode;
 }
