@@ -40,7 +40,8 @@ enum class Datastore : uint32_t {
     Startup,
     Running,
     Candidate,
-    Operational
+    Operational,
+    FactoryDefault,
 };
 
 /**

@@ -24,6 +24,7 @@ static_assert(toDatastore(Datastore::Running) == SR_DS_RUNNING);
 static_assert(toDatastore(Datastore::Candidate) == SR_DS_CANDIDATE);
 static_assert(toDatastore(Datastore::Operational) == SR_DS_OPERATIONAL);
 static_assert(toDatastore(Datastore::Startup) == SR_DS_STARTUP);
+static_assert(toDatastore(Datastore::FactoryDefault) == SR_DS_FACTORY_DEFAULT);
 
 constexpr Event toEvent(const sr_event_t event)
 {

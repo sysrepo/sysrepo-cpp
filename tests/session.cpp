@@ -205,4 +205,12 @@ TEST_CASE("session")
 
         REQUIRE(sess.getPendingChanges() == std::nullopt);
     }
+
+    DOCTEST_SUBCASE("factory-default DS")
+    {
+        sess.switchDatastore(sysrepo::Datastore::FactoryDefault);
+        auto data = sess.getData("/*");
+        REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::WithSiblings) == "{\n\n}\n");
+        REQUIRE_THROWS_AS(sess.setItem("/test_module:leafInt32", "123"), sysrepo::ErrorWithCode);
+    }
 }
