@@ -213,4 +213,10 @@ TEST_CASE("session")
         REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::WithSiblings) == "{\n\n}\n");
         REQUIRE_THROWS_AS(sess.setItem("/test_module:leafInt32", "123"), sysrepo::ErrorWithCode);
     }
+
+    DOCTEST_SUBCASE("session IDs")
+    {
+        REQUIRE(sess.getId() == sess.getId());
+        REQUIRE(sess.getId() != conn->sessionStart().getId());
+    }
 }

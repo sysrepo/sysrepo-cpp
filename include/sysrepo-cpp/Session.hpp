@@ -148,6 +148,8 @@ public:
     Connection getConnection();
     const libyang::Context getContext() const;
 
+    uint32_t getId() const;
+
 private:
     friend Connection;
     friend Session wrapUnmanagedSession(sr_session_ctx_s* session);

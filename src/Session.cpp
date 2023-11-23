@@ -685,6 +685,16 @@ const libyang::Context Session::getContext() const
     return libyang::createUnmanagedContext(const_cast<ly_ctx*>(ctx), [sess = m_sess] (ly_ctx*) { sr_session_release_context(sess.get()); });
 }
 
+/**
+ * @brief Get the internal, sysrepo-level session ID
+ *
+ * Wraps `sr_session_get_id`.
+ */
+uint32_t Session::getId() const
+{
+    return sr_session_get_id(m_sess.get());
+}
+
 sr_session_ctx_s* getRawSession(Session sess)
 {
     return sess.m_sess.get();
