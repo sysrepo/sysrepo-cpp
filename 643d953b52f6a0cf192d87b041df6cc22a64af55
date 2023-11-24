@@ -22,6 +22,30 @@
       },
       "revId": "643d953b52f6a0cf192d87b041df6cc22a64af55",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd14b5db_3eb3affd",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-11-24T21:15:59Z",
+      "side": 1,
+      "message": "thanks, I didn\u0027t know that this matters",
+      "parentUuid": "78df1b0f_037341e1",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 0
+      },
+      "revId": "643d953b52f6a0cf192d87b041df6cc22a64af55",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
