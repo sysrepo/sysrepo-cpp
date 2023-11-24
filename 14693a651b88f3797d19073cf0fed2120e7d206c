@@ -16,6 +16,24 @@
       "message": "The doc says that if this returns 0, it\u0027s an error. But I guess it\u0027s not important to throw an exception, if this is just an internal ID.",
       "revId": "14693a651b88f3797d19073cf0fed2120e7d206c",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8aca8a3a_63eb1e1e",
+        "filename": "src/Session.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-11-24T21:14:16Z",
+      "side": 1,
+      "message": "yeah, I read that, and since I have no way of testing it, I was feeling like ignoring that scenario",
+      "parentUuid": "067fea6c_6611f740",
+      "revId": "14693a651b88f3797d19073cf0fed2120e7d206c",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
