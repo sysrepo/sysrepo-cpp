@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78df1b0f_037341e1",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000095
+      },
+      "writtenOn": "2023-11-24T21:12:57Z",
+      "side": 1,
+      "message": "According to clang-tidy, it\u0027s better to make deleted functions public: https://clang.llvm.org/extra/clang-tidy/checks/modernize/use-equals-delete.html\n\nApparently it gives a better error message",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 0
+      },
+      "revId": "643d953b52f6a0cf192d87b041df6cc22a64af55",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
