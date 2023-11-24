@@ -161,4 +161,29 @@ private:
     std::shared_ptr<sr_conn_ctx_s> m_conn;
     std::shared_ptr<sr_session_ctx_s> m_sess;
 };
+
+/**
+ * @brief Lock the current datastore, or a specified module in a datastore
+ *
+ * Lock release is controlled through [RAII](https://en.cppreference.com/w/cpp/language/raii).
+ */
+class Lock {
+public:
+    /** @brief Obtain a lock
+     *
+     * Wraps `sr_lock`.
+     */
+    explicit Lock(Session session, std::optional<std::string> module = std::nullopt, std::optional<std::chrono::milliseconds> timeout = std::nullopt);
+    /** @brief Release the lock
+     *
+     * Wraps `sr_unlock`.
+     */
+    ~Lock();
+private:
+    Session m_session;
+    std::optional<std::string> m_module;
+
+    Lock& operator=(const Lock& other) = delete;
+    Lock(const Lock& other) = delete;
+};
 }

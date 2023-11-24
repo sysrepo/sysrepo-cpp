@@ -695,6 +695,20 @@ uint32_t Session::getId() const
     return sr_session_get_id(m_sess.get());
 }
 
+Lock::Lock(Session session, std::optional<std::string> module, std::optional<std::chrono::milliseconds> timeout)
+    : m_session(session)
+    , m_module(module)
+{
+    auto res = sr_lock(getRawSession(m_session), module ? module->c_str() : nullptr, timeout ? timeout->count() : 0);
+    throwIfError(res, "Cannot lock session", getRawSession(m_session));
+}
+
+Lock::~Lock()
+{
+    auto res = sr_unlock(getRawSession(m_session), m_module ? m_module->c_str() : nullptr);
+    throwIfError(res, "Cannot unlock session", getRawSession(m_session));
+}
+
 sr_session_ctx_s* getRawSession(Session sess)
 {
     return sess.m_sess.get();

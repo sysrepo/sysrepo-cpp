@@ -12,6 +12,8 @@
 #include <sysrepo-cpp/utils/utils.hpp>
 #include <sysrepo-cpp/utils/exception.hpp>
 
+using namespace std::literals;
+
 TEST_CASE("session")
 {
     sysrepo::setLogLevelStderr(sysrepo::LogLevel::Information);
@@ -218,5 +220,50 @@ TEST_CASE("session")
     {
         REQUIRE(sess.getId() == sess.getId());
         REQUIRE(sess.getId() != conn->sessionStart().getId());
+    }
+
+    DOCTEST_SUBCASE("locking")
+    {
+        auto sid = sess.getId();
+
+        {
+            // L1 will be released at the scope exit
+            auto l1 = sysrepo::Lock{sess};
+            const auto start = std::chrono::steady_clock::now();
+            try {
+                // even though we provide a timeout, an attempt to lock by the same session is detected immediately
+                auto l2 = sysrepo::Lock{sess, std::nullopt, 500ms};
+                FAIL("should have thrown (immediately)");
+            } catch (sysrepo::ErrorWithCode& e) {
+                REQUIRE(e.code() == sysrepo::ErrorCode::Locked);
+                std::string msg = e.what();
+                REQUIRE(msg.find("already locked by this session " + std::to_string(sid)) != std::string::npos);
+            }
+            auto shouldBeImmediate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
+            REQUIRE(shouldBeImmediate < 100);
+        }
+        {
+            // ensure that L1 was released
+            sysrepo::Lock l3{sess};
+        }
+        {
+            sysrepo::Lock l4{sess, std::nullopt};
+            const auto start = std::chrono::steady_clock::now();
+            try {
+                // locking through an unrelated session sleeps
+                sysrepo::Lock{conn->sessionStart(), std::nullopt, 500ms};
+                FAIL("should have thrown (after a timeout)");
+            } catch (sysrepo::ErrorWithCode& e) {
+                REQUIRE(e.code() == sysrepo::ErrorCode::Locked);
+                std::string msg = e.what();
+                REQUIRE(msg.find("is DS-locked by session " + std::to_string(sid)) != std::string::npos);
+            }
+            auto processingMS = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
+            REQUIRE(processingMS >= 500);
+        }
+        {
+            sysrepo::Lock m1_lock{sess, "test_module"};
+            sysrepo::Lock m2_lock{sess, "ietf-netconf-acm"};
+        }
     }
 }
