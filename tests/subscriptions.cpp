@@ -421,9 +421,9 @@ TEST_CASE("subscriptions")
         if (ret == sysrepo::ErrorCode::Ok) {
             auto output = sess.sendRPC(sess.getContext().newPath(rpcPath));
             if (setFunction) {
-                REQUIRE(output.findPath("/test_module:shutdown/success", libyang::OutputNodes::Yes));
+                REQUIRE(output.findPath("/test_module:shutdown/success", libyang::InputOutputNodes::Output));
             } else {
-                REQUIRE(!output.findPath("/test_module:shutdown/success", libyang::OutputNodes::Yes).has_value());
+                REQUIRE(!output.findPath("/test_module:shutdown/success", libyang::InputOutputNodes::Output).has_value());
             }
         } else {
             REQUIRE_THROWS(sess.sendRPC(sess.getContext().newPath(rpcPath)));
