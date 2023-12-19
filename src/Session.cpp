@@ -574,8 +574,9 @@ std::vector<ErrType> impl_getErrors(sr_session_ctx_s* sess)
             }
             netconfErr.message = message;
             if (infoElements) {
-                auto infoElemsDeleter = std::unique_ptr<const char*, decltype(&std::free)>(infoElements, std::free);
-                auto infoValuesDeleter = std::unique_ptr<const char*, decltype(&std::free)>(infoValues, std::free);
+                using deleter_free_t = decltype([](auto x) constexpr { std::free(x); });
+                auto infoElemsDeleter = std::unique_ptr<const char*, deleter_free_t>(infoElements);
+                auto infoValuesDeleter = std::unique_ptr<const char*, deleter_free_t>(infoValues);
                 auto elems = std::span(infoElements, infoCount);
                 auto vals = std::span(infoValues, infoCount);
 
