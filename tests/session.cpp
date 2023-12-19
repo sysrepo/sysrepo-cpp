@@ -175,7 +175,7 @@ TEST_CASE("session")
             sess.setItem("/test_module:denyAllLeaf", "someValue");
             REQUIRE_THROWS_WITH_AS(sess.applyChanges(),
                     "Session::applyChanges: Couldn't apply changes: SR_ERR_UNAUTHORIZED\n"
-                    " NACM access denied. (SR_ERR_UNAUTHORIZED)\n"
+                    " NACM access denied by \"denyAllLeaf\" node extension \"default-deny-all\". (SR_ERR_UNAUTHORIZED)\n"
                     " NETCONF: protocol: access-denied: /test_module:denyAllLeaf: Access to the data model \"test_module\" "
                     "is denied because \"nobody\" NACM authorization failed.",
                     sysrepo::ErrorWithCode);
