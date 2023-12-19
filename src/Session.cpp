@@ -320,6 +320,29 @@ void Session::sendNotification(libyang::DataNode notification, const Wait wait, 
     throwIfError(res, "Couldn't send notification", m_sess.get());
 }
 
+
+/**
+ * Replace datastore's content with the provided data
+ *
+ * Wraps `sr_replace_config`.
+ *
+ * @param config Libyang tree to use as a complete datastore content, or nullopt
+ * @param module If provided, a module name to limit the operation to
+ * @param timeout Optional timeout to wait for
+ */
+void Session::replaceConfig(std::optional<libyang::DataNode> config, const std::optional<std::string>& module, std::chrono::milliseconds timeout)
+{
+    std::optional<libyang::DataNode> thrashable;
+    if (config) {
+        thrashable = config->duplicateWithSiblings(libyang::DuplicationOptions::Recursive | libyang::DuplicationOptions::WithParents);
+    }
+    auto res = sr_replace_config(
+        m_sess.get(), module ? module->c_str() : nullptr,
+        config ? libyang::releaseRawNode(*thrashable) : nullptr,
+        timeout.count());
+    throwIfError(res, "sr_replace_config failed", m_sess.get());
+}
+
 /**
  * Subscribe for changes made in the specified module.
  *

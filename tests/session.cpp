@@ -266,4 +266,66 @@ TEST_CASE("session")
             sysrepo::Lock m2_lock{sess, "ietf-netconf-acm"};
         }
     }
+
+    DOCTEST_SUBCASE("replace config")
+    {
+        REQUIRE(!sess.getData("/test_module:leafInt32"));
+        // some "reasonable data" for two modules
+        sess.setItem("/test_module:leafInt32", "666");
+        sess.setItem("/ietf-netconf-acm:nacm/groups/group[name='ahoj']/user-name[.='foo']", "");
+        sess.applyChanges();
+
+        auto conf = sess.getData("/*");
+        REQUIRE(!!conf);
+
+        // override a single leaf
+        REQUIRE(sess.getOneNode("/test_module:leafInt32").asTerm().valueStr() == "666");
+        sess.setItem("/test_module:leafInt32", "123");
+        sess.setItem("/ietf-netconf-acm:nacm/groups/group[name='ahoj']/user-name[.='bar']", "");
+        sess.applyChanges();
+        REQUIRE(sess.getOneNode("/test_module:leafInt32").asTerm().valueStr() == "123");
+
+        DOCTEST_SUBCASE("this module empty config")
+        {
+            sess.replaceConfig(std::nullopt, "test_module");
+            REQUIRE(!sess.getData("/test_module:leafInt32"));
+            REQUIRE(sess.getOneNode("/ietf-netconf-acm:nacm/groups/group[name='ahoj']/user-name[.='foo']").asTerm().valueStr() == "foo");
+            REQUIRE(sess.getOneNode("/ietf-netconf-acm:nacm/groups/group[name='ahoj']/user-name[.='bar']").asTerm().valueStr() == "bar");
+        }
+
+        DOCTEST_SUBCASE("this module")
+        {
+            sess.replaceConfig(conf, "test_module");
+            REQUIRE(sess.getOneNode("/test_module:leafInt32").asTerm().valueStr() == "666");
+            REQUIRE(sess.getOneNode("/ietf-netconf-acm:nacm/groups/group[name='ahoj']/user-name[.='foo']").asTerm().valueStr() == "foo");
+            REQUIRE(sess.getOneNode("/ietf-netconf-acm:nacm/groups/group[name='ahoj']/user-name[.='bar']").asTerm().valueStr() == "bar");
+        }
+
+        DOCTEST_SUBCASE("other module")
+        {
+            sess.replaceConfig(std::nullopt, "ietf-netconf-acm");
+            REQUIRE(sess.getOneNode("/test_module:leafInt32").asTerm().valueStr() == "123");
+            REQUIRE(!sess.getData("/ietf-netconf-acm:nacm/groups/group[name='ahoj']/user-name[.='foo']"));
+            REQUIRE(!sess.getData("/ietf-netconf-acm:nacm/groups/group[name='ahoj']/user-name[.='bar']"));
+        }
+
+        DOCTEST_SUBCASE("entire datastore empty config")
+        {
+            sess.replaceConfig(std::nullopt);
+            REQUIRE(!sess.getData("/test_module:leafInt32"));
+            REQUIRE(!sess.getData("/ietf-netconf-acm:nacm/groups/group[name='ahoj']/user-name[.='foo']"));
+            REQUIRE(!sess.getData("/ietf-netconf-acm:nacm/groups/group[name='ahoj']/user-name[.='bar']"));
+        }
+
+        DOCTEST_SUBCASE("entire datastore")
+        {
+            sess.replaceConfig(conf);
+            REQUIRE(sess.getOneNode("/test_module:leafInt32").asTerm().valueStr() == "666");
+            REQUIRE(sess.getOneNode("/ietf-netconf-acm:nacm/groups/group[name='ahoj']/user-name[.='foo']").asTerm().valueStr() == "foo");
+            REQUIRE(!sess.getData("/ietf-netconf-acm:nacm/groups/group[name='ahoj']/user-name[.='bar']"));
+        }
+
+        // the original tree is not corrupted
+        REQUIRE(*conf->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::WithSiblings) != "");
+    }
 }
