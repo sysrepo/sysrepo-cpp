@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e85702c1_93506801",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-12-19T17:15:28Z",
+      "side": 1,
+      "message": "CI failed because of https://github.com/sysrepo/sysrepo/commit/629e444c , let me push an update for that",
+      "revId": "77399f2858bd287d0783f634bd43ebe908cec17d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
