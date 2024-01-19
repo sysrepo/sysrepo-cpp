@@ -185,6 +185,7 @@ public:
     Lock(const Lock& other) = delete;
 private:
     Session m_session;
+    Datastore m_lockedDs;
     std::optional<std::string> m_module;
 };
 }
