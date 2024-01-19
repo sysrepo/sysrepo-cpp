@@ -721,6 +721,7 @@ uint32_t Session::getId() const
 
 Lock::Lock(Session session, std::optional<std::string> module, std::optional<std::chrono::milliseconds> timeout)
     : m_session(session)
+    , m_lockedDs(static_cast<Datastore>(sr_session_get_ds(getRawSession(m_session))))
     , m_module(module)
 {
     auto res = sr_lock(getRawSession(m_session), module ? module->c_str() : nullptr, timeout ? timeout->count() : 0);
@@ -729,8 +730,15 @@ Lock::Lock(Session session, std::optional<std::string> module, std::optional<std
 
 Lock::~Lock()
 {
-    auto res = sr_unlock(getRawSession(m_session), m_module ? m_module->c_str() : nullptr);
-    throwIfError(res, "Cannot unlock session", getRawSession(m_session));
+    auto sess = getRawSession(m_session);
+    // Unlocking has to be performed in the same DS as the original locking, but the current active DS might have changed.
+    // Temporary switching is safe here because these C API methods cannot fail (as of 2024-01 at least), and the C API
+    // documents Session to be only usable form a single thread.
+    auto currentDs = sr_session_get_ds(sess);
+    sr_session_switch_ds(sess, toDatastore(m_lockedDs));
+    auto res = sr_unlock(sess, m_module ? m_module->c_str() : nullptr);
+    sr_session_switch_ds(sess, currentDs);
+    throwIfError(res, "Cannot unlock session", sess);
 }
 
 sr_session_ctx_s* getRawSession(Session sess)
