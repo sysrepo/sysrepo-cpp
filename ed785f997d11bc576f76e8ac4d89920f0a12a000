@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d80090f0_a14ab570",
+        "filename": "src/Session.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1000095
+      },
+      "writtenOn": "2024-01-19T12:26:06Z",
+      "side": 1,
+      "message": "You could use m_session.activeDatastore() here",
+      "revId": "ed785f997d11bc576f76e8ac4d89920f0a12a000",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35255937_5dc2119a",
+        "filename": "src/Session.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1000095
+      },
+      "writtenOn": "2024-01-19T12:26:06Z",
+      "side": 1,
+      "message": "could use the wrappers we already have for sr_session_switch_ds",
+      "revId": "ed785f997d11bc576f76e8ac4d89920f0a12a000",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
