@@ -25,7 +25,7 @@ Connection wrapUnmanagedConnection(std::shared_ptr<sr_conn_ctx_s> conn);
  */
 class Connection {
 public:
-    Connection();
+    Connection(const ConnectionFlags options = ConnectionFlags::Default);
     Session sessionStart(sysrepo::Datastore datastore = sysrepo::Datastore::Running);
 
     [[deprecated("Use sysrepo::Session::discardItems")]] void discardOperationalChanges(const std::optional<std::string>& xpath = std::nullopt, std::optional<Session> session = std::nullopt, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});

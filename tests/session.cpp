@@ -335,4 +335,19 @@ TEST_CASE("session")
         // the original tree is not corrupted
         REQUIRE(*conf->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::WithSiblings) != "");
     }
+
+    DOCTEST_SUBCASE("libyang context flags")
+    {
+        sess.setItem("/test_module:popelnice/s", "666");
+        REQUIRE(sess.getOneNode("/test_module:popelnice/s").asTerm().valueStr() == "666");
+        // Parsed type info is not preserved by libyang unless its context is constructed with a flag,
+        // and that flag is not used by sysrepo by default...
+        REQUIRE_THROWS_AS(sess.getOneNode("/test_module:popelnice/s").schema().asLeaf().valueType().asString().length(), libyang::ParsedInfoUnavailable);
+
+        // ...unless we pass that flag explicitly as a parameter to the connection.
+        auto sess2 = sysrepo::Connection{sysrepo::ConnectionFlags::LibYangPrivParsed}.sessionStart();
+        sess2.setItem("/test_module:popelnice/s", "333");
+        REQUIRE(sess2.getOneNode("/test_module:popelnice/s").asTerm().valueStr() == "333");
+        REQUIRE(sess2.getOneNode("/test_module:popelnice/s").schema().asLeaf().valueType().asString().length().parts[0].max == 10);
+    }
 }

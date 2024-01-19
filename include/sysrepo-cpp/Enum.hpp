@@ -175,6 +175,20 @@ enum class NotificationType : uint32_t {
     Resumed
 };
 
+/**
+ * Wraps `sr_conn_flag_e`.
+ */
+enum class ConnectionFlags : uint32_t {
+    Default = 0x00, /**< SR_CONN_DEFAULT */
+    CacheRunning = 0x01, /**< SR_CONN_CACHE_RUNNING */
+    LibYangPrivParsed = 0x02, /**< SR_CONN_CTX_SET_PRIV_PARSED */
+};
+
+constexpr ConnectionFlags operator|(const ConnectionFlags a, const ConnectionFlags b)
+{
+    return implEnumBitOr(a, b);
+}
+
 std::ostream& operator<<(std::ostream& os, const NotificationType& type);
 std::ostream& operator<<(std::ostream& os, const Event& event);
 std::ostream& operator<<(std::ostream& os, const ChangeOperation& changeOp);
