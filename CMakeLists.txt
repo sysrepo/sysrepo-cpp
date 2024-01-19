@@ -60,43 +60,20 @@ if(BUILD_TESTING)
 
     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/test_repositories)
 
-    include(cmake/DiscoverSysrepoExecutables.cmake)
-    discover_sysrepo_executables()
+    include(cmake/SysrepoTest.cmake)
 
-    function(sysrepo_cpp_test name module)
-        set(TESTNAME test_${name})
-
-        add_executable(${TESTNAME}
-            tests/${name}.cpp
-            )
-        target_link_libraries(test_${name} DoctestIntegration sysrepo-cpp)
-
-        add_test(${TESTNAME} ${TESTNAME})
-
-        set_tests_properties(${TESTNAME} PROPERTIES FIXTURES_REQUIRED ${TESTNAME}_setup)
-
-        add_test(NAME ${TESTNAME}_init COMMAND ${CMAKE_CURRENT_BINARY_DIR}/init_datastore.bash "${module}")
-        set_tests_properties(${TESTNAME}_init PROPERTIES FIXTURES_SETUP ${TESTNAME}_setup)
-        add_test(NAME ${TESTNAME}_cleanup COMMAND ${CMAKE_CURRENT_BINARY_DIR}/cleanup_datastore.bash)
-        set_tests_properties(${TESTNAME}_cleanup PROPERTIES FIXTURES_CLEANUP ${TESTNAME}_setup)
-
-        set_property(TEST ${TESTNAME} ${TESTNAME}_init ${TESTNAME}_cleanup APPEND PROPERTY ENVIRONMENT
-            "SYSREPO_REPOSITORY_PATH=${CMAKE_CURRENT_BINARY_DIR}/test_repositories/${TESTNAME}"
-            "SYSREPO_SHM_PREFIX=sysrepo-cpp_${TESTNAME}"
-            )
+    function(sysrepo_cpp_test)
+        cmake_parse_arguments(TEST "" "NAME" "LIBRARIES" ${ARGN})
+        sysrepo_test(NAME ${TEST_NAME} LIBRARIES DoctestIntegration sysrepo-cpp ${TEST_LIBRARIES} ${TEST_UNPARSED_ARGUMENTS})
     endfunction()
 
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tests/init_datastore.bash.in
-        ${CMAKE_CURRENT_BINARY_DIR}/init_datastore.bash @ONLY)
+    set(fixture-test-module
+        --install ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang
+        )
 
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tests/cleanup_datastore.bash.in
-        ${CMAKE_CURRENT_BINARY_DIR}/cleanup_datastore.bash @ONLY)
-
-    sysrepo_cpp_test(session "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang")
-    sysrepo_cpp_test(subscriptions "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang")
-    target_link_libraries(test_subscriptions Threads::Threads)
-    sysrepo_cpp_test(unsafe "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang")
-    target_link_libraries(test_unsafe PkgConfig::SYSREPO)
+    sysrepo_cpp_test(NAME session FIXTURE fixture-test-module)
+    sysrepo_cpp_test(NAME subscriptions FIXTURE fixture-test-module LIBRARIES Threads::Threads)
+    sysrepo_cpp_test(NAME unsafe FIXTURE fixture-test-module LIBRARIES PkgConfig::SYSREPO)
 endif()
 
 if(WITH_DOCS)
