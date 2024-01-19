@@ -18,6 +18,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d4b946a_1bbe286a",
+        "filename": "src/Session.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-01-19T12:37:51Z",
+      "side": 1,
+      "message": "right, thanks, done",
+      "parentUuid": "d80090f0_a14ab570",
+      "revId": "ed785f997d11bc576f76e8ac4d89920f0a12a000",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35255937_5dc2119a",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-01-19T12:26:06Z",
       "side": 1,
       "message": "could use the wrappers we already have for sr_session_switch_ds",
+      "revId": "ed785f997d11bc576f76e8ac4d89920f0a12a000",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b82059b0_a0d9eb0f",
+        "filename": "src/Session.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-01-19T12:37:51Z",
+      "side": 1,
+      "message": "I deliberately used the C API here to make the code \"stand out\". Since this is a destructor, it can be called during stack unwinding while another exception is being handled, and that means that we cannot really throw from here. I could check for std::unhandled_exceptions(), of course, but if these (C API) calls failed, no matter whether invoked indirectly through the C++ wrapper or directly, the end result is the same, a DS is not unlocked properly.\n\nFortunately, as the comment above above explains, the C functions actually cannot fail ATM because they just manipulate a single variable. Still, to indicate that this code is \"potentially fragile\" if that ever gets changed upstream, I think it makes sense to do this directly in C and to make the code \"look fishy\" like this, along with that comment above.",
+      "parentUuid": "35255937_5dc2119a",
       "revId": "ed785f997d11bc576f76e8ac4d89920f0a12a000",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
