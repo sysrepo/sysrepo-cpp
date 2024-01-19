@@ -265,6 +265,13 @@ TEST_CASE("session")
             sysrepo::Lock m1_lock{sess, "test_module"};
             sysrepo::Lock m2_lock{sess, "ietf-netconf-acm"};
         }
+
+        // check that unlocking temporarily switches to the original DS, and then back to the current one
+        {
+            sysrepo::Lock l{sess};
+            sess.switchDatastore(sysrepo::Datastore::FactoryDefault);
+        }
+        REQUIRE(sess.activeDatastore() == sysrepo::Datastore::FactoryDefault);
     }
 
     DOCTEST_SUBCASE("replace config")
