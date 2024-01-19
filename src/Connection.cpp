@@ -21,11 +21,11 @@ namespace sysrepo {
  *
  * Wraps `sr_connect`.
  */
-Connection::Connection()
+Connection::Connection(const ConnectionFlags options)
     : ctx(nullptr)
 {
     sr_conn_ctx_t* ctx;
-    auto res = sr_connect(0, &ctx);
+    auto res = sr_connect(static_cast<sr_conn_options_t>(options), &ctx);
 
     throwIfError(res, "Couldn't connect to sysrepo");
     this->ctx = std::shared_ptr<sr_conn_ctx_t>(ctx, sr_disconnect);

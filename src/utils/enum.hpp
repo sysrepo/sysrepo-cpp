@@ -149,4 +149,10 @@ static_assert(toNotificationType(SR_EV_NOTIF_TERMINATED) == NotificationType::Te
 static_assert(toNotificationType(SR_EV_NOTIF_MODIFIED) == NotificationType::Modified);
 static_assert(toNotificationType(SR_EV_NOTIF_SUSPENDED) == NotificationType::Suspended);
 static_assert(toNotificationType(SR_EV_NOTIF_RESUMED) == NotificationType::Resumed);
+
+static_assert(std::is_same_v<sr_conn_options_t, std::underlying_type_t<ConnectionFlags>>);
+static_assert(static_cast<ConnectionFlags>(SR_CONN_DEFAULT) == ConnectionFlags::Default);
+static_assert(static_cast<ConnectionFlags>(SR_CONN_CACHE_RUNNING) == ConnectionFlags::CacheRunning);
+static_assert(static_cast<ConnectionFlags>(SR_CONN_CTX_SET_PRIV_PARSED) == ConnectionFlags::LibYangPrivParsed);
+static_assert(static_cast<ConnectionFlags>(SR_CONN_CACHE_RUNNING | SR_CONN_CTX_SET_PRIV_PARSED) == (ConnectionFlags::CacheRunning | ConnectionFlags::LibYangPrivParsed));
 }
