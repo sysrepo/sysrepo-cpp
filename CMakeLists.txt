@@ -74,6 +74,7 @@ if(BUILD_TESTING)
     sysrepo_cpp_test(NAME session FIXTURE fixture-test-module)
     sysrepo_cpp_test(NAME subscriptions FIXTURE fixture-test-module LIBRARIES Threads::Threads)
     sysrepo_cpp_test(NAME unsafe FIXTURE fixture-test-module LIBRARIES PkgConfig::SYSREPO)
+    sysrepo_cpp_test(NAME benchmark FIXTURE fixture-test-module)
 endif()
 
 if(WITH_DOCS)
