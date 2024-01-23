@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cfecf69_e3a785b7",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2024-01-23T06:11:15Z",
+      "side": 1,
+      "message": "nit: Are we doing this without a whitespace around \u003d ?",
+      "range": {
+        "startLine": 28,
+        "startChar": 43,
+        "endLine": 28,
+        "endChar": 47
+      },
+      "revId": "9c172cf90437e2abb00a27647f94e92abc538c49",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
