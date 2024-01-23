@@ -315,7 +315,7 @@ ChangeIterator ChangeCollection::begin() const
  */
 ChangeIterator ChangeCollection::end() const
 {
-    return ChangeIterator{ChangeIterator::iterator_end_tag{}};
+    return ChangeIterator{};
 }
 
 /**
@@ -328,7 +328,10 @@ ChangeIterator::ChangeIterator(sr_change_iter_s* iter, std::shared_ptr<sr_sessio
     operator++();
 }
 
-ChangeIterator::ChangeIterator(const iterator_end_tag)
+/**
+ * @short Invalid iterator points past the end of (any) collection
+ */
+ChangeIterator::ChangeIterator()
     : m_current(std::nullopt)
     , m_iter(nullptr)
     , m_sess(nullptr)

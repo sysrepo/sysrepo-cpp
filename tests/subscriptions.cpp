@@ -143,6 +143,8 @@ TEST_CASE("subscriptions")
                 REQUIRE(it1 == it2);
                 REQUIRE(it1 == changes.end());
                 REQUIRE(it2 == changes.end());
+                REQUIRE(it1 == sysrepo::ChangeIterator{});
+                REQUIRE(sysrepo::ChangeIterator{} == sysrepo::ChangeIterator{});
                 return sysrepo::ErrorCode::Ok;
             };
 
