@@ -6,7 +6,7 @@
               - name: github/CESNET/libyang
                 override-checkout: devel
               - name: github/sysrepo/sysrepo
-                override-checkout: devel
+                override-checkout: cesnet/2024-12-pre-oper-push-change
               - name: github/onqtam/doctest
                 override-checkout: v2.4.8
               - name: github/rollbear/trompeloeil
@@ -17,7 +17,7 @@
               - name: github/CESNET/libyang
                 override-checkout: devel
               - name: github/sysrepo/sysrepo
-                override-checkout: devel
+                override-checkout: cesnet/2024-12-pre-oper-push-change
               - name: github/onqtam/doctest
                 override-checkout: v2.4.11
               - name: github/rollbear/trompeloeil
