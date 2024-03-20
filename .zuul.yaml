@@ -4,9 +4,9 @@
         - f38-gcc-cover:
             required-projects:
               - name: github/CESNET/libyang
-                override-checkout: devel
+                override-checkout: cesnet/2024-03--v2-latest
               - name: github/sysrepo/sysrepo
-                override-checkout: devel
+                override-checkout: cesnet/2024-03--v2-latest
               - name: github/onqtam/doctest
                 override-checkout: v2.4.8
               - name: github/rollbear/trompeloeil
@@ -15,9 +15,9 @@
         - f38-clang-asan-ubsan:
             required-projects: &projects
               - name: github/CESNET/libyang
-                override-checkout: devel
+                override-checkout: cesnet/2024-03--v2-latest
               - name: github/sysrepo/sysrepo
-                override-checkout: devel
+                override-checkout: cesnet/2024-03--v2-latest
               - name: github/onqtam/doctest
                 override-checkout: v2.4.11
               - name: github/rollbear/trompeloeil
