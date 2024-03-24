@@ -9,8 +9,7 @@ It uses RAII for automatic memory management.
 
 ## Dependencies
 - [sysrepo](https://github.com/sysrepo/sysrepo) - the `devel` branch (even for the `master` branch of *sysrepo-cpp*)
-  - temporarily (March 2024) this requires the [pre-v3 API of libyang (commit `a3937bb0`)](https://github.com/sysrepo/sysrepo/commit/a3937bb0bc20da8ff71f11523e5ef68fd0185c0a)
-- [libyang-cpp](https://github.com/CESNET/libyang-cpp) - C++ bindings for *libyang*
+- [libyang-cpp](https://github.com/CESNET/libyang-cpp) - C++ bindings for *libyang*, built against libyang v3
 - C++20 compiler (e.g., GCC 10.x+, clang 10+)
 - CMake 3.19+
 - optionally for built-in tests, [Doctest](https://github.com/onqtam/doctest/) as a C++ unit test framework
