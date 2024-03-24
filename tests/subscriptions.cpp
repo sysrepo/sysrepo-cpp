@@ -541,7 +541,7 @@ TEST_CASE("subscriptions")
         REQUIRE(errors.size() == 2);
         REQUIRE(errors.at(0) == sysrepo::ErrorInfo{
             .code = sysrepo::ErrorCode::OperationFailed,
-            .errorMessage = "NETCONF error occurred."
+            .errorMessage = "Test callback failure.",
         });
         REQUIRE(errors.at(1) == sysrepo::ErrorInfo{
             .code = sysrepo::ErrorCode::CallbackFailed,
