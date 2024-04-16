@@ -95,6 +95,83 @@ TEST_CASE("session")
                 sysrepo::ErrorWithCode);
     }
 
+    DOCTEST_SUBCASE("Session::getData")
+    {
+        DOCTEST_SUBCASE("max depth")
+        {
+            sess.setItem("/test_module:popelnice/content/trash[name='c++']/cont/l", "hi");
+            sess.setItem("/test_module:popelnice/content/trash[name='rust']", std::nullopt);
+
+            auto data = sess.getData("/test_module:popelnice", 0);
+            REQUIRE(data);
+            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::KeepEmptyCont) == R"({
+  "test_module:popelnice": {
+    "content": {
+      "trash": [
+        {
+          "name": "c++",
+          "cont": {
+            "l": "hi"
+          }
+        },
+        {
+          "name": "rust"
+        }
+      ]
+    }
+  }
+}
+)");
+
+            data = sess.getData("/test_module:popelnice", 1);
+            REQUIRE(data);
+            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::KeepEmptyCont) == R"({
+  "test_module:popelnice": {
+    "content": {}
+  }
+}
+)");
+
+            // If a list should be returned, its keys are always returned as well.
+            data = sess.getData("/test_module:popelnice", 2);
+            REQUIRE(data);
+            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::KeepEmptyCont) == R"({
+  "test_module:popelnice": {
+    "content": {
+      "trash": [
+        {
+          "name": "c++"
+        },
+        {
+          "name": "rust"
+        }
+      ]
+    }
+  }
+}
+)");
+
+            data = sess.getData("/test_module:popelnice", 3);
+            REQUIRE(data);
+            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::KeepEmptyCont) == R"({
+  "test_module:popelnice": {
+    "content": {
+      "trash": [
+        {
+          "name": "c++",
+          "cont": {}
+        },
+        {
+          "name": "rust"
+        }
+      ]
+    }
+  }
+}
+)");
+        }
+    }
+
     DOCTEST_SUBCASE("Session::deleteOperItem")
     {
         // Set some arbitrary leaf.

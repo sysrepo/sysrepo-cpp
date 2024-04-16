@@ -37,6 +37,15 @@ module test_module {
         length "0..10";
       }
     }
+    container content {
+      list trash {
+        key "name";
+        leaf name { type string; }
+        container cont {
+          leaf l { type string; }
+        }
+      }
+    }
   }
 
   rpc noop {
