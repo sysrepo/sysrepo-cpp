@@ -114,7 +114,7 @@ TEST_CASE("session")
 
             DOCTEST_SUBCASE("No state data")
             {
-                auto data = sess.getData("/test_module:*", sysrepo::GetOptions::OperNoState);
+                auto data = sess.getData("/test_module:*", 0, sysrepo::GetOptions::OperNoState);
                 REQUIRE(data);
                 REQUIRE(!data->findPath("/test_module:stateLeaf"));
                 REQUIRE(data->findPath("/test_module:leafInt32"));
@@ -129,10 +129,84 @@ TEST_CASE("session")
             REQUIRE(data);
             REQUIRE(data->findPath("/test_module:leafWithDefault"));
 
-            REQUIRE_THROWS_WITH_AS(sess.getData("/test_module:*", sysrepo::GetOptions::OperNoState | sysrepo::GetOptions::OperNoConfig | sysrepo::GetOptions::NoFilter),
+            REQUIRE_THROWS_WITH_AS(sess.getData("/test_module:*", 0, sysrepo::GetOptions::OperNoState | sysrepo::GetOptions::OperNoConfig | sysrepo::GetOptions::NoFilter),
                                    "Session::getData: Couldn't get '/test_module:*': SR_ERR_INVAL_ARG\n"
                                    " Invalid arguments for function \"sr_get_data\". (SR_ERR_INVAL_ARG)",
                                    sysrepo::ErrorWithCode);
+        }
+
+        DOCTEST_SUBCASE("max depth")
+        {
+            sess.setItem("/test_module:popelnice/content/trash[name='c++']/cont/l", "hi");
+            sess.setItem("/test_module:popelnice/content/trash[name='rust']", std::nullopt);
+
+            auto data = sess.getData("/test_module:popelnice", 0);
+            REQUIRE(data);
+            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::KeepEmptyCont) == R"({
+  "test_module:popelnice": {
+    "content": {
+      "trash": [
+        {
+          "name": "c++",
+          "cont": {
+            "l": "hi"
+          }
+        },
+        {
+          "name": "rust"
+        }
+      ]
+    }
+  }
+}
+)");
+
+            data = sess.getData("/test_module:popelnice", 1);
+            REQUIRE(data);
+            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::KeepEmptyCont) == R"({
+  "test_module:popelnice": {
+    "content": {}
+  }
+}
+)");
+
+            // If a list should be returned, its keys are always returned as well.
+            data = sess.getData("/test_module:popelnice", 2);
+            REQUIRE(data);
+            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::KeepEmptyCont) == R"({
+  "test_module:popelnice": {
+    "content": {
+      "trash": [
+        {
+          "name": "c++"
+        },
+        {
+          "name": "rust"
+        }
+      ]
+    }
+  }
+}
+)");
+
+            data = sess.getData("/test_module:popelnice", 3);
+            REQUIRE(data);
+            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::KeepEmptyCont) == R"({
+  "test_module:popelnice": {
+    "content": {
+      "trash": [
+        {
+          "name": "c++",
+          "cont": {}
+        },
+        {
+          "name": "rust"
+        }
+      ]
+    }
+  }
+}
+)");
         }
     }
 
