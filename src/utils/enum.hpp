@@ -155,4 +155,20 @@ static_assert(static_cast<ConnectionFlags>(SR_CONN_DEFAULT) == ConnectionFlags::
 static_assert(static_cast<ConnectionFlags>(SR_CONN_CACHE_RUNNING) == ConnectionFlags::CacheRunning);
 static_assert(static_cast<ConnectionFlags>(SR_CONN_CTX_SET_PRIV_PARSED) == ConnectionFlags::LibYangPrivParsed);
 static_assert(static_cast<ConnectionFlags>(SR_CONN_CACHE_RUNNING | SR_CONN_CTX_SET_PRIV_PARSED) == (ConnectionFlags::CacheRunning | ConnectionFlags::LibYangPrivParsed));
+
+static_assert(std::is_same_v<sr_get_options_t, std::underlying_type_t<GetOptions>>);
+static_assert(static_cast<GetOptions>(SR_OPER_DEFAULT) == GetOptions::Default);
+static_assert(static_cast<GetOptions>(SR_OPER_NO_STATE) == GetOptions::OperNoState);
+static_assert(static_cast<GetOptions>(SR_OPER_NO_CONFIG) == GetOptions::OperNoConfig);
+static_assert(static_cast<GetOptions>(SR_OPER_NO_SUBS) == GetOptions::OperNoPullSubscriptions);
+static_assert(static_cast<GetOptions>(SR_OPER_NO_STORED) == GetOptions::OperNoPushedData);
+static_assert(static_cast<GetOptions>(SR_OPER_WITH_ORIGIN) == GetOptions::OperWithOrigin);
+static_assert(static_cast<GetOptions>(SR_OPER_NO_POLL_CACHED) == GetOptions::OperNoPollSubscriptionsCached);
+static_assert(static_cast<GetOptions>(SR_OPER_NO_RUN_CACHED) == GetOptions::OperNoRunningCached);
+static_assert(static_cast<GetOptions>(SR_GET_NO_FILTER) == GetOptions::NoFilter);
+
+constexpr sr_get_options_t toGetOptions(const GetOptions opts)
+{
+    return static_cast<sr_get_options_t>(opts);
+}
 }

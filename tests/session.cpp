@@ -170,6 +170,44 @@ TEST_CASE("session")
 }
 )");
         }
+
+        DOCTEST_SUBCASE("options for operational DS")
+        {
+            sess.switchDatastore(sysrepo::Datastore::Operational);
+            sess.setItem("/test_module:stateLeaf", "42");
+            sess.setItem("/test_module:leafInt32", "1");
+            sess.applyChanges();
+
+            DOCTEST_SUBCASE("Default options")
+            {
+                auto data = sess.getData("/test_module:*");
+                REQUIRE(data);
+                REQUIRE(data->findPath("/test_module:stateLeaf"));
+                REQUIRE(data->findPath("/test_module:leafInt32"));
+            }
+
+            DOCTEST_SUBCASE("No state data")
+            {
+                auto data = sess.getData("/test_module:*", 0, sysrepo::GetOptions::OperNoState);
+                REQUIRE(data);
+                REQUIRE(!data->findPath("/test_module:stateLeaf"));
+                REQUIRE(data->findPath("/test_module:leafInt32"));
+            }
+        }
+
+        DOCTEST_SUBCASE("options and running ds")
+        {
+            sess.switchDatastore(sysrepo::Datastore::Running);
+
+            auto data = sess.getData("/test_module:*");
+            REQUIRE(data);
+            REQUIRE(data->findPath("/test_module:leafWithDefault"));
+
+            REQUIRE_THROWS_WITH_AS(sess.getData("/test_module:*", 0, sysrepo::GetOptions::OperNoState | sysrepo::GetOptions::OperNoConfig | sysrepo::GetOptions::NoFilter),
+                                   "Session::getData: Couldn't get '/test_module:*': SR_ERR_INVAL_ARG\n"
+                                   " Invalid arguments for function \"sr_get_data\". (SR_ERR_INVAL_ARG)",
+                                   sysrepo::ErrorWithCode);
+        }
     }
 
     DOCTEST_SUBCASE("Session::deleteOperItem")

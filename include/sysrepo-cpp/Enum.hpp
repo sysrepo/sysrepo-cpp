@@ -189,6 +189,26 @@ constexpr ConnectionFlags operator|(const ConnectionFlags a, const ConnectionFla
     return implEnumBitOr(a, b);
 }
 
+/**
+ * @brief Wraps `sr_get_options_t`, which comprises `sr_get_flag_t` and `sr_get_oper_flag_t`.
+ */
+enum class GetOptions : uint32_t {
+    Default = 0x00, /**< SR_OPER_DEFAULT */
+    OperNoState = 0x01, /**< SR_OPER_NO_STATE */
+    OperNoConfig = 0x02, /**< SR_OPER_NO_CONFIG */
+    OperNoPullSubscriptions = 0x04, /**< SR_OPER_NO_SUBS */
+    OperNoPushedData = 0x08, /**< SR_OPER_NO_STORED */
+    OperWithOrigin = 0x10, /**< SR_OPER_WITH_ORIGIN */
+    OperNoPollSubscriptionsCached = 0x20, /**< SR_OPER_NO_POLL_CACHED */
+    OperNoRunningCached = 0x40, /**< SR_OPER_NO_RUN_CACHED */
+    NoFilter = 0x010000, /**< SR_GET_NO_FILTER */
+};
+
+constexpr GetOptions operator|(const GetOptions a, const GetOptions b)
+{
+    return implEnumBitOr(a, b);
+}
+
 std::ostream& operator<<(std::ostream& os, const NotificationType& type);
 std::ostream& operator<<(std::ostream& os, const Event& event);
 std::ostream& operator<<(std::ostream& os, const ChangeOperation& changeOp);
