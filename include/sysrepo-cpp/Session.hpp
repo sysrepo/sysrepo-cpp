@@ -88,7 +88,7 @@ public:
     void discardItems(const std::optional<std::string>& xpath);
     void moveItem(const std::string& path, const MovePosition move, const std::optional<std::string>& keys_or_value, const std::optional<std::string>& origin = std::nullopt, const EditOptions opts = sysrepo::EditOptions::Default);
     // TODO: allow all arguments
-    std::optional<libyang::DataNode> getData(const std::string& path) const;
+    std::optional<libyang::DataNode> getData(const std::string& path, const GetOptions = sysrepo::GetOptions::OperDefault) const;
     // TODO: allow all arguments
     libyang::DataNode getOneNode(const std::string& path) const;
     std::optional<const libyang::DataNode> getPendingChanges() const;

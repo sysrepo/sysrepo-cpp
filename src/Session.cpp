@@ -187,12 +187,13 @@ libyang::DataNode wrapSrData(std::shared_ptr<sr_session_ctx_s> sess, sr_data_t* 
  * Wraps `sr_get_data`.
  *
  * @param path XPath which corresponds to the data that should be retrieved.
+ * @param opts GetOptions overriding default behaviour
  * @returns std::nullopt if no matching data found, otherwise the requested data.
  */
-std::optional<libyang::DataNode> Session::getData(const std::string& path) const
+std::optional<libyang::DataNode> Session::getData(const std::string& path, const GetOptions opts) const
 {
     sr_data_t* data;
-    auto res = sr_get_data(m_sess.get(), path.c_str(), 0, 0, 0, &data);
+    auto res = sr_get_data(m_sess.get(), path.c_str(), 0, 0, toGetOptions(opts), &data);
 
     throwIfError(res, "Session::getData: Couldn't get '"s + path + "'", m_sess.get());
 
