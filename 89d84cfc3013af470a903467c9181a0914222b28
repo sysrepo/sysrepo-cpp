@@ -217,6 +217,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d8dc890_12d50138",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-04-17T11:50:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "18d57059_4260cb7c",
+      "range": {
+        "startLine": 202,
+        "startChar": 4,
+        "endLine": 202,
+        "endChar": 20
+      },
+      "revId": "89d84cfc3013af470a903467c9181a0914222b28",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31f59fd9_6c9273d8",
