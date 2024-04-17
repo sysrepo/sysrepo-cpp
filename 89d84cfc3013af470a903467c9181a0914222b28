@@ -35,6 +35,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ff61a3f_3ac3bc9b",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2024-04-17T11:18:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fdf71ba5_adca3ecf",
+      "revId": "89d84cfc3013af470a903467c9181a0914222b28",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ba082e3_118b0eae",
@@ -48,6 +66,30 @@
       "writtenOn": "2024-04-17T09:16:51Z",
       "side": 1,
       "message": "`Default`",
+      "range": {
+        "startLine": 196,
+        "startChar": 4,
+        "endLine": 196,
+        "endChar": 15
+      },
+      "revId": "89d84cfc3013af470a903467c9181a0914222b28",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a2f8f39_f08fb715",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2024-04-17T11:18:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ba082e3_118b0eae",
       "range": {
         "startLine": 196,
         "startChar": 4,
@@ -81,6 +123,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c2d0a8f_116de96b",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2024-04-17T11:18:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5af53a6b_d6a63004",
+      "range": {
+        "startLine": 199,
+        "startChar": 4,
+        "endLine": 199,
+        "endChar": 14
+      },
+      "revId": "89d84cfc3013af470a903467c9181a0914222b28",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ba82ccd_f700b216",
@@ -104,6 +170,53 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34c2a861_5c00244b",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2024-04-17T11:18:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ba82ccd_f700b216",
+      "range": {
+        "startLine": 200,
+        "startChar": 4,
+        "endLine": 200,
+        "endChar": 16
+      },
+      "revId": "89d84cfc3013af470a903467c9181a0914222b28",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18d57059_4260cb7c",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2024-04-17T11:18:51Z",
+      "side": 1,
+      "message": "I have renamed this to OperNoPollSubscriptionsCached, feel free to revert.",
+      "range": {
+        "startLine": 202,
+        "startChar": 4,
+        "endLine": 202,
+        "endChar": 20
+      },
+      "revId": "89d84cfc3013af470a903467c9181a0914222b28",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31f59fd9_6c9273d8",
@@ -117,6 +230,30 @@
       "writtenOn": "2024-04-17T09:16:51Z",
       "side": 1,
       "message": "`OperNoRunningCached`",
+      "range": {
+        "startLine": 203,
+        "startChar": 4,
+        "endLine": 203,
+        "endChar": 19
+      },
+      "revId": "89d84cfc3013af470a903467c9181a0914222b28",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df0b5d3d_a2a7e1b1",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2024-04-17T11:18:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31f59fd9_6c9273d8",
       "range": {
         "startLine": 203,
         "startChar": 4,
