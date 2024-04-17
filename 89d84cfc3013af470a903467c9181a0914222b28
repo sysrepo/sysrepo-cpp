@@ -16,6 +16,115 @@
       "message": "recheck",
       "revId": "89d84cfc3013af470a903467c9181a0914222b28",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdf71ba5_adca3ecf",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-04-17T09:16:51Z",
+      "side": 1,
+      "message": "Use a description like this:\n\n @brief Wraps `sr_get_options_t`, which comprises `sr_get_flag_t` and `sr_get_oper_flag_t`.",
+      "revId": "89d84cfc3013af470a903467c9181a0914222b28",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ba082e3_118b0eae",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-04-17T09:16:51Z",
+      "side": 1,
+      "message": "`Default`",
+      "range": {
+        "startLine": 196,
+        "startChar": 4,
+        "endLine": 196,
+        "endChar": 15
+      },
+      "revId": "89d84cfc3013af470a903467c9181a0914222b28",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5af53a6b_d6a63004",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-04-17T09:16:51Z",
+      "side": 1,
+      "message": "`OperNoPullSubscriptions`",
+      "range": {
+        "startLine": 199,
+        "startChar": 4,
+        "endLine": 199,
+        "endChar": 14
+      },
+      "revId": "89d84cfc3013af470a903467c9181a0914222b28",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ba82ccd_f700b216",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-04-17T09:16:51Z",
+      "side": 1,
+      "message": "`OperNoPushedData`",
+      "range": {
+        "startLine": 200,
+        "startChar": 4,
+        "endLine": 200,
+        "endChar": 16
+      },
+      "revId": "89d84cfc3013af470a903467c9181a0914222b28",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31f59fd9_6c9273d8",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-04-17T09:16:51Z",
+      "side": 1,
+      "message": "`OperNoRunningCached`",
+      "range": {
+        "startLine": 203,
+        "startChar": 4,
+        "endLine": 203,
+        "endChar": 19
+      },
+      "revId": "89d84cfc3013af470a903467c9181a0914222b28",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
