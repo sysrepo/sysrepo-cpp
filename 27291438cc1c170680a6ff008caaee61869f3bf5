@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "162012cf_12bee0cf",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-04-17T09:26:05Z",
+      "side": 1,
+      "message": "I do not have any strong preference about the order of arguments, so it\u0027s OK to use the one from upstream sysrepo like you did here. But please do *not* ever \"insert\" extra arguments like this; IMHO it\u0027s much, much better to introduce them \"in a sequence\". It looks like there won\u0027t be much extra work in rebasing this, so please introduce these commits in the \"proper\" order.",
+      "revId": "27291438cc1c170680a6ff008caaee61869f3bf5",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
