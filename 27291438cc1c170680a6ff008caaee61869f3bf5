@@ -34,6 +34,24 @@
       "parentUuid": "162012cf_12bee0cf",
       "revId": "27291438cc1c170680a6ff008caaee61869f3bf5",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "790d4ff1_d5be3a43",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-04-17T11:48:12Z",
+      "side": 1,
+      "message": "1) commit 1 adds arg B with a default value\n2) in project 2, someone starts providing a value for B\n3) commit 2 adds arg A with a default value situated before B\n4) project 2 now won\u0027t build",
+      "parentUuid": "70d5d17b_a08a4f93",
+      "revId": "27291438cc1c170680a6ff008caaee61869f3bf5",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
