@@ -33,7 +33,7 @@ void printValue(libyang::DataNode node)
         break;
     }
 
-    if (node.schema().nodeType() == libyang::NodeType::Leaf && node.asTerm().isDefaultValue()) {
+    if (node.schema().nodeType() == libyang::NodeType::Leaf && node.asTerm().hasDefaultValue()) {
         std::cout << " [default]";
     }
 
