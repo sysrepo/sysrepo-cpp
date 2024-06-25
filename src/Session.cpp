@@ -191,10 +191,10 @@ libyang::DataNode wrapSrData(std::shared_ptr<sr_session_ctx_s> sess, sr_data_t* 
  * @param opts GetOptions overriding default behaviour
  * @returns std::nullopt if no matching data found, otherwise the requested data.
  */
-std::optional<libyang::DataNode> Session::getData(const std::string& path, int maxDepth, const GetOptions opts) const
+std::optional<libyang::DataNode> Session::getData(const std::string& path, int maxDepth, const GetOptions opts, std::chrono::milliseconds timeout) const
 {
     sr_data_t* data;
-    auto res = sr_get_data(m_sess.get(), path.c_str(), maxDepth, 0, toGetOptions(opts), &data);
+    auto res = sr_get_data(m_sess.get(), path.c_str(), maxDepth, timeout.count(), toGetOptions(opts), &data);
 
     throwIfError(res, "Session::getData: Couldn't get '"s + path + "'", m_sess.get());
 
@@ -219,10 +219,10 @@ std::optional<libyang::DataNode> Session::getData(const std::string& path, int m
  * @param path XPath which corresponds to the data that should be retrieved.
  * @returns the requested data node (as a disconnected node)
  */
-libyang::DataNode Session::getOneNode(const std::string& path) const
+libyang::DataNode Session::getOneNode(const std::string& path, std::chrono::milliseconds timeout) const
 {
     sr_data_t* data;
-    auto res = sr_get_node(m_sess.get(), path.c_str(), 0, &data);
+    auto res = sr_get_node(m_sess.get(), path.c_str(), timeout.count(), &data);
 
     throwIfError(res, "Session::getOneNode: Couldn't get '"s + path + "'", m_sess.get());
 
