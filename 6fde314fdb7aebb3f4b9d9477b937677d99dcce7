@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bf15741_69030062",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2024-06-30T19:47:05Z",
+      "side": 1,
+      "message": "Thanks for the contribution :)",
+      "revId": "6fde314fdb7aebb3f4b9d9477b937677d99dcce7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7522f353_9eb33331",
+        "filename": "src/Session.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2024-06-30T19:47:05Z",
+      "side": 1,
+      "message": "Could you please add @param for the timeout parameter, please?",
+      "revId": "6fde314fdb7aebb3f4b9d9477b937677d99dcce7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d6359e2_04d552fe",
+        "filename": "src/Session.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2024-06-30T19:47:05Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "6fde314fdb7aebb3f4b9d9477b937677d99dcce7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
