@@ -13,6 +13,7 @@ extern "C" {
 #include <sysrepo-cpp/utils/exception.hpp>
 #include "utils/enum.hpp"
 #include "utils/exception.hpp"
+#include "utils/utils.hpp"
 
 namespace sysrepo {
 
@@ -61,5 +62,35 @@ void Connection::discardOperationalChanges(const std::optional<std::string>& xpa
     auto res = sr_discard_oper_changes(ctx.get(), session ? session->m_sess.get() : nullptr, xpath ? xpath->c_str() : nullptr, timeout.count());
 
     throwIfError(res, "Couldn't discard operational changes");
+}
+
+/**
+ * Change module replay support
+ *
+ * Wraps `sr_set_module_replay_support`,
+ */
+void Connection::setModuleReplaySupport(const std::string& moduleName, bool enabled)
+{
+    auto res = sr_set_module_replay_support(ctx.get(), moduleName.c_str(), enabled);
+    throwIfError(res, "Couldn't set replay support for module '" + moduleName + "'");
+}
+
+/**
+ * Returns information about replay support of a module
+ *
+ * Wraps `sr_get_module_replay_support`,
+ */
+ModuleReplaySupport Connection::getModuleReplaySupport(const std::string& moduleName)
+{
+    int enabled;
+    struct timespec earliestNotif;
+    auto res = sr_get_module_replay_support(ctx.get(), moduleName.c_str(), &earliestNotif, &enabled);
+
+    throwIfError(res, "Couldn't get replay support for module '" + moduleName + "'");
+
+    if (earliestNotif.tv_sec == 0 && earliestNotif.tv_nsec == 0) {
+        return {static_cast<bool>(enabled), std::nullopt};
+    }
+    return {static_cast<bool>(enabled), toTimePoint(earliestNotif)};
 }
 }
