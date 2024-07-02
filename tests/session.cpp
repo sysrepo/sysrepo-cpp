@@ -465,4 +465,27 @@ TEST_CASE("session")
         REQUIRE(sess2.getOneNode("/test_module:popelnice/s").asTerm().valueStr() == "333");
         REQUIRE(sess2.getOneNode("/test_module:popelnice/s").schema().asLeaf().valueType().asString().length().parts[0].max == 10);
     }
+
+    DOCTEST_SUBCASE("replay support")
+    {
+        REQUIRE_THROWS_WITH_AS(conn->getModuleReplaySupport("bla"), "Couldn't get replay support for module 'bla': SR_ERR_NOT_FOUND", std::runtime_error);
+        REQUIRE_THROWS_WITH_AS(conn->setModuleReplaySupport("bla", true), "Couldn't set replay support for module 'bla': SR_ERR_NOT_FOUND", std::runtime_error);
+
+        auto s = conn->getModuleReplaySupport("test_module");
+        REQUIRE(!s.enabled);
+        REQUIRE(!s.earliestNotification);
+
+        conn->setModuleReplaySupport("test_module", true);
+        s = conn->getModuleReplaySupport("test_module");
+        REQUIRE(s.enabled);
+        REQUIRE(!s.earliestNotification);
+
+        auto notification = sess.getContext().newPath("/test_module:ping");
+        notification.newPath("myLeaf", "132");
+        sess.sendNotification(notification, sysrepo::Wait::Yes);
+
+        s = conn->getModuleReplaySupport("test_module");
+        REQUIRE(s.enabled);
+        REQUIRE(s.earliestNotification);
+    }
 }
