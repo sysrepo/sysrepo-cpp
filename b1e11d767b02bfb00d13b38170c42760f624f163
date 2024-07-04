@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b35a927_f9e9b600",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-07-04T10:47:01Z",
+      "side": 1,
+      "message": "Is that version of libyang needed? It won\u0027t fix the build because that change only affects build options of libyang-cpp, not sysrepo-cpp, so the ASAN-reported ODR violation (which is a real one as far as I can tell, BTW) will still be there.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 1
+      },
+      "revId": "b1e11d767b02bfb00d13b38170c42760f624f163",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4d477a9_16aca51d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-07-04T10:47:01Z",
+      "side": 1,
+      "message": "If you want to keep the DCO footer signed-off-by, make sure it\u0027s part of the trailing footers block. The way it is right now it won\u0027t be seen by the standard git tools.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 68
+      },
+      "revId": "b1e11d767b02bfb00d13b38170c42760f624f163",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
