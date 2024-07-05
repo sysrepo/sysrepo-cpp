@@ -45,6 +45,54 @@
       },
       "revId": "b1e11d767b02bfb00d13b38170c42760f624f163",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbcfa664_44f2e625",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000164
+      },
+      "writtenOn": "2024-07-05T07:07:49Z",
+      "side": 1,
+      "message": "No, just tried to work around the issue (noticed a releated issue in gerrit).",
+      "parentUuid": "2b35a927_f9e9b600",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 1
+      },
+      "revId": "b1e11d767b02bfb00d13b38170c42760f624f163",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b98fa5cb_0e5aa6cb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000164
+      },
+      "writtenOn": "2024-07-05T07:07:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4d477a9_16aca51d",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 68
+      },
+      "revId": "b1e11d767b02bfb00d13b38170c42760f624f163",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
