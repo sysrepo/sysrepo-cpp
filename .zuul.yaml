@@ -4,7 +4,7 @@
         - f38-gcc-cover:
             required-projects:
               - name: github/CESNET/libyang
-                override-checkout: devel
+                override-checkout: cesnet/2024-07-08--3.0.18
               - name: github/sysrepo/sysrepo
                 override-checkout: devel
               - name: github/onqtam/doctest
@@ -15,7 +15,7 @@
         - f38-clang-asan-ubsan:
             required-projects: &projects
               - name: github/CESNET/libyang
-                override-checkout: devel
+                override-checkout: cesnet/2024-07-08--3.0.18
               - name: github/sysrepo/sysrepo
                 override-checkout: devel
               - name: github/onqtam/doctest
