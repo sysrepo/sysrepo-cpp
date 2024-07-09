@@ -182,8 +182,9 @@ using RpcActionCb = std::function<ErrorCode(Session session, uint32_t subscripti
  * @param session An implicit session for the callback.
  * @param subscriptionId ID the subscription associated with the callback.
  * @param type Type of the notification.
- * @param notificationTree The tree identifying the notification. Might be std::nullopt depending on the notification
- * type.
+ * @param notificationTree The tree identifying the notification. For events with no matching YANG-level notification
+ * (i.e., neither realtime not replay notification), std::nullopt.
+ *
  * @param timestamp Time when the notification was generated.
  */
 using NotifCb = std::function<void(Session session, uint32_t subscriptionId, const NotificationType type, const std::optional<libyang::DataNode> notificationTree, const NotificationTimeStamp timestamp)>;

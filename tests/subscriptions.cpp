@@ -434,6 +434,15 @@ TEST_CASE("subscriptions")
     {
         Recorder rec;
         sysrepo::NotifCb cb = [&rec] (auto, auto, auto type, auto notification, auto) {
+            switch (type) {
+                case sysrepo::NotificationType::Realtime:
+                case sysrepo::NotificationType::Replay:
+                    REQUIRE(!!notification);
+                    break;
+                default:
+                    REQUIRE(!notification);
+                    break;
+            }
             if (notification) {
                 for (const auto& node : notification->childrenDfs()) {
                     rec.recordNotification(type, std::string{node.path()});
@@ -447,10 +456,12 @@ TEST_CASE("subscriptions")
 
         REQUIRE_CALL(rec, recordNotification(sysrepo::NotificationType::Realtime, "/test_module:ping"));
         REQUIRE_CALL(rec, recordNotification(sysrepo::NotificationType::Realtime, "/test_module:ping/myLeaf"));
+        REQUIRE_CALL(rec, recordNotification(sysrepo::NotificationType::Realtime, "/test_module:silent-ping"));
         REQUIRE_CALL(rec, recordNotification(sysrepo::NotificationType::Terminated, std::nullopt));
         auto notification = sess.getContext().newPath("/test_module:ping");
         notification.newPath("myLeaf", "132");
         sess.sendNotification(notification, sysrepo::Wait::Yes);
+        sess.sendNotification(sess.getContext().newPath("/test_module:silent-ping"), sysrepo::Wait::Yes);
         sub = std::nullopt;
     }
 

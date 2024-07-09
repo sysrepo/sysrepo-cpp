@@ -64,4 +64,6 @@ module test_module {
       type int32;
     }
   }
+
+  notification silent-ping;
 }
