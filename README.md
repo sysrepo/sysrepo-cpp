@@ -14,6 +14,7 @@ It uses RAII for automatic memory management.
 - CMake 3.19+
 - optionally for built-in tests, [Doctest](https://github.com/onqtam/doctest/) as a C++ unit test framework
 - optionally for built-in tests, [trompeloeil](https://github.com/rollbear/trompeloeil) for mock objects in C++
+- optionally for the docs, Doxygen
 
 ## Building
 *sysrepo-cpp* uses *CMake* for building. The standard way of building *sysrepo-cpp* looks like this:
