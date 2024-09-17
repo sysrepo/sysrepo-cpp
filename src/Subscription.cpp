@@ -94,7 +94,7 @@ int moduleChangeCb(sr_session_ctx_t* session, uint32_t subscriptionId, const cha
                 wrapUnmanagedSession(session),
                 subscriptionId,
                 moduleName,
-                subXPath ? std::optional<std::string_view>{subXPath} : std::nullopt,
+                subXPath ? std::optional<std::string>{subXPath} : std::nullopt,
                 toEvent(event),
                 requestId);
     } catch (std::exception& ex) {
@@ -358,8 +358,8 @@ ChangeIterator& ChangeIterator::operator++()
     m_current.emplace(Change{
             .operation = toChangeOper(operation),
             .node = libyang::wrapUnmanagedRawNode(node),
-            .previousValue = prevValue ? std::optional<std::string_view>(prevValue) : std::nullopt,
-            .previousList = prevList ? std::optional<std::string_view>(prevList) : std::nullopt,
+            .previousValue = prevValue ? std::optional<std::string>(prevValue) : std::nullopt,
+            .previousList = prevList ? std::optional<std::string>(prevList) : std::nullopt,
             .previousDefault = static_cast<bool>(prevDefault),
     });
 

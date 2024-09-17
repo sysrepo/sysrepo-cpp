@@ -677,7 +677,7 @@ std::ostream& operator<<(std::ostream& stream, const NetconfErrorInfo& e)
  * Wraps `sr_session_get_orig_name`.
  * @return The originator name.
  */
-std::string_view Session::getOriginatorName() const
+std::string Session::getOriginatorName() const
 {
     return sr_session_get_orig_name(m_sess.get());
 }

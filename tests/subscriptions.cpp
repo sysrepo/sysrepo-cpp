@@ -17,12 +17,11 @@
 #include <unistd.h>
 #include "utils.hpp"
 
-using namespace std::string_view_literals;
 namespace trompeloeil {
 template <>
-    struct printer<std::optional<std::string_view>>
+    struct printer<std::optional<std::string>>
     {
-        static void print(std::ostream& os, const std::optional<std::string_view>& b)
+        static void print(std::ostream& os, const std::optional<std::string>& b)
         {
             if (!b) {
                 os << "std::nullopt";
@@ -35,10 +34,10 @@ template <>
 
 class Recorder {
 public:
-    TROMPELOEIL_MAKE_CONST_MOCK5(record, void(sysrepo::ChangeOperation, std::string, std::optional<std::string_view>, std::optional<std::string_view>, bool));
-    TROMPELOEIL_MAKE_CONST_MOCK1(recordRPC, void(std::string_view));
+    TROMPELOEIL_MAKE_CONST_MOCK5(record, void(sysrepo::ChangeOperation, std::string, std::optional<std::string>, std::optional<std::string>, bool));
+    TROMPELOEIL_MAKE_CONST_MOCK1(recordRPC, void(std::string));
     TROMPELOEIL_MAKE_CONST_MOCK1(recordException, void(std::string));
-    TROMPELOEIL_MAKE_CONST_MOCK2(recordNotification, void(sysrepo::NotificationType, std::optional<std::string_view>));
+    TROMPELOEIL_MAKE_CONST_MOCK2(recordNotification, void(sysrepo::NotificationType, std::optional<std::string>));
 };
 
 namespace {
@@ -565,7 +564,7 @@ TEST_CASE("subscriptions")
 
     DOCTEST_SUBCASE("Originator name")
     {
-        std::string_view originatorName;
+        std::string originatorName;
 
         DOCTEST_SUBCASE("Originator name set")
         {

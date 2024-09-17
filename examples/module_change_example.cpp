@@ -76,8 +76,8 @@ void printCurrentConfig(sysrepo::Session session, std::string moduleName)
 sysrepo::ErrorCode moduleChangeCb(
         sysrepo::Session session,
         uint32_t /*subscriptionId*/,
-        std::string_view moduleName,
-        std::optional<std::string_view> subXPath,
+        const std::string& moduleName,
+        const std::optional<std::string>& subXPath,
         sysrepo::Event event,
         uint32_t /*requestId*/)
 {

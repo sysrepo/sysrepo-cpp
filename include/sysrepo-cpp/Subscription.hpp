@@ -57,7 +57,7 @@ struct Change {
      *  - if #node is a user-ordered leaf-list, #previousValue is the value of the new preceding instance of #node.
      *    If #node became the first instance in the leaf-list, #previousValue contains an empty string.
      */
-    std::optional<std::string_view> previousValue;
+    std::optional<std::string> previousValue;
     /**
      * @brief Contains the list keys predicate for the new preceding list instance.
      *
@@ -69,7 +69,7 @@ struct Change {
      *
      * Otherwise #previousList is `std::nullopt`.
      */
-    std::optional<std::string_view> previousList;
+    std::optional<std::string> previousList;
     /**
      * @brief Signifies whether #previousValue was a default value.
      *
@@ -153,7 +153,7 @@ using NotificationTimeStamp = std::chrono::time_point<std::chrono::system_clock,
  * @param requestId Request ID unique for the specific module_name. Connected events for one request (SR_EV_CHANGE and
  * SR_EV_DONE, for example) have the same request ID.
  */
-using ModuleChangeCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view moduleName, std::optional<std::string_view> subXPath, Event event, uint32_t requestId)>;
+using ModuleChangeCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, const std::string& moduleName, const std::optional<std::string>& subXPath, Event event, uint32_t requestId)>;
 
 /**
  * A callback for OperGet subscriptions.
@@ -164,7 +164,7 @@ using ModuleChangeCb = std::function<ErrorCode(Session session, uint32_t subscri
  * @param requestId Request ID unique for the specific module_name. Connected events for one request (SR_EV_CHANGE and
  * @param output A handle to a tree. The callback is supposed to fill this tree with the requested data.
  */
-using OperGetCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view moduleName, std::optional<std::string_view> subXPath, std::optional<std::string_view> requestXPath, uint32_t requestId, std::optional<libyang::DataNode>& output)>;
+using OperGetCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, const std::string& moduleName, const std::optional<std::string>& subXPath, const std::optional<std::string>& requestXPath, uint32_t requestId, std::optional<libyang::DataNode>& output)>;
 
 /**
  * A callback for RPC/action subscriptions.
@@ -176,7 +176,7 @@ using OperGetCb = std::function<ErrorCode(Session session, uint32_t subscription
  * @param output A handle to a tree. The callback is supposed to fill this tree with output data (if there are any).
  * Points to the operation root node.
  */
-using RpcActionCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, std::string_view path, const libyang::DataNode input, Event event, uint32_t requestId, libyang::DataNode output)>;
+using RpcActionCb = std::function<ErrorCode(Session session, uint32_t subscriptionId, const std::string& path, const libyang::DataNode input, Event event, uint32_t requestId, libyang::DataNode output)>;
 /**
  * A callback for notification subscriptions.
  * @param session An implicit session for the callback.

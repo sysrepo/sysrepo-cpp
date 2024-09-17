@@ -141,7 +141,7 @@ public:
     std::vector<ErrorInfo> getErrors() const;
     std::vector<NetconfErrorInfo> getNetconfErrors() const;
 
-    std::string_view getOriginatorName() const;
+    std::string getOriginatorName() const;
     void setOriginatorName(const std::string& originatorName);
 
     Connection getConnection();

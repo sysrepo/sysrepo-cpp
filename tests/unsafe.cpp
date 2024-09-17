@@ -15,7 +15,7 @@
 
 class Recorder {
 public:
-    TROMPELOEIL_MAKE_CONST_MOCK5(record, void(sysrepo::ChangeOperation, std::string, std::optional<std::string_view>, std::optional<std::string_view>, bool));
+    TROMPELOEIL_MAKE_CONST_MOCK5(record, void(sysrepo::ChangeOperation, std::string, std::optional<std::string>, std::optional<std::string>, bool));
 };
 
 TEST_CASE("unsafe")
