@@ -27,9 +27,9 @@ option(WITH_DOCS "Create and install internal documentation (needs Doxygen)" ${D
 option(WITH_EXAMPLES "Build examples" ON)
 
 find_package(PkgConfig)
-pkg_check_modules(LIBYANG_CPP REQUIRED libyang-cpp>=2 IMPORTED_TARGET)
+pkg_check_modules(LIBYANG_CPP REQUIRED libyang-cpp>=3 IMPORTED_TARGET)
 pkg_check_modules(SYSREPO REQUIRED sysrepo>=2.11.7 IMPORTED_TARGET)
-set(SYSREPO_CPP_PKG_VERSION "2")
+set(SYSREPO_CPP_PKG_VERSION "3")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
@@ -43,6 +43,12 @@ add_library(sysrepo-cpp SHARED
     )
 
 target_link_libraries(sysrepo-cpp PRIVATE PkgConfig::SYSREPO PUBLIC PkgConfig::LIBYANG_CPP)
+# We do not offer any long-term API/ABI guarantees. To make stuff easier for downstream consumers,
+# we will be bumping both API and ABI versions very deliberately.
+# There will be no attempts at semver tracking, for example.
+set_target_properties(sysrepo-cpp PROPERTIES
+	VERSION ${SYSREPO_CPP_PKG_VERSION}
+	SOVERSION ${SYSREPO_CPP_PKG_VERSION})
 
 if(BUILD_TESTING)
     find_package(doctest 2.4.8 REQUIRED)
