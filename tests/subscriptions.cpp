@@ -494,11 +494,11 @@ TEST_CASE("subscriptions")
             sess.applyChanges();
         } catch (const sysrepo::ErrorWithCode&) {
             auto errors = sess.getErrors();
-            REQUIRE(errors.size() == 2);
-            REQUIRE(errors.at(0).errorMessage == message);
-            REQUIRE(errors.at(0).code == sysrepo::ErrorCode::OperationFailed);
-            REQUIRE(errors.at(1).errorMessage == "User callback failed.");
-            REQUIRE(errors.at(1).code == sysrepo::ErrorCode::CallbackFailed);
+            REQUIRE(errors.size() == 1);
+            REQUIRE(errors.at(0) == sysrepo::ErrorInfo{
+                .code = sysrepo::ErrorCode::OperationFailed,
+                .errorMessage = message
+            });
         }
 
         // The callback does not fail the second time.
@@ -548,14 +548,10 @@ TEST_CASE("subscriptions")
         sess.setItem("/test_module:leafInt32", "123");
         REQUIRE_THROWS_AS(sess.applyChanges(), sysrepo::ErrorWithCode);
         auto errors = sess.getErrors();
-        REQUIRE(errors.size() == 2);
+        REQUIRE(errors.size() == 1);
         REQUIRE(errors.at(0) == sysrepo::ErrorInfo{
             .code = sysrepo::ErrorCode::OperationFailed,
             .errorMessage = "Test callback failure.",
-        });
-        REQUIRE(errors.at(1) == sysrepo::ErrorInfo{
-            .code = sysrepo::ErrorCode::CallbackFailed,
-            .errorMessage = "User callback failed."
         });
         auto ncErrors = sess.getNetconfErrors();
         REQUIRE(ncErrors.size() == 1);
