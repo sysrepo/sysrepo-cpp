@@ -53,7 +53,7 @@ Session Connection::sessionStart(sysrepo::Datastore datastore)
     sr_session_ctx_t* sess;
     auto res = sr_session_start(ctx.get(), toDatastore(datastore), &sess);
 
-    throwIfError(res, "Couldn't connect to sysrepo");
+    throwIfError(res, "Couldn't start sysrepo session");
     return Session{sess, ctx};
 }
 
