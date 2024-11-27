@@ -190,6 +190,13 @@ using RpcActionCb = std::function<ErrorCode(Session session, uint32_t subscripti
 using NotifCb = std::function<void(Session session, uint32_t subscriptionId, const NotificationType type, const std::optional<libyang::DataNode> notificationTree, const NotificationTimeStamp timestamp)>;
 
 /**
+ * A callback for YANG push notification subscriptions.
+ * @param notification The notification tree.
+ * @param timestamp Time when the notification was generated.
+ */
+using YangPushNotifCb = std::function<void(const std::optional<libyang::DataNode> notificationTree, const NotificationTimeStamp timestamp)>;
+
+/**
  * Exception handler type for handling exceptions thrown in user callbacks.
  */
 using ExceptionHandler = std::function<void(std::exception& ex)>;
@@ -267,5 +274,42 @@ private:
     std::shared_ptr<sr_subscription_ctx_s> m_sub;
 
     bool m_didNacmInit;
+};
+
+enum class SyncOnStart : bool {
+    No,
+    Yes,
+};
+
+/**
+ * @brief Manages lifetime of YANG push subscriptions.
+ *
+ * Users are supposed to create instances of this class via Session::yangPushPeriodic or Session::yangPushOnChange.
+ * Whenever notified about a change (by polling the file descriptor obtained by fd() function),
+ * there is at least one event waiting to be processed by a call to YangPushSubscription::processEvent.
+ *
+ * There is no event loop created by the library, so the user is responsible for polling the file descriptor and calling
+ * YangPushSubscription::processEvent.
+ */
+class YangPushSubscription {
+public:
+    YangPushSubscription(const YangPushSubscription&) = delete;
+    YangPushSubscription& operator=(const YangPushSubscription&) = delete;
+    YangPushSubscription(YangPushSubscription&&) noexcept;
+    YangPushSubscription& operator=(YangPushSubscription&&) noexcept;
+    ~YangPushSubscription();
+
+    int fd() const;
+    uint64_t subscriptionId() const;
+    void processEvent(YangPushNotifCb cb) const;
+    void terminate(const std::optional<std::string>& reason = std::nullopt);
+
+private:
+    YangPushSubscription(std::shared_ptr<sr_session_ctx_s> sess, int fd, uint64_t subId);
+
+    struct Data;
+    std::unique_ptr<Data> m_data;
+
+    friend class Session;
 };
 }
