@@ -11,6 +11,7 @@
 extern "C" {
 #include <sysrepo.h>
 #include <sysrepo/netconf_acm.h>
+#include <sysrepo/subscribed_notifications.h>
 }
 #include "utils/enum.hpp"
 #include "utils/exception.hpp"
@@ -409,5 +410,96 @@ bool ChangeIterator::operator==(const ChangeIterator& other) const
     return this->m_current.has_value() == other.m_current.has_value() &&
         // And then either both contain nothing or contain the same thing.
         (!this->m_current.has_value() || this->m_current->node == other.m_current->node);
+}
+
+
+struct DynamicSubscription::Data {
+    std::shared_ptr<sr_session_ctx_s> sess;
+    int fd;
+    uint64_t subId;
+    bool m_terminated;
+
+    Data(std::shared_ptr<sr_session_ctx_s> sess, int fd, uint64_t subId, bool terminated);
+    ~Data();
+    void terminate(const std::optional<std::string>& reason = std::nullopt);
+};
+
+DynamicSubscription::DynamicSubscription(std::shared_ptr<sr_session_ctx_s> sess, int fd, uint64_t subId)
+    : m_data(std::make_unique<Data>(std::move(sess), fd, subId, false))
+{
+}
+
+DynamicSubscription::DynamicSubscription(DynamicSubscription&&) noexcept = default;
+DynamicSubscription& DynamicSubscription::operator=(DynamicSubscription&&) noexcept = default;
+DynamicSubscription::~DynamicSubscription() = default;
+
+/** @brief Returns the file descriptor associated with this subscription. */
+int DynamicSubscription::fd() const
+{
+    return m_data->fd;
+}
+
+/** @brief Returns the subscription ID associated with this subscription. */
+uint64_t DynamicSubscription::subscriptionId() const
+{
+    return m_data->subId;
+}
+
+/** @brief Terminates the subscription.
+ *
+ * Wraps `srsn_terminate`.
+ */
+void DynamicSubscription::terminate(const std::optional<std::string>& reason)
+{
+    m_data->terminate(reason);
+}
+
+/** @brief Processes a single event associated with this subscription.
+ *
+ * Invoke only when the file descriptor associated with this subscription is ready for reading.
+ * Otherwise, the function blocks unless the FD is set to non-blocking.
+ *
+ * Wraps `srsn_read_notif`.
+ */
+void DynamicSubscription::processEvent(YangPushNotifCb cb) const
+{
+    struct timespec timestamp;
+    struct lyd_node* tree;
+    auto ctx = std::unique_ptr<const ly_ctx, std::function<void(const ly_ctx*)>>(sr_session_acquire_context(m_data->sess.get()), [&](const ly_ctx*) { sr_session_release_context(m_data->sess.get()); });
+
+    auto err = srsn_read_notif(fd(), ctx.get(), &timestamp, &tree);
+    throwIfError(err, "Couldn't read yang-push notification");
+
+    const auto wrappedNotification = tree ? std::optional{libyang::wrapRawNode(tree)} : std::nullopt;
+
+    if (wrappedNotification && wrappedNotification->path() == "/ietf-subscribed-notifications:subscription-terminated") {
+        // subscription was terminated by sysrepo (e.g. because of stop-time)
+        m_data->m_terminated = true;
+    }
+
+    cb(wrappedNotification, toTimePoint(timestamp));
+}
+
+DynamicSubscription::Data::Data(std::shared_ptr<sr_session_ctx_s> sess, int fd, uint64_t subId, bool terminated)
+    : sess(std::move(sess))
+    , fd(fd)
+    , subId(subId)
+    , m_terminated(terminated)
+{
+}
+
+DynamicSubscription::Data::~Data()
+{
+    if (!m_terminated) {
+        terminate();
+    }
+    close(fd);
+}
+
+void DynamicSubscription::Data::terminate(const std::optional<std::string>& reason)
+{
+    auto err = srsn_terminate(subId, reason ? reason->c_str() : nullptr);
+    throwIfError(err, "Couldn't terminate yang-push subscription with id " + std::to_string(subId));
+    m_terminated = true;
 }
 }
