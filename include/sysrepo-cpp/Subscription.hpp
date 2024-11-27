@@ -189,6 +189,8 @@ using RpcActionCb = std::function<ErrorCode(Session session, uint32_t subscripti
  */
 using NotifCb = std::function<void(Session session, uint32_t subscriptionId, const NotificationType type, const std::optional<libyang::DataNode> notificationTree, const NotificationTimeStamp timestamp)>;
 
+using YangPushNotifCb = std::function<void(const std::optional<libyang::DataNode>, const NotificationTimeStamp)>;
+
 /**
  * Exception handler type for handling exceptions thrown in user callbacks.
  */
@@ -267,5 +269,29 @@ private:
     std::shared_ptr<sr_subscription_ctx_s> m_sub;
 
     bool m_didNacmInit;
+};
+
+class YangPushSubscription {
+public:
+    ~YangPushSubscription();
+    YangPushSubscription(const YangPushSubscription&) = delete;
+    YangPushSubscription& operator=(const YangPushSubscription&) = delete;
+    YangPushSubscription(YangPushSubscription&&) noexcept = default;
+    YangPushSubscription& operator=(YangPushSubscription&&) noexcept = default;
+
+    int fd() const;
+    void processEvents() const;
+    void terminate(const std::optional<std::string>& reason = std::nullopt);
+
+private:
+    YangPushSubscription(std::shared_ptr<sr_session_ctx_s> sess, int fd, uint64_t subId, YangPushNotifCb cb);
+
+    std::shared_ptr<sr_session_ctx_s> m_sess;
+    int m_fd;
+    uint64_t m_subId;
+    YangPushNotifCb m_cb;
+    bool m_terminated;
+
+    friend class Session;
 };
 }

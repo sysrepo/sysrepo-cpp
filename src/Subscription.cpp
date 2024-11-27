@@ -11,6 +11,7 @@
 extern "C" {
 #include <sysrepo.h>
 #include <sysrepo/netconf_acm.h>
+#include <sysrepo/subscribed_notifications.h>
 }
 #include "utils/enum.hpp"
 #include "utils/exception.hpp"
@@ -409,5 +410,47 @@ bool ChangeIterator::operator==(const ChangeIterator& other) const
     return this->m_current.has_value() == other.m_current.has_value() &&
         // And then either both contain nothing or contain the same thing.
         (!this->m_current.has_value() || this->m_current->node == other.m_current->node);
+}
+
+YangPushSubscription::YangPushSubscription(std::shared_ptr<sr_session_ctx_s> sess, int fd, uint64_t subId, YangPushNotifCb cb)
+    : m_sess(std::move(sess))
+    , m_fd(fd)
+    , m_subId(subId)
+    , m_cb(std::move(cb))
+    , m_terminated(false)
+{
+}
+
+YangPushSubscription::~YangPushSubscription()
+{
+    if (!m_terminated) {
+        terminate();
+    }
+    close(m_fd);
+}
+
+void YangPushSubscription::terminate(const std::optional<std::string>& reason )
+{
+    auto err = srsn_terminate(m_subId, reason ? reason->c_str() : nullptr);
+    throwIfError(err, "Couldn't terminate yang-push subscription with id " + std::to_string(m_subId));
+    m_terminated = true;
+}
+
+int YangPushSubscription::fd() const
+{
+    return m_fd;
+}
+
+void YangPushSubscription::processEvents() const
+{
+    struct timespec timestamp;
+    struct lyd_node* tree;
+    const struct ly_ctx* ctx = sr_session_acquire_context(m_sess.get());
+
+    auto err = srsn_read_notif(m_fd, ctx, &timestamp, &tree);
+    throwIfError(err, "Couldn't read yang-push notification");
+
+    auto wrappedNotification = tree ? std::optional{libyang::wrapRawNode(tree)} : std::nullopt;
+    m_cb(wrappedNotification, toTimePoint(timestamp));
 }
 }
