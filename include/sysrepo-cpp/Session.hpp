@@ -134,6 +134,17 @@ public:
             ExceptionHandler handler = nullptr,
             const std::optional<FDHandling>& callbacks = std::nullopt);
 
+    [[nodiscard]] YangPushSubscription yangPushPeriodic(
+        const std::optional<std::string>& xpathFilter,
+        std::chrono::milliseconds periodTime,
+        const std::optional<NotificationTimeStamp>& anchorTime = std::nullopt,
+        const std::optional<NotificationTimeStamp>& stopTime = std::nullopt);
+    [[nodiscard]] YangPushSubscription yangPushOnChange(
+        const std::optional<std::string>& xpathFilter,
+        const std::optional<std::chrono::milliseconds>& dampeningPeriod = std::nullopt,
+        SyncOnStart syncOnStart = SyncOnStart::No,
+        const std::optional<NotificationTimeStamp>& stopTime = std::nullopt);
+
     ChangeCollection getChanges(const std::string& xpath = "//.");
     void setErrorMessage(const std::string& msg);
     void setNetconfError(const NetconfErrorInfo& info);

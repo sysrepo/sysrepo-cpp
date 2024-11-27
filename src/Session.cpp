@@ -11,6 +11,7 @@ extern "C" {
 #include <sysrepo.h>
 #include <sysrepo/netconf_acm.h>
 #include <sysrepo/error_format.h>
+#include <sysrepo/subscribed_notifications.h>
 }
 #include <libyang-cpp/Context.hpp>
 #include <sysrepo-cpp/Connection.hpp>
@@ -471,6 +472,78 @@ Subscription Session::onNotification(
     auto sub = Subscription{m_sess, handler, callbacks};
     sub.onNotification(moduleName, cb, xpath, startTime, stopTime, opts);
     return sub;
+}
+
+/**
+ * Subscribe for receiving notifications according to 'ietf-yang-push' YANG periodic subscriptions.
+ *
+ * Wraps `srsn_yang_push_periodic`.
+ *
+ * @param xpathFilter Optional XPath that filters received notification.
+ * @param periodTime Notification period.
+ * @param anchorTime Optional anchor time for the period. Anchor time acts as a reference point for the period.
+ * @param stopTime Optional stop time ending the notification subscription.
+ *
+ * @return The YangPushSubscription handle.
+ */
+YangPushSubscription Session::yangPushPeriodic(
+    const std::optional<std::string>& xpathFilter,
+    std::chrono::milliseconds periodTime,
+    const std::optional<NotificationTimeStamp>& anchorTime,
+    const std::optional<NotificationTimeStamp>& stopTime)
+{
+    int fd;
+    uint32_t subId;
+    auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} : std::nullopt;
+    auto anchorSpec = anchorTime ? std::optional{toTimespec(*anchorTime)} : std::nullopt;
+    auto res = srsn_yang_push_periodic(m_sess.get(),
+                                       toDatastore(activeDatastore()),
+                                       xpathFilter ? xpathFilter->c_str() : nullptr,
+                                       periodTime.count(),
+                                       anchorSpec ? &anchorSpec.value() : nullptr,
+                                       stopSpec ? &stopSpec.value() : nullptr,
+                                       &fd,
+                                       &subId);
+    throwIfError(res, "Couldn't create yang-push periodic subscription", m_sess.get());
+
+    return {m_sess, fd, subId};
+}
+
+/**
+ * Subscribe for receiving notifications according to 'ietf-yang-push' YANG on-change subscriptions.
+ *
+ * Wraps `srsn_yang_push_on_change`.
+ *
+ * @param xpathFilter Optional XPath that filters received notification.
+ * @param dampeningPeriod Optional dampening period.
+ * @param syncOnStart Whether to start with a notification of the current state.
+ * @param stopTime Optional stop time ending the notification subscription.
+ *
+ * @return The YangPushSubscription handle.
+ */
+YangPushSubscription Session::yangPushOnChange(
+    const std::optional<std::string>& xpathFilter,
+    const std::optional<std::chrono::milliseconds>& dampeningPeriod,
+    SyncOnStart syncOnStart,
+    const std::optional<NotificationTimeStamp>& stopTime)
+{
+    int fd;
+    uint32_t subId;
+    auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} : std::nullopt;
+    auto res = srsn_yang_push_on_change(m_sess.get(),
+                                        toDatastore(activeDatastore()),
+                                        xpathFilter ? xpathFilter->c_str() : nullptr,
+                                        dampeningPeriod ? dampeningPeriod->count() : 0,
+                                        syncOnStart == SyncOnStart::Yes,
+                                        nullptr,
+                                        stopSpec ? &stopSpec.value() : nullptr,
+                                        0,
+                                        nullptr,
+                                        &fd,
+                                        &subId);
+    throwIfError(res, "Couldn't create yang-push on-change subscription", m_sess.get());
+
+    return {m_sess, fd, subId};
 }
 
 /**
