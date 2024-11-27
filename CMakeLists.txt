@@ -76,9 +76,19 @@ if(BUILD_TESTING)
     set(fixture-test-module
         --install ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang
         )
+    set(fixture-dynamic-subscriptions
+        --install ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang
+        --install ${CMAKE_CURRENT_SOURCE_DIR}/tests/yang/iana-if-type@2014-05-08.yang
+        --install ${CMAKE_CURRENT_SOURCE_DIR}/tests/yang/ietf-interfaces@2018-02-20.yang
+        --install ${CMAKE_CURRENT_SOURCE_DIR}/tests/yang/ietf-ip@2018-02-22.yang
+        --install ${CMAKE_CURRENT_SOURCE_DIR}/tests/yang/ietf-network-instance@2019-01-21.yang
+        --install ${CMAKE_CURRENT_SOURCE_DIR}/tests/yang/ietf-subscribed-notifications@2019-09-09.yang -e replay
+        --install ${CMAKE_CURRENT_SOURCE_DIR}/tests/yang/ietf-yang-push@2019-09-09.yang -e on-change
+        )
 
     sysrepo_cpp_test(NAME session FIXTURE fixture-test-module)
     sysrepo_cpp_test(NAME subscriptions FIXTURE fixture-test-module LIBRARIES Threads::Threads)
+    sysrepo_cpp_test(NAME subscriptions-dynamic FIXTURE fixture-dynamic-subscriptions LIBRARIES PkgConfig::SYSREPO)
     sysrepo_cpp_test(NAME unsafe FIXTURE fixture-test-module LIBRARIES PkgConfig::SYSREPO)
 endif()
 
