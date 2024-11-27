@@ -190,6 +190,13 @@ using RpcActionCb = std::function<ErrorCode(Session session, uint32_t subscripti
 using NotifCb = std::function<void(Session session, uint32_t subscriptionId, const NotificationType type, const std::optional<libyang::DataNode> notificationTree, const NotificationTimeStamp timestamp)>;
 
 /**
+ * A callback for YANG push notification subscriptions.
+ * @param notification The notification tree.
+ * @param timestamp Time when the notification was generated.
+ */
+using YangPushNotifCb = std::function<void(const std::optional<libyang::DataNode> notificationTree, const NotificationTimeStamp timestamp)>;
+
+/**
  * Exception handler type for handling exceptions thrown in user callbacks.
  */
 using ExceptionHandler = std::function<void(std::exception& ex)>;
@@ -267,5 +274,47 @@ private:
     std::shared_ptr<sr_subscription_ctx_s> m_sub;
 
     bool m_didNacmInit;
+};
+
+enum class SyncOnStart : bool {
+    No,
+    Yes,
+};
+
+/**
+ * @brief Manages lifetime of YANG push subscriptions.
+ *
+ * Users are supposed to create instances of this class via Session::yangPushPeriodic, Session::yangPushOnChange or Session::subscribeNotifications.
+ * Whenever notified about a change (by polling the file descriptor obtained by fd() function),
+ * there is at least one event waiting to be processed by a call to YangPushSubscription::processEvent.
+ *
+ * Internally, the sysrepo C library creates some background thread(s). These are used either for managing internal,
+ * sysrepo-level module subscriptions, or for scheduling of periodic timers. These threads are fully encapsulated by
+ * the C code, and there is no control over them from this C++ wrapper. The public interface of this class is a file
+ * descriptor that the caller is expected to poll for readability/closing (and the subscription ID). Once the FD is
+ * readable, invoke this class' processEvents(). There is no automatic event loop which would take care of this
+ * functionality, and users are expected to integrate this FD into their own event handling.
+ */
+class DynamicSubscription {
+public:
+    DynamicSubscription(const DynamicSubscription&) = delete;
+    DynamicSubscription& operator=(const DynamicSubscription&) = delete;
+    DynamicSubscription(DynamicSubscription&&) noexcept;
+    DynamicSubscription& operator=(DynamicSubscription&&) noexcept;
+    ~DynamicSubscription();
+
+    int fd() const;
+    uint64_t subscriptionId() const;
+    std::optional<NotificationTimeStamp> replayStartTime() const;
+    void processEvent(YangPushNotifCb cb) const;
+    void terminate(const std::optional<std::string>& reason = std::nullopt);
+
+private:
+    DynamicSubscription(std::shared_ptr<sr_session_ctx_s> sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime = std::nullopt);
+
+    struct Data;
+    std::unique_ptr<Data> m_data;
+
+    friend class Session;
 };
 }
