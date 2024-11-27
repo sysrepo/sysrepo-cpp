@@ -11,6 +11,7 @@ extern "C" {
 #include <sysrepo.h>
 #include <sysrepo/netconf_acm.h>
 #include <sysrepo/error_format.h>
+#include <sysrepo/subscribed_notifications.h>
 }
 #include <libyang-cpp/Context.hpp>
 #include <sysrepo-cpp/Connection.hpp>
@@ -471,6 +472,46 @@ Subscription Session::onNotification(
     auto sub = Subscription{m_sess, handler, callbacks};
     sub.onNotification(moduleName, cb, xpath, startTime, stopTime, opts);
     return sub;
+}
+
+YangPushSubscription Session::yangPushPeriodic(const YangPushNotifCb& cb, std::chrono::milliseconds periodTime, const std::optional<std::string>& xpathFilter, const std::optional<NotificationTimeStamp>& anchorTime, const std::optional<NotificationTimeStamp>& stopTime)
+{
+    int fd;
+    uint32_t subId;
+    auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} : std::nullopt;
+    auto anchorSpec = anchorTime ? std::optional{toTimespec(*anchorTime)} : std::nullopt;
+    auto res = srsn_yang_push_periodic(m_sess.get(),
+                                       toDatastore(sysrepo::Datastore::Running),
+                                       xpathFilter ? xpathFilter->c_str() : nullptr,
+                                       periodTime.count(),
+                                       anchorSpec ? &anchorSpec.value() : nullptr,
+                                       stopSpec ? &stopSpec.value() : nullptr,
+                                       &fd,
+                                       &subId);
+    throwIfError(res, "Couldn't create yang-push periodic subscription", m_sess.get());
+
+    return {m_sess, fd, subId, cb};
+}
+
+YangPushSubscription Session::yangPushOnChange(const YangPushNotifCb& cb, const std::optional<std::string>& xpathFilter, bool syncOnStart, const std::chrono::milliseconds& dampeningPeriod, const std::optional<NotificationTimeStamp>& stopTime)
+{
+    int fd;
+    uint32_t subId;
+    auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} : std::nullopt;
+    auto res = srsn_yang_push_on_change(m_sess.get(),
+                                        toDatastore(sysrepo::Datastore::Running),
+                                        xpathFilter ? xpathFilter->c_str() : nullptr,
+                                        dampeningPeriod.count(),
+                                        syncOnStart,
+                                        nullptr,
+                                        stopSpec ? &stopSpec.value() : nullptr,
+                                        0,
+                                        nullptr,
+                                        &fd,
+                                        &subId);
+    throwIfError(res, "Couldn't create yang-push on-change subscription", m_sess.get());
+
+    return {m_sess, fd, subId, cb};
 }
 
 /**

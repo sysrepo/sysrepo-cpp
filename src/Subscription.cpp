@@ -11,6 +11,7 @@
 extern "C" {
 #include <sysrepo.h>
 #include <sysrepo/netconf_acm.h>
+#include <sysrepo/subscribed_notifications.h>
 }
 #include "utils/enum.hpp"
 #include "utils/exception.hpp"
@@ -409,5 +410,57 @@ bool ChangeIterator::operator==(const ChangeIterator& other) const
     return this->m_current.has_value() == other.m_current.has_value() &&
         // And then either both contain nothing or contain the same thing.
         (!this->m_current.has_value() || this->m_current->node == other.m_current->node);
+}
+
+YangPushSubscription::YangPushSubscription(std::shared_ptr<sr_session_ctx_s> sess, int fd, uint64_t subId, YangPushNotifCb cb)
+    : m_data(std::make_unique<Data>(std::move(sess), fd, subId, false))
+    , m_cb(cb)
+{
+}
+
+int YangPushSubscription::fd() const
+{
+    return m_data->fd;
+}
+
+void YangPushSubscription::terminate(const std::optional<std::string>& reason)
+{
+    m_data->terminate(reason);
+}
+
+void YangPushSubscription::processEvents() const
+{
+    struct timespec timestamp;
+    struct lyd_node* tree;
+    const struct ly_ctx* ctx = sr_session_acquire_context(m_data->sess.get());
+
+    auto err = srsn_read_notif(fd(), ctx, &timestamp, &tree);
+    throwIfError(err, "Couldn't read yang-push notification");
+
+    auto wrappedNotification = tree ? std::optional{libyang::wrapRawNode(tree)} : std::nullopt;
+    m_cb(wrappedNotification, toTimePoint(timestamp));
+}
+
+YangPushSubscription::Data::Data(std::shared_ptr<sr_session_ctx_s> sess, int fd, uint64_t subId, bool terminated)
+    : sess(std::move(sess))
+    , fd(fd)
+    , subId(subId)
+    , m_terminated(terminated)
+{
+}
+
+YangPushSubscription::Data::~Data()
+{
+    if (!m_terminated) {
+        terminate();
+    }
+    close(fd);
+}
+
+void YangPushSubscription::Data::terminate(const std::optional<std::string>& reason)
+{
+    auto err = srsn_terminate(subId, reason ? reason->c_str() : nullptr);
+    throwIfError(err, "Couldn't terminate yang-push subscription with id " + std::to_string(subId));
+    m_terminated = true;
 }
 }
