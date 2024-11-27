@@ -6,6 +6,10 @@ module test_module {
     prefix nacm;
   }
 
+  import ietf-subscribed-notifications {
+    prefix sn;
+  }
+
   leaf leafInt32 {
     type int32;
   }
