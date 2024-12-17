@@ -331,17 +331,17 @@ void Session::sendNotification(libyang::DataNode notification, const Wait wait, 
  * Wraps `sr_replace_config`.
  *
  * @param config Libyang tree to use as a complete datastore content, or nullopt
- * @param module If provided, a module name to limit the operation to
+ * @param moduleName If provided, a module name to limit the operation to
  * @param timeout Optional timeout to wait for
  */
-void Session::replaceConfig(std::optional<libyang::DataNode> config, const std::optional<std::string>& module, std::chrono::milliseconds timeout)
+void Session::replaceConfig(std::optional<libyang::DataNode> config, const std::optional<std::string>& moduleName, std::chrono::milliseconds timeout)
 {
     std::optional<libyang::DataNode> thrashable;
     if (config) {
         thrashable = config->duplicateWithSiblings(libyang::DuplicationOptions::Recursive | libyang::DuplicationOptions::WithParents);
     }
     auto res = sr_replace_config(
-        m_sess.get(), module ? module->c_str() : nullptr,
+        m_sess.get(), moduleName ? moduleName->c_str() : nullptr,
         config ? libyang::releaseRawNode(*thrashable) : nullptr,
         timeout.count());
     throwIfError(res, "sr_replace_config failed", m_sess.get());
@@ -723,12 +723,12 @@ uint32_t Session::getId() const
     return sr_session_get_id(m_sess.get());
 }
 
-Lock::Lock(Session session, std::optional<std::string> module, std::optional<std::chrono::milliseconds> timeout)
+Lock::Lock(Session session, std::optional<std::string> moduleName, std::optional<std::chrono::milliseconds> timeout)
     : m_session(session)
     , m_lockedDs(m_session.activeDatastore())
-    , m_module(module)
+    , m_module(moduleName)
 {
-    auto res = sr_lock(getRawSession(m_session), module ? module->c_str() : nullptr, timeout ? timeout->count() : 0);
+    auto res = sr_lock(getRawSession(m_session), moduleName ? moduleName->c_str() : nullptr, timeout ? timeout->count() : 0);
     throwIfError(res, "Cannot lock session", getRawSession(m_session));
 }
 

@@ -95,7 +95,7 @@ public:
     void copyConfig(const Datastore source, const std::optional<std::string>& moduleName = std::nullopt, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
     libyang::DataNode sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
     void sendNotification(libyang::DataNode notification, const Wait wait, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
-    void replaceConfig(std::optional<libyang::DataNode> config, const std::optional<std::string>& module = std::nullopt, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
+    void replaceConfig(std::optional<libyang::DataNode> config, const std::optional<std::string>& moduleName = std::nullopt, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
 
     void setNacmUser(const std::string& user);
     [[nodiscard]] Subscription initNacm(
@@ -172,7 +172,7 @@ public:
      *
      * Wraps `sr_lock`.
      */
-    explicit Lock(Session session, std::optional<std::string> module = std::nullopt, std::optional<std::chrono::milliseconds> timeout = std::nullopt);
+    explicit Lock(Session session, std::optional<std::string> moduleName = std::nullopt, std::optional<std::chrono::milliseconds> timeout = std::nullopt);
     /** @brief Release the lock
      *
      * Wraps `sr_unlock`.
