@@ -9,7 +9,6 @@ It uses RAII for automatic memory management.
 
 ## Dependencies
 - [sysrepo](https://github.com/sysrepo/sysrepo) - the `devel` branch (even for the `master` branch of *sysrepo-cpp*)
-  - we temporarily require pre-v3 sysrepo which introduced backward-incompatible changes to operational data handling
 - [libyang-cpp](https://github.com/CESNET/libyang-cpp) - C++ bindings for *libyang*
 - C++20 compiler (e.g., GCC 10.x+, clang 10+)
 - CMake 3.19+

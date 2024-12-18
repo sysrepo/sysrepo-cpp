@@ -85,13 +85,15 @@ public:
     void setItem(const std::string& path, const std::optional<std::string>& value, const EditOptions opts = sysrepo::EditOptions::Default);
     void editBatch(libyang::DataNode edit, const DefaultOperation op);
     void deleteItem(const std::string& path, const EditOptions opts = sysrepo::EditOptions::Default);
-    void discardItems(const std::optional<std::string>& xpath);
     void moveItem(const std::string& path, const MovePosition move, const std::optional<std::string>& keys_or_value, const std::optional<std::string>& origin = std::nullopt, const EditOptions opts = sysrepo::EditOptions::Default);
     std::optional<libyang::DataNode> getData(const std::string& path, int maxDepth = 0, const GetOptions opts = sysrepo::GetOptions::Default, std::chrono::milliseconds timeout = std::chrono::milliseconds{0}) const;
     libyang::DataNode getOneNode(const std::string& path, std::chrono::milliseconds timeout = std::chrono::milliseconds{0}) const;
     std::optional<const libyang::DataNode> getPendingChanges() const;
     void applyChanges(std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
-    void discardChanges();
+    void discardChanges(const std::optional<std::string>& xpath = std::nullopt);
+    std::optional<libyang::DataNode> operationalChanges(const std::optional<std::string>& moduleName = std::nullopt) const;
+    void discardOperationalChanges(const std::optional<std::string>& moduleName = std::nullopt, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
+    void dropForeignOperationalContent(const std::optional<std::string>& xpath);
     void copyConfig(const Datastore source, const std::optional<std::string>& moduleName = std::nullopt, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
     libyang::DataNode sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
     void sendNotification(libyang::DataNode notification, const Wait wait, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
