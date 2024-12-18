@@ -23,6 +23,26 @@ extern "C" {
 
 using namespace std::string_literals;
 namespace sysrepo {
+
+namespace {
+libyang::DataNode wrapSrData(std::shared_ptr<sr_session_ctx_s> sess, sr_data_t* data)
+{
+    // Since the lyd_node came from sysrepo and it is wrapped in a sr_data_t, we have to postpone calling the
+    // sr_release_data() until after we're "done" with the libyang::DataNode.
+    //
+    // Normally, sr_release_data() would free the lyd_data as well. However, it is possible that the user wants to
+    // manipulate the data tree (think unlink()) in a way which might have needed to overwrite the tree->data pointer.
+    // Just delegate all the freeing to the C++ wrapper around lyd_data. The sysrepo library doesn't care about this.
+    auto tree = std::exchange(data->tree, nullptr);
+
+    // Use wrapRawNode, not wrapUnmanagedRawNode because we want to let the C++ wrapper manage memory.
+    // Note: We're capturing the session inside the lambda.
+    return libyang::wrapRawNode(tree, std::shared_ptr<sr_data_t>(data, [extend_session_lifetime = sess] (sr_data_t* data) {
+        sr_release_data(data);
+    }));
+}
+}
+
 /**
  * Wraps a pointer to sr_session_ctx_s and manages the lifetime of it. Also extends the lifetime of the connection
  * specified by the `conn` argument.
@@ -119,18 +139,59 @@ void Session::deleteItem(const std::string& path, const EditOptions opts)
 }
 
 /**
- * Prepare to discard nodes matching the specified xpath (or all if not set) previously set by the session connection.
- * Usable only for sysrepo::Datastore::Operational. The changes are applied only after calling Session::applyChanges.
+ * Prepare to drop "earlier content" from other sources in the operational DS for nodes matching the specified XPath
+ *
+ * The "earlier content" might come from the `running` datastore, or be pushed into the `operational` DS from
+ * another session, with a lower priority. This function prepares a special node into the current session's
+ * stored edit which effectively discards any matching content from previous, lower-priority sources.
+ *
+ * This function cannot be used to remove an edit which was pushed via the current session. To do that,
+ * use discardChanges(), or retrieve the stored edit and manipulate its libyang data tree.
+ *
+ * The changes are applied only after calling Session::applyChanges.
  *
  * Wraps `sr_discard_items`.
  *
  * @param xpath Expression filtering the nodes to discard, nullopt for all nodes.
  */
-void Session::discardItems(const std::optional<std::string>& xpath)
+void Session::dropForeignOperationalContent(const std::optional<std::string>& xpath)
 {
     auto res = sr_discard_items(m_sess.get(), xpath ? xpath->c_str() : nullptr);
 
     throwIfError(res, "Session::discardItems: Can't discard "s + (xpath ? "'"s + *xpath + "'" : "all nodes"s), m_sess.get());
+}
+
+/** @short Get a copy of the stored push-operational data for this session
+ *
+ * To modify the stored push operational data, modify this tree in-place and pass it to editBatch()
+ * with the "replace" operation.
+ *
+ * Wraps `sr_get_oper_changes`.
+ */
+std::optional<libyang::DataNode> Session::operationalChanges(const std::optional<std::string>& moduleName) const
+{
+    sr_data_t* data;
+    auto res = sr_get_oper_changes(m_sess.get(), moduleName ? moduleName->c_str() : nullptr, &data);
+
+    throwIfError(res, "Session::operationalChanges: Couldn't retrieve data'"s + (moduleName ? " for \"" + *moduleName + '"' : ""s), m_sess.get());
+
+    if (!data) {
+        return std::nullopt;
+    }
+
+    return wrapSrData(m_sess, data);
+
+}
+
+/** @short Discard push operational changes of a module for this session
+ *
+ * Wraps `sr_discard_oper_changes`.
+ *
+ * */
+void Session::discardOperationalChanges(const std::optional<std::string>& moduleName, std::chrono::milliseconds timeout)
+{
+    auto res = sr_discard_oper_changes(nullptr, m_sess.get(), moduleName ? nullptr : moduleName->c_str(), timeout.count());
+    throwIfError(res, "Session::discardOoperationalChanges: Couldn't discard "s + (moduleName ? "for module \"" + *moduleName + "\"" : "globally"s), m_sess.get());
 }
 
 /**
@@ -153,25 +214,6 @@ void Session::moveItem(const std::string& path, const MovePosition move, const s
             toEditOptions(opts));
 
     throwIfError(res, "Session::moveItem: Can't move '"s + path + "'", m_sess.get());
-}
-
-namespace {
-libyang::DataNode wrapSrData(std::shared_ptr<sr_session_ctx_s> sess, sr_data_t* data)
-{
-    // Since the lyd_node came from sysrepo and it is wrapped in a sr_data_t, we have to postpone calling the
-    // sr_release_data() until after we're "done" with the libyang::DataNode.
-    //
-    // Normally, sr_release_data() would free the lyd_data as well. However, it is possible that the user wants to
-    // manipulate the data tree (think unlink()) in a way which might have needed to overwrite the tree->data pointer.
-    // Just delegate all the freeing to the C++ wrapper around lyd_data. The sysrepo library doesn't care about this.
-    auto tree = std::exchange(data->tree, nullptr);
-
-    // Use wrapRawNode, not wrapUnmanagedRawNode because we want to let the C++ wrapper manage memory.
-    // Note: We're capturing the session inside the lambda.
-    return libyang::wrapRawNode(tree, std::shared_ptr<sr_data_t>(data, [extend_session_lifetime = sess] (sr_data_t* data) {
-        sr_release_data(data);
-    }));
-}
 }
 
 /**
@@ -263,13 +305,15 @@ void Session::applyChanges(std::chrono::milliseconds timeout)
 }
 
 /**
- * Discards changes made in this Session.
+ * Discards changes made earlier in this Session, optionally only below a given XPath
  *
- * Wraps `sr_discard_changes`.
+ * The changes are applied only after calling Session::applyChanges.
+ *
+ * Wraps `sr_discard_changes_xpath`.
  */
-void Session::discardChanges()
+void Session::discardChanges(const std::optional<std::string>& xpath)
 {
-    auto res = sr_discard_changes(m_sess.get());
+    auto res = sr_discard_changes_xpath(m_sess.get(), xpath ? xpath->c_str() : nullptr);
 
     throwIfError(res, "Session::discardChanges: Couldn't discard changes", m_sess.get());
 }
