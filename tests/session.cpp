@@ -210,34 +210,68 @@ TEST_CASE("session")
         }
     }
 
-    DOCTEST_SUBCASE("Session::deleteOperItem")
+    DOCTEST_SUBCASE("push operational data and deleting stuff")
     {
+        const auto leaf = "/test_module:leafInt32"s;
         // Set some arbitrary leaf.
-        sess.setItem("/test_module:leafInt32", "123");
+        sess.setItem(leaf, "123");
         sess.applyChanges();
 
         // The leaf is accesible from the running datastore.
-        REQUIRE(sess.getData("/test_module:leafInt32")->asTerm().valueStr() == "123");
+        REQUIRE(sess.getData(leaf)->asTerm().valueStr() == "123");
 
         // The leaf is NOT accesible from the operational datastore without a subscription.
         sess.switchDatastore(sysrepo::Datastore::Operational);
-        REQUIRE(!sess.getData("/test_module:leafInt32"));
+        REQUIRE(!sess.getData(leaf));
 
         // When we create a subscription, the leaf is accesible from the operational datastore.
         sess.switchDatastore(sysrepo::Datastore::Running);
         auto sub = sess.onModuleChange("test_module", [] (auto, auto, auto, auto, auto, auto) { return sysrepo::ErrorCode::Ok; });
         sess.switchDatastore(sysrepo::Datastore::Operational);
-        REQUIRE(sess.getData("/test_module:leafInt32")->asTerm().valueStr() == "123");
+        REQUIRE(sess.getData(leaf)->asTerm().valueStr() == "123");
 
-        // After using deleteItem, the leaf is no longer accesible from the operational datastore.
-        sess.deleteItem("/test_module:leafInt32");
-        sess.applyChanges();
-        REQUIRE(!sess.getData("/test_module:leafInt32"));
+        DOCTEST_SUBCASE("discardOperationalChanges")
+        {
+            // apply a change which makes the leaf disappear
+            sess.dropForeignOperationalContent(leaf);
+            REQUIRE(!!sess.getData(leaf));
+            sess.applyChanges();
+            REQUIRE(!sess.getData(leaf));
 
-        // Using discardItems makes the leaf visible again (in the operational datastore).
-        sess.discardItems("/test_module:leafInt32");
-        sess.applyChanges();
-        REQUIRE(sess.getData("/test_module:leafInt32")->asTerm().valueStr() == "123");
+            // Using discardOperationalChanges makes the leaf visible again (in the operational datastore).
+            // Also, no need to applyChanges().
+            sess.discardOperationalChanges("test_module");
+            REQUIRE(sess.getData(leaf)->asTerm().valueStr() == "123");
+        }
+
+        DOCTEST_SUBCASE("direct edit of a libyang::DataNode")
+        {
+            // at first, set the leaf to some random value
+            sess.setItem(leaf, "456");
+            sess.applyChanges();
+            REQUIRE(sess.getData(leaf)->asTerm().valueStr() == "456");
+
+            // change the edit in-place
+            auto pushed = sess.operationalChanges();
+            REQUIRE(pushed->path() == leaf);
+            pushed->asTerm().changeValue("666");
+            sess.editBatch(*pushed, sysrepo::DefaultOperation::Replace);
+            sess.applyChanges();
+            REQUIRE(sess.getData(leaf)->asTerm().valueStr() == "666");
+
+            // Remove that previous edit in-place. Since the new edit cannot be empty, set some other leaf.
+            pushed = sess.operationalChanges();
+            auto another = "/test_module:popelnice/s"s;
+            pushed->newPath(another, "xxx");
+            pushed = *pushed->findPath(another);
+            pushed->findPath(leaf)->unlink();
+            REQUIRE(!pushed->findPath(leaf));
+            REQUIRE(!!pushed->findPath(another));
+            sess.editBatch(*pushed, sysrepo::DefaultOperation::Replace);
+            sess.applyChanges();
+            REQUIRE(*pushed->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::WithSiblings) == "{\nXXX\n}\n");
+            REQUIRE(sess.getData(leaf)->asTerm().valueStr() == "123");
+        }
     }
 
     DOCTEST_SUBCASE("edit batch")
@@ -318,6 +352,11 @@ TEST_CASE("session")
         DOCTEST_SUBCASE("discard")
         {
             sess.discardChanges();
+        }
+
+        DOCTEST_SUBCASE("discard XPath")
+        {
+            sess.discardChanges("/test_module:leafInt32");
         }
 
         REQUIRE(sess.getPendingChanges() == std::nullopt);
