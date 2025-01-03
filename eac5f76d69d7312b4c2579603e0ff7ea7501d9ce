@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3385a8e9_31231c6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-01-03T10:22:56Z",
+      "side": 1,
+      "message": "Interesting changes from upstream, made my head go boom few times. But I think your patch looks good",
+      "revId": "eac5f76d69d7312b4c2579603e0ff7ea7501d9ce",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
