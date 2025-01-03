@@ -22,6 +22,30 @@
       },
       "revId": "80e9659b41ea1de2e20d62f94319fe5af26adcee",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a6799ac_850c29d0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-01-03T13:28:52Z",
+      "side": 1,
+      "message": "I think I got lost somewhere in between multiple rebuilds when I noticed that.",
+      "parentUuid": "ea6e053e_14e9c213",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 49
+      },
+      "revId": "80e9659b41ea1de2e20d62f94319fe5af26adcee",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
