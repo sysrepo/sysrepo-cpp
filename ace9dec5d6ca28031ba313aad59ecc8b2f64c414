@@ -71,6 +71,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "beabf482_724a28ee",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-01-20T13:17:27Z",
+      "side": 1,
+      "message": "I tried to cover it with tests. Is this what you meant?",
+      "parentUuid": "20219813_f3c4e2dd",
+      "range": {
+        "startLine": 475,
+        "startChar": 62,
+        "endLine": 475,
+        "endChar": 118
+      },
+      "revId": "ace9dec5d6ca28031ba313aad59ecc8b2f64c414",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f319bf19_c6a9cd91",
