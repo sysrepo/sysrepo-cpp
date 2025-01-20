@@ -24,6 +24,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6baec858_db855e65",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-01-20T13:17:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b90a6ae_7e8dbfb6",
+      "range": {
+        "startLine": 287,
+        "startChar": 60,
+        "endLine": 287,
+        "endChar": 114
+      },
+      "revId": "ace9dec5d6ca28031ba313aad59ecc8b2f64c414",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20219813_f3c4e2dd",
@@ -60,6 +84,24 @@
       "writtenOn": "2025-01-16T01:37:54Z",
       "side": 1,
       "message": "I\u0027m surprised that a function whose name suggest that I can use it to query whether there are some data in a pipe will in fact throw an exception when there are no data in a pipe.",
+      "revId": "ace9dec5d6ca28031ba313aad59ecc8b2f64c414",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da63573d_7d1fc287",
+        "filename": "tests/subscriptions-yangpush.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-01-20T13:17:00Z",
+      "side": 1,
+      "message": "It actually throwed only on poll() failures. I have rewritten those throws, now it invokes doctest\u0027s FAIL() instead",
+      "parentUuid": "f319bf19_c6a9cd91",
       "revId": "ace9dec5d6ca28031ba313aad59ecc8b2f64c414",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
