@@ -530,4 +530,21 @@ TEST_CASE("session")
         REQUIRE(s.enabled);
         REQUIRE(s.earliestNotification);
     }
+
+    DOCTEST_SUBCASE("Originator name and data")
+    {
+        sess.setOriginatorName("Test originator");
+        sess.pushOriginatorData("I am originator");
+        sess.pushOriginatorData("Hi originator, I am dad");
+
+        auto rpcSess = conn->sessionStart();
+        auto sub = rpcSess.onRPCAction("/test_module:shutdown", [&](auto session, auto, auto, auto, auto, auto, auto) {
+            REQUIRE(session.getOriginatorData(0) == "I am originator"s);
+            REQUIRE(session.getOriginatorData(1) == "Hi originator, I am dad"s);
+            REQUIRE_THROWS_WITH_AS(session.getOriginatorData(2), "Couldn't get originator data: SR_ERR_NOT_FOUND", sysrepo::ErrorWithCode);
+            return sysrepo::ErrorCode::Ok;
+        });
+
+        sess.sendRPC(sess.getContext().newPath("/test_module:shutdown"));
+    }
 }

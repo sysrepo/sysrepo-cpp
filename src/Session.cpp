@@ -853,6 +853,35 @@ void Session::setOriginatorName(const std::string& originatorName)
 }
 
 /**
+ * Writes originator string data.
+ *
+ * Wraps `sr_session_push_orig_data`.
+ * @param data The string to write.
+ */
+void Session::pushOriginatorData(const std::string& data)
+{
+    auto res = sr_session_push_orig_data(m_sess.get(), data.size() + 1 /* zero byte */, data.data());
+    throwIfError(res, "Couldn't push originator data", m_sess.get());
+}
+
+/**
+ * Retrieves the originator string data at the specified index.
+ *
+ * Wraps `sr_session_get_orig_data`.
+ * @param idx The index of the string data.
+ * @return The originator string.
+ */
+std::string Session::getOriginatorData(uint32_t idx)
+{
+    uint32_t size;
+    const void* data;
+
+    auto res = sr_session_get_orig_data(m_sess.get(), idx, &size, &data);
+    throwIfError(res, "Couldn't get originator data", m_sess.get());
+    return std::string{static_cast<const char*>(data), size - 1};
+}
+
+/**
  * Returns the connection this session was created on.
  */
 Connection Session::getConnection()

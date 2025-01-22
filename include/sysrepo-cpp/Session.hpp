@@ -163,6 +163,9 @@ public:
     std::string getOriginatorName() const;
     void setOriginatorName(const std::string& originatorName);
 
+    void pushOriginatorData(const std::string& data);
+    std::string getOriginatorData(uint32_t idx);
+
     Connection getConnection();
     const libyang::Context getContext() const;
 
