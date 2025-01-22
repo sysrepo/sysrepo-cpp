@@ -146,6 +146,24 @@
       "parentUuid": "da63573d_7d1fc287",
       "revId": "ace9dec5d6ca28031ba313aad59ecc8b2f64c414",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a26ac4f0_091fbe8f",
+        "filename": "tests/subscriptions-yangpush.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-01-22T10:29:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b108c02d_0838d666",
+      "revId": "ace9dec5d6ca28031ba313aad59ecc8b2f64c414",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }

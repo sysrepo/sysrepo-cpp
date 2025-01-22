@@ -16,6 +16,24 @@
       "message": "can you reuse your poll wrapper in this place?",
       "revId": "68dea1a53e39a933a9768523ff8d65d91670ad38",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "843de02b_4520f472",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-01-22T10:29:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c50721a_6dd2e671",
+      "revId": "68dea1a53e39a933a9768523ff8d65d91670ad38",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
