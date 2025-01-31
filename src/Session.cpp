@@ -349,7 +349,9 @@ libyang::DataNode Session::sendRPC(libyang::DataNode input, std::chrono::millise
     auto res = sr_rpc_send_tree(m_sess.get(), libyang::getRawNode(input), timeout.count(), &output);
     throwIfError(res, "Couldn't send RPC", m_sess.get());
 
-    assert(output); // TODO: sysrepo always gives the RPC node? (even when it has not output or output nodes?)
+    if (!output) {
+        return std::nullopt;
+    }
     return wrapSrData(m_sess, output);
 }
 
