@@ -343,13 +343,15 @@ void Session::copyConfig(const Datastore source, const std::optional<std::string
  * @param input Libyang tree representing the RPC/action.
  * @param timeout Optional timeout.
  */
-libyang::DataNode Session::sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout)
+std::optional<libyang::DataNode> Session::sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout)
 {
     sr_data_t* output;
     auto res = sr_rpc_send_tree(m_sess.get(), libyang::getRawNode(input), timeout.count(), &output);
     throwIfError(res, "Couldn't send RPC", m_sess.get());
 
-    assert(output); // TODO: sysrepo always gives the RPC node? (even when it has not output or output nodes?)
+    if (!output) {
+        return std::nullopt;
+    }
     return wrapSrData(m_sess, output);
 }
 
