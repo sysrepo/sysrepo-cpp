@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7186ca0_526b42fe",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-03-05T09:50:56Z",
+      "side": 1,
+      "message": "In trompeloeil, the REQUIRE_* macros in general \"only\" set some expectations, and these expectations must be fulfilled either immediately, or at some later point. This macro is different; in addition to setting such an expectation, it also immediately checks that there\u0027s a pending event in the pipe FD, and processes that event.\n\n- Can we call it something like `PROCESS_YANG_PUSH_ONCHANGE`, or `CHECK_YANG_PUSH_ONCHANGE_NOW`, etc? Just to make it clear that it\u0027s something which happns right now.\n\n- Let\u0027s also check right after the call to processEvents that the expectation is spent by using a block, i.e.:\n REQUIRE(pipeStatus(SUBSCRIPTION-\u003efd()) \u003d\u003d PipeStatus::DataReady); \\\n { \\\n     TROMPELOEIL_REQUIRE_CALL(rec, recordYangPush(SUBSCRIPTION-\u003esubscriptionId(), JSON_DATA)).IN_SEQUENCE(seq); \\\n     SUBSCRIPTION-\u003eprocessEvent(cb); \\\n }",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 35
+      },
+      "revId": "d9f146f976d35a57f3ce0b1443cfcfc5d7e6fac7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05edda8c_9561963f",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-03-05T09:50:56Z",
+      "side": 1,
+      "message": "Originally I wanted to suggest the same change as for REQUIRE_YANG_PUSH_ONCHANGE (a different name and a block), and then I realized that this is actually correct because this one is used differently, it really sets that expectation up for a later fulfillment.",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 37
+      },
+      "revId": "d9f146f976d35a57f3ce0b1443cfcfc5d7e6fac7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "584d6a8c_fd396415",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-03-05T09:50:56Z",
+      "side": 1,
+      "message": "Put this into a block, please",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 37
+      },
+      "revId": "d9f146f976d35a57f3ce0b1443cfcfc5d7e6fac7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9862a037_c7a9b1b9",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-03-05T09:50:56Z",
+      "side": 1,
+      "message": "Do you actually need to wait? All the usages appear to check what the poll status is \"right now\", so 0 (for \"no wait\") looks like a more suitable timeout.",
+      "range": {
+        "startLine": 77,
+        "startChar": 26,
+        "endLine": 77,
+        "endChar": 46
+      },
+      "revId": "d9f146f976d35a57f3ce0b1443cfcfc5d7e6fac7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "620b5117_5ca631cc",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-03-05T09:50:56Z",
+      "side": 1,
+      "message": "Please add a comment which links to https://github.com/sysrepo/sysrepo/issues/3525",
+      "revId": "d9f146f976d35a57f3ce0b1443cfcfc5d7e6fac7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38c08550_462fa2bd",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-03-05T09:50:56Z",
+      "side": 1,
+      "message": "This might look like a race, but there\u0027s actually no race. All the other tests for sysrepo subscriptions in other files work with event processing in a background thread. This one is different, there\u0027s no bg thread, and while the underlying event \"hey, stuff changed\" is generated as a part of the applyChanges(), nothing handles that incoming event on a FD asynchronously. Instead, this main test thread will have to manually poll for that change, which is what happens on line 214.\n\nI think that it might be worth adding a comment here to clarify what exactly is going on.",
+      "range": {
+        "startLine": 212,
+        "startChar": 8,
+        "endLine": 214,
+        "endChar": 38
+      },
+      "revId": "d9f146f976d35a57f3ce0b1443cfcfc5d7e6fac7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e213205_c00e87f0",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-03-05T09:50:56Z",
+      "side": 1,
+      "message": "this requires a separate sysrepo session because the main thread used this session before this jthread, and that\u0027s not safe",
+      "range": {
+        "startLine": 401,
+        "startChar": 0,
+        "endLine": 413,
+        "endChar": 34
+      },
+      "revId": "d9f146f976d35a57f3ce0b1443cfcfc5d7e6fac7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8952408_37255b12",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-03-05T09:50:56Z",
+      "side": 1,
+      "message": "this is dead code, right?",
+      "range": {
+        "startLine": 416,
+        "startChar": 0,
+        "endLine": 419,
+        "endChar": 42
+      },
+      "revId": "d9f146f976d35a57f3ce0b1443cfcfc5d7e6fac7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
