@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "19acd477_a4256622",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-03-10T10:36:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7186ca0_526b42fe",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 35
+      },
+      "revId": "d9f146f976d35a57f3ce0b1443cfcfc5d7e6fac7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "05edda8c_9561963f",
         "filename": "tests/subscriptions-dynamic.cpp",
         "patchSetId": 15
@@ -70,6 +94,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4764cb2_4e15a1cd",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-03-10T10:36:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "584d6a8c_fd396415",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 37
+      },
+      "revId": "d9f146f976d35a57f3ce0b1443cfcfc5d7e6fac7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9862a037_c7a9b1b9",
@@ -83,6 +131,30 @@
       "writtenOn": "2025-03-05T09:50:56Z",
       "side": 1,
       "message": "Do you actually need to wait? All the usages appear to check what the poll status is \"right now\", so 0 (for \"no wait\") looks like a more suitable timeout.",
+      "range": {
+        "startLine": 77,
+        "startChar": 26,
+        "endLine": 77,
+        "endChar": 46
+      },
+      "revId": "d9f146f976d35a57f3ce0b1443cfcfc5d7e6fac7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb40194a_fc8a2aaf",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-03-10T10:36:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9862a037_c7a9b1b9",
       "range": {
         "startLine": 77,
         "startChar": 26,
@@ -110,6 +182,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "798fbf37_f15a9dd7",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-03-10T10:36:39Z",
+      "side": 1,
+      "message": "I have added the comment also to the Subscription.cpp",
+      "parentUuid": "620b5117_5ca631cc",
+      "revId": "d9f146f976d35a57f3ce0b1443cfcfc5d7e6fac7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38c08550_462fa2bd",
@@ -123,6 +213,30 @@
       "writtenOn": "2025-03-05T09:50:56Z",
       "side": 1,
       "message": "This might look like a race, but there\u0027s actually no race. All the other tests for sysrepo subscriptions in other files work with event processing in a background thread. This one is different, there\u0027s no bg thread, and while the underlying event \"hey, stuff changed\" is generated as a part of the applyChanges(), nothing handles that incoming event on a FD asynchronously. Instead, this main test thread will have to manually poll for that change, which is what happens on line 214.\n\nI think that it might be worth adding a comment here to clarify what exactly is going on.",
+      "range": {
+        "startLine": 212,
+        "startChar": 8,
+        "endLine": 214,
+        "endChar": 38
+      },
+      "revId": "d9f146f976d35a57f3ce0b1443cfcfc5d7e6fac7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76f3f55b_ebd422c6",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-03-10T10:36:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38c08550_462fa2bd",
       "range": {
         "startLine": 212,
         "startChar": 8,
@@ -156,6 +270,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eff8377b_64fc4523",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-03-10T10:36:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e213205_c00e87f0",
+      "range": {
+        "startLine": 401,
+        "startChar": 0,
+        "endLine": 413,
+        "endChar": 34
+      },
+      "revId": "d9f146f976d35a57f3ce0b1443cfcfc5d7e6fac7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8952408_37255b12",
@@ -169,6 +307,30 @@
       "writtenOn": "2025-03-05T09:50:56Z",
       "side": 1,
       "message": "this is dead code, right?",
+      "range": {
+        "startLine": 416,
+        "startChar": 0,
+        "endLine": 419,
+        "endChar": 42
+      },
+      "revId": "d9f146f976d35a57f3ce0b1443cfcfc5d7e6fac7",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d94f181e_397906c6",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-03-10T10:36:39Z",
+      "side": 1,
+      "message": "right",
+      "parentUuid": "e8952408_37255b12",
       "range": {
         "startLine": 416,
         "startChar": 0,
