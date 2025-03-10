@@ -127,6 +127,13 @@ TEST_CASE("session")
             data = sess.getData("/test_module:popelnice", 1);
             REQUIRE(data);
             REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::KeepEmptyCont) == R"({
+  "test_module:popelnice": {}
+}
+)");
+
+            data = sess.getData("/test_module:popelnice", 2);
+            REQUIRE(data);
+            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::KeepEmptyCont) == R"({
   "test_module:popelnice": {
     "content": {}
   }
@@ -134,7 +141,7 @@ TEST_CASE("session")
 )");
 
             // If a list should be returned, its keys are always returned as well.
-            data = sess.getData("/test_module:popelnice", 2);
+            data = sess.getData("/test_module:popelnice", 3);
             REQUIRE(data);
             REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::KeepEmptyCont) == R"({
   "test_module:popelnice": {
@@ -152,7 +159,7 @@ TEST_CASE("session")
 }
 )");
 
-            data = sess.getData("/test_module:popelnice", 3);
+            data = sess.getData("/test_module:popelnice", 4);
             REQUIRE(data);
             REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::KeepEmptyCont) == R"({
   "test_module:popelnice": {
