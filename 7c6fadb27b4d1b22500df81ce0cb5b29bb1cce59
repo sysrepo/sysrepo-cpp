@@ -16,6 +16,24 @@
       "message": "This comment belongs to the original code block (with test data with actual list keys, line no. 144-160)",
       "revId": "7c6fadb27b4d1b22500df81ce0cb5b29bb1cce59",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06f26ba8_5b932948",
+        "filename": "tests/session.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-03-10T14:00:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52d5accd_7a5d392f",
+      "revId": "7c6fadb27b4d1b22500df81ce0cb5b29bb1cce59",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
