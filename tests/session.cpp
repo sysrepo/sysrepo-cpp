@@ -245,9 +245,35 @@ TEST_CASE("session")
             sess.applyChanges();
             REQUIRE(!sess.getData(leaf));
 
-            // Using discardOperationalChanges makes the leaf visible again (in the operational datastore).
-            // Also, no need to applyChanges().
-            sess.discardOperationalChanges("test_module");
+            // check that a magic sysrepo:discard-items node is in place
+            REQUIRE(!!sess.operationalChanges());
+            auto matchingDiscard = sysrepo::findMatchingDiscard(*sess.operationalChanges(), leaf);
+            REQUIRE(!!matchingDiscard);
+            REQUIRE(matchingDiscard->value() == leaf);
+            REQUIRE(matchingDiscard->name().moduleOrNamespace == "sysrepo");
+            REQUIRE(matchingDiscard->name().name == "discard-items");
+            REQUIRE(!sysrepo::findMatchingDiscard(*sess.operationalChanges(), "something else"));
+
+            DOCTEST_SUBCASE("forget changes via discardOperationalChanges(module)")
+            {
+                // Using discardOperationalChanges makes the leaf visible again (in the operational datastore).
+                // Also, no need to applyChanges().
+                sess.discardOperationalChanges("test_module");
+            }
+
+            DOCTEST_SUBCASE("forget changes via a selective edit")
+            {
+                // this edit only has a single node, which means that we cannot really call unlink() and hope for a sane result
+                REQUIRE(matchingDiscard->firstSibling() == *matchingDiscard);
+
+                // so, we add a dummy node instead...
+                auto root = matchingDiscard->newPath("/test_module:popelnice/s", "foo");
+                // ...and only then we nuke the eixtsing discard-items node
+                matchingDiscard->unlink();
+                sess.editBatch(*root, sysrepo::DefaultOperation::Replace);
+                sess.applyChanges();
+            }
+
             REQUIRE(sess.getData(leaf)->asTerm().valueStr() == "123");
         }
 

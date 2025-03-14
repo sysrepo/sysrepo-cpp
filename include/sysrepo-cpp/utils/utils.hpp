@@ -12,4 +12,5 @@
 namespace sysrepo {
 Session wrapUnmanagedSession(sr_session_ctx_s* session);
 void setLogLevelStderr(const LogLevel);
+std::optional<libyang::DataNodeOpaque> findMatchingDiscard(libyang::DataNode root, const std::string& xpath);
 }
