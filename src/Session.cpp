@@ -153,6 +153,7 @@ void Session::deleteItem(const std::string& path, const EditOptions opts)
  * Wraps `sr_discard_items`.
  *
  * @param xpath Expression filtering the nodes to discard, nullopt for all nodes.
+ * @see findMatchingDiscard()
  */
 void Session::dropForeignOperationalContent(const std::optional<std::string>& xpath)
 {
@@ -167,6 +168,8 @@ void Session::dropForeignOperationalContent(const std::optional<std::string>& xp
  * with the "replace" operation.
  *
  * Wraps `sr_get_oper_changes`.
+ *
+ * @see findMatchingDiscard()
  */
 std::optional<libyang::DataNode> Session::operationalChanges(const std::optional<std::string>& moduleName) const
 {

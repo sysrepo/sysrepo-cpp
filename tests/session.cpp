@@ -245,9 +245,77 @@ TEST_CASE("session")
             sess.applyChanges();
             REQUIRE(!sess.getData(leaf));
 
-            // Using discardOperationalChanges makes the leaf visible again (in the operational datastore).
-            // Also, no need to applyChanges().
-            sess.discardOperationalChanges("test_module");
+            // check that a magic sysrepo:discard-items node is in place
+            REQUIRE(!!sess.operationalChanges());
+            auto matchingDiscard = sysrepo::findMatchingDiscard(*sess.operationalChanges(), leaf);
+            REQUIRE(!!matchingDiscard);
+            REQUIRE(matchingDiscard->value() == leaf);
+            REQUIRE(matchingDiscard->name().moduleOrNamespace == "sysrepo");
+            REQUIRE(matchingDiscard->name().name == "discard-items");
+            REQUIRE(!sysrepo::findMatchingDiscard(*sess.operationalChanges(), "something else"));
+
+            DOCTEST_SUBCASE("forget changes via discardOperationalChanges(module)")
+            {
+                // Using discardOperationalChanges makes the leaf visible again (in the operational datastore).
+                // Also, no need to applyChanges().
+                sess.discardOperationalChanges("test_module");
+            }
+
+            DOCTEST_SUBCASE("forget changes via a selective edit")
+            {
+                // this edit only has a single node, which means that we cannot really call unlink() and hope for a sane result
+                REQUIRE(matchingDiscard->firstSibling() == *matchingDiscard);
+
+                // so, we add a dummy node instead...
+                auto root = matchingDiscard->newPath("/test_module:popelnice/s", "foo");
+                // ...and only then we nuke the eixtsing discard-items node
+                matchingDiscard->unlink();
+                sess.editBatch(*root, sysrepo::DefaultOperation::Replace);
+                sess.applyChanges();
+            }
+
+            DOCTEST_SUBCASE("multiple sysrepo:discard-items nodes")
+            {
+                sess.dropForeignOperationalContent("/test_module:popelnice");
+                sess.dropForeignOperationalContent("/test_module:popelnice/s");
+                sess.dropForeignOperationalContent("/test_module:values");
+                sess.dropForeignOperationalContent("/test_module:popelnice/content");
+                sess.dropForeignOperationalContent("/test_module:denyAllLeaf");
+                sess.dropForeignOperationalContent(leaf); // yup, once more, in addition to the one at the very beginning
+                sess.applyChanges();
+
+                auto forPopelnice = sysrepo::findMatchingDiscard(*sess.operationalChanges(), "/test_module:popelnice");
+                REQUIRE(!!forPopelnice);
+                REQUIRE(forPopelnice->value() == "/test_module:popelnice");
+                auto oneMatch = sysrepo::findMatchingDiscard(*sess.operationalChanges(), "/test_module:values");
+                REQUIRE(!!oneMatch);
+                REQUIRE(oneMatch->value() == "/test_module:values");
+
+                auto atOrBelowPopelnice = sysrepo::findMatchingDiscardPrefixes(*sess.operationalChanges(), "/test_module:popelnice");
+                REQUIRE(atOrBelowPopelnice.size() == 3);
+                // yup, these are apparently backwards compared to how I put them in. Never mind.
+                REQUIRE(atOrBelowPopelnice[2].value() == "/test_module:popelnice");
+                REQUIRE(atOrBelowPopelnice[1].value() == "/test_module:popelnice/s");
+                REQUIRE(atOrBelowPopelnice[0].value() == "/test_module:popelnice/content");
+
+                auto belowPopelnice = sysrepo::findMatchingDiscardPrefixes(*sess.operationalChanges(), "/test_module:popelnice/");
+                REQUIRE(belowPopelnice.size() == 2);
+                // again, the order is reversed
+                REQUIRE(belowPopelnice[1].value() == "/test_module:popelnice/s");
+                REQUIRE(belowPopelnice[0].value() == "/test_module:popelnice/content");
+
+                auto newEdit = sess.operationalChanges();
+                auto forLeaf = sysrepo::findMatchingDiscardPrefixes(*newEdit, leaf);
+                REQUIRE(forLeaf.size() == 2);
+                REQUIRE(forLeaf[0].value() == leaf);
+                REQUIRE(forLeaf[1].value() == leaf);
+                for (auto node : forLeaf) {
+                    sysrepo::unlinkFromForest(newEdit, node);
+                }
+                sess.editBatch(*newEdit, sysrepo::DefaultOperation::Replace);
+                sess.applyChanges();
+            }
+
             REQUIRE(sess.getData(leaf)->asTerm().valueStr() == "123");
         }
 

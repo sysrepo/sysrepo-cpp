@@ -72,4 +72,61 @@ void checkNoThreadFlag(const SubscribeOptions opts, const std::optional<FDHandli
     }
 }
 
+/**
+ * @short If there's a sysrepo:discard-items node which matches the given XPath, return it
+ *
+ * @see Session::operationalChanges()
+ * @see Session::dropForeignOperationalContent()
+ */
+std::optional<libyang::DataNode> findMatchingDiscard(libyang::DataNode root, const std::string& xpath)
+{
+    auto discard = root.firstOpaqueSibling();
+    while (discard) {
+        if (discard->name().matches("sysrepo", "discard-items") && discard->value() == xpath) {
+            return discard;
+        }
+        if (auto next = discard->nextSibling()) {
+            discard = next->asOpaque();
+        } else {
+            break;
+        }
+    }
+    return std::nullopt;
+}
+
+/**
+ * @short Find all sysrepo:discard-items nodes which match the given XPath or the descendats of this XPath
+ */
+std::vector<libyang::DataNode> findMatchingDiscardPrefixes(libyang::DataNode root, const std::string& xpathPrefix)
+{
+    auto withSlash = (xpathPrefix.empty() || xpathPrefix[xpathPrefix.size() - 1] == '/') ? xpathPrefix : xpathPrefix + '/';
+    auto withBracket = (xpathPrefix.empty() || xpathPrefix[xpathPrefix.size() - 1] == '[') ? xpathPrefix : xpathPrefix + '[';
+    std::vector<libyang::DataNode> res;
+    auto discard = root.firstOpaqueSibling();
+    while (discard) {
+        if (discard->name().matches("sysrepo", "discard-items")) {
+            if (auto text = discard->value(); text == xpathPrefix || text.starts_with(withSlash) || text.starts_with(withBracket)) {
+                res.emplace_back(*discard);
+            }
+        }
+        if (auto next = discard->nextSibling()) {
+            discard = next->asOpaque();
+        } else {
+            break;
+        }
+    }
+    return res;
+}
+
+/**
+ * @short Remove a node from a forest of tree nodes while modifying the root in-place
+ */
+void unlinkFromForest(std::optional<libyang::DataNode>& root, libyang::DataNode node)
+{
+    if (node == root) {
+        root = node.nextSibling();
+    }
+    node.unlink();
+}
+
 }
