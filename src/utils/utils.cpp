@@ -72,4 +72,25 @@ void checkNoThreadFlag(const SubscribeOptions opts, const std::optional<FDHandli
     }
 }
 
+/**
+ * @short If there's a sysrepo:discard-items node which matches the given XPath, return it
+ *
+ * @see Session::operationalChanges()
+ * @see Session::dropForeignOperationalContent()
+ */
+std::optional<libyang::DataNode> findMatchingDiscard(libyang::DataNode root, const std::string& xpath)
+{
+    while (auto discard = root.firstOpaqueSibling()) {
+        if (discard->name().matches("sysrepo", "discard-items") && discard->value() == xpath) {
+            return discard;
+        }
+        if (auto next = discard->nextSibling()) {
+            discard = next->asOpaque();
+        } else {
+            break;
+        }
+    }
+    return std::nullopt;
+}
+
 }
