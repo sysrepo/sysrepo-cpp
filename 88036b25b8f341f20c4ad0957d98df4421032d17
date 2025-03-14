@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bfe1f66_6c0678c9",
+        "filename": "src/utils/utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-03-14T17:26:35Z",
+      "side": 1,
+      "message": "yay for infinite recursion, yay!",
+      "range": {
+        "startLine": 83,
+        "startChar": 11,
+        "endLine": 83,
+        "endChar": 51
+      },
+      "revId": "88036b25b8f341f20c4ad0957d98df4421032d17",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
