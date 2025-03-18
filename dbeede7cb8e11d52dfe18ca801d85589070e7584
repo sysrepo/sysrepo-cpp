@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f9412d9_4477eaac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-03-18T10:21:33Z",
+      "side": 1,
+      "message": "If you have time, please also say that we decided not to wrap that functionality of the C API which allows to reuse an existing sysrepo-level subscription, and to not create an internal background thread. The reason for this decision is that the periodic notifications will create an internal thread anyway, and that decoupling this all from sysrepo\u0027s internal abstraction would be too much work.",
+      "revId": "dbeede7cb8e11d52dfe18ca801d85589070e7584",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27bae653_d65f71dd",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-03-18T10:21:33Z",
+      "side": 1,
+      "message": "I thought that this is the case, but then Michal explained stuff to me over Slack. This functionality is built on top of sysrepo\u0027s existing subscriptions, and this thing \"simply\" adds a layer on top of that functionality. As such, the default behavior of sysrepo, which is to create a background thread, is still in place, *but* that internal subscription and its background thread are encapsulated by this class. So, let\u0027s put it this way instead:\n Internally, the sysrepo C library creates some background thread(s). These are used either for managing internal, sysrepo-level module subscriptions, or for scheduling of periodic timers. These threads are fully encapsulated by the C code, and there is no control over them from this C++ wrapper. The public interface of this class is a file descriptor that the caller is expected to poll for readability/closing. Once the FD is readable, invoke this class\u0027 processEvents(). There is no automatic event loop which would take care of this functionality, and users are expected to integrate this FD into their own event handling.",
+      "revId": "dbeede7cb8e11d52dfe18ca801d85589070e7584",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dacfe3f_c07083cf",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-03-18T10:21:33Z",
+      "side": 1,
+      "message": "this comment is now misleading, I suggest to remove it since the functionality is explained in the docstring",
+      "revId": "dbeede7cb8e11d52dfe18ca801d85589070e7584",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "678b9607_88f7c571",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-03-18T10:21:33Z",
+      "side": 1,
+      "message": "nit: if I was writing this, I would have probably used three separate string variables named, e.g., `ping1Notification`, `silentPingNotification` and `ping2Notification`, but whatever :). The benefit would be that these indexes cannot be compile-time checked and IDE-completed, but variable names can.",
+      "revId": "dbeede7cb8e11d52dfe18ca801d85589070e7584",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32ff677b_f3e046eb",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-03-18T10:21:33Z",
+      "side": 1,
+      "message": "Please use at least 500ms, I\u0027m worried about all the false positives that we might get on a heavily loaded box during a parallel build. Also below, please.",
+      "range": {
+        "startLine": 198,
+        "startChar": 63,
+        "endLine": 198,
+        "endChar": 68
+      },
+      "revId": "dbeede7cb8e11d52dfe18ca801d85589070e7584",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d17280b_adc0e85f",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-03-18T10:21:33Z",
+      "side": 1,
+      "message": "I\u0027ll be more comfortable with, say, 500ms; the way how it\u0027s currently written we only have a headroom of 34ms, which doesn\u0027t sound very robust on a possibly heavily loaded machine during a parallel build. Also below, please.",
+      "range": {
+        "startLine": 443,
+        "startChar": 40,
+        "endLine": 443,
+        "endChar": 45
+      },
+      "revId": "dbeede7cb8e11d52dfe18ca801d85589070e7584",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
