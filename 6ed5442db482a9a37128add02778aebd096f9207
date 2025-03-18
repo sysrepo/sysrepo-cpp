@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "543e57a4_f3f0d628",
+        "filename": "src/utils/utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-03-18T10:26:17Z",
+      "side": 1,
+      "message": "https://gerrit.cesnet.cz/c/CzechLight/sysrepo-cpp/+/8453",
+      "parentUuid": "cc582264_ec7d7049",
+      "range": {
+        "startLine": 98,
+        "startChar": 82,
+        "endLine": 98,
+        "endChar": 92
+      },
+      "revId": "6ed5442db482a9a37128add02778aebd096f9207",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d4befdc4_8f69b3b6",
         "filename": "tests/session.cpp",
         "patchSetId": 3
