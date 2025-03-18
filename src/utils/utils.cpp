@@ -95,7 +95,7 @@ std::optional<libyang::DataNode> findMatchingDiscard(libyang::DataNode root, con
 }
 
 /**
- * @short Find all sysrepo:discard-items nodes which match the given XPath or the descendats of this XPath
+ * @short Find all sysrepo:discard-items nodes which match the given XPath or the descendants of this XPath
  */
 std::vector<libyang::DataNode> findMatchingDiscardPrefixes(libyang::DataNode root, const std::string& xpathPrefix)
 {
