@@ -18,6 +18,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58212ed8_2250c855",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-03-18T12:04:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f9412d9_4477eaac",
+      "revId": "dbeede7cb8e11d52dfe18ca801d85589070e7584",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "27bae653_d65f71dd",
@@ -35,6 +53,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3207359b_b0ab0c54",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-03-18T12:04:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27bae653_d65f71dd",
+      "revId": "dbeede7cb8e11d52dfe18ca801d85589070e7584",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9dacfe3f_c07083cf",
@@ -48,6 +84,24 @@
       "writtenOn": "2025-03-18T10:21:33Z",
       "side": 1,
       "message": "this comment is now misleading, I suggest to remove it since the functionality is explained in the docstring",
+      "revId": "dbeede7cb8e11d52dfe18ca801d85589070e7584",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c484da27_b72916a0",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-03-18T12:04:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9dacfe3f_c07083cf",
       "revId": "dbeede7cb8e11d52dfe18ca801d85589070e7584",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
@@ -92,6 +146,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d8b41c7_6ad00b57",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-03-18T12:04:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32ff677b_f3e046eb",
+      "range": {
+        "startLine": 198,
+        "startChar": 63,
+        "endLine": 198,
+        "endChar": 68
+      },
+      "revId": "dbeede7cb8e11d52dfe18ca801d85589070e7584",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d17280b_adc0e85f",
@@ -105,6 +183,30 @@
       "writtenOn": "2025-03-18T10:21:33Z",
       "side": 1,
       "message": "I\u0027ll be more comfortable with, say, 500ms; the way how it\u0027s currently written we only have a headroom of 34ms, which doesn\u0027t sound very robust on a possibly heavily loaded machine during a parallel build. Also below, please.",
+      "range": {
+        "startLine": 443,
+        "startChar": 40,
+        "endLine": 443,
+        "endChar": 45
+      },
+      "revId": "dbeede7cb8e11d52dfe18ca801d85589070e7584",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c0f5309_de37b843",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-03-18T12:04:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d17280b_adc0e85f",
       "range": {
         "startLine": 443,
         "startChar": 40,
