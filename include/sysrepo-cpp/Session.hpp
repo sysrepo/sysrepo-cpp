@@ -13,6 +13,7 @@
 #include <optional>
 #include <libyang-cpp/Context.hpp>
 #include <libyang-cpp/DataNode.hpp>
+#include <libyang-cpp/Value.hpp>
 #include <sysrepo-cpp/Enum.hpp>
 #include <sysrepo-cpp/Subscription.hpp>
 
@@ -147,7 +148,7 @@ public:
         SyncOnStart syncOnStart = SyncOnStart::No,
         const std::optional<NotificationTimeStamp>& stopTime = std::nullopt);
     [[nodiscard]] DynamicSubscription subscribeNotifications(
-        const std::optional<std::string>& xpathFilter,
+        const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter,
         const std::optional<std::string>& stream = std::nullopt,
         const std::optional<NotificationTimeStamp>& stopTime = std::nullopt,
         const std::optional<NotificationTimeStamp>& startTime = std::nullopt);

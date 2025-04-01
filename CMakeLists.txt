@@ -82,7 +82,7 @@ if(BUILD_TESTING)
         --install ${CMAKE_CURRENT_SOURCE_DIR}/tests/yang/ietf-interfaces@2018-02-20.yang
         --install ${CMAKE_CURRENT_SOURCE_DIR}/tests/yang/ietf-ip@2018-02-22.yang
         --install ${CMAKE_CURRENT_SOURCE_DIR}/tests/yang/ietf-network-instance@2019-01-21.yang
-        --install ${CMAKE_CURRENT_SOURCE_DIR}/tests/yang/ietf-subscribed-notifications@2019-09-09.yang -e replay
+        --install ${CMAKE_CURRENT_SOURCE_DIR}/tests/yang/ietf-subscribed-notifications@2019-09-09.yang -e replay -e subtree
         --install ${CMAKE_CURRENT_SOURCE_DIR}/tests/yang/ietf-yang-push@2019-09-09.yang -e on-change
         )
 
