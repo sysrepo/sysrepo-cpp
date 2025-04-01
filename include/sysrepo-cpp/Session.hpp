@@ -137,17 +137,17 @@ public:
             const std::optional<FDHandling>& callbacks = std::nullopt);
 
     [[nodiscard]] DynamicSubscription yangPushPeriodic(
-        const std::optional<std::string>& xpathFilter,
+        const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter,
         std::chrono::milliseconds periodTime,
         const std::optional<NotificationTimeStamp>& anchorTime = std::nullopt,
         const std::optional<NotificationTimeStamp>& stopTime = std::nullopt);
     [[nodiscard]] DynamicSubscription yangPushOnChange(
-        const std::optional<std::string>& xpathFilter,
+        const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter,
         const std::optional<std::chrono::milliseconds>& dampeningPeriod = std::nullopt,
         SyncOnStart syncOnStart = SyncOnStart::No,
         const std::optional<NotificationTimeStamp>& stopTime = std::nullopt);
     [[nodiscard]] DynamicSubscription subscribeNotifications(
-        const std::optional<std::string>& xpathFilter,
+        const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter,
         const std::optional<std::string>& stream = std::nullopt,
         const std::optional<NotificationTimeStamp>& stopTime = std::nullopt,
         const std::optional<NotificationTimeStamp>& startTime = std::nullopt);

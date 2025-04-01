@@ -42,6 +42,37 @@ libyang::DataNode wrapSrData(std::shared_ptr<sr_session_ctx_s> sess, sr_data_t* 
         sr_release_data(data);
     }));
 }
+
+std::optional<std::string> constructXPathFilter(const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter)
+{
+    if (!filter) {
+        return std::nullopt;
+    }
+
+    if (std::holds_alternative<std::string>(*filter)) {
+        return std::get<std::string>(*filter);
+    }
+
+    auto node = std::get<libyang::DataNodeAny>(*filter);
+    auto value = node.releaseValue();
+
+    if (!value) {
+        return "/"; // select nothing, RFC 6241, 6.4.2
+    }
+
+    if (value && std::holds_alternative<libyang::DataNode>(*value)) {
+        char* str;
+
+        auto filterTree = std::get<libyang::DataNode>(*value);
+        auto res = srsn_filter_subtree2xpath(libyang::getRawNode(filterTree), nullptr, &str);
+        std::unique_ptr<char, decltype([](auto* p) constexpr { std::free(p); })> strDeleter(str); // pass ownership of c-string to the deleter
+
+        throwIfError(res, "Unable to convert subtree filter to xpath");
+        return str;
+    }
+
+    throw Error("Subtree filter anydata node must contain (possibly empty) libyang tree");
+}
 }
 
 /**
@@ -526,9 +557,9 @@ Subscription Session::onNotification(
 /**
  * Subscribe for receiving notifications according to 'ietf-yang-push' YANG periodic subscriptions.
  *
- * Wraps `srsn_yang_push_periodic`.
+ * Wraps `srsn_subscribe` and `srsn_filter_subtree2xpath` for subtree filters.
  *
- * @param xpathFilter Optional XPath that filters received notification.
+ * @param filter Optional filter for received notification, xpath filter for string type, subtree filter for libyang::DataNodeAny
  * @param periodTime Notification period.
  * @param anchorTime Optional anchor time for the period. Anchor time acts as a reference point for the period.
  * @param stopTime Optional stop time ending the notification subscription.
@@ -536,7 +567,7 @@ Subscription Session::onNotification(
  * @return A YangPushSubscription handle.
  */
 DynamicSubscription Session::yangPushPeriodic(
-    const std::optional<std::string>& xpathFilter,
+    const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter,
     std::chrono::milliseconds periodTime,
     const std::optional<NotificationTimeStamp>& anchorTime,
     const std::optional<NotificationTimeStamp>& stopTime)
@@ -545,6 +576,8 @@ DynamicSubscription Session::yangPushPeriodic(
     uint32_t subId;
     auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} : std::nullopt;
     auto anchorSpec = anchorTime ? std::optional{toTimespec(*anchorTime)} : std::nullopt;
+    auto xpathFilter = constructXPathFilter(filter);
+
     auto res = srsn_yang_push_periodic(m_sess.get(),
                                        toDatastore(activeDatastore()),
                                        xpathFilter ? xpathFilter->c_str() : nullptr,
@@ -561,9 +594,9 @@ DynamicSubscription Session::yangPushPeriodic(
 /**
  * Subscribe for receiving notifications according to 'ietf-yang-push' YANG on-change subscriptions.
  *
- * Wraps `srsn_yang_push_on_change`.
+ * Wraps `srsn_subscribe` and `srsn_filter_subtree2xpath` for subtree filters.
  *
- * @param xpathFilter Optional XPath that filters received notification.
+ * @param filter Optional filter for received notification, xpath filter for string type, subtree filter for libyang::DataNodeAny
  * @param dampeningPeriod Optional dampening period.
  * @param syncOnStart Whether to start with a notification of the current state.
  * @param stopTime Optional stop time ending the notification subscription.
@@ -571,7 +604,7 @@ DynamicSubscription Session::yangPushPeriodic(
  * @return A YangPushSubscription handle.
  */
 DynamicSubscription Session::yangPushOnChange(
-    const std::optional<std::string>& xpathFilter,
+    const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter,
     const std::optional<std::chrono::milliseconds>& dampeningPeriod,
     SyncOnStart syncOnStart,
     const std::optional<NotificationTimeStamp>& stopTime)
@@ -579,6 +612,8 @@ DynamicSubscription Session::yangPushOnChange(
     int fd;
     uint32_t subId;
     auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} : std::nullopt;
+    auto xpathFilter = constructXPathFilter(filter);
+
     auto res = srsn_yang_push_on_change(m_sess.get(),
                                         toDatastore(activeDatastore()),
                                         xpathFilter ? xpathFilter->c_str() : nullptr,
@@ -596,11 +631,11 @@ DynamicSubscription Session::yangPushOnChange(
 }
 
 /**
- * Subscribe for receiving notifications according to 'ietf-subscribed-notifications'
+ * Subscribe for receiving notifications according to 'ietf-subscribed-notifications'.
  *
- * Wraps `srsn_subscribe.
+ * Wraps `srsn_subscribe` and `srsn_filter_subtree2xpath` for subtree filters.
  *
- * @param xpathFilter Optional XPath that filters received notification.
+ * @param filter Optional filter for received notification, xpath filter for string type, subtree filter for libyang::DataNodeAny
  * @param stream Optional stream to subscribe to.
  * @param stopTime Optional stop time ending the subscription.
  * @param startTime Optional start time of the subscription, used for replaying stored notifications.
@@ -608,7 +643,7 @@ DynamicSubscription Session::yangPushOnChange(
  * @return A YangPushSubscription handle.
  */
 DynamicSubscription Session::subscribeNotifications(
-    const std::optional<std::string>& xpathFilter,
+    const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter,
     const std::optional<std::string>& stream,
     const std::optional<NotificationTimeStamp>& stopTime,
     const std::optional<NotificationTimeStamp>& startTime)
@@ -618,10 +653,11 @@ DynamicSubscription Session::subscribeNotifications(
     auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} : std::nullopt;
     auto startSpec = startTime ? std::optional{toTimespec(*startTime)} : std::nullopt;
     struct timespec replayStartSpec;
+    auto xpathFilter = constructXPathFilter(filter);
 
     auto res = srsn_subscribe(m_sess.get(),
                               stream ? stream->c_str() : nullptr,
-                              xpathFilter ? xpathFilter->c_str() : nullptr,
+                              xpathFilter ? xpathFilter->data() : nullptr,
                               stopSpec ? &stopSpec.value() : nullptr,
                               startSpec ? &startSpec.value() : nullptr,
                               false,
