@@ -596,11 +596,11 @@ DynamicSubscription Session::yangPushOnChange(
 }
 
 /**
- * Subscribe for receiving notifications according to 'ietf-subscribed-notifications'
+ * Subscribe for receiving notifications according to 'ietf-subscribed-notifications'.
  *
- * Wraps `srsn_subscribe.
+ * Wraps `srsn_subscribe` and `srsn_filter_subtree2xpath` for subtree filters.
  *
- * @param xpathFilter Optional XPath that filters received notification.
+ * @param filter Optional filter for received notification, xpath filter for string type, subtree filter for libyang::DataNodeAny
  * @param stream Optional stream to subscribe to.
  * @param stopTime Optional stop time ending the subscription.
  * @param startTime Optional start time of the subscription, used for replaying stored notifications.
@@ -608,7 +608,7 @@ DynamicSubscription Session::yangPushOnChange(
  * @return A YangPushSubscription handle.
  */
 DynamicSubscription Session::subscribeNotifications(
-    const std::optional<std::string>& xpathFilter,
+    const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter,
     const std::optional<std::string>& stream,
     const std::optional<NotificationTimeStamp>& stopTime,
     const std::optional<NotificationTimeStamp>& startTime)
@@ -619,9 +619,36 @@ DynamicSubscription Session::subscribeNotifications(
     auto startSpec = startTime ? std::optional{toTimespec(*startTime)} : std::nullopt;
     struct timespec replayStartSpec;
 
+    std::optional<std::string_view> xpathFilter;
+    std::unique_ptr<char, decltype([](auto* p) constexpr { std::free(p); })> strDeleter;
+
+    if (filter) {
+        if (std::holds_alternative<std::string>(*filter)) {
+            xpathFilter = std::get<std::string>(*filter);
+        } else if (std::holds_alternative<libyang::DataNodeAny>(*filter)) {
+            auto node = std::get<libyang::DataNodeAny>(*filter);
+            auto value = node.releaseValue();
+
+            if (!value) {
+                xpathFilter = "/"; // select nothing, RFC 6241, 6.4.2
+            } else if (value && std::holds_alternative<libyang::DataNode>(*value)) {
+                char* str;
+
+                auto filterTree = std::get<libyang::DataNode>(*value);
+                auto res = srsn_filter_subtree2xpath(libyang::getRawNode(filterTree), nullptr, &str);
+                throwIfError(res, "Unable to convert subtree filter to xpath");
+
+                xpathFilter = str;
+                strDeleter.reset(str); // pass ownership to strDeleter, so it can free the c-string later
+            } else {
+                throw Error("Subtree filter anydata node must contain (possibly empty) libyang tree");
+            }
+        }
+    }
+
     auto res = srsn_subscribe(m_sess.get(),
                               stream ? stream->c_str() : nullptr,
-                              xpathFilter ? xpathFilter->c_str() : nullptr,
+                              xpathFilter ? xpathFilter->data() : nullptr,
                               stopSpec ? &stopSpec.value() : nullptr,
                               startSpec ? &startSpec.value() : nullptr,
                               false,

@@ -28,6 +28,9 @@
 #define REQUIRE_NOTIFICATION(SUBSCRIPTION, NOTIFICATION) \
     TROMPELOEIL_REQUIRE_CALL(rec, recordNotification(NOTIFICATION)).IN_SEQUENCE(seq);
 
+#define REQUIRE_NAMED_NOTIFICATION(SUBSCRIPTION, NOTIFICATION) \
+    expectations.emplace_back(TROMPELOEIL_NAMED_REQUIRE_CALL(rec, recordNotification(NOTIFICATION)).IN_SEQUENCE(seq));
+
 #define READ_NOTIFICATION(SUBSCRIPTION)                                \
     REQUIRE(pipeStatus((SUBSCRIPTION).fd()) == PipeStatus::DataReady); \
     (SUBSCRIPTION).processEvent(cbNotif);
@@ -275,6 +278,66 @@ TEST_CASE("Dynamic subscriptions")
             // TODO: Can be simplified after we bump minimal doctest version to doctest>=2.4.9
             const auto excMessage = "Couldn't terminate yang-push subscription with id " + std::to_string(sub->subscriptionId()) + ": SR_ERR_NOT_FOUND";
             REQUIRE_THROWS_WITH_AS(sub->terminate(), excMessage.c_str(), sysrepo::ErrorWithCode);
+        }
+
+        DOCTEST_SUBCASE("Filtering")
+        {
+            std::optional<sysrepo::DynamicSubscription> sub;
+            std::vector<std::unique_ptr<trompeloeil::expectation>> expectations;
+
+            DOCTEST_SUBCASE("xpath filter")
+            {
+                sub = sess.subscribeNotifications("/test_module:ping");
+
+                REQUIRE_NAMED_NOTIFICATION(sub, notifications[0]);
+            }
+
+            DOCTEST_SUBCASE("subtree filter")
+            {
+                libyang::CreatedNodes createdNodes;
+
+                DOCTEST_SUBCASE("filter a node")
+                {
+                    createdNodes = sess.getContext().newPath2(
+                        "/ietf-subscribed-notifications:establish-subscription/stream-subtree-filter",
+                        libyang::XML{"<ping xmlns='urn:ietf:params:xml:ns:yang:test_module' />"});
+
+                    REQUIRE_NAMED_NOTIFICATION(sub, notifications[0]);
+                }
+
+                DOCTEST_SUBCASE("filter more top level nodes")
+                {
+                    createdNodes = sess.getContext().newPath2(
+                        "/ietf-subscribed-notifications:establish-subscription/stream-subtree-filter",
+                        libyang::XML{"<ping xmlns='urn:ietf:params:xml:ns:yang:test_module' />"
+                                     "<silent-ping xmlns='urn:ietf:params:xml:ns:yang:test_module' />"});
+
+                    REQUIRE_NAMED_NOTIFICATION(sub, notifications[0]);
+                    REQUIRE_NAMED_NOTIFICATION(sub, notifications[1]);
+                }
+
+                DOCTEST_SUBCASE("empty filter selects nothing")
+                {
+                    createdNodes = sess.getContext().newPath2(
+                        "/ietf-subscribed-notifications:establish-subscription/stream-subtree-filter",
+                        std::nullopt);
+                }
+
+                sub = sess.subscribeNotifications(createdNodes.createdNode->asAny());
+            }
+
+            CLIENT_SEND_NOTIFICATION(notifications[0]);
+            CLIENT_SEND_NOTIFICATION(notifications[1]);
+
+            // read as many notifications as we expect
+            for (size_t i = 0; i < expectations.size(); ++i) {
+                READ_NOTIFICATION_BLOCKING(*sub);
+            }
+
+            sub->terminate();
+
+            // ensure no more notifications were sent
+            REQUIRE_PIPE_HANGUP(*sub);
         }
     }
 
