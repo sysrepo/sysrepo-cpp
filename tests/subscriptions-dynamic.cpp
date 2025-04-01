@@ -28,6 +28,9 @@
 #define REQUIRE_NOTIFICATION(SUBSCRIPTION, NOTIFICATION) \
     TROMPELOEIL_REQUIRE_CALL(rec, recordNotification(NOTIFICATION)).IN_SEQUENCE(seq);
 
+#define REQUIRE_NAMED_NOTIFICATION(SUBSCRIPTION, NOTIFICATION) \
+    expectations.emplace_back(TROMPELOEIL_NAMED_REQUIRE_CALL(rec, recordNotification(NOTIFICATION)).IN_SEQUENCE(seq));
+
 #define READ_NOTIFICATION(SUBSCRIPTION)                                \
     REQUIRE(pipeStatus((SUBSCRIPTION).fd()) == PipeStatus::DataReady); \
     (SUBSCRIPTION).processEvent(cbNotif);
@@ -276,6 +279,89 @@ TEST_CASE("Dynamic subscriptions")
             const auto excMessage = "Couldn't terminate yang-push subscription with id " + std::to_string(sub->subscriptionId()) + ": SR_ERR_NOT_FOUND";
             REQUIRE_THROWS_WITH_AS(sub->terminate(), excMessage.c_str(), sysrepo::ErrorWithCode);
         }
+
+        DOCTEST_SUBCASE("Filtering")
+        {
+            std::optional<sysrepo::DynamicSubscription> sub;
+            std::vector<std::unique_ptr<trompeloeil::expectation>> expectations;
+
+            DOCTEST_SUBCASE("xpath filter")
+            {
+                sub = sess.subscribeNotifications("/test_module:ping");
+
+                REQUIRE_NAMED_NOTIFICATION(sub, notifications[0]);
+            }
+
+            DOCTEST_SUBCASE("subtree filter")
+            {
+                libyang::CreatedNodes createdNodes;
+
+                DOCTEST_SUBCASE("filter a node")
+                {
+                    DOCTEST_SUBCASE("XML")
+                    {
+                        createdNodes = sess.getContext().newPath2(
+                            "/ietf-subscribed-notifications:establish-subscription/stream-subtree-filter",
+                            libyang::XML{"<ping xmlns='urn:ietf:params:xml:ns:yang:test_module' />"});
+                    }
+
+                    DOCTEST_SUBCASE("JSON")
+                    {
+                        createdNodes = sess.getContext().newPath2(
+                            "/ietf-subscribed-notifications:establish-subscription/stream-subtree-filter",
+                            libyang::JSON{R"({"test_module:ping": {}})"});
+                    }
+
+                    REQUIRE_NAMED_NOTIFICATION(sub, notifications[0]);
+                }
+
+                DOCTEST_SUBCASE("filter more top level nodes")
+                {
+                    DOCTEST_SUBCASE("XML")
+                    {
+                        createdNodes = sess.getContext().newPath2(
+                            "/ietf-subscribed-notifications:establish-subscription/stream-subtree-filter",
+                            libyang::XML{"<ping xmlns='urn:ietf:params:xml:ns:yang:test_module' />"
+                                         "<silent-ping xmlns='urn:ietf:params:xml:ns:yang:test_module' />"});
+                    }
+
+                    DOCTEST_SUBCASE("JSON")
+                    {
+                        createdNodes = sess.getContext().newPath2(
+                            "/ietf-subscribed-notifications:establish-subscription/stream-subtree-filter",
+                            libyang::JSON{R"({
+                                "test_module:ping": {},
+                                "test_module:silent-ping": {}
+                            })"});
+                    }
+
+                    REQUIRE_NAMED_NOTIFICATION(sub, notifications[0]);
+                    REQUIRE_NAMED_NOTIFICATION(sub, notifications[1]);
+                }
+
+                DOCTEST_SUBCASE("empty filter selects nothing")
+                {
+                    createdNodes = sess.getContext().newPath2(
+                        "/ietf-subscribed-notifications:establish-subscription/stream-subtree-filter",
+                        std::nullopt);
+                }
+
+                sub = sess.subscribeNotifications(createdNodes.createdNode->asAny());
+            }
+
+            CLIENT_SEND_NOTIFICATION(notifications[0]);
+            CLIENT_SEND_NOTIFICATION(notifications[1]);
+
+            // read as many notifications as we expect
+            for (size_t i = 0; i < expectations.size(); ++i) {
+                READ_NOTIFICATION_BLOCKING(*sub);
+            }
+
+            sub->terminate();
+
+            // ensure no more notifications were sent
+            REQUIRE_PIPE_HANGUP(*sub);
+        }
     }
 
     DOCTEST_SUBCASE("YANG Push on change")
@@ -285,9 +371,73 @@ TEST_CASE("Dynamic subscriptions")
          * between writing to sysrepo and reading the notifications.
          */
 
-        auto sub = sess.yangPushOnChange(std::nullopt, std::nullopt, sysrepo::SyncOnStart::Yes);
+        DOCTEST_SUBCASE("Filters")
+        {
+            std::optional<sysrepo::DynamicSubscription> sub;
 
-        REQUIRE_YANG_PUSH_UPDATE(sub, R"({
+            DOCTEST_SUBCASE("XPath filter")
+            {
+                sub = sess.yangPushOnChange("/test_module:leafInt32 | /test_module:popelnice/content/trash[name='asd']");
+            }
+
+            DOCTEST_SUBCASE("Subtree filter")
+            {
+                auto createdNodes = sess.getContext().newPath2(
+                    "/ietf-subscribed-notifications:establish-subscription/ietf-yang-push:datastore-subtree-filter",
+                    libyang::XML{"<leafInt32 xmlns='http://example.com/' />"
+                                 "<popelnice xmlns='http://example.com/'><content><trash><name>asd</name></trash></content></popelnice>"});
+                sub = sess.yangPushOnChange(createdNodes.createdNode->asAny());
+            }
+
+            client.setItem("/test_module:leafInt32", "42");
+            client.setItem("/test_module:popelnice/s", "asd");
+            client.setItem("/test_module:popelnice/content/trash[name='asd']", std::nullopt);
+            client.applyChanges();
+
+            client.deleteItem("/test_module:popelnice/s");
+            client.applyChanges();
+
+            REQUIRE_YANG_PUSH_UPDATE(*sub, R"({
+  "ietf-yang-push:push-change-update": {
+    "datastore-changes": {
+      "yang-patch": {
+        "patch-id": "patch-1",
+        "edit": [
+          {
+            "edit-id": "edit-1",
+            "operation": "create",
+            "target": "/test_module:leafInt32",
+            "value": {
+              "test_module:leafInt32": 42
+            }
+          },
+          {
+            "edit-id": "edit-2",
+            "operation": "create",
+            "target": "/test_module:popelnice/content/trash[name='asd']",
+            "value": {
+              "test_module:trash": {
+                "name": "asd"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+)");
+            READ_YANG_PUSH_UPDATE(*sub);
+
+            sub->terminate();
+            REQUIRE_PIPE_HANGUP(*sub);
+        }
+
+        DOCTEST_SUBCASE("Sync on start")
+        {
+            auto sub = sess.yangPushOnChange(std::nullopt, std::nullopt, sysrepo::SyncOnStart::Yes);
+
+            REQUIRE_YANG_PUSH_UPDATE(sub, R"({
   "ietf-yang-push:push-update": {
     "datastore-contents": {
       "test_module:values": [
@@ -298,14 +448,14 @@ TEST_CASE("Dynamic subscriptions")
   }
 }
 )");
-        READ_YANG_PUSH_UPDATE(sub);
+            READ_YANG_PUSH_UPDATE(sub);
 
-        client.setItem("/test_module:leafInt32", "123");
-        client.setItem("/test_module:values[.='5']", std::nullopt);
-        client.deleteItem("/test_module:values[.='3']");
-        client.applyChanges();
+            client.setItem("/test_module:leafInt32", "123");
+            client.setItem("/test_module:values[.='5']", std::nullopt);
+            client.deleteItem("/test_module:values[.='3']");
+            client.applyChanges();
 
-        REQUIRE_YANG_PUSH_UPDATE(sub, R"({
+            REQUIRE_YANG_PUSH_UPDATE(sub, R"({
   "ietf-yang-push:push-change-update": {
     "datastore-changes": {
       "yang-patch": {
@@ -342,10 +492,11 @@ TEST_CASE("Dynamic subscriptions")
   }
 }
 )");
-        READ_YANG_PUSH_UPDATE(sub);
+            READ_YANG_PUSH_UPDATE(sub);
 
-        sub.terminate();
-        REQUIRE_PIPE_HANGUP(sub);
+            sub.terminate();
+            REQUIRE_PIPE_HANGUP(sub);
+        }
     }
 
     DOCTEST_SUBCASE("YANG Push periodic")
