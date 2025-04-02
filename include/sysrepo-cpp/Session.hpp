@@ -145,6 +145,7 @@ public:
         const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter,
         const std::optional<std::chrono::milliseconds>& dampeningPeriod = std::nullopt,
         SyncOnStart syncOnStart = SyncOnStart::No,
+        const std::set<YangPushChange>& excludedChanges = {},
         const std::optional<NotificationTimeStamp>& stopTime = std::nullopt);
     [[nodiscard]] DynamicSubscription subscribeNotifications(
         const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter,

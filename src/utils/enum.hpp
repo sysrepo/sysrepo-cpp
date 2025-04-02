@@ -9,6 +9,7 @@
 #include <type_traits>
 extern "C" {
 #include <sysrepo.h>
+#include <sysrepo/subscribed_notifications.h>
 }
 #include <sysrepo-cpp/Enum.hpp>
 
@@ -171,4 +172,11 @@ constexpr sr_get_options_t toGetOptions(const GetOptions opts)
 {
     return static_cast<sr_get_options_t>(opts);
 }
+
+static_assert(static_cast<YangPushChange>(SRSN_YP_CHANGE_CREATE) == YangPushChange::Create);
+static_assert(static_cast<YangPushChange>(SRSN_YP_CHANGE_DELETE) == YangPushChange::Delete);
+static_assert(static_cast<YangPushChange>(SRSN_YP_CHANGE_INSERT) == YangPushChange::Insert);
+static_assert(static_cast<YangPushChange>(SRSN_YP_CHANGE_MOVE) == YangPushChange::Move);
+static_assert(static_cast<YangPushChange>(SRSN_YP_CHANGE_REPLACE) == YangPushChange::Replace);
+static_assert(static_cast<YangPushChange>(SRSN_COUNT_YP_CHANGE) == YangPushChange::EnumCount);
 }

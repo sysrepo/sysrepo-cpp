@@ -209,6 +209,18 @@ constexpr GetOptions operator|(const GetOptions a, const GetOptions b)
     return implEnumBitOr(a, b);
 }
 
+/**
+ * @brief Wraps `srsn_yang_push_change_t`
+ */
+enum class YangPushChange : uint32_t {
+    Create = 0, /**< SRSN_YP_CHANGE_CREATE */
+    Delete = 1, /**< SRSN_YP_CHANGE_DELETE */
+    Insert = 2, /**< SRSN_YP_CHANGE_INSERT */
+    Move = 3, /**< SRSN_YP_CHANGE_MOVE */
+    Replace = 4, /**< SRSN_YP_CHANGE_REPLACE */
+    EnumCount = 5, /**< SRSN_COUNT_YP_CHANGE */
+};
+
 std::ostream& operator<<(std::ostream& os, const NotificationType& type);
 std::ostream& operator<<(std::ostream& os, const Event& event);
 std::ostream& operator<<(std::ostream& os, const ChangeOperation& changeOp);
