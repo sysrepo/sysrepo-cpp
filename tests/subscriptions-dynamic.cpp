@@ -497,6 +497,66 @@ TEST_CASE("Dynamic subscriptions")
             sub.terminate();
             REQUIRE_PIPE_HANGUP(sub);
         }
+
+        DOCTEST_SUBCASE("Excluded changes")
+        {
+            auto sub = sess.yangPushOnChange(std::nullopt, std::nullopt, sysrepo::SyncOnStart::No, {sysrepo::YangPushChange::Create});
+
+            client.setItem("/test_module:leafInt32", "123");
+            client.applyChanges(); // excluded (create)
+            client.setItem("/test_module:leafInt32", "124");
+            client.applyChanges();
+            client.setItem("/test_module:leafInt32", "125");
+            client.applyChanges();
+
+            REQUIRE_YANG_PUSH_UPDATE(sub, R"({
+  "ietf-yang-push:push-change-update": {
+    "datastore-changes": {
+      "yang-patch": {
+        "patch-id": "patch-1",
+        "edit": [
+          {
+            "edit-id": "edit-1",
+            "operation": "replace",
+            "target": "/test_module:leafInt32",
+            "value": {
+              "test_module:leafInt32": 124
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+)");
+
+            READ_YANG_PUSH_UPDATE(sub);
+
+            REQUIRE_YANG_PUSH_UPDATE(sub, R"({
+  "ietf-yang-push:push-change-update": {
+    "datastore-changes": {
+      "yang-patch": {
+        "patch-id": "patch-2",
+        "edit": [
+          {
+            "edit-id": "edit-1",
+            "operation": "replace",
+            "target": "/test_module:leafInt32",
+            "value": {
+              "test_module:leafInt32": 125
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+)");
+            READ_YANG_PUSH_UPDATE(sub);
+
+            sub.terminate();
+            REQUIRE_PIPE_HANGUP(sub);
+        }
     }
 
     DOCTEST_SUBCASE("YANG Push periodic")

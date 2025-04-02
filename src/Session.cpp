@@ -607,6 +607,7 @@ DynamicSubscription Session::yangPushOnChange(
     const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter,
     const std::optional<std::chrono::milliseconds>& dampeningPeriod,
     SyncOnStart syncOnStart,
+    const std::set<YangPushChange>& excludedChanges,
     const std::optional<NotificationTimeStamp>& stopTime)
 {
     int fd;
@@ -614,12 +615,21 @@ DynamicSubscription Session::yangPushOnChange(
     auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} : std::nullopt;
     auto xpathFilter = constructXPathFilter(filter);
 
+    /* The enum values are not used as the other enum flags in sysrepo-cpp.
+     * srsn_yang_push_on_change expects an integer array of size EnumCount with 0 or 1 values.
+     */
+    using YangPushChangeUnderlying = std::underlying_type_t<YangPushChange>;
+    std::array<int, static_cast<YangPushChangeUnderlying>(YangPushChange::EnumCount)> excludedChangesArray{};
+    for (const auto& change: excludedChanges) {
+        excludedChangesArray[static_cast<YangPushChangeUnderlying>(change)] = 1;
+    }
+
     auto res = srsn_yang_push_on_change(m_sess.get(),
                                         toDatastore(activeDatastore()),
                                         xpathFilter ? xpathFilter->c_str() : nullptr,
                                         dampeningPeriod ? dampeningPeriod->count() : 0,
                                         syncOnStart == SyncOnStart::Yes,
-                                        nullptr,
+                                        excludedChangesArray.data(),
                                         stopSpec ? &stopSpec.value() : nullptr,
                                         0,
                                         nullptr,
