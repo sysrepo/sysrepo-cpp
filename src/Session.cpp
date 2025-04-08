@@ -707,6 +707,15 @@ void Session::setNacmUser(const std::string& user)
 }
 
 /**
+ * @brief Get the NACM user for this session.
+ */
+std::optional<std::string> Session::getNacmUser() const
+{
+    auto* username = sr_nacm_get_user(m_sess.get());
+    return username ? std::make_optional<std::string>(username) : std::nullopt;
+}
+
+/**
  * @brief Initializes NACM callbacks.
  *
  * @param opts Can contain the sysrepo::SubscribeOptions::NoThread. Other flags are invalid.

@@ -100,6 +100,7 @@ public:
     void replaceConfig(std::optional<libyang::DataNode> config, const std::optional<std::string>& moduleName = std::nullopt, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
 
     void setNacmUser(const std::string& user);
+    std::optional<std::string> getNacmUser() const;
     [[nodiscard]] Subscription initNacm(
             SubscribeOptions opts = SubscribeOptions::Default,
             ExceptionHandler handler = nullptr,
