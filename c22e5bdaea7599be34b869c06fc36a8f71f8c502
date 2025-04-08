@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "26701a63_c8331d0e",
+        "filename": "src/Session.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-04-08T11:08:49Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "e0fb9d0f_f2f208e0",
+      "revId": "c22e5bdaea7599be34b869c06fc36a8f71f8c502",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "7cd1014b_255f8ddb",
         "filename": "tests/subscriptions-dynamic.cpp",
         "patchSetId": 3
