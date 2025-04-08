@@ -51,6 +51,24 @@
       "message": "I *think* that the subtree \"should\" be also expressible as a JSON. How would that JSON look like, and can you please add a test for that?",
       "revId": "c22e5bdaea7599be34b869c06fc36a8f71f8c502",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eafbdcbf_9943a79f",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-04-08T11:39:24Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "7cd1014b_255f8ddb",
+      "revId": "c22e5bdaea7599be34b869c06fc36a8f71f8c502",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
