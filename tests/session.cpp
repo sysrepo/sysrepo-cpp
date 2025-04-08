@@ -390,10 +390,14 @@ TEST_CASE("session")
         auto data = sess.getData("/test_module:denyAllLeaf");
         REQUIRE(data.value().findPath("/test_module:denyAllLeaf").value().asTerm().valueStr() == "AHOJ");
 
+        REQUIRE(!sess.getNacmUser());
+
         // check that repeated NACM initialization still works
         for (int i = 0; i < 3; ++i) {
             auto nacmSub = sess.initNacm();
             sess.setNacmUser("nobody");
+            REQUIRE(sess.getNacmUser() == "nobody");
+
             data = sess.getData("/test_module:denyAllLeaf");
             // After turning on NACM, we can't access the leaf.
             REQUIRE(!data);
@@ -407,6 +411,9 @@ TEST_CASE("session")
                     "Access to the data model \"test_module\" is denied because \"nobody\" NACM authorization failed.",
                     sysrepo::ErrorWithCode);
         }
+
+        REQUIRE(!!sess.getNacmUser());
+        REQUIRE(sess.getNacmUser() == "nobody");
 
         // duplicate NACM initialization should throw
         auto nacm = sess.initNacm();
