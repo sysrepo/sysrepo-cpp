@@ -55,6 +55,10 @@ module test_module {
   rpc noop {
   }
 
+  rpc deny-all-rpc {
+    nacm:default-deny-all;
+  }
+
   rpc shutdown {
     output {
       leaf success {
