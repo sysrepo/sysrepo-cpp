@@ -716,6 +716,19 @@ std::optional<std::string> Session::getNacmUser() const
 }
 
 /**
+ * @brief Checks if operation is allowed for current NACM user. Wraps `sr_nacm_check_operation`.
+ * @return true if the current user is authorized to perform operation on given @p node.
+ *
+ * Details on unsuccessfull authorizations can be retrieved via Session::getErrors.
+ * Note that if the NACM user is not set, `sr_nacm_check_operation` and this function both return true.
+ */
+bool Session::checkNacmOperation(const libyang::DataNode& node) const
+{
+    auto res = sr_nacm_check_operation(m_sess.get(), libyang::getRawNode(node));
+    return res == SR_ERR_OK;
+}
+
+/**
  * @brief Initializes NACM callbacks.
  *
  * @param opts Can contain the sysrepo::SubscribeOptions::NoThread. Other flags are invalid.

@@ -423,6 +423,52 @@ TEST_CASE("session")
                 sysrepo::ErrorWithCode);
     }
 
+    DOCTEST_SUBCASE("Session::checkNacmOperation")
+    {
+        auto nacmSub = sess.initNacm();
+
+        // check NACM access for RPCs
+        auto shutdownRPC = sess.getContext().newPath("/test_module:shutdown", std::nullopt);
+        auto denyAllRPC = sess.getContext().newPath("/test_module:deny-all-rpc", std::nullopt);
+
+        // user not set, everything is permitted
+        REQUIRE(sess.checkNacmOperation(shutdownRPC) == true);
+        REQUIRE(sess.checkNacmOperation(denyAllRPC) == true);
+        REQUIRE(sess.getErrors().size() == 0);
+
+        sess.setNacmUser("root");
+        REQUIRE(sess.checkNacmOperation(shutdownRPC) == true);
+        REQUIRE(sess.checkNacmOperation(denyAllRPC) == true);
+        REQUIRE(sess.getErrors().size() == 0);
+
+        sess.setNacmUser("nobody");
+        REQUIRE(sess.checkNacmOperation(shutdownRPC) == true);
+        REQUIRE(sess.checkNacmOperation(denyAllRPC) == false);
+        REQUIRE(sess.getErrors().size() == 1);
+        REQUIRE(sess.getErrors().at(0) == sysrepo::ErrorInfo{
+                    .code = sysrepo::ErrorCode::Unauthorized,
+                    .errorMessage = "Executing the operation is denied because \"nobody\" NACM authorization failed.",
+                });
+
+        sess.setNacmUser("root"); // 'nobody' is not authorized to write into this subtree
+        sess.switchDatastore(sysrepo::Datastore::Running);
+        sess.setItem("/ietf-netconf-acm:nacm/enable-external-groups", "false");
+        sess.setItem("/ietf-netconf-acm:nacm/groups/group[name='grp']/user-name[.='nobody']", "");
+        sess.setItem("/ietf-netconf-acm:nacm/rule-list[name='rule']/group[.='grp']", "");
+        sess.setItem("/ietf-netconf-acm:nacm/rule-list[name='rule']/rule[name='1']/module-name", "test_module");
+        sess.setItem("/ietf-netconf-acm:nacm/rule-list[name='rule']/rule[name='1']/access-operations", "*");
+        sess.setItem("/ietf-netconf-acm:nacm/rule-list[name='rule']/rule[name='1']/action", "deny");
+        sess.applyChanges();
+
+        sess.setNacmUser("root");
+        REQUIRE(sess.checkNacmOperation(denyAllRPC) == true);
+        REQUIRE(sess.checkNacmOperation(shutdownRPC) == true);
+
+        sess.setNacmUser("nobody");
+        REQUIRE(sess.checkNacmOperation(denyAllRPC) == false);
+        REQUIRE(sess.checkNacmOperation(shutdownRPC) == false);
+    }
+
     DOCTEST_SUBCASE("Session::getPendingChanges")
     {
         REQUIRE(sess.getPendingChanges() == std::nullopt);

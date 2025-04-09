@@ -101,6 +101,7 @@ public:
 
     void setNacmUser(const std::string& user);
     std::optional<std::string> getNacmUser() const;
+    bool checkNacmOperation(const libyang::DataNode& node) const;
     [[nodiscard]] Subscription initNacm(
             SubscribeOptions opts = SubscribeOptions::Default,
             ExceptionHandler handler = nullptr,
