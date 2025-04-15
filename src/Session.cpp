@@ -564,7 +564,7 @@ Subscription Session::onNotification(
  * @param anchorTime Optional anchor time for the period. Anchor time acts as a reference point for the period.
  * @param stopTime Optional stop time ending the notification subscription.
  *
- * @return A YangPushSubscription handle.
+ * @return A DynamicSubscription handle.
  */
 DynamicSubscription Session::yangPushPeriodic(
     const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter,
@@ -601,7 +601,7 @@ DynamicSubscription Session::yangPushPeriodic(
  * @param syncOnStart Whether to start with a notification of the current state.
  * @param stopTime Optional stop time ending the notification subscription.
  *
- * @return A YangPushSubscription handle.
+ * @return A DynamicSubscription handle.
  */
 DynamicSubscription Session::yangPushOnChange(
     const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter,
@@ -650,7 +650,7 @@ DynamicSubscription Session::yangPushOnChange(
  * @param stopTime Optional stop time ending the subscription.
  * @param startTime Optional start time of the subscription, used for replaying stored notifications.
  *
- * @return A YangPushSubscription handle.
+ * @return A DynamicSubscription handle.
  */
 DynamicSubscription Session::subscribeNotifications(
     const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter,
