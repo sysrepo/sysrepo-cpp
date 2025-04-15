@@ -716,6 +716,16 @@ std::optional<std::string> Session::getNacmUser() const
 }
 
 /**
+ * @brief Get the sysrepo NACM recovery user.
+ *
+ * wraps `sr_nacm_get_recovery_user`.
+ */
+std::string Session::getNacmRecoveryUser()
+{
+    return sr_nacm_get_recovery_user();
+}
+
+/**
  * @brief Checks if operation is allowed for current NACM user. Wraps `sr_nacm_check_operation`.
  * @return true if the current user is authorized to perform operation on given @p node.
  *
