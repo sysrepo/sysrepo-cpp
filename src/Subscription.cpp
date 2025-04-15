@@ -414,18 +414,18 @@ bool ChangeIterator::operator==(const ChangeIterator& other) const
 
 
 struct DynamicSubscription::Data {
-    std::shared_ptr<sr_session_ctx_s> sess;
+    sysrepo::Session sess;
     int fd;
     uint64_t subId;
     std::optional<NotificationTimeStamp> m_replayStartTime;
     bool m_terminated;
 
-    Data(std::shared_ptr<sr_session_ctx_s> sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime, bool terminated);
+    Data(sysrepo::Session sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime, bool terminated);
     ~Data();
     void terminate(const std::optional<std::string>& reason = std::nullopt);
 };
 
-DynamicSubscription::DynamicSubscription(std::shared_ptr<sr_session_ctx_s> sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime)
+DynamicSubscription::DynamicSubscription(sysrepo::Session sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime)
     : m_data(std::make_unique<Data>(std::move(sess), fd, subId, replayStartTime, false))
 {
 }
@@ -433,6 +433,12 @@ DynamicSubscription::DynamicSubscription(std::shared_ptr<sr_session_ctx_s> sess,
 DynamicSubscription::DynamicSubscription(DynamicSubscription&&) noexcept = default;
 DynamicSubscription& DynamicSubscription::operator=(DynamicSubscription&&) noexcept = default;
 DynamicSubscription::~DynamicSubscription() = default;
+
+/** @brief Returns sysrepo Session associated with this subscription */
+sysrepo::Session DynamicSubscription::getSession() const
+{
+    return m_data->sess;
+}
 
 /** @brief Returns the file descriptor associated with this subscription. */
 int DynamicSubscription::fd() const
@@ -472,9 +478,8 @@ void DynamicSubscription::processEvent(YangPushNotifCb cb) const
 {
     struct timespec timestamp;
     struct lyd_node* tree;
-    auto ctx = std::unique_ptr<const ly_ctx, std::function<void(const ly_ctx*)>>(sr_session_acquire_context(m_data->sess.get()), [&](const ly_ctx*) { sr_session_release_context(m_data->sess.get()); });
 
-    auto err = srsn_read_notif(fd(), ctx.get(), &timestamp, &tree);
+    auto err = srsn_read_notif(fd(), libyang::retrieveContext(m_data->sess.getContext()), &timestamp, &tree);
     throwIfError(err, "Couldn't read yang-push notification");
 
     const auto wrappedNotification = tree ? std::optional{libyang::wrapRawNode(tree)} : std::nullopt;
@@ -488,7 +493,7 @@ void DynamicSubscription::processEvent(YangPushNotifCb cb) const
     cb(wrappedNotification, toTimePoint(timestamp));
 }
 
-DynamicSubscription::Data::Data(std::shared_ptr<sr_session_ctx_s> sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime, bool terminated)
+DynamicSubscription::Data::Data(sysrepo::Session sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime, bool terminated)
     : sess(std::move(sess))
     , fd(fd)
     , subId(subId)

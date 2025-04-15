@@ -303,6 +303,7 @@ public:
     DynamicSubscription& operator=(DynamicSubscription&&) noexcept;
     ~DynamicSubscription();
 
+    sysrepo::Session getSession() const;
     int fd() const;
     uint64_t subscriptionId() const;
     std::optional<NotificationTimeStamp> replayStartTime() const;
@@ -310,7 +311,7 @@ public:
     void terminate(const std::optional<std::string>& reason = std::nullopt);
 
 private:
-    DynamicSubscription(std::shared_ptr<sr_session_ctx_s> sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime = std::nullopt);
+    DynamicSubscription(sysrepo::Session sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime = std::nullopt);
 
     struct Data;
     std::unique_ptr<Data> m_data;
