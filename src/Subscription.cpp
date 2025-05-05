@@ -512,6 +512,10 @@ DynamicSubscription::Data::~Data()
 
 void DynamicSubscription::Data::terminate(const std::optional<std::string>& reason)
 {
+    if (m_terminated) {
+        return;
+    }
+
     auto err = srsn_terminate(subId, reason ? reason->c_str() : nullptr);
     throwIfError(err, "Couldn't terminate yang-push subscription with id " + std::to_string(subId));
     m_terminated = true;
