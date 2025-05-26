@@ -93,4 +93,15 @@ ModuleReplaySupport Connection::getModuleReplaySupport(const std::string& module
     }
     return {static_cast<bool>(enabled), toTimePoint(earliestNotif)};
 }
+
+/**
+ * @brief Get the internal, sysrepo-level connection ID
+ *
+ * Wraps `sr_get_cid`.
+ */
+uint32_t Connection::getId() const
+{
+    return sr_get_cid(ctx.get());
+}
+
 }

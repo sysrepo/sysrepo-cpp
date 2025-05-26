@@ -505,6 +505,10 @@ TEST_CASE("session")
     {
         REQUIRE(sess.getId() == sess.getId());
         REQUIRE(sess.getId() != conn->sessionStart().getId());
+
+        std::optional<sysrepo::Connection> conn2{std::in_place};
+        REQUIRE(conn->getId() != conn2->getId());
+        REQUIRE(sess.getId() != conn2->sessionStart().getId());
     }
 
     DOCTEST_SUBCASE("locking")
