@@ -662,4 +662,20 @@ TEST_CASE("session")
         REQUIRE(s.enabled);
         REQUIRE(s.earliestNotification);
     }
+
+#ifdef SYSREPO_CPP_THREAD_CHECKING
+    DOCTEST_SUBCASE("thread safety")
+    {
+        std::atomic<bool> thrown = false;
+        std::jthread bg([&]() {
+            try {
+                sess.activeDatastore();
+            } catch (const std::logic_error&) {
+                thrown = true;
+            }
+        });
+        bg.join();
+        REQUIRE(bool{thrown});
+    }
+#endif
 }
