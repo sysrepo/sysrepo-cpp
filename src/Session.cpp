@@ -18,9 +18,40 @@ extern "C" {
 #include <span>
 #include <sysrepo-cpp/Subscription.hpp>
 #include <utility>
+#include <version>
 #include "utils/enum.hpp"
 #include "utils/exception.hpp"
 #include "utils/utils.hpp"
+
+#if __cpp_lib_formatters >= 202302L
+#  define SYSREPO_CPP_THREAD_CHECKING_DEBUG_IMPL(TID) std::format("sysrepo::Session access from another thread is not allowed: created in {}, accessed from {}", TID, std::this_thread::get_id())
+#else
+#include <sstream>
+namespace {
+auto threadPrinter(const std::thread::id id)
+{
+    std::ostringstream ss;
+    ss << id;
+    return ss.str();
+}
+}
+#  define SYSREPO_CPP_THREAD_CHECKING_DEBUG_IMPL(TID) \
+    "sysrepo::Session access from another thread is not allowed: created from " + threadPrinter(TID) + \
+        ", accessed from " + threadPrinter(std::this_thread::get_id())
+#endif
+
+#ifdef SYSREPO_CPP_THREAD_CHECKING
+#  define SESSION_CHECK_THREAD_OF(TID) \
+    { \
+        if (TID != std::this_thread::get_id()) { \
+            throw std::logic_error{SYSREPO_CPP_THREAD_CHECKING_DEBUG_IMPL(TID)}; \
+        } \
+    }
+#  define SESSION_CHECK_THREAD SESSION_CHECK_THREAD_OF(m_firstTID)
+#else
+#  define SESSION_CHECK_THREAD_OF(TID) {}
+#  define SESSION_CHECK_THREAD {}
+#endif
 
 using namespace std::string_literals;
 namespace sysrepo {
@@ -88,6 +119,9 @@ Session::Session(sr_session_ctx_s* sess, std::shared_ptr<sr_conn_ctx_s> conn)
     , m_sess(sess, [extend_connection_lifetime = conn] (auto* sess) {
         sr_session_stop(sess);
     })
+#ifdef SYSREPO_CPP_THREAD_CHECKING
+    , m_firstTID(std::this_thread::get_id())
+#endif
 {
 }
 
@@ -97,6 +131,9 @@ Session::Session(sr_session_ctx_s* sess, std::shared_ptr<sr_conn_ctx_s> conn)
 Session::Session(sr_session_ctx_s* unmanagedSession, const unmanaged_tag)
     : m_conn(std::shared_ptr<sr_conn_ctx_s>{sr_session_get_connection(unmanagedSession), [] (sr_conn_ctx_s*) {}})
     , m_sess(unmanagedSession, [] (sr_session_ctx_s*) {})
+#ifdef SYSREPO_CPP_THREAD_CHECKING
+    , m_firstTID(std::this_thread::get_id())
+#endif
 {
 }
 
@@ -107,6 +144,7 @@ Session::Session(sr_session_ctx_s* unmanagedSession, const unmanaged_tag)
  */
 Datastore Session::activeDatastore() const
 {
+    SESSION_CHECK_THREAD
     return static_cast<Datastore>(sr_session_get_ds(m_sess.get()));
 }
 
@@ -118,6 +156,7 @@ Datastore Session::activeDatastore() const
  */
 void Session::switchDatastore(const Datastore ds) const
 {
+    SESSION_CHECK_THREAD
     auto res = sr_session_switch_ds(m_sess.get(), toDatastore(ds));
     throwIfError(res, "Couldn't switch datastore", m_sess.get());
 }
@@ -133,6 +172,7 @@ void Session::switchDatastore(const Datastore ds) const
  */
 void Session::setItem(const std::string& path, const std::optional<std::string>& value, const EditOptions opts)
 {
+    SESSION_CHECK_THREAD
     auto res = sr_set_item_str(m_sess.get(), path.c_str(), value ? value->c_str() : nullptr, nullptr, toEditOptions(opts));
 
     throwIfError(res, "Session::setItem: Couldn't set '"s + path + "'"s + (value ? (" to '"s + *value + "'") : ""), m_sess.get());
@@ -149,6 +189,7 @@ void Session::setItem(const std::string& path, const std::optional<std::string>&
  */
 void Session::editBatch(libyang::DataNode edit, const DefaultOperation op)
 {
+    SESSION_CHECK_THREAD
     auto res = sr_edit_batch(m_sess.get(), libyang::getRawNode(edit), toDefaultOperation(op));
 
     throwIfError(res, "Session::editBatch: Couldn't apply the edit batch", m_sess.get());
@@ -165,6 +206,7 @@ void Session::editBatch(libyang::DataNode edit, const DefaultOperation op)
  */
 void Session::deleteItem(const std::string& path, const EditOptions opts)
 {
+    SESSION_CHECK_THREAD
     auto res = sr_delete_item(m_sess.get(), path.c_str(), toEditOptions(opts));
 
     throwIfError(res, "Session::deleteItem: Can't delete '"s + path + "'", m_sess.get());
@@ -189,6 +231,7 @@ void Session::deleteItem(const std::string& path, const EditOptions opts)
  */
 void Session::dropForeignOperationalContent(const std::optional<std::string>& xpath)
 {
+    SESSION_CHECK_THREAD
     auto res = sr_discard_items(m_sess.get(), xpath ? xpath->c_str() : nullptr);
 
     throwIfError(res, "Session::discardItems: Can't discard "s + (xpath ? "'"s + *xpath + "'" : "all nodes"s), m_sess.get());
@@ -205,6 +248,7 @@ void Session::dropForeignOperationalContent(const std::optional<std::string>& xp
  */
 std::optional<libyang::DataNode> Session::operationalChanges(const std::optional<std::string>& moduleName) const
 {
+    SESSION_CHECK_THREAD
     sr_data_t* data;
     auto res = sr_get_oper_changes(m_sess.get(), moduleName ? moduleName->c_str() : nullptr, &data);
 
@@ -225,6 +269,7 @@ std::optional<libyang::DataNode> Session::operationalChanges(const std::optional
  * */
 void Session::discardOperationalChanges(const std::optional<std::string>& moduleName, std::chrono::milliseconds timeout)
 {
+    SESSION_CHECK_THREAD
     auto res = sr_discard_oper_changes(nullptr, m_sess.get(), moduleName ? nullptr : moduleName->c_str(), timeout.count());
     throwIfError(res, "Session::discardOoperationalChanges: Couldn't discard "s + (moduleName ? "for module \"" + *moduleName + "\"" : "globally"s), m_sess.get());
 }
@@ -240,6 +285,7 @@ void Session::discardOperationalChanges(const std::optional<std::string>& module
  */
 void Session::moveItem(const std::string& path, const MovePosition move, const std::optional<std::string>& keys_or_value, const std::optional<std::string>& origin, const EditOptions opts)
 {
+    SESSION_CHECK_THREAD
     // sr_move_item has separate arguments for list keys and leaf-list values, but the C++ api has just one. It is OK if
     // both of the arguments are the same. https://github.com/sysrepo/sysrepo/issues/2621
     auto res = sr_move_item(m_sess.get(), path.c_str(), toMovePosition(move),
@@ -271,6 +317,7 @@ void Session::moveItem(const std::string& path, const MovePosition move, const s
  */
 std::optional<libyang::DataNode> Session::getData(const std::string& path, int maxDepth, const GetOptions opts, std::chrono::milliseconds timeout) const
 {
+    SESSION_CHECK_THREAD
     sr_data_t* data;
     auto res = sr_get_data(m_sess.get(), path.c_str(), maxDepth, timeout.count(), toGetOptions(opts), &data);
 
@@ -300,6 +347,7 @@ std::optional<libyang::DataNode> Session::getData(const std::string& path, int m
  */
 libyang::DataNode Session::getOneNode(const std::string& path, std::chrono::milliseconds timeout) const
 {
+    SESSION_CHECK_THREAD
     sr_data_t* data;
     auto res = sr_get_node(m_sess.get(), path.c_str(), timeout.count(), &data);
 
@@ -318,6 +366,7 @@ libyang::DataNode Session::getOneNode(const std::string& path, std::chrono::mill
  */
 std::optional<const libyang::DataNode> Session::getPendingChanges() const
 {
+    SESSION_CHECK_THREAD
     auto changes = sr_get_changes(m_sess.get());
     if (!changes) {
         return std::nullopt;
@@ -334,6 +383,7 @@ std::optional<const libyang::DataNode> Session::getPendingChanges() const
  */
 void Session::applyChanges(std::chrono::milliseconds timeout)
 {
+    SESSION_CHECK_THREAD
     auto res = sr_apply_changes(m_sess.get(), timeout.count());
 
     throwIfError(res, "Session::applyChanges: Couldn't apply changes", m_sess.get());
@@ -348,6 +398,7 @@ void Session::applyChanges(std::chrono::milliseconds timeout)
  */
 void Session::discardChanges(const std::optional<std::string>& xpath)
 {
+    SESSION_CHECK_THREAD
     auto res = sr_discard_changes_xpath(m_sess.get(), xpath ? xpath->c_str() : nullptr);
 
     throwIfError(res, "Session::discardChanges: Couldn't discard changes", m_sess.get());
@@ -365,6 +416,7 @@ void Session::discardChanges(const std::optional<std::string>& xpath)
  */
 void Session::copyConfig(const Datastore source, const std::optional<std::string>& moduleName, std::chrono::milliseconds timeout)
 {
+    SESSION_CHECK_THREAD
     auto res = sr_copy_config(m_sess.get(), moduleName ? moduleName->c_str() : nullptr, toDatastore(source), timeout.count());
 
     throwIfError(res, "Couldn't copy config", m_sess.get());
@@ -380,6 +432,7 @@ void Session::copyConfig(const Datastore source, const std::optional<std::string
  */
 std::optional<libyang::DataNode> Session::sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout)
 {
+    SESSION_CHECK_THREAD
     sr_data_t* output;
     auto res = sr_rpc_send_tree(m_sess.get(), libyang::getRawNode(input), timeout.count(), &output);
     throwIfError(res, "Couldn't send RPC", m_sess.get());
@@ -401,6 +454,7 @@ std::optional<libyang::DataNode> Session::sendRPC(libyang::DataNode input, std::
  */
 void Session::sendNotification(libyang::DataNode notification, const Wait wait, std::chrono::milliseconds timeout)
 {
+    SESSION_CHECK_THREAD
     auto res = sr_notif_send_tree(m_sess.get(), libyang::getRawNode(notification), timeout.count(), wait == Wait::Yes ? 1 : 0);
     throwIfError(res, "Couldn't send notification", m_sess.get());
 }
@@ -417,6 +471,7 @@ void Session::sendNotification(libyang::DataNode notification, const Wait wait, 
  */
 void Session::replaceConfig(std::optional<libyang::DataNode> config, const std::optional<std::string>& moduleName, std::chrono::milliseconds timeout)
 {
+    SESSION_CHECK_THREAD
     std::optional<libyang::DataNode> thrashable;
     if (config) {
         thrashable = config->duplicateWithSiblings(libyang::DuplicationOptions::Recursive | libyang::DuplicationOptions::WithParents);
@@ -454,6 +509,7 @@ Subscription Session::onModuleChange(
         ExceptionHandler handler,
         const std::optional<FDHandling>& callbacks)
 {
+    SESSION_CHECK_THREAD
     checkNoThreadFlag(opts, callbacks);
     auto sub = Subscription{m_sess, handler, callbacks};
     sub.onModuleChange(moduleName, cb, xpath, priority, opts);
@@ -484,6 +540,7 @@ Subscription Session::onOperGet(
         ExceptionHandler handler,
         const std::optional<FDHandling>& callbacks)
 {
+    SESSION_CHECK_THREAD
     checkNoThreadFlag(opts, callbacks);
     auto sub = Subscription{m_sess, handler, callbacks};
     sub.onOperGet(moduleName, cb, xpath, opts);
@@ -514,6 +571,7 @@ Subscription Session::onRPCAction(
         ExceptionHandler handler,
         const std::optional<FDHandling>& callbacks)
 {
+    SESSION_CHECK_THREAD
     checkNoThreadFlag(opts, callbacks);
     auto sub = Subscription{m_sess, handler, callbacks};
     sub.onRPCAction(xpath, cb, priority, opts);
@@ -548,6 +606,7 @@ Subscription Session::onNotification(
         ExceptionHandler handler,
         const std::optional<FDHandling>& callbacks)
 {
+    SESSION_CHECK_THREAD
     checkNoThreadFlag(opts, callbacks);
     auto sub = Subscription{m_sess, handler, callbacks};
     sub.onNotification(moduleName, cb, xpath, startTime, stopTime, opts);
@@ -572,6 +631,7 @@ DynamicSubscription Session::yangPushPeriodic(
     const std::optional<NotificationTimeStamp>& anchorTime,
     const std::optional<NotificationTimeStamp>& stopTime)
 {
+    SESSION_CHECK_THREAD
     int fd;
     uint32_t subId;
     auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} : std::nullopt;
@@ -610,6 +670,7 @@ DynamicSubscription Session::yangPushOnChange(
     const std::set<YangPushChange>& excludedChanges,
     const std::optional<NotificationTimeStamp>& stopTime)
 {
+    SESSION_CHECK_THREAD
     int fd;
     uint32_t subId;
     auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} : std::nullopt;
@@ -658,6 +719,7 @@ DynamicSubscription Session::subscribeNotifications(
     const std::optional<NotificationTimeStamp>& stopTime,
     const std::optional<NotificationTimeStamp>& startTime)
 {
+    SESSION_CHECK_THREAD
     int fd;
     uint32_t subId;
     auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} : std::nullopt;
@@ -694,6 +756,7 @@ DynamicSubscription Session::subscribeNotifications(
  */
 ChangeCollection Session::getChanges(const std::string& xpath)
 {
+    SESSION_CHECK_THREAD
     return ChangeCollection{xpath, m_sess};
 }
 
@@ -702,6 +765,7 @@ ChangeCollection Session::getChanges(const std::string& xpath)
  */
 void Session::setNacmUser(const std::string& user)
 {
+    SESSION_CHECK_THREAD
     auto res = sr_nacm_set_user(m_sess.get(), user.c_str());
     throwIfError(res, "Couldn't set NACM user", m_sess.get());
 }
@@ -711,6 +775,7 @@ void Session::setNacmUser(const std::string& user)
  */
 std::optional<std::string> Session::getNacmUser() const
 {
+    SESSION_CHECK_THREAD
     auto* username = sr_nacm_get_user(m_sess.get());
     return username ? std::make_optional<std::string>(username) : std::nullopt;
 }
@@ -734,6 +799,7 @@ std::string Session::getNacmRecoveryUser()
  */
 bool Session::checkNacmOperation(const libyang::DataNode& node) const
 {
+    SESSION_CHECK_THREAD
     auto res = sr_nacm_check_operation(m_sess.get(), libyang::getRawNode(node));
     return res == SR_ERR_OK;
 }
@@ -749,6 +815,7 @@ bool Session::checkNacmOperation(const libyang::DataNode& node) const
  */
 [[nodiscard]] Subscription Session::initNacm(SubscribeOptions opts, ExceptionHandler handler, const std::optional<FDHandling>& callbacks)
 {
+    SESSION_CHECK_THREAD
     sr_subscription_ctx_t* sub = nullptr;
     auto res = sr_nacm_init(m_sess.get(), toSubscribeOptions(opts), &sub);
     throwIfError(res, "Couldn't initialize NACM", m_sess.get());
@@ -769,6 +836,7 @@ bool Session::checkNacmOperation(const libyang::DataNode& node) const
  */
 void Session::setErrorMessage(const std::string& msg)
 {
+    SESSION_CHECK_THREAD
     auto res = sr_session_set_error_message(m_sess.get(), "%s", msg.c_str());
     throwIfError(res, "Couldn't set error message");
 }
@@ -782,6 +850,7 @@ void Session::setErrorMessage(const std::string& msg)
  */
 void Session::setNetconfError(const NetconfErrorInfo& info)
 {
+    SESSION_CHECK_THREAD
     std::vector<const char*> elements, values;
     elements.reserve(info.infoElements.size());
     values.reserve(elements.size());
@@ -881,6 +950,7 @@ std::vector<ErrType> impl_getErrors(sr_session_ctx_s* sess)
  */
 std::vector<ErrorInfo> Session::getErrors() const
 {
+    SESSION_CHECK_THREAD
     return impl_getErrors<ErrorInfo>(m_sess.get());
 }
 
@@ -892,6 +962,7 @@ std::vector<ErrorInfo> Session::getErrors() const
  */
 std::vector<NetconfErrorInfo> Session::getNetconfErrors() const
 {
+    SESSION_CHECK_THREAD
     return impl_getErrors<NetconfErrorInfo>(m_sess.get());
 }
 
@@ -924,6 +995,7 @@ std::ostream& operator<<(std::ostream& stream, const NetconfErrorInfo& e)
  */
 std::string Session::getOriginatorName() const
 {
+    SESSION_CHECK_THREAD
     return sr_session_get_orig_name(m_sess.get());
 }
 
@@ -935,6 +1007,7 @@ std::string Session::getOriginatorName() const
  */
 void Session::setOriginatorName(const std::string& originatorName)
 {
+    SESSION_CHECK_THREAD
     auto res = sr_session_set_orig_name(m_sess.get(), originatorName.c_str());
     throwIfError(res, "Couldn't switch datastore", m_sess.get());
 }
@@ -944,6 +1017,7 @@ void Session::setOriginatorName(const std::string& originatorName)
  */
 Connection Session::getConnection()
 {
+    SESSION_CHECK_THREAD
     return Connection{m_conn};
 }
 
@@ -954,6 +1028,7 @@ Connection Session::getConnection()
  */
 const libyang::Context Session::getContext() const
 {
+    SESSION_CHECK_THREAD
     auto ctx = sr_session_acquire_context(m_sess.get());
     return libyang::createUnmanagedContext(const_cast<ly_ctx*>(ctx), [sess = m_sess] (ly_ctx*) { sr_session_release_context(sess.get()); });
 }
@@ -965,6 +1040,7 @@ const libyang::Context Session::getContext() const
  */
 uint32_t Session::getId() const
 {
+    SESSION_CHECK_THREAD
     return sr_session_get_id(m_sess.get());
 }
 
@@ -992,6 +1068,7 @@ Lock::~Lock()
 
 sr_session_ctx_s* getRawSession(Session sess)
 {
+    SESSION_CHECK_THREAD_OF(sess.m_firstTID)
     return sess.m_sess.get();
 }
 }
