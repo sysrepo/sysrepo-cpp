@@ -30,7 +30,7 @@ find_package(PkgConfig)
 pkg_check_modules(LIBYANG_CPP REQUIRED libyang-cpp>=3 IMPORTED_TARGET)
 pkg_check_modules(SYSREPO REQUIRED sysrepo>=3.7.3 IMPORTED_TARGET)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_BINARY_DIR}/include)
 
 add_library(sysrepo-cpp SHARED
         src/Connection.cpp
@@ -48,6 +48,9 @@ target_link_libraries(sysrepo-cpp PRIVATE PkgConfig::SYSREPO PUBLIC PkgConfig::L
 set_target_properties(sysrepo-cpp PROPERTIES
     VERSION ${SYSREPO_CPP_PKG_VERSION}
     SOVERSION ${SYSREPO_CPP_PKG_VERSION})
+
+option(SYSREPO_CPP_THREAD_CHECKING "Try to detect some multithreading issues when accessing sysrepo-cpp data structures" ON)
+configure_file(include/sysrepo-cpp/utils/build.hpp.in include/sysrepo-cpp/utils/build.hpp @ONLY)
 
 if(BUILD_TESTING)
     find_package(doctest 2.4.8 REQUIRED)
@@ -121,4 +124,5 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/sysrepo-cpp.pc.in" "${CMAKE_CURRENT_
 # this is not enough, but at least it will generate the `install` target so that the CI setup is less magic
 install(TARGETS sysrepo-cpp)
 install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/sysrepo-cpp" TYPE INCLUDE)
+install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/include/sysrepo-cpp" TYPE INCLUDE)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/sysrepo-cpp.pc" DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)

@@ -15,6 +15,10 @@
 #include <libyang-cpp/DataNode.hpp>
 #include <sysrepo-cpp/Enum.hpp>
 #include <sysrepo-cpp/Subscription.hpp>
+#include <sysrepo-cpp/utils/build.hpp>
+#ifdef SYSREPO_CPP_THREAD_CHECKING
+#  include <thread>
+#endif
 
 struct sr_conn_ctx_s;
 struct sr_session_ctx_s;
@@ -181,6 +185,9 @@ private:
 
     std::shared_ptr<sr_conn_ctx_s> m_conn;
     std::shared_ptr<sr_session_ctx_s> m_sess;
+#ifdef SYSREPO_CPP_THREAD_CHECKING
+    std::thread::id m_firstTID;
+#endif
 };
 
 /**
