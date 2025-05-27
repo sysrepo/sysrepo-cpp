@@ -33,6 +33,8 @@ public:
     Connection(const ConnectionFlags options = ConnectionFlags::Default);
     Session sessionStart(sysrepo::Datastore datastore = sysrepo::Datastore::Running);
 
+    uint32_t getId() const;
+
     [[deprecated("Use sysrepo::Session::discardItems")]] void discardOperationalChanges(const std::optional<std::string>& xpath = std::nullopt, std::optional<Session> session = std::nullopt, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
     ModuleReplaySupport getModuleReplaySupport(const std::string& moduleName);
     void setModuleReplaySupport(const std::string& moduleName, bool enabled);

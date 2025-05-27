@@ -44,7 +44,7 @@ Connection::Connection(std::shared_ptr<sr_conn_ctx_t> ctx)
 /**
  * Starts a new sysrepo session.
  *
- * Wraps `sr_session_start`,
+ * Wraps `sr_session_start`.
  * @param datastore The datastore which the session should operate on. Default is sysrepo::Datastore::Running.
  * @return The newly created session.
  */
@@ -67,7 +67,7 @@ void Connection::discardOperationalChanges(const std::optional<std::string>& xpa
 /**
  * Change module replay support
  *
- * Wraps `sr_set_module_replay_support`,
+ * Wraps `sr_set_module_replay_support`.
  */
 void Connection::setModuleReplaySupport(const std::string& moduleName, bool enabled)
 {
@@ -78,7 +78,7 @@ void Connection::setModuleReplaySupport(const std::string& moduleName, bool enab
 /**
  * Returns information about replay support of a module
  *
- * Wraps `sr_get_module_replay_support`,
+ * Wraps `sr_get_module_replay_support`.
  */
 ModuleReplaySupport Connection::getModuleReplaySupport(const std::string& moduleName)
 {
@@ -93,4 +93,15 @@ ModuleReplaySupport Connection::getModuleReplaySupport(const std::string& module
     }
     return {static_cast<bool>(enabled), toTimePoint(earliestNotif)};
 }
+
+/**
+ * @brief Get the internal, sysrepo-level connection ID
+ *
+ * Wraps `sr_get_cid`.
+ */
+uint32_t Connection::getId() const
+{
+    return sr_get_cid(ctx.get());
+}
+
 }
