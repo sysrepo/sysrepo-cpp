@@ -9,7 +9,7 @@
 #include <atomic>
 #include <doctest/doctest.h>
 #include <pretty_printers.hpp>
-#include <sysrepo-cpp/Connection.hpp>
+#include <sysrepo-cpp/Subscription.hpp>
 #include <sysrepo-cpp/utils/utils.hpp>
 #include <sysrepo-cpp/utils/exception.hpp>
 #include <thread>

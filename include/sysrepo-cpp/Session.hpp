@@ -9,17 +9,20 @@
 
 #include <iosfwd>
 #include <optional>
+#include <variant>
 #include <libyang-cpp/Context.hpp>
 #include <libyang-cpp/DataNode.hpp>
+#include <sysrepo-cpp/Callbacks.hpp>
 #include <sysrepo-cpp/Connection.hpp>
-#include <sysrepo-cpp/Subscription.hpp>
 
 struct sr_session_ctx_s;
 
 namespace sysrepo {
 class Connection;
 class ChangeCollection;
+class DynamicSubscription;
 class Session;
+class Subscription;
 
 /**
  * @brief Internal use only.
