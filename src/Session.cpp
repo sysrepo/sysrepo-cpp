@@ -695,7 +695,7 @@ DynamicSubscription Session::subscribeNotifications(
  */
 ChangeCollection Session::getChanges(const std::string& xpath)
 {
-    return ChangeCollection{xpath, m_sess};
+    return ChangeCollection{xpath, *this};
 }
 
 /**

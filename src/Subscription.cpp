@@ -293,7 +293,7 @@ Subscription::Subscription(Subscription&& other) noexcept = default;
 
 Subscription& Subscription::operator=(Subscription&& other) noexcept = default;
 
-ChangeCollection::ChangeCollection(const std::string& xpath, std::shared_ptr<sr_session_ctx_s> sess)
+ChangeCollection::ChangeCollection(const std::string& xpath, Session sess)
     : m_xpath(xpath)
     , m_sess(sess)
 {
@@ -305,9 +305,9 @@ ChangeCollection::ChangeCollection(const std::string& xpath, std::shared_ptr<sr_
 ChangeIterator ChangeCollection::begin() const
 {
     sr_change_iter_t* iter;
-    auto res = sr_get_changes_iter(m_sess.get(), m_xpath.c_str(), &iter);
+    auto res = sr_get_changes_iter(m_sess.m_sess.get(), m_xpath.c_str(), &iter);
 
-    throwIfError(res, "Couldn't create an iterator for changes", m_sess.get());
+    throwIfError(res, "Couldn't create an iterator for changes", m_sess.m_sess.get());
 
     return ChangeIterator{iter, m_sess};
 }
@@ -323,9 +323,9 @@ ChangeIterator ChangeCollection::end() const
 /**
  * Wraps `sr_change_iter_s`.
  */
-ChangeIterator::ChangeIterator(sr_change_iter_s* iter, std::shared_ptr<sr_session_ctx_s> sess)
+ChangeIterator::ChangeIterator(sr_change_iter_s* iter, Session sess)
     : m_iter(iter, sr_free_change_iter)
-    , m_sess(sess)
+    , m_sess(std::move(sess))
 {
     operator++();
 }
@@ -333,7 +333,7 @@ ChangeIterator::ChangeIterator(sr_change_iter_s* iter, std::shared_ptr<sr_sessio
 ChangeIterator::ChangeIterator(const iterator_end_tag)
     : m_current(std::nullopt)
     , m_iter(nullptr)
-    , m_sess(nullptr)
+    , m_sess(std::nullopt)
 {
 }
 
@@ -347,14 +347,14 @@ ChangeIterator& ChangeIterator::operator++()
     const char* prevValue;
     const char* prevList;
     int prevDefault;
-    auto ret = sr_get_change_tree_next(m_sess.get(), m_iter.get(), &operation, &node, &prevValue, &prevList, &prevDefault);
+    auto ret = sr_get_change_tree_next(m_sess->m_sess.get(), m_iter.get(), &operation, &node, &prevValue, &prevList, &prevDefault);
 
     if (ret == SR_ERR_NOT_FOUND) {
         m_current = std::nullopt;
         return *this;
     }
 
-    throwIfError(ret, "Could not iterate to the next change", m_sess.get());
+    throwIfError(ret, "Could not iterate to the next change", m_sess->m_sess.get());
 
     // I can safely "dereference" the change here, because last change is handled by the condition above.
     m_current.emplace(Change{
