@@ -10,9 +10,9 @@
 #include <memory>
 #include <optional>
 #include <sysrepo-cpp/Enum.hpp>
+#include <sysrepo-cpp/Session.hpp>
 #include <string>
 
-struct sr_session_ctx_s;
 struct sr_change_iter_s;
 
 namespace sysrepo {
@@ -99,14 +99,15 @@ private:
     struct iterator_end_tag{
     };
 
-    ChangeIterator(sr_change_iter_s* iter, std::shared_ptr<sr_session_ctx_s> sess);
+    ChangeIterator(sr_change_iter_s* iter, Session sess);
     ChangeIterator(const iterator_end_tag);
     friend ChangeCollection;
 
     std::optional<Change> m_current;
 
     std::shared_ptr<sr_change_iter_s> m_iter;
-    std::shared_ptr<sr_session_ctx_s> m_sess;
+    // FIXME: get rid of the optional<> when we have a sentinel instead of an end iterator
+    std::optional<Session> m_sess;
 };
 
 /**
@@ -128,9 +129,9 @@ public:
     ChangeIterator end() const;
 
 private:
-    ChangeCollection(const std::string& xpath, std::shared_ptr<sr_session_ctx_s> sess);
+    ChangeCollection(const std::string& xpath, Session sess);
     friend Session;
     std::string m_xpath;
-    std::shared_ptr<sr_session_ctx_s> m_sess;
+    Session m_sess;
 };
 }

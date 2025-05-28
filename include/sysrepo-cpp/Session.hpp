@@ -20,6 +20,7 @@ struct sr_session_ctx_s;
 namespace sysrepo {
 class Connection;
 class ChangeCollection;
+class ChangeIterator;
 class DynamicSubscription;
 class Session;
 class Subscription;
@@ -173,6 +174,8 @@ public:
 
 private:
     friend Connection;
+    friend ChangeCollection;
+    friend ChangeIterator;
     friend Session wrapUnmanagedSession(sr_session_ctx_s* session);
     friend Subscription;
     friend sr_session_ctx_s* getRawSession(Session sess);
