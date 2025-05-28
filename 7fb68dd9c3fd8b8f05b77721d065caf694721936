@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a700daef_375c15df",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-05-28T17:40:28Z",
+      "side": 1,
+      "message": "a sneaky little exercise why this is needed.",
+      "range": {
+        "startLine": 18,
+        "startChar": 7,
+        "endLine": 18,
+        "endChar": 23
+      },
+      "revId": "7fb68dd9c3fd8b8f05b77721d065caf694721936",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
