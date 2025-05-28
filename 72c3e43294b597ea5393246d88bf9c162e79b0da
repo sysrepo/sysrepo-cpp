@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90825d9e_b907aa6c",
+        "filename": "src/Session.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-28T19:23:33Z",
+      "side": 1,
+      "message": "ha! fail, this was moved from already.",
+      "range": {
+        "startLine": 92,
+        "startChar": 49,
+        "endLine": 92,
+        "endChar": 53
+      },
+      "revId": "72c3e43294b597ea5393246d88bf9c162e79b0da",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
