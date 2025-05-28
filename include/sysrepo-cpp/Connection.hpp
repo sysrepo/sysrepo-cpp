@@ -7,8 +7,10 @@
 */
 #pragma once
 
+#include <chrono>
 #include <memory>
-#include <sysrepo-cpp/Session.hpp>
+#include <string>
+#include <sysrepo-cpp/Enum.hpp>
 
 struct sr_conn_ctx_s;
 
@@ -42,7 +44,7 @@ public:
     friend Session;
 
 private:
-    Connection(std::shared_ptr<sr_conn_ctx_s> ctx);
+    explicit Connection(std::shared_ptr<sr_conn_ctx_s> ctx);
     std::shared_ptr<sr_conn_ctx_s> ctx;
 };
 }
