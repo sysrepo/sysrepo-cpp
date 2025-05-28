@@ -8,7 +8,6 @@
 #pragma once
 #include <chrono>
 #include <sysrepo-cpp/Session.hpp>
-struct sr_session_ctx_s;
 
 namespace sysrepo {
 std::timespec toTimespec(std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>);
