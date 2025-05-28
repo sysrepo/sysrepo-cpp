@@ -8,6 +8,7 @@
 #pragma once
 
 #include <iosfwd>
+#include <mutex>
 #include <optional>
 #include <variant>
 #include <libyang-cpp/Context.hpp>
@@ -24,6 +25,7 @@ class ChangeIterator;
 class DynamicSubscription;
 class Session;
 class Subscription;
+class Lock;
 
 /**
  * @brief Internal use only.
@@ -181,6 +183,7 @@ private:
     friend Connection;
     friend ChangeCollection;
     friend ChangeIterator;
+    friend Lock;
     friend Session wrapUnmanagedSession(sr_session_ctx_s* session);
     friend Subscription;
     friend sr_session_ctx_s* getRawSession(Session sess);
@@ -189,8 +192,20 @@ private:
     explicit Session(sr_session_ctx_s* unmanagedSession, const unmanaged_tag);
 
     Connection m_conn;
+
+    using mutex_type = std::mutex;
+    mutable std::shared_ptr<mutex_type> m_mtx;
+    using lock_type = std::lock_guard<mutex_type>;
+    [[nodiscard]] auto static mt_lock(mutex_type& mtx)
+    {
+        return lock_type{mtx};
+    }
+
     std::shared_ptr<sr_session_ctx_s> m_sess;
 };
+
+#define SYSREPO_CPP_SESSION_MTX_OF(SESSION) auto sysrepoCppInternalLock = Session::mt_lock(*(SESSION).m_mtx)
+#define SYSREPO_CPP_SESSION_MTX SYSREPO_CPP_SESSION_MTX_OF(*this)
 
 /**
  * @brief Lock the current datastore, or a specified module in a datastore
