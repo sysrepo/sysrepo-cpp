@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2ed5236_7b865239",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-28T09:44:51Z",
+      "side": 1,
+      "message": "we\u0027re actively discussing this, and we might end up with just doing the locking here, so let\u0027s block this change for now",
+      "revId": "41b87bca8de89a77b3955c5bc5840327f7864ad9",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
