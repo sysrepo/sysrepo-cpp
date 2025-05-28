@@ -86,7 +86,11 @@ Session::Session(sr_session_ctx_s* sess, Connection conn)
     : m_conn(std::move(conn))
     // The connection is saved here in the deleter (as a capture). This means that copies of this shared_ptr will
     // automatically hold a reference to `m_conn`.
-    , m_sess(sess, [extend_connection_lifetime = m_conn] (auto* sess) {
+    , m_mtx(std::make_shared<mutex_type>())
+    // The connection `conn` is saved here in the deleter (as a capture). This means that copies of this shared_ptr will
+    // automatically hold a reference to `conn`.
+    , m_sess(sess, [extend_connection_lifetime = conn, mtx = this->m_mtx] (auto* sess) {
+        auto guard = lock_type{*mtx};
         sr_session_stop(sess);
     })
 {
@@ -97,9 +101,14 @@ Session::Session(sr_session_ctx_s* sess, Connection conn)
  */
 Session::Session(sr_session_ctx_s* unmanagedSession, const unmanaged_tag)
     : m_conn(std::shared_ptr<sr_conn_ctx_s>{sr_session_get_connection(unmanagedSession), [] (sr_conn_ctx_s*) {}})
-    , m_sess(unmanagedSession, [] (sr_session_ctx_s*) {})
+    , m_mtx(std::make_shared<mutex_type>())
+    , m_sess(unmanagedSession, [mtx = this->m_mtx] (sr_session_ctx_s*) {
+        auto guard = lock_type{*mtx};
+    })
 {
 }
+
+#define SYSREPO_CPP_ACTIVE_DATASTORE_IMPL(SESS) static_cast<Datastore>(sr_session_get_ds(SESS.get()))
 
 /**
  * Retrieves the current active datastore.
@@ -108,7 +117,8 @@ Session::Session(sr_session_ctx_s* unmanagedSession, const unmanaged_tag)
  */
 Datastore Session::activeDatastore() const
 {
-    return static_cast<Datastore>(sr_session_get_ds(m_sess.get()));
+    SYSREPO_CPP_SESSION_MTX;
+    return SYSREPO_CPP_ACTIVE_DATASTORE_IMPL(m_sess);
 }
 
 /**
@@ -119,6 +129,7 @@ Datastore Session::activeDatastore() const
  */
 void Session::switchDatastore(const Datastore ds) const
 {
+    SYSREPO_CPP_SESSION_MTX;
     auto res = sr_session_switch_ds(m_sess.get(), toDatastore(ds));
     throwIfError(res, "Couldn't switch datastore", m_sess.get());
 }
@@ -134,6 +145,7 @@ void Session::switchDatastore(const Datastore ds) const
  */
 void Session::setItem(const std::string& path, const std::optional<std::string>& value, const EditOptions opts)
 {
+    SYSREPO_CPP_SESSION_MTX;
     auto res = sr_set_item_str(m_sess.get(), path.c_str(), value ? value->c_str() : nullptr, nullptr, toEditOptions(opts));
 
     throwIfError(res, "Session::setItem: Couldn't set '"s + path + "'"s + (value ? (" to '"s + *value + "'") : ""), m_sess.get());
@@ -150,6 +162,7 @@ void Session::setItem(const std::string& path, const std::optional<std::string>&
  */
 void Session::editBatch(libyang::DataNode edit, const DefaultOperation op)
 {
+    SYSREPO_CPP_SESSION_MTX;
     auto res = sr_edit_batch(m_sess.get(), libyang::getRawNode(edit), toDefaultOperation(op));
 
     throwIfError(res, "Session::editBatch: Couldn't apply the edit batch", m_sess.get());
@@ -166,6 +179,7 @@ void Session::editBatch(libyang::DataNode edit, const DefaultOperation op)
  */
 void Session::deleteItem(const std::string& path, const EditOptions opts)
 {
+    SYSREPO_CPP_SESSION_MTX;
     auto res = sr_delete_item(m_sess.get(), path.c_str(), toEditOptions(opts));
 
     throwIfError(res, "Session::deleteItem: Can't delete '"s + path + "'", m_sess.get());
@@ -190,6 +204,7 @@ void Session::deleteItem(const std::string& path, const EditOptions opts)
  */
 void Session::dropForeignOperationalContent(const std::optional<std::string>& xpath)
 {
+    SYSREPO_CPP_SESSION_MTX;
     auto res = sr_discard_items(m_sess.get(), xpath ? xpath->c_str() : nullptr);
 
     throwIfError(res, "Session::discardItems: Can't discard "s + (xpath ? "'"s + *xpath + "'" : "all nodes"s), m_sess.get());
@@ -206,6 +221,7 @@ void Session::dropForeignOperationalContent(const std::optional<std::string>& xp
  */
 std::optional<libyang::DataNode> Session::operationalChanges(const std::optional<std::string>& moduleName) const
 {
+    SYSREPO_CPP_SESSION_MTX;
     sr_data_t* data;
     auto res = sr_get_oper_changes(m_sess.get(), moduleName ? moduleName->c_str() : nullptr, &data);
 
@@ -226,6 +242,7 @@ std::optional<libyang::DataNode> Session::operationalChanges(const std::optional
  * */
 void Session::discardOperationalChanges(const std::optional<std::string>& moduleName, std::chrono::milliseconds timeout)
 {
+    SYSREPO_CPP_SESSION_MTX;
     auto res = sr_discard_oper_changes(nullptr, m_sess.get(), moduleName ? nullptr : moduleName->c_str(), timeout.count());
     throwIfError(res, "Session::discardOoperationalChanges: Couldn't discard "s + (moduleName ? "for module \"" + *moduleName + "\"" : "globally"s), m_sess.get());
 }
@@ -241,6 +258,7 @@ void Session::discardOperationalChanges(const std::optional<std::string>& module
  */
 void Session::moveItem(const std::string& path, const MovePosition move, const std::optional<std::string>& keys_or_value, const std::optional<std::string>& origin, const EditOptions opts)
 {
+    SYSREPO_CPP_SESSION_MTX;
     // sr_move_item has separate arguments for list keys and leaf-list values, but the C++ api has just one. It is OK if
     // both of the arguments are the same. https://github.com/sysrepo/sysrepo/issues/2621
     auto res = sr_move_item(m_sess.get(), path.c_str(), toMovePosition(move),
@@ -272,6 +290,7 @@ void Session::moveItem(const std::string& path, const MovePosition move, const s
  */
 std::optional<libyang::DataNode> Session::getData(const std::string& path, int maxDepth, const GetOptions opts, std::chrono::milliseconds timeout) const
 {
+    SYSREPO_CPP_SESSION_MTX;
     sr_data_t* data;
     auto res = sr_get_data(m_sess.get(), path.c_str(), maxDepth, timeout.count(), toGetOptions(opts), &data);
 
@@ -301,6 +320,7 @@ std::optional<libyang::DataNode> Session::getData(const std::string& path, int m
  */
 libyang::DataNode Session::getOneNode(const std::string& path, std::chrono::milliseconds timeout) const
 {
+    SYSREPO_CPP_SESSION_MTX;
     sr_data_t* data;
     auto res = sr_get_node(m_sess.get(), path.c_str(), timeout.count(), &data);
 
@@ -319,6 +339,7 @@ libyang::DataNode Session::getOneNode(const std::string& path, std::chrono::mill
  */
 std::optional<const libyang::DataNode> Session::getPendingChanges() const
 {
+    SYSREPO_CPP_SESSION_MTX;
     auto changes = sr_get_changes(m_sess.get());
     if (!changes) {
         return std::nullopt;
@@ -335,6 +356,7 @@ std::optional<const libyang::DataNode> Session::getPendingChanges() const
  */
 void Session::applyChanges(std::chrono::milliseconds timeout)
 {
+    SYSREPO_CPP_SESSION_MTX;
     auto res = sr_apply_changes(m_sess.get(), timeout.count());
 
     throwIfError(res, "Session::applyChanges: Couldn't apply changes", m_sess.get());
@@ -349,6 +371,7 @@ void Session::applyChanges(std::chrono::milliseconds timeout)
  */
 void Session::discardChanges(const std::optional<std::string>& xpath)
 {
+    SYSREPO_CPP_SESSION_MTX;
     auto res = sr_discard_changes_xpath(m_sess.get(), xpath ? xpath->c_str() : nullptr);
 
     throwIfError(res, "Session::discardChanges: Couldn't discard changes", m_sess.get());
@@ -366,6 +389,7 @@ void Session::discardChanges(const std::optional<std::string>& xpath)
  */
 void Session::copyConfig(const Datastore source, const std::optional<std::string>& moduleName, std::chrono::milliseconds timeout)
 {
+    SYSREPO_CPP_SESSION_MTX;
     auto res = sr_copy_config(m_sess.get(), moduleName ? moduleName->c_str() : nullptr, toDatastore(source), timeout.count());
 
     throwIfError(res, "Couldn't copy config", m_sess.get());
@@ -381,6 +405,7 @@ void Session::copyConfig(const Datastore source, const std::optional<std::string
  */
 std::optional<libyang::DataNode> Session::sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout)
 {
+    SYSREPO_CPP_SESSION_MTX;
     sr_data_t* output;
     auto res = sr_rpc_send_tree(m_sess.get(), libyang::getRawNode(input), timeout.count(), &output);
     throwIfError(res, "Couldn't send RPC", m_sess.get());
@@ -402,6 +427,7 @@ std::optional<libyang::DataNode> Session::sendRPC(libyang::DataNode input, std::
  */
 void Session::sendNotification(libyang::DataNode notification, const Wait wait, std::chrono::milliseconds timeout)
 {
+    SYSREPO_CPP_SESSION_MTX;
     auto res = sr_notif_send_tree(m_sess.get(), libyang::getRawNode(notification), timeout.count(), wait == Wait::Yes ? 1 : 0);
     throwIfError(res, "Couldn't send notification", m_sess.get());
 }
@@ -418,6 +444,7 @@ void Session::sendNotification(libyang::DataNode notification, const Wait wait, 
  */
 void Session::replaceConfig(std::optional<libyang::DataNode> config, const std::optional<std::string>& moduleName, std::chrono::milliseconds timeout)
 {
+    SYSREPO_CPP_SESSION_MTX;
     std::optional<libyang::DataNode> thrashable;
     if (config) {
         thrashable = config->duplicateWithSiblings(libyang::DuplicationOptions::Recursive | libyang::DuplicationOptions::WithParents);
@@ -573,6 +600,7 @@ DynamicSubscription Session::yangPushPeriodic(
     const std::optional<NotificationTimeStamp>& anchorTime,
     const std::optional<NotificationTimeStamp>& stopTime)
 {
+    SYSREPO_CPP_SESSION_MTX;
     int fd;
     uint32_t subId;
     auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} : std::nullopt;
@@ -611,6 +639,7 @@ DynamicSubscription Session::yangPushOnChange(
     const std::set<YangPushChange>& excludedChanges,
     const std::optional<NotificationTimeStamp>& stopTime)
 {
+    SYSREPO_CPP_SESSION_MTX;
     int fd;
     uint32_t subId;
     auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} : std::nullopt;
@@ -659,6 +688,7 @@ DynamicSubscription Session::subscribeNotifications(
     const std::optional<NotificationTimeStamp>& stopTime,
     const std::optional<NotificationTimeStamp>& startTime)
 {
+    SYSREPO_CPP_SESSION_MTX;
     int fd;
     uint32_t subId;
     auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} : std::nullopt;
@@ -695,6 +725,7 @@ DynamicSubscription Session::subscribeNotifications(
  */
 ChangeCollection Session::getChanges(const std::string& xpath)
 {
+    SYSREPO_CPP_SESSION_MTX;
     return ChangeCollection{xpath, *this};
 }
 
@@ -703,6 +734,7 @@ ChangeCollection Session::getChanges(const std::string& xpath)
  */
 void Session::setNacmUser(const std::string& user)
 {
+    SYSREPO_CPP_SESSION_MTX;
     auto res = sr_nacm_set_user(m_sess.get(), user.c_str());
     throwIfError(res, "Couldn't set NACM user", m_sess.get());
 }
@@ -712,6 +744,7 @@ void Session::setNacmUser(const std::string& user)
  */
 std::optional<std::string> Session::getNacmUser() const
 {
+    SYSREPO_CPP_SESSION_MTX;
     auto* username = sr_nacm_get_user(m_sess.get());
     return username ? std::make_optional<std::string>(username) : std::nullopt;
 }
@@ -735,6 +768,7 @@ std::string Session::getNacmRecoveryUser()
  */
 bool Session::checkNacmOperation(const libyang::DataNode& node) const
 {
+    SYSREPO_CPP_SESSION_MTX;
     auto res = sr_nacm_check_operation(m_sess.get(), libyang::getRawNode(node));
     return res == SR_ERR_OK;
 }
@@ -750,6 +784,7 @@ bool Session::checkNacmOperation(const libyang::DataNode& node) const
  */
 [[nodiscard]] Subscription Session::initNacm(SubscribeOptions opts, ExceptionHandler handler, const std::optional<FDHandling>& callbacks)
 {
+    SYSREPO_CPP_SESSION_MTX;
     sr_subscription_ctx_t* sub = nullptr;
     auto res = sr_nacm_init(m_sess.get(), toSubscribeOptions(opts), &sub);
     throwIfError(res, "Couldn't initialize NACM", m_sess.get());
@@ -770,6 +805,7 @@ bool Session::checkNacmOperation(const libyang::DataNode& node) const
  */
 void Session::setErrorMessage(const std::string& msg)
 {
+    SYSREPO_CPP_SESSION_MTX;
     auto res = sr_session_set_error_message(m_sess.get(), "%s", msg.c_str());
     throwIfError(res, "Couldn't set error message");
 }
@@ -783,6 +819,7 @@ void Session::setErrorMessage(const std::string& msg)
  */
 void Session::setNetconfError(const NetconfErrorInfo& info)
 {
+    SYSREPO_CPP_SESSION_MTX;
     std::vector<const char*> elements, values;
     elements.reserve(info.infoElements.size());
     values.reserve(elements.size());
@@ -882,6 +919,7 @@ std::vector<ErrType> impl_getErrors(sr_session_ctx_s* sess)
  */
 std::vector<ErrorInfo> Session::getErrors() const
 {
+    SYSREPO_CPP_SESSION_MTX;
     return impl_getErrors<ErrorInfo>(m_sess.get());
 }
 
@@ -893,6 +931,7 @@ std::vector<ErrorInfo> Session::getErrors() const
  */
 std::vector<NetconfErrorInfo> Session::getNetconfErrors() const
 {
+    SYSREPO_CPP_SESSION_MTX;
     return impl_getErrors<NetconfErrorInfo>(m_sess.get());
 }
 
@@ -925,6 +964,7 @@ std::ostream& operator<<(std::ostream& stream, const NetconfErrorInfo& e)
  */
 std::string Session::getOriginatorName() const
 {
+    SYSREPO_CPP_SESSION_MTX;
     return sr_session_get_orig_name(m_sess.get());
 }
 
@@ -936,6 +976,7 @@ std::string Session::getOriginatorName() const
  */
 void Session::setOriginatorName(const std::string& originatorName)
 {
+    SYSREPO_CPP_SESSION_MTX;
     auto res = sr_session_set_orig_name(m_sess.get(), originatorName.c_str());
     throwIfError(res, "Couldn't switch datastore", m_sess.get());
 }
@@ -955,6 +996,7 @@ Connection Session::getConnection()
  */
 const libyang::Context Session::getContext() const
 {
+    SYSREPO_CPP_SESSION_MTX;
     auto ctx = sr_session_acquire_context(m_sess.get());
     return libyang::createUnmanagedContext(const_cast<ly_ctx*>(ctx), [sess = m_sess] (ly_ctx*) { sr_session_release_context(sess.get()); });
 }
@@ -966,6 +1008,7 @@ const libyang::Context Session::getContext() const
  */
 uint32_t Session::getId() const
 {
+    SYSREPO_CPP_SESSION_MTX;
     return sr_session_get_id(m_sess.get());
 }
 
@@ -974,12 +1017,14 @@ Lock::Lock(Session session, std::optional<std::string> moduleName, std::optional
     , m_lockedDs(m_session.activeDatastore())
     , m_module(moduleName)
 {
+    SYSREPO_CPP_SESSION_MTX_OF(m_session);
     auto res = sr_lock(getRawSession(m_session), moduleName ? moduleName->c_str() : nullptr, timeout ? timeout->count() : 0);
     throwIfError(res, "Cannot lock session", getRawSession(m_session));
 }
 
 Lock::~Lock()
 {
+    SYSREPO_CPP_SESSION_MTX_OF(m_session);
     auto sess = getRawSession(m_session);
     // Unlocking has to be performed in the same DS as the original locking, but the current active DS might have changed.
     // Temporary switching is safe here because these C API methods cannot fail (as of 2024-01 at least), and the C API

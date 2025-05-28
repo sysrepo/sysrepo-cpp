@@ -193,6 +193,7 @@ void eventNotifCb(sr_session_ctx_t* session, uint32_t subscriptionId, const sr_e
  */
 void Subscription::onModuleChange(const std::string& moduleName, ModuleChangeCb cb, const std::optional<std::string>& xpath, uint32_t priority, const SubscribeOptions opts)
 {
+    SYSREPO_CPP_SESSION_MTX_OF(m_sess);
     checkNoThreadFlag(opts, m_customEventLoopCbs);
 
     auto& privRef = m_moduleChangeCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
@@ -216,6 +217,7 @@ void Subscription::onModuleChange(const std::string& moduleName, ModuleChangeCb 
  */
 void Subscription::onOperGet(const std::string& moduleName, OperGetCb cb, const std::optional<std::string>& xpath, const SubscribeOptions opts)
 {
+    SYSREPO_CPP_SESSION_MTX_OF(m_sess);
     checkNoThreadFlag(opts, m_customEventLoopCbs);
 
     auto& privRef = m_operGetCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
@@ -238,6 +240,7 @@ void Subscription::onOperGet(const std::string& moduleName, OperGetCb cb, const 
  */
 void Subscription::onRPCAction(const std::string& xpath, RpcActionCb cb, uint32_t priority, const SubscribeOptions opts)
 {
+    SYSREPO_CPP_SESSION_MTX_OF(m_sess);
     checkNoThreadFlag(opts, m_customEventLoopCbs);
 
     auto& privRef = m_RPCActionCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
@@ -268,6 +271,7 @@ void Subscription::onNotification(
         const std::optional<NotificationTimeStamp>& stopTime,
         const SubscribeOptions opts)
 {
+    SYSREPO_CPP_SESSION_MTX_OF(m_sess);
     checkNoThreadFlag(opts, m_customEventLoopCbs);
 
     auto& privRef = m_notificationCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
@@ -304,6 +308,7 @@ ChangeCollection::ChangeCollection(const std::string& xpath, Session sess)
  */
 ChangeIterator ChangeCollection::begin() const
 {
+    SYSREPO_CPP_SESSION_MTX_OF(m_sess);
     sr_change_iter_t* iter;
     auto res = sr_get_changes_iter(m_sess.m_sess.get(), m_xpath.c_str(), &iter);
 
@@ -342,6 +347,7 @@ ChangeIterator::ChangeIterator(const iterator_end_tag)
  */
 ChangeIterator& ChangeIterator::operator++()
 {
+    SYSREPO_CPP_SESSION_MTX_OF(*m_sess);
     sr_change_oper_t operation;
     const lyd_node* node;
     const char* prevValue;
