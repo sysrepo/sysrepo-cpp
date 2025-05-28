@@ -179,6 +179,7 @@ public:
 private:
     friend Connection;
     friend Session wrapUnmanagedSession(sr_session_ctx_s* session);
+    friend Subscription;
     friend sr_session_ctx_s* getRawSession(Session sess);
 
     Session(sr_session_ctx_s* sess, Connection conn);

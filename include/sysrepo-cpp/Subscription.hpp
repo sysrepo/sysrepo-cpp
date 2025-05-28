@@ -14,12 +14,11 @@
 #include <optional>
 #include <sysrepo-cpp/Enum.hpp>
 #include <sysrepo-cpp/Callbacks.hpp>
+#include <sysrepo-cpp/Session.hpp>
 
-struct sr_session_ctx_s;
 struct sr_subscription_ctx_s;
 
 namespace sysrepo {
-class Session;
 
 /**
  * @brief Manages lifetime of subscriptions.
@@ -47,7 +46,7 @@ private:
     void saveContext(sr_subscription_ctx_s* ctx);
 
     friend Session;
-    explicit Subscription(std::shared_ptr<sr_session_ctx_s> sess, ExceptionHandler handler, const std::optional<FDHandling>& callbacks);
+    explicit Subscription(Session sess, ExceptionHandler handler, const std::optional<FDHandling>& callbacks);
 
     std::optional<FDHandling> m_customEventLoopCbs;
 
@@ -61,7 +60,7 @@ private:
     // Need a stable address, so need to save it on the heap.
     std::shared_ptr<ExceptionHandler> m_exceptionHandler;
 
-    std::shared_ptr<sr_session_ctx_s> m_sess;
+    Session m_sess;
 
     std::shared_ptr<sr_subscription_ctx_s> m_sub;
 
