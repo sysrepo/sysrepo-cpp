@@ -15,10 +15,10 @@
 #include <sysrepo-cpp/Enum.hpp>
 #include <sysrepo-cpp/Callbacks.hpp>
 
+struct sr_session_ctx_s;
 struct sr_subscription_ctx_s;
 
 namespace sysrepo {
-class ChangeCollection;
 class Session;
 
 /**

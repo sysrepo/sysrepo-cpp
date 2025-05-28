@@ -14,6 +14,7 @@ extern "C" {
 #include <sysrepo/subscribed_notifications.h>
 }
 #include <libyang-cpp/Context.hpp>
+#include <sysrepo-cpp/Changes.hpp>
 #include <sysrepo-cpp/Connection.hpp>
 #include <span>
 #include <sysrepo-cpp/Subscription.hpp>
