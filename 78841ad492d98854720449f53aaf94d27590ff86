@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "bd885374_d91e4cfe",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-28T18:18:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e13c9155_fe6fba9a",
+      "range": {
+        "startLine": 28,
+        "startChar": 13,
+        "endLine": 28,
+        "endChar": 17
+      },
+      "revId": "78841ad492d98854720449f53aaf94d27590ff86",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "899bc4d7_d8bab868",
         "filename": "src/Subscription.cpp",
         "patchSetId": 1
