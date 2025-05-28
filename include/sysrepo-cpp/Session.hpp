@@ -195,10 +195,13 @@ private:
 
     using mutex_type = std::mutex;
     mutable std::shared_ptr<mutex_type> m_mtx;
-    using lock_type = std::lock_guard<mutex_type>;
+    using lock_type = std::unique_lock<mutex_type>;
     [[nodiscard]] auto static mt_lock(mutex_type& mtx)
     {
-        return lock_type{mtx};
+        if (auto lck = lock_type{mtx, std::try_to_lock_t{}}) {
+            return lck;
+        }
+        throw std::logic_error{"cannot use sysrepo::Session from multiple threads"};
     }
 
     std::shared_ptr<sr_session_ctx_s> m_sess;
