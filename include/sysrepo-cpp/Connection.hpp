@@ -7,8 +7,10 @@
 */
 #pragma once
 
+#include <chrono>
 #include <memory>
-#include <sysrepo-cpp/Session.hpp>
+#include <string>
+#include <sysrepo-cpp/Enum.hpp>
 
 struct sr_conn_ctx_s;
 
