@@ -46,6 +46,30 @@
       },
       "revId": "fb69fcafc5d245d1efe407340fffdc55bf6fbb41",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43c88c02_84db27d9",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-05-28T18:27:32Z",
+      "side": 1,
+      "message": "All other places OK, but this one is still missing.",
+      "parentUuid": "8ae43bce_793aa1bf",
+      "range": {
+        "startLine": 298,
+        "startChar": 13,
+        "endLine": 298,
+        "endChar": 17
+      },
+      "revId": "fb69fcafc5d245d1efe407340fffdc55bf6fbb41",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
