@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "899bc4d7_d8bab868",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-05-28T17:41:36Z",
+      "side": 1,
+      "message": "This does not look pretty :(",
+      "range": {
+        "startLine": 201,
+        "startChar": 42,
+        "endLine": 201,
+        "endChar": 55
+      },
+      "revId": "78841ad492d98854720449f53aaf94d27590ff86",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
