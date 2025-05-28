@@ -456,7 +456,7 @@ Subscription Session::onModuleChange(
         const std::optional<FDHandling>& callbacks)
 {
     checkNoThreadFlag(opts, callbacks);
-    auto sub = Subscription{m_sess, handler, callbacks};
+    auto sub = Subscription{*this, handler, callbacks};
     sub.onModuleChange(moduleName, cb, xpath, priority, opts);
     return sub;
 }
@@ -486,7 +486,7 @@ Subscription Session::onOperGet(
         const std::optional<FDHandling>& callbacks)
 {
     checkNoThreadFlag(opts, callbacks);
-    auto sub = Subscription{m_sess, handler, callbacks};
+    auto sub = Subscription{*this, handler, callbacks};
     sub.onOperGet(moduleName, cb, xpath, opts);
     return sub;
 }
@@ -516,7 +516,7 @@ Subscription Session::onRPCAction(
         const std::optional<FDHandling>& callbacks)
 {
     checkNoThreadFlag(opts, callbacks);
-    auto sub = Subscription{m_sess, handler, callbacks};
+    auto sub = Subscription{*this, handler, callbacks};
     sub.onRPCAction(xpath, cb, priority, opts);
     return sub;
 }
@@ -550,7 +550,7 @@ Subscription Session::onNotification(
         const std::optional<FDHandling>& callbacks)
 {
     checkNoThreadFlag(opts, callbacks);
-    auto sub = Subscription{m_sess, handler, callbacks};
+    auto sub = Subscription{*this, handler, callbacks};
     sub.onNotification(moduleName, cb, xpath, startTime, stopTime, opts);
     return sub;
 }
@@ -754,7 +754,7 @@ bool Session::checkNacmOperation(const libyang::DataNode& node) const
     auto res = sr_nacm_init(m_sess.get(), toSubscribeOptions(opts), &sub);
     throwIfError(res, "Couldn't initialize NACM", m_sess.get());
 
-    Subscription ret(m_sess, handler, callbacks);
+    Subscription ret(*this, handler, callbacks);
     ret.saveContext(sub);
     ret.m_didNacmInit = true;
 

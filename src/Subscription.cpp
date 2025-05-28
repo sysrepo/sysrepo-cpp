@@ -22,7 +22,7 @@ namespace sysrepo {
 /**
  * Creates a Subscription instance with no actual underlying subscription associated with it. Internal use only.
  */
-Subscription::Subscription(std::shared_ptr<sr_session_ctx_s> sess, ExceptionHandler handler, const std::optional<FDHandling>& callbacks)
+Subscription::Subscription(Session sess, ExceptionHandler handler, const std::optional<FDHandling>& callbacks)
     : m_customEventLoopCbs(callbacks)
     , m_exceptionHandler(std::make_unique<ExceptionHandler>(handler))
     , m_sess(sess)
@@ -198,8 +198,8 @@ void Subscription::onModuleChange(const std::string& moduleName, ModuleChangeCb 
     auto& privRef = m_moduleChangeCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
     sr_subscription_ctx_s* ctx = m_sub.get();
 
-    auto res = sr_module_change_subscribe(m_sess.get(), moduleName.c_str(), xpath ? xpath->c_str() : nullptr, moduleChangeCb, reinterpret_cast<void*>(&privRef), priority, toSubscribeOptions(opts), &ctx);
-    throwIfError(res, "Couldn't create module change subscription", m_sess.get());
+    auto res = sr_module_change_subscribe(m_sess.m_sess.get(), moduleName.c_str(), xpath ? xpath->c_str() : nullptr, moduleChangeCb, reinterpret_cast<void*>(&privRef), priority, toSubscribeOptions(opts), &ctx);
+    throwIfError(res, "Couldn't create module change subscription", m_sess.m_sess.get());
 
     saveContext(ctx);
 }
@@ -220,8 +220,8 @@ void Subscription::onOperGet(const std::string& moduleName, OperGetCb cb, const 
 
     auto& privRef = m_operGetCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
     sr_subscription_ctx_s* ctx = m_sub.get();
-    auto res = sr_oper_get_subscribe(m_sess.get(), moduleName.c_str(), xpath ? xpath->c_str() : nullptr, operGetItemsCb, reinterpret_cast<void*>(&privRef), toSubscribeOptions(opts), &ctx);
-    throwIfError(res, "Couldn't create operational get items subscription", m_sess.get());
+    auto res = sr_oper_get_subscribe(m_sess.m_sess.get(), moduleName.c_str(), xpath ? xpath->c_str() : nullptr, operGetItemsCb, reinterpret_cast<void*>(&privRef), toSubscribeOptions(opts), &ctx);
+    throwIfError(res, "Couldn't create operational get items subscription", m_sess.m_sess.get());
 
     saveContext(ctx);
 }
@@ -242,8 +242,8 @@ void Subscription::onRPCAction(const std::string& xpath, RpcActionCb cb, uint32_
 
     auto& privRef = m_RPCActionCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
     sr_subscription_ctx_s* ctx = m_sub.get();
-    auto res = sr_rpc_subscribe_tree(m_sess.get(), xpath.c_str(), rpcActionCb, reinterpret_cast<void*>(&privRef), priority, toSubscribeOptions(opts), &ctx);
-    throwIfError(res, "Couldn't create RPC/action subscription", m_sess.get());
+    auto res = sr_rpc_subscribe_tree(m_sess.m_sess.get(), xpath.c_str(), rpcActionCb, reinterpret_cast<void*>(&privRef), priority, toSubscribeOptions(opts), &ctx);
+    throwIfError(res, "Couldn't create RPC/action subscription", m_sess.m_sess.get());
 
     saveContext(ctx);
 }
@@ -275,7 +275,7 @@ void Subscription::onNotification(
     auto startSpec = startTime ? std::optional{toTimespec(*startTime)} : std::nullopt;
     auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} : std::nullopt;
     auto res = sr_notif_subscribe_tree(
-            m_sess.get(),
+            m_sess.m_sess.get(),
             moduleName.c_str(),
             xpath ? xpath->c_str() : nullptr,
             startSpec ? &startSpec.value() : nullptr,
@@ -284,7 +284,7 @@ void Subscription::onNotification(
             reinterpret_cast<void*>(&privRef),
             toSubscribeOptions(opts),
             &ctx);
-    throwIfError(res, "Couldn't create notification subscription", m_sess.get());
+    throwIfError(res, "Couldn't create notification subscription", m_sess.m_sess.get());
 
     saveContext(ctx);
 }
