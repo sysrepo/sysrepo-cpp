@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e13c9155_fe6fba9a",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-05-28T17:46:24Z",
+      "side": 1,
+      "message": "Just wondering: Shouldn\u0027t we move here in order to avoid two copies?\nThe copy won\u0027t be expensive, but it is a few unnecessary copies of Session and underlying Connection object.",
+      "range": {
+        "startLine": 28,
+        "startChar": 13,
+        "endLine": 28,
+        "endChar": 17
+      },
+      "revId": "78841ad492d98854720449f53aaf94d27590ff86",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "899bc4d7_d8bab868",
