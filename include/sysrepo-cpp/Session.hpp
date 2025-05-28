@@ -7,16 +7,13 @@
 */
 #pragma once
 
-#include <chrono>
 #include <iosfwd>
-#include <memory>
 #include <optional>
 #include <libyang-cpp/Context.hpp>
 #include <libyang-cpp/DataNode.hpp>
-#include <sysrepo-cpp/Enum.hpp>
+#include <sysrepo-cpp/Connection.hpp>
 #include <sysrepo-cpp/Subscription.hpp>
 
-struct sr_conn_ctx_s;
 struct sr_session_ctx_s;
 
 namespace sysrepo {
@@ -176,10 +173,10 @@ private:
     friend Session wrapUnmanagedSession(sr_session_ctx_s* session);
     friend sr_session_ctx_s* getRawSession(Session sess);
 
-    Session(sr_session_ctx_s* sess, std::shared_ptr<sr_conn_ctx_s> conn);
+    Session(sr_session_ctx_s* sess, Connection conn);
     explicit Session(sr_session_ctx_s* unmanagedSession, const unmanaged_tag);
 
-    std::shared_ptr<sr_conn_ctx_s> m_conn;
+    Connection m_conn;
     std::shared_ptr<sr_session_ctx_s> m_sess;
 };
 

@@ -81,11 +81,11 @@ std::optional<std::string> constructXPathFilter(const std::optional<std::variant
  *
  * Internal use only.
  */
-Session::Session(sr_session_ctx_s* sess, std::shared_ptr<sr_conn_ctx_s> conn)
-    : m_conn(conn)
-    // The connection `conn` is saved here in the deleter (as a capture). This means that copies of this shared_ptr will
-    // automatically hold a reference to `conn`.
-    , m_sess(sess, [extend_connection_lifetime = conn] (auto* sess) {
+Session::Session(sr_session_ctx_s* sess, Connection conn)
+    : m_conn(std::move(conn))
+    // The connection is saved here in the deleter (as a capture). This means that copies of this shared_ptr will
+    // automatically hold a reference to `m_conn`.
+    , m_sess(sess, [extend_connection_lifetime = m_conn] (auto* sess) {
         sr_session_stop(sess);
     })
 {
@@ -944,7 +944,7 @@ void Session::setOriginatorName(const std::string& originatorName)
  */
 Connection Session::getConnection()
 {
-    return Connection{m_conn};
+    return m_conn;
 }
 
 /**
