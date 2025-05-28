@@ -22,6 +22,30 @@
       },
       "revId": "f337334932bc5e2e045ed8f537c4ac32a42899ad",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa65fb00_fdc5eeec",
+        "filename": "include/sysrepo-cpp/Callbacks.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-28T18:18:47Z",
+      "side": 1,
+      "message": "I thought that it was used in both Session and Subscription, but that\u0027s not the case. Thanks.",
+      "parentUuid": "2e82f581_309a2d36",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 2
+      },
+      "revId": "f337334932bc5e2e045ed8f537c4ac32a42899ad",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
