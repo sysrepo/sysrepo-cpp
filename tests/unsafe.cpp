@@ -8,6 +8,7 @@
 
 #include <doctest/doctest.h>
 #include <optional>
+#include <sysrepo-cpp/Changes.hpp>
 #include <sysrepo-cpp/Subscription.hpp>
 #include <sysrepo-cpp/utils/utils.hpp>
 #include <sysrepo.h>

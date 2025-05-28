@@ -10,6 +10,7 @@
 #include <csignal>
 #include <experimental/iterator>
 #include <iostream>
+#include <sysrepo-cpp/Changes.hpp>
 #include <sysrepo-cpp/Subscription.hpp>
 #include <sysrepo-cpp/utils/utils.hpp>
 #include <unistd.h>
