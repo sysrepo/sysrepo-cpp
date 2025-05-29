@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40edc16c_e5944db5",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-05-29T09:05:53Z",
+      "side": 1,
+      "message": "I dont follow why these using declarations are needed. \nAd `lock_type`: It is used only inside `mt_lock`, can\u0027t we inline the type there?\nAd `mutex_type`, I think you are declaring the using mutex_type only because you don\u0027t want type std::mutex twice (in two ctors). You can use decltype there, can\u0027t you?",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 198,
+        "endChar": 2
+      },
+      "revId": "5216961b47be434b87666b66f8832c2c3fe3c46e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27d67ddd_4c023285",
+        "filename": "src/Session.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-05-29T09:05:53Z",
+      "side": 1,
+      "message": "I think this change can be done as a standalone patch, but I am not feeling very strict today, so I will not enforce this :-)",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 2
+      },
+      "revId": "5216961b47be434b87666b66f8832c2c3fe3c46e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
