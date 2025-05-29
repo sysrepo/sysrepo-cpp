@@ -74,6 +74,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "16225771_c3ad2524",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-05-29T09:20:22Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8a1cc64d_56bb10fe",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 198,
+        "endChar": 2
+      },
+      "revId": "5216961b47be434b87666b66f8832c2c3fe3c46e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "27d67ddd_4c023285",
         "filename": "src/Session.cpp",
         "patchSetId": 2
