@@ -48,6 +48,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a1cc64d_56bb10fe",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-29T09:18:26Z",
+      "side": 1,
+      "message": "(Also, I thought that it might be useful to \"pass\" the lock between methods, and for that, trying to determine a function\u0027s call result is something that I really like to avoid :). This turned out to not be needed, but I think it\u0027s still OK to have this as a part of the private API. Are you OK with this?)",
+      "parentUuid": "a590ccab_3a029fb7",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 198,
+        "endChar": 2
+      },
+      "revId": "5216961b47be434b87666b66f8832c2c3fe3c46e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "27d67ddd_4c023285",
