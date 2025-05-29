@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a590ccab_3a029fb7",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-05-29T09:16:45Z",
+      "side": 1,
+      "message": "The `mutex_type` is used three times already (in the member variable definition, in the `lock_guard` type specialization, and in the `mt_lock`\u0027s signature). In my opinion an explicit `using` declaration is quite a bit nicer than `decltype(m_mtx)::element_type`, so I won\u0027t be changing this.\n\nRe the `lock_type`, the reason why I wrote it that way is that out-of-class use of the locking function in the lambdas which are used as the destructor in Session::Session. In some previous version of this change (unpushed, I guess), I had to reimplement the same locking because I do not have access to a Session instance by the time its members are being destroyed. In the end I solved this by using a static method, so you\u0027re right, this is not necessary, but I think that it really doesn\u0027t hurt that much.",
+      "parentUuid": "40edc16c_e5944db5",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 198,
+        "endChar": 2
+      },
+      "revId": "5216961b47be434b87666b66f8832c2c3fe3c46e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "27d67ddd_4c023285",
         "filename": "src/Session.cpp",
         "patchSetId": 2
