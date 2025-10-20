@@ -4,9 +4,9 @@
         - f38-gcc-cover:
             required-projects:
               - name: github/CESNET/libyang
-                override-checkout: devel
+                override-checkout: cesnet/2025-07-08
               - name: github/sysrepo/sysrepo
-                override-checkout: devel
+                override-checkout: cesnet/2025-06-02
               - name: github/doctest/doctest
                 override-checkout: v2.4.8
               - name: github/rollbear/trompeloeil
