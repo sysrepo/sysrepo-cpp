@@ -5,7 +5,7 @@
 #
 
 cmake_minimum_required(VERSION 3.22)
-project(sysrepo-cpp LANGUAGES CXX)
+project(sysrepo-cpp LANGUAGES CXX VERSION 6)
 set(CMAKE_CXX_STANDARD 23)
 include(CTest)
 include(GNUInstallDirs)
@@ -19,8 +19,7 @@ add_custom_target(sysrepo-cpp-version-cmake
         cmake/ProjectGitVersionRunner.cmake
         )
 include(cmake/ProjectGitVersion.cmake)
-set(SYSREPO_CPP_PKG_VERSION "6")
-prepare_git_version(SYSREPO_CPP_VERSION ${SYSREPO_CPP_PKG_VERSION})
+prepare_git_version(SYSREPO_CPP_VERSION ${PROJECT_VERSION})
 
 find_package(Doxygen)
 option(WITH_DOCS "Create and install internal documentation (needs Doxygen)" ${DOXYGEN_FOUND})
@@ -46,8 +45,8 @@ target_link_libraries(sysrepo-cpp PRIVATE PkgConfig::SYSREPO PUBLIC PkgConfig::L
 # we will be bumping both API and ABI versions very deliberately.
 # There will be no attempts at semver tracking, for example.
 set_target_properties(sysrepo-cpp PROPERTIES
-    VERSION ${SYSREPO_CPP_PKG_VERSION}
-    SOVERSION ${SYSREPO_CPP_PKG_VERSION})
+    VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_VERSION_MAJOR})
 
 if(BUILD_TESTING)
     find_package(doctest 2.4.8 REQUIRED)
@@ -122,3 +121,6 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/sysrepo-cpp.pc.in" "${CMAKE_CURRENT_
 install(TARGETS sysrepo-cpp)
 install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/sysrepo-cpp" TYPE INCLUDE)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/sysrepo-cpp.pc" DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+if(PROJECT_IS_TOP_LEVEL)
+    include(CPack)
+endif()
