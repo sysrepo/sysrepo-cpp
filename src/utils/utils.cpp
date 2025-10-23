@@ -36,6 +36,18 @@ void setLogLevelStderr(const LogLevel level)
     sr_log_stderr(toLogLevel(level));
 }
 
+/**
+ * @brief Set global sysrepo-level context options
+ *
+ * Be advised of consequences of manipulating a shared global state, especially when using multiple connections.
+ *
+ * Wraps `sr_context_options`.
+ */
+void setGlobalContextOptions(const ContextFlags flags)
+{
+    sr_context_options(static_cast<uint32_t>(flags), nullptr);
+}
+
 std::timespec toTimespec(std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> tp)
 {
     // https://embeddedartistry.com/blog/2019/01/31/converting-between-timespec-stdchrono#-std-chrono-time_point-to-timespec-
