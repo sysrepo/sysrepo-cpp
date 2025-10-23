@@ -40,6 +40,8 @@ public:
     ModuleReplaySupport getModuleReplaySupport(const std::string& moduleName);
     void setModuleReplaySupport(const std::string& moduleName, bool enabled);
 
+    void setGlobalContextOptions(const ContextFlags flags);
+
     friend Connection wrapUnmanagedConnection(std::shared_ptr<sr_conn_ctx_s> conn);
     friend Session;
 

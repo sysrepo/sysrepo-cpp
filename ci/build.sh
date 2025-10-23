@@ -49,6 +49,11 @@ if [[ $ZUUL_JOB_NAME =~ .*-tsan ]]; then
     CMAKE_OPTIONS="${CMAKE_OPTIONS} -DHAVE_PTHREAD_MUTEX_TIMEDLOCK=OFF -DHAVE_PTHREAD_MUTEX_CLOCKLOCK=OFF -DHAVE_PTHREAD_RWLOCK_CLOCKRDLOCK=OFF -DHAVE_PTHREAD_RWLOCK_CLOCKWRLOCK=OFF -DHAVE_PTHREAD_COND_CLOCKWAIT=OFF"
 fi
 
+if [[ $ZUUL_JOB_NAME =~ .*-gcc.* ]]; then
+    # Let's disable this (mis)feature on at least one build in the matrix
+    CMAKE_OPTIONS="${CMAKE_OPTIONS} -DPRINTED_CONTEXT_ADDRESS=0"
+fi
+
 if [[ $ZUUL_JOB_NAME =~ .*-cover.* ]]; then
     export CFLAGS="${CFLAGS} --coverage"
     export CXXFLAGS="${CXXFLAGS} --coverage"

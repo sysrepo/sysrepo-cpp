@@ -151,13 +151,16 @@ static_assert(toNotificationType(SR_EV_NOTIF_MODIFIED) == NotificationType::Modi
 static_assert(toNotificationType(SR_EV_NOTIF_SUSPENDED) == NotificationType::Suspended);
 static_assert(toNotificationType(SR_EV_NOTIF_RESUMED) == NotificationType::Resumed);
 
-static_assert(std::is_same_v<sr_conn_options_t, std::underlying_type_t<ConnectionFlags>>);
+static_assert(std::is_same_v<std::underlying_type_t<sr_conn_flag_t>, std::underlying_type_t<ConnectionFlags>>);
 static_assert(static_cast<ConnectionFlags>(SR_CONN_DEFAULT) == ConnectionFlags::Default);
-static_assert(static_cast<ConnectionFlags>(SR_CONN_CACHE_RUNNING) == ConnectionFlags::CacheRunning);
-static_assert(static_cast<ConnectionFlags>(SR_CONN_CTX_SET_PRIV_PARSED) == ConnectionFlags::LibYangPrivParsed);
-static_assert(static_cast<ConnectionFlags>(SR_CONN_CACHE_RUNNING | SR_CONN_CTX_SET_PRIV_PARSED) == (ConnectionFlags::CacheRunning | ConnectionFlags::LibYangPrivParsed));
 
-static_assert(std::is_same_v<sr_get_options_t, std::underlying_type_t<GetOptions>>);
+static_assert(std::is_same_v<std::underlying_type_t<sr_context_flag_t>, std::underlying_type_t<ContextFlags>>);
+static_assert(static_cast<ContextFlags>(SR_CTX_DEFAULT) == ContextFlags::Default);
+static_assert(static_cast<ContextFlags>(SR_CTX_SET_PRIV_PARSED) == ContextFlags::LibYangPrivParsed);
+static_assert(static_cast<ContextFlags>(SR_CTX_NO_PRINTED) == ContextFlags::NoPrinted);
+static_assert(static_cast<ContextFlags>(SR_CTX_SET_PRIV_PARSED | SR_CTX_NO_PRINTED) == (ContextFlags::LibYangPrivParsed | ContextFlags::NoPrinted));
+
+// upstream project provides no dedicated type for these
 static_assert(static_cast<GetOptions>(SR_OPER_DEFAULT) == GetOptions::Default);
 static_assert(static_cast<GetOptions>(SR_OPER_NO_STATE) == GetOptions::OperNoState);
 static_assert(static_cast<GetOptions>(SR_OPER_NO_CONFIG) == GetOptions::OperNoConfig);
@@ -168,9 +171,10 @@ static_assert(static_cast<GetOptions>(SR_OPER_NO_POLL_CACHED) == GetOptions::Ope
 static_assert(static_cast<GetOptions>(SR_OPER_NO_RUN_CACHED) == GetOptions::OperNoRunningCached);
 static_assert(static_cast<GetOptions>(SR_GET_NO_FILTER) == GetOptions::NoFilter);
 
-constexpr sr_get_options_t toGetOptions(const GetOptions opts)
+// upstream project provides no dedicated type for these
+constexpr uint32_t toGetOptions(const GetOptions opts)
 {
-    return static_cast<sr_get_options_t>(opts);
+    return static_cast<uint32_t>(opts);
 }
 
 static_assert(static_cast<YangPushChange>(SRSN_YP_CHANGE_CREATE) == YangPushChange::Create);
