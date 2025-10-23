@@ -176,12 +176,24 @@ enum class NotificationType : uint32_t {
 };
 
 /**
- * Wraps `sr_conn_flag_e`.
+ * Wraps `sr_context_flag_t`.
+ */
+enum class ContextFlags : uint32_t {
+    Default = 0x00, /**< SR_CTX_DEFAULT */
+    NoPrinted = 0x01, /**< SR_CTX_NO_PRINTED */
+    LibYangPrivParsed = 0x02, /**< SR_CTX_SET_PRIV_PARSED */
+};
+
+constexpr ContextFlags operator|(const ContextFlags a, const ContextFlags b)
+{
+    return implEnumBitOr(a, b);
+}
+
+/**
+ * Wraps `sr_conn_flag_t`.
  */
 enum class ConnectionFlags : uint32_t {
     Default = 0x00, /**< SR_CONN_DEFAULT */
-    CacheRunning = 0x01, /**< SR_CONN_CACHE_RUNNING */
-    LibYangPrivParsed = 0x02, /**< SR_CONN_CTX_SET_PRIV_PARSED */
 };
 
 constexpr ConnectionFlags operator|(const ConnectionFlags a, const ConnectionFlags b)
