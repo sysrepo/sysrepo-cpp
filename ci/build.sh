@@ -47,6 +47,10 @@ if [[ $ZUUL_JOB_NAME =~ .*-tsan ]]; then
     # Our TSAN does not have interceptors for a variety of "less common" functions such as pthread_mutex_clocklock.
     # Disable all functions which are optional in sysrepo/libnetconf2/Netopeer2.
     CMAKE_OPTIONS="${CMAKE_OPTIONS} -DHAVE_PTHREAD_MUTEX_TIMEDLOCK=OFF -DHAVE_PTHREAD_MUTEX_CLOCKLOCK=OFF -DHAVE_PTHREAD_RWLOCK_CLOCKRDLOCK=OFF -DHAVE_PTHREAD_RWLOCK_CLOCKWRLOCK=OFF -DHAVE_PTHREAD_COND_CLOCKWAIT=OFF"
+
+    # This is currently broken on TSAN ("Failed to map the printed context (Operation not permitted).").
+    # Even if it wasn't broken, I want at least one build in the matrix with this (mis)feature disabled.
+    CMAKE_OPTIONS="${CMAKE_OPTIONS} -DPRINTED_CONTEXT_ADDRESS=0"
 fi
 
 if [[ $ZUUL_JOB_NAME =~ .*-cover.* ]]; then
