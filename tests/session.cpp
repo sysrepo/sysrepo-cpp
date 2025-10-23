@@ -627,17 +627,29 @@ TEST_CASE("session")
 
     DOCTEST_SUBCASE("libyang context flags")
     {
-        sess.setItem("/test_module:popelnice/s", "666");
-        REQUIRE(sess.getOneNode("/test_module:popelnice/s").asTerm().valueStr() == "666");
-        // Parsed type info is not preserved by libyang unless its context is constructed with a flag,
-        // and that flag is not used by sysrepo by default...
-        REQUIRE_THROWS_AS(sess.getOneNode("/test_module:popelnice/s").schema().asLeaf().valueType().asString().length(), libyang::ParsedInfoUnavailable);
+        DOCTEST_SUBCASE("default")
+        {
+            sess.setItem("/test_module:popelnice/s", "666");
+            REQUIRE(sess.getOneNode("/test_module:popelnice/s").asTerm().valueStr() == "666");
+            // Parsed type info is not preserved by libyang unless its context is constructed with a flag,
+            // and that flag is not used by sysrepo by default.
+            REQUIRE_THROWS_AS(sess.getOneNode("/test_module:popelnice/s").schema().asLeaf().valueType().asString().length(), libyang::ParsedInfoUnavailable);
 
-        // ...unless we pass that flag explicitly as a parameter to the connection.
-        auto sess2 = sysrepo::Connection{sysrepo::ConnectionFlags::LibYangPrivParsed}.sessionStart();
-        sess2.setItem("/test_module:popelnice/s", "333");
-        REQUIRE(sess2.getOneNode("/test_module:popelnice/s").asTerm().valueStr() == "333");
-        REQUIRE(sess2.getOneNode("/test_module:popelnice/s").schema().asLeaf().valueType().asString().length().parts[0].max == 10);
+            // pending changes hold the context lock, so we cannot change the global context options
+            sysrepo::setGlobalContextOptions(sysrepo::ContextFlags::LibYangPrivParsed | sysrepo::ContextFlags::NoPrinted, sysrepo::GlobalContextEffect::Immediate);
+        }
+
+        // Since this is actually a shared global state, changing it is "tricky". The best bet is to actually
+        // ensure that there are no other connections (which we cannot do here, we already have a connection opened
+        // from the common code at the very top of this test case), and especially no internal sysrepo-level locks
+        // on the shared libyang context. For example, no uncommited changes -- hence a new subcase.
+        DOCTEST_SUBCASE("Connection::setGlobalContextOptions LibYangPrivParsed")
+        {
+            sysrepo::setGlobalContextOptions(sysrepo::ContextFlags::LibYangPrivParsed | sysrepo::ContextFlags::NoPrinted, sysrepo::GlobalContextEffect::Immediate);
+            sess.setItem("/test_module:popelnice/s", "333");
+            REQUIRE(sess.getOneNode("/test_module:popelnice/s").asTerm().valueStr() == "333");
+            REQUIRE(sess.getOneNode("/test_module:popelnice/s").schema().asLeaf().valueType().asString().length().parts[0].max == 10);
+        }
     }
 
     DOCTEST_SUBCASE("replay support")
