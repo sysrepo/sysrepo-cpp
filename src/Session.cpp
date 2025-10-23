@@ -241,7 +241,7 @@ std::optional<libyang::DataNode> Session::operationalChanges(const std::optional
 void Session::discardOperationalChanges(const std::optional<std::string>& moduleName, std::chrono::milliseconds timeout)
 {
     SYSREPO_CPP_SESSION_MTX;
-    auto res = sr_discard_oper_changes(nullptr, m_sess.get(), moduleName ? nullptr : moduleName->c_str(), timeout.count());
+    auto res = sr_discard_oper_changes(m_sess.get(), moduleName ? nullptr : moduleName->c_str(), timeout.count());
     throwIfError(res, "Session::discardOoperationalChanges: Couldn't discard "s + (moduleName ? "for module \"" + *moduleName + "\"" : "globally"s), m_sess.get());
 }
 

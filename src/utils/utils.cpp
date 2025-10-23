@@ -13,6 +13,7 @@ extern "C" {
 #include <sysrepo.h>
 }
 #include "enum.hpp"
+#include "exception.hpp"
 #include "misc.hpp"
 
 namespace sysrepo {
@@ -35,6 +36,23 @@ Connection wrapUnmanagedConnection(std::shared_ptr<sr_conn_ctx_s> conn)
 void setLogLevelStderr(const LogLevel level)
 {
     sr_log_stderr(toLogLevel(level));
+}
+
+/**
+ * @brief Set global sysrepo-level context options
+ *
+ * Be advised of consequences of manipulating a shared global state, especially when using multiple connections.
+ *
+ * Wraps `sr_context_options`.
+ */
+ContextFlags setGlobalContextOptions(const ContextFlags flags, const GlobalContextEffect when)
+{
+    uint32_t old;
+    throwIfError(
+        sr_context_options(static_cast<uint32_t>(flags), when == GlobalContextEffect::Immediate, &old),
+        "sr_context_options failed",
+        nullptr);
+    return static_cast<ContextFlags>(old);
 }
 
 std::timespec toTimespec(std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> tp)
