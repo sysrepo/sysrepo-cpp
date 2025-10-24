@@ -8,6 +8,7 @@
 
 #include <sysrepo-cpp/Connection.hpp>
 #include <sysrepo-cpp/utils/exception.hpp>
+#include <sysrepo-cpp/utils/utils.hpp>
 extern "C" {
 #include <sysrepo.h>
 }
@@ -78,7 +79,7 @@ void checkNoThreadFlag(const SubscribeOptions opts, const std::optional<FDHandli
  * @see Session::operationalChanges()
  * @see Session::dropForeignOperationalContent()
  */
-std::optional<libyang::DataNode> findMatchingDiscard(libyang::DataNode root, const std::string& xpath)
+std::optional<libyang::DataNodeOpaque> findMatchingDiscard(libyang::DataNode root, const std::string& xpath)
 {
     auto discard = root.firstOpaqueSibling();
     while (discard) {
@@ -97,11 +98,11 @@ std::optional<libyang::DataNode> findMatchingDiscard(libyang::DataNode root, con
 /**
  * @short Find all sysrepo:discard-items nodes which match the given XPath or the descendants of this XPath
  */
-std::vector<libyang::DataNode> findMatchingDiscardPrefixes(libyang::DataNode root, const std::string& xpathPrefix)
+std::vector<libyang::DataNodeOpaque> findMatchingDiscardPrefixes(libyang::DataNode root, const std::string& xpathPrefix)
 {
     auto withSlash = (xpathPrefix.empty() || xpathPrefix[xpathPrefix.size() - 1] == '/') ? xpathPrefix : xpathPrefix + '/';
     auto withBracket = (xpathPrefix.empty() || xpathPrefix[xpathPrefix.size() - 1] == '[') ? xpathPrefix : xpathPrefix + '[';
-    std::vector<libyang::DataNode> res;
+    std::vector<libyang::DataNodeOpaque> res;
     auto discard = root.firstOpaqueSibling();
     while (discard) {
         if (discard->name().matches("sysrepo", "discard-items")) {
