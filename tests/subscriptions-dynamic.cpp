@@ -39,21 +39,28 @@
     REQUIRE(pipeStatus((SUBSCRIPTION).fd(), -1) == PipeStatus::DataReady); \
     (SUBSCRIPTION).processEvent(cbNotif);
 
-#define SUBSCRIPTION_TERMINATED(SUBSCRIPTION) R"({
+auto SUBSCRIPTION_TERMINATED(const auto& SUBSCRIPTION)
+{
+    return R"({
   "ietf-subscribed-notifications:subscription-terminated": {
-    "id": )" + std::to_string((SUBSCRIPTION).subscriptionId()) + R"(,
+    "id": )"
+        + std::to_string((SUBSCRIPTION).subscriptionId()) + R"(,
     "reason": "no-such-subscription"
   }
 }
-)"
+)";
+};
 
-#define REPLAY_COMPLETED(SUBSCRIPTION) R"({
+auto REPLAY_COMPLETED(const auto& SUBSCRIPTION)
+{
+    return R"({
   "ietf-subscribed-notifications:replay-completed": {
-    "id": )" \
-    + std::to_string((SUBSCRIPTION).subscriptionId()) + R"(
+    "id": )"
+        + std::to_string((SUBSCRIPTION).subscriptionId()) + R"(
   }
 }
-)"
+)";
+};
 
 #define REQUIRE_YANG_PUSH_UPDATE(SUBSCRIPTION, NOTIFICATION) \
     TROMPELOEIL_REQUIRE_CALL(rec, recordYangPushUpdate((SUBSCRIPTION).subscriptionId(), NOTIFICATION)).IN_SEQUENCE(seq);
@@ -246,7 +253,8 @@ TEST_CASE("Dynamic subscriptions")
 
             REQUIRE_NOTIFICATION(sub, R"({
   "ietf-subscribed-notifications:subscription-terminated": {
-    "id": )" + std::to_string(sub.subscriptionId()) + R"(,
+    "id": )" + std::to_string(sub.subscriptionId())
+                                     + R"(,
     "reason": "filter-unavailable"
   }
 }
