@@ -7,7 +7,7 @@
 */
 
 #include <sysrepo-cpp/Connection.hpp>
-#include "sysrepo-cpp/utils/exception.hpp"
+#include <sysrepo-cpp/utils/exception.hpp>
 extern "C" {
 #include <sysrepo.h>
 }
