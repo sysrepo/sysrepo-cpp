@@ -13,7 +13,7 @@ extern "C" {
 #include <sysrepo-cpp/utils/exception.hpp>
 #include "utils/enum.hpp"
 #include "utils/exception.hpp"
-#include "utils/utils.hpp"
+#include "utils/misc.hpp"
 
 namespace sysrepo {
 

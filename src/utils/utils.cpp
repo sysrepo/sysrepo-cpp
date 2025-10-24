@@ -12,7 +12,7 @@ extern "C" {
 #include <sysrepo.h>
 }
 #include "enum.hpp"
-#include "utils.hpp"
+#include "misc.hpp"
 
 namespace sysrepo {
 /**

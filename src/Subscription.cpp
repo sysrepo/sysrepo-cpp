@@ -16,7 +16,7 @@ extern "C" {
 }
 #include "utils/enum.hpp"
 #include "utils/exception.hpp"
-#include "utils/utils.hpp"
+#include "utils/misc.hpp"
 
 namespace sysrepo {
 /**

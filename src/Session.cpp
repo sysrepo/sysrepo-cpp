@@ -21,7 +21,7 @@ extern "C" {
 #include <utility>
 #include "utils/enum.hpp"
 #include "utils/exception.hpp"
-#include "utils/utils.hpp"
+#include "utils/misc.hpp"
 
 using namespace std::string_literals;
 namespace sysrepo {
