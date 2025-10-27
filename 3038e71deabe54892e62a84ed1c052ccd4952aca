@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "887cd9c1_bcb2a6e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-10-27T10:34:35Z",
+      "side": 1,
+      "message": "got a link to their bug tracker that you could put into the commit message, for example?",
+      "parentUuid": "35f0e6a3_05c90cfe",
+      "revId": "3038e71deabe54892e62a84ed1c052ccd4952aca",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bddf2b93_629f9cbb",
         "filename": "tests/subscriptions-dynamic.cpp",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2025-10-24T15:02:28Z",
       "side": 1,
       "message": "nit: this looks like a whitespace-only change, could you please drop it from this commit?",
+      "revId": "3038e71deabe54892e62a84ed1c052ccd4952aca",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02104e1b_35a7cf00",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-10-27T10:34:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bddf2b93_629f9cbb",
       "revId": "3038e71deabe54892e62a84ed1c052ccd4952aca",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
