@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "39c70b51_a24d4355",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2025-10-27T15:54:57Z",
+      "side": 1,
+      "message": "It indeed does not work (https://godbolt.org/z/Yfaf6aErE) and I found this in my browser history: https://gcc.gnu.org/bugzilla/show_bug.cgi?id\u003d55971",
+      "parentUuid": "887cd9c1_bcb2a6e7",
+      "revId": "3038e71deabe54892e62a84ed1c052ccd4952aca",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bddf2b93_629f9cbb",
         "filename": "tests/subscriptions-dynamic.cpp",
         "patchSetId": 1
