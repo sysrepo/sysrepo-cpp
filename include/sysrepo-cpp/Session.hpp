@@ -127,7 +127,7 @@ public:
     [[nodiscard]] Subscription onOperGet(
             const std::string& moduleName,
             OperGetCb cb,
-            const std::optional<std::string>& xpath = std::nullopt,
+            const std::string& path,
             const SubscribeOptions opts = SubscribeOptions::Default,
             ExceptionHandler handler = nullptr,
             const std::optional<FDHandling>& callbacks = std::nullopt);

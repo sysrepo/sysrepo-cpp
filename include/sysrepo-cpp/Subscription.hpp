@@ -32,7 +32,7 @@ public:
     Subscription& operator=(Subscription&&) noexcept;
 
     void onModuleChange(const std::string& moduleName, ModuleChangeCb cb, const std::optional<std::string>& xpath = std::nullopt, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
-    void onOperGet(const std::string& moduleName, OperGetCb cb, const std::optional<std::string>& xpath, const SubscribeOptions opts = SubscribeOptions::Default);
+    void onOperGet(const std::string& moduleName, OperGetCb cb, const std::string& path, const SubscribeOptions opts = SubscribeOptions::Default);
     void onRPCAction(const std::string& xpath, RpcActionCb cb, uint32_t priority = 0, const SubscribeOptions opts = SubscribeOptions::Default);
     void onNotification(
             const std::string& moduleName,

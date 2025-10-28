@@ -215,14 +215,14 @@ void Subscription::onModuleChange(const std::string& moduleName, ModuleChangeCb 
  * @param xpath XPath that identifies which data this subscription is able to provide.
  * @param opts Options further changing the behavior of this method.
  */
-void Subscription::onOperGet(const std::string& moduleName, OperGetCb cb, const std::optional<std::string>& xpath, const SubscribeOptions opts)
+void Subscription::onOperGet(const std::string& moduleName, OperGetCb cb, const std::string& path, const SubscribeOptions opts)
 {
     SYSREPO_CPP_SESSION_MTX_OF(m_sess);
     checkNoThreadFlag(opts, m_customEventLoopCbs);
 
     auto& privRef = m_operGetCbs.emplace_back(PrivData{cb, m_exceptionHandler.get()});
     sr_subscription_ctx_s* ctx = m_sub.get();
-    auto res = sr_oper_get_subscribe(m_sess.m_sess.get(), moduleName.c_str(), xpath ? xpath->c_str() : nullptr, operGetItemsCb, reinterpret_cast<void*>(&privRef), toSubscribeOptions(opts), &ctx);
+    auto res = sr_oper_get_subscribe(m_sess.m_sess.get(), moduleName.c_str(), path.c_str(), operGetItemsCb, reinterpret_cast<void*>(&privRef), toSubscribeOptions(opts), &ctx);
     throwIfError(res, "Couldn't create operational get items subscription", m_sess.m_sess.get());
 
     saveContext(ctx);
