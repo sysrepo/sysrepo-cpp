@@ -54,6 +54,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e1d37f4_9fabafed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000163
+      },
+      "writtenOn": "2025-10-28T11:53:58Z",
+      "side": 1,
+      "message": "sorry I thought I lkinked the bug report in the commit",
+      "parentUuid": "39c70b51_a24d4355",
+      "revId": "3038e71deabe54892e62a84ed1c052ccd4952aca",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bddf2b93_629f9cbb",
