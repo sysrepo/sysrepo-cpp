@@ -505,14 +505,14 @@ Subscription Session::onModuleChange(
 Subscription Session::onOperGet(
         const std::string& moduleName,
         OperGetCb cb,
-        const std::optional<std::string>& xpath,
+        const std::string& path,
         const SubscribeOptions opts,
         ExceptionHandler handler,
         const std::optional<FDHandling>& callbacks)
 {
     checkNoThreadFlag(opts, callbacks);
     auto sub = Subscription{*this, handler, callbacks};
-    sub.onOperGet(moduleName, cb, xpath, opts);
+    sub.onOperGet(moduleName, cb, path, opts);
     return sub;
 }
 
