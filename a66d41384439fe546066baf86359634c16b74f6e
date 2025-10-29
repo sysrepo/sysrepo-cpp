@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62eca6cd_9714e091",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-10-29T10:43:44Z",
+      "side": 1,
+      "message": "Thanks, you found a nice bug. This is an API/ABI change, and we\u0027re in the process of porting to libyang v4 anyway (which will mean a version bump), so I prefer to pick this change on top of https://gerrit.cesnet.cz/c/CzechLight/sysrepo-cpp/+/8989 , which means that I\u0027ll be rebasing this on top of that change.",
+      "revId": "a66d41384439fe546066baf86359634c16b74f6e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
