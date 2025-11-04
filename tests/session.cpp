@@ -22,6 +22,28 @@ TEST_CASE("session")
     sess.copyConfig(sysrepo::Datastore::Startup);
     const auto leaf = "/test_module:leafInt32"s;
 
+    DOCTEST_SUBCASE("Connection removeModules and installModules")
+    {
+        conn->removeModules({"test_module"});
+
+        // Check that it is actually gone!
+        REQUIRE_THROWS_WITH_AS(sess.getOneNode("/test_module:leafInt32"),
+                "Session::getOneNode: Couldn't get '/test_module:leafInt32': SR_ERR_LY\n"
+                " Unknown/non-implemented module \"test_module\". (SR_ERR_LY)",
+                sysrepo::ErrorWithCode);
+
+        // Re-install the module
+        conn->installModules({SYSREPO_CPP_TESTS_DIR "test_module.yang"}, SYSREPO_CPP_TESTS_DIR);
+
+        sess.setItem("/test_module:leafInt32", "1");
+        sess.applyChanges();
+        REQUIRE(sess.getData("/test_module:leafInt32"));
+
+        // Cleanup
+        sess.deleteItem("/test_module:leafInt32");
+        sess.applyChanges();
+    }
+
     DOCTEST_SUBCASE("Session should be still valid even after the Connection class gets freed")
     {
         conn = std::nullopt;
