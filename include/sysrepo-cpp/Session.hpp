@@ -103,6 +103,7 @@ public:
     void discardOperationalChanges(const std::optional<std::string>& moduleName = std::nullopt, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
     void dropForeignOperationalContent(const std::optional<std::string>& xpath);
     void copyConfig(const Datastore source, const std::optional<std::string>& moduleName = std::nullopt, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
+    void replaceConfig(const std::optional<std::string>& moduleName, libyang::DataNode src_config, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
     std::optional<libyang::DataNode> sendRPC(libyang::DataNode input, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
     void sendNotification(libyang::DataNode notification, const Wait wait, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
     void replaceConfig(std::optional<libyang::DataNode> config, const std::optional<std::string>& moduleName = std::nullopt, std::chrono::milliseconds timeout = std::chrono::milliseconds{0});

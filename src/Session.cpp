@@ -394,6 +394,18 @@ void Session::copyConfig(const Datastore source, const std::optional<std::string
 }
 
 /**
+ * @brief Replaces the contents of a datastore with a data tree @p src_config.
+ * 
+ * Wraps `sr_replace_config`
+ */
+void Session::replaceConfig(const std::optional<std::string>& moduleName, libyang::DataNode src_config, std::chrono::milliseconds timeout)
+{
+    auto res = sr_replace_config(m_sess.get(), moduleName ? moduleName->c_str() : nullptr, libyang::releaseRawNode(src_config), timeout.count());
+
+    throwIfError(res, "Couldn't replace config");
+}
+
+/**
  * Send an RPC/action and return the result.
  *
  * Wraps `sr_rpc_send_tree`.
