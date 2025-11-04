@@ -8,9 +8,12 @@
 
 #include <doctest/doctest.h>
 #include <optional>
+#include <sysrepo-cpp/Connection.hpp>
 #include <sysrepo-cpp/Subscription.hpp>
 #include <sysrepo-cpp/utils/utils.hpp>
 #include <sysrepo-cpp/utils/exception.hpp>
+
+#include "tests/configure.cmake.h"
 
 using namespace std::literals;
 
@@ -21,6 +24,33 @@ TEST_CASE("session")
     auto sess = conn->sessionStart();
     sess.copyConfig(sysrepo::Datastore::Startup);
     const auto leaf = "/test_module:leafInt32"s;
+
+    DOCTEST_SUBCASE("Connection removeModules and installModules")
+    {
+        std::filesystem::path dir{CMAKE_CURRENT_SOURCE_DIR};
+        std::filesystem::path path = dir / "tests" / "test_module.yang";
+        std::vector<std::string> features = {"dummy"};
+        std::vector<struct sysrepo::ModuleInstallation> modules = {{.fileName = path, .features = features}};
+
+        conn->removeModules({"test_module"});
+        
+        // Check that it is actually gone!
+        REQUIRE_THROWS_WITH_AS(sess.getOneNode(leaf),
+                "Session::getOneNode: Couldn't get '/test_module:leafInt32': SR_ERR_LY\n"
+                " Unknown/non-implemented module \"test_module\". (SR_ERR_LY)",
+                sysrepo::ErrorWithCode);
+        
+        // Re-install the module
+        conn->installModules(modules, dir);
+        
+        sess.setItem(leaf, "1");
+        sess.applyChanges();
+        REQUIRE(sess.getData(leaf));
+        
+        // Cleanup
+        sess.deleteItem(leaf);
+        sess.applyChanges();
+    }
 
     DOCTEST_SUBCASE("Session should be still valid even after the Connection class gets freed")
     {

@@ -7,10 +7,14 @@
 */
 #pragma once
 
-#include <optional>
 #include <chrono>
+#include <filesystem>
+#include <libyang-cpp/Enum.hpp>
 #include <memory>
+#include <optional>
 #include <string>
+#include <variant>
+#include <vector>
 #include <sysrepo-cpp/Enum.hpp>
 
 struct sr_conn_ctx_s;
@@ -27,6 +31,15 @@ struct ModuleReplaySupport {
     std::optional<std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>> earliestNotification;
 };
 
+struct ModuleInstallation {
+  std::filesystem::path fileName;
+  std::vector<std::string> features = {};
+  std::optional<std::string> owner = {};
+  std::optional<std::string> group = {};
+  mode_t permissions = 0;
+  // FIXME: maybe add support for module plugins later
+};
+
 Connection wrapUnmanagedConnection(std::shared_ptr<sr_conn_ctx_s> conn);
 /**
  * @brief Handles a connection to sysrepo.
@@ -40,6 +53,11 @@ public:
 
     ModuleReplaySupport getModuleReplaySupport(const std::string& moduleName);
     void setModuleReplaySupport(const std::string& moduleName, bool enabled);
+    void installModules(const std::vector<ModuleInstallation>& modules,
+        const std::optional<std::filesystem::path>& searchDirs = std::nullopt,
+        const std::variant<std::monostate, std::filesystem::path, std::string>& initialData = {},
+        const libyang::DataFormat dataFormat = libyang::DataFormat::Detect);
+    void removeModules(const std::vector<std::string>& modules);
 
     friend Connection wrapUnmanagedConnection(std::shared_ptr<sr_conn_ctx_s> conn);
     friend Session;
