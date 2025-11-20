@@ -105,7 +105,7 @@ TEST_CASE("session")
 
             auto data = sess.getData("/test_module:popelnice", 0);
             REQUIRE(data);
-            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::KeepEmptyCont) == R"({
+            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::EmptyContainers) == R"({
   "test_module:popelnice": {
     "content": {
       "trash": [
@@ -126,14 +126,14 @@ TEST_CASE("session")
 
             data = sess.getData("/test_module:popelnice", 1);
             REQUIRE(data);
-            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::KeepEmptyCont) == R"({
+            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::EmptyContainers) == R"({
   "test_module:popelnice": {}
 }
 )");
 
             data = sess.getData("/test_module:popelnice", 2);
             REQUIRE(data);
-            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::KeepEmptyCont) == R"({
+            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::EmptyContainers) == R"({
   "test_module:popelnice": {
     "content": {}
   }
@@ -143,7 +143,7 @@ TEST_CASE("session")
             // If a list should be returned, its keys are always returned as well.
             data = sess.getData("/test_module:popelnice", 3);
             REQUIRE(data);
-            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::KeepEmptyCont) == R"({
+            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::EmptyContainers) == R"({
   "test_module:popelnice": {
     "content": {
       "trash": [
@@ -161,7 +161,7 @@ TEST_CASE("session")
 
             data = sess.getData("/test_module:popelnice", 4);
             REQUIRE(data);
-            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::KeepEmptyCont) == R"({
+            REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::EmptyContainers) == R"({
   "test_module:popelnice": {
     "content": {
       "trash": [
@@ -497,7 +497,7 @@ TEST_CASE("session")
     {
         sess.switchDatastore(sysrepo::Datastore::FactoryDefault);
         auto data = sess.getData("/*");
-        REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::WithSiblings) == "{\n\n}\n");
+        REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::Siblings) == "{\n\n}\n");
         REQUIRE_THROWS_AS(sess.setItem(leaf, "123"), sysrepo::ErrorWithCode);
     }
 
@@ -622,7 +622,7 @@ TEST_CASE("session")
         }
 
         // the original tree is not corrupted
-        REQUIRE(*conf->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::WithSiblings) != "");
+        REQUIRE(*conf->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::Siblings) != "");
     }
 
     DOCTEST_SUBCASE("libyang context flags")

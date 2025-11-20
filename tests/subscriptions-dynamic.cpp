@@ -140,12 +140,12 @@ TEST_CASE("Dynamic subscriptions")
         const auto subId = std::get<uint32_t>(idNode->asTerm().value());
         idNode->unlink();
 
-        rec.recordYangPushUpdate(subId, tree->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::WithSiblings));
+        rec.recordYangPushUpdate(subId, tree->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::Siblings));
     };
 
     auto cbNotif = [&](const std::optional<libyang::DataNode>& tree, auto) {
         REQUIRE(tree);
-        rec.recordNotification(tree->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::WithSiblings));
+        rec.recordNotification(tree->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::Siblings));
     };
 
     // write some initial data
