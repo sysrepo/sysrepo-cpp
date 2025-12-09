@@ -1,0 +1,187 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1427e73d_4fd4ef80",
+        "filename": "CMakeLists.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-09T11:29:28Z",
+      "side": 1,
+      "message": "This looks like an unrelated change. Is it really needed? What error message are you getting if you skip it?",
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89d68596_c011208e",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-09T11:29:28Z",
+      "side": 1,
+      "message": "This is already included on line 10",
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb283638_f008d8b2",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-09T11:29:28Z",
+      "side": 1,
+      "message": "- We\u0027re using `camelCaseNamingConvention`, not `the_snake_case` convention in this project. This comment applies to all other places as well.\n- The C API supports passing a list of per-module features to enable, let\u0027s support it here as well, please.",
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "311bd3a7_aeaf65c7",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-09T11:29:28Z",
+      "side": 1,
+      "message": "Use a `std::filesystem::path` because it\u0027s not really a \"schema path\", it\u0027s a path to a schema file on a local disk.",
+      "range": {
+        "startLine": 45,
+        "startChar": 42,
+        "endLine": 45,
+        "endChar": 53
+      },
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a474d26_dd28fb88",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-09T11:29:28Z",
+      "side": 1,
+      "message": "`std::filesystem::path` here as well",
+      "range": {
+        "startLine": 46,
+        "startChar": 32,
+        "endLine": 46,
+        "endChar": 43
+      },
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c962e54d_c2aa9dc6",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-09T11:29:28Z",
+      "side": 1,
+      "message": "We already have a `replaceConfig` that\u0027s defined on line 109.",
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a2e80ea_6eb010f5",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-09T11:29:28Z",
+      "side": 1,
+      "message": "nit: trailing whitespace, here and in other places as well",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 22,
+        "endChar": 3
+      },
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4994fe31_821f7775",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-09T11:29:28Z",
+      "side": 1,
+      "message": "Let\u0027s call this something like `unsafeStringVector` because this indeed is \"unsafe\" -- the validity of the pointers which are stored inside is limited to the lifetime of the original `vector\u003cstring\u003e`.",
+      "range": {
+        "startLine": 26,
+        "startChar": 32,
+        "endLine": 26,
+        "endChar": 44
+      },
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c766cc86_3c166a11",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-09T11:29:28Z",
+      "side": 1,
+      "message": "In C++, this is usually done [via an unnamed namespace](https://en.cppreference.com/w/cpp/language/namespace.html#Unnamed_namespaces). So, wrap this in a `namespace { ... }` and remove the `static` keyword here, please.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 6
+      },
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
