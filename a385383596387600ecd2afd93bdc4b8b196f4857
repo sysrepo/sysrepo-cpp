@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d5644971_21b7cb72",
+        "filename": "CMakeLists.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-10T15:58:36Z",
+      "side": 1,
+      "message": "My bad, I mis-read this as if you were adding a new include directory.\n\nThe CMake way of doing this is via:\n```\nconfigure_file(${CMAKE_CURRENT_SOURCE_DIR}/tests/configure.cmake.h.in \n  ${CMAKE_CURRENT_BINARY_DIR}/tests/configure.cmake.h)\n```\n\nAnd then, in `tests/configure.cmake.h.in`:\n```\n#define CMAKE_CURRENT_SOURCE_DIR \"@CMAKE_CURRENT_SOURCE_DIR@\"\n#define CMAKE_CURRENT_BINARY_DIR \"@CMAKE_CURRENT_BINARY_DIR@\"\n```\nThese can then be used like this:\n```\n#include \"tests/configure.cmake.h\"\n\nstd::filesystem::path foo{CMAKE_CURRENT_SOURCE_DIR} / \"tests\" / \"blah.txt\"}\n```",
+      "parentUuid": "1427e73d_4fd4ef80",
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "89d68596_c011208e",
         "filename": "include/sysrepo-cpp/Connection.hpp",
         "patchSetId": 1
@@ -49,6 +67,24 @@
       "writtenOn": "2025-12-09T11:29:28Z",
       "side": 1,
       "message": "This is already included on line 10",
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19cd8038_a9548c8e",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-10T15:58:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89d68596_c011208e",
       "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
@@ -93,6 +129,48 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bf62fca_271b5902",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-10T15:58:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "311bd3a7_aeaf65c7",
+      "range": {
+        "startLine": 45,
+        "startChar": 42,
+        "endLine": 45,
+        "endChar": 53
+      },
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4358d0a5_23004710",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-10T15:58:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb283638_f008d8b2",
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a474d26_dd28fb88",
@@ -106,6 +184,30 @@
       "writtenOn": "2025-12-09T11:29:28Z",
       "side": 1,
       "message": "`std::filesystem::path` here as well",
+      "range": {
+        "startLine": 46,
+        "startChar": 32,
+        "endLine": 46,
+        "endChar": 43
+      },
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f272711_77e27167",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-10T15:58:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a474d26_dd28fb88",
       "range": {
         "startLine": 46,
         "startChar": 32,
@@ -133,6 +235,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88b4f0cf_891117fa",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-10T15:58:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c962e54d_c2aa9dc6",
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a2e80ea_6eb010f5",
@@ -146,6 +266,30 @@
       "writtenOn": "2025-12-09T11:29:28Z",
       "side": 1,
       "message": "nit: trailing whitespace, here and in other places as well",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 22,
+        "endChar": 3
+      },
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69aaa68f_078de853",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-10T15:58:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a2e80ea_6eb010f5",
       "range": {
         "startLine": 22,
         "startChar": 2,
@@ -192,6 +336,54 @@
       "writtenOn": "2025-12-09T11:29:28Z",
       "side": 1,
       "message": "In C++, this is usually done [via an unnamed namespace](https://en.cppreference.com/w/cpp/language/namespace.html#Unnamed_namespaces). So, wrap this in a `namespace { ... }` and remove the `static` keyword here, please.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 6
+      },
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3377856_dd0ad4c7",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-10T15:58:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4994fe31_821f7775",
+      "range": {
+        "startLine": 26,
+        "startChar": 32,
+        "endLine": 26,
+        "endChar": 44
+      },
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88a98a31_67ed061e",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-10T15:58:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c766cc86_3c166a11",
       "range": {
         "startLine": 26,
         "startChar": 0,
