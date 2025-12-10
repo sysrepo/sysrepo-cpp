@@ -7,10 +7,12 @@
 */
 #pragma once
 
-#include <optional>
 #include <chrono>
+#include <filesystem>
 #include <memory>
+#include <optional>
 #include <string>
+#include <vector>
 #include <sysrepo-cpp/Enum.hpp>
 
 struct sr_conn_ctx_s;
@@ -40,6 +42,10 @@ public:
 
     ModuleReplaySupport getModuleReplaySupport(const std::string& moduleName);
     void setModuleReplaySupport(const std::string& moduleName, bool enabled);
+    void installModules(const std::vector<std::filesystem::path>& schemaPaths,
+            const std::optional<std::filesystem::path>& searchDir = std::nullopt,
+            const std::optional<std::vector<std::vector<std::string>>>& features = std::nullopt);
+    void removeModules(const std::vector<std::string>& modules);
 
     friend Connection wrapUnmanagedConnection(std::shared_ptr<sr_conn_ctx_s> conn);
     friend Session;
