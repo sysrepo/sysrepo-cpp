@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "520f4438_54cee733",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000163
+      },
+      "writtenOn": "2025-12-10T15:35:30Z",
+      "side": 1,
+      "message": "consider making a template for both the stirng and path versions",
+      "revId": "99f95faa3ba89a58f726095e7a572eb64eae1e23",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb7e08cc_bc1727de",
+        "filename": "tests/session.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000163
+      },
+      "writtenOn": "2025-12-10T15:35:30Z",
+      "side": 1,
+      "message": "consider using `leaf` variable declared in line 23 like other tests",
+      "revId": "99f95faa3ba89a58f726095e7a572eb64eae1e23",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}

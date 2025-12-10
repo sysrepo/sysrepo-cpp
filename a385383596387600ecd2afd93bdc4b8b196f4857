@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0504fb0a_8908e491",
+        "filename": "CMakeLists.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000163
+      },
+      "writtenOn": "2025-12-10T15:35:30Z",
+      "side": 1,
+      "message": "I see they use this definition at line 36 in the tests to look for the module to install. Do you think it should be moved somewhere else?\nPersonally I would maybe add a Connection test?",
+      "parentUuid": "1427e73d_4fd4ef80",
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "89d68596_c011208e",
         "filename": "include/sysrepo-cpp/Connection.hpp",
         "patchSetId": 1
