@@ -64,6 +64,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c521d20_b79f857b",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-10T16:01:16Z",
+      "side": 1,
+      "message": "I\u0027m afraid this will not work in this situation because the standard doesn\u0027t guarantee that the result of `std::filesystem::path::c_str()` outlives the context in which it is invoked.",
+      "parentUuid": "520f4438_54cee733",
+      "revId": "99f95faa3ba89a58f726095e7a572eb64eae1e23",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88a13cea_e1215740",
