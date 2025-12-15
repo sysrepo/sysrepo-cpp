@@ -1,0 +1,273 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "135f02e9_cd8c8a49",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-15T10:03:24Z",
+      "side": 1,
+      "message": "incorrect",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86868713_fc1832c5",
+        "filename": "CMakeLists.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-15T10:03:24Z",
+      "side": 1,
+      "message": "this file has not been added to git, so the compilation fails in the CI",
+      "range": {
+        "startLine": 58,
+        "startChar": 19,
+        "endLine": 58,
+        "endChar": 73
+      },
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "610a300f_30689fda",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-15T10:03:24Z",
+      "side": 1,
+      "message": "strings",
+      "range": {
+        "startLine": 23,
+        "startChar": 28,
+        "endLine": 23,
+        "endChar": 37
+      },
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd18802c_9185adc6",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-15T10:03:24Z",
+      "side": 1,
+      "message": "nit: you can zero-initialize the vector and save that later call to `push_back` like this:\n```\nstd::vector\u003ccont char *\u003e res(vec.size() + 1 /* trailing nullptr */, nullptr);\n```",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 55
+      },
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d959e4e1_05e998be",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-15T10:03:24Z",
+      "side": 1,
+      "message": "I don\u0027t understand the intention behind this.",
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8586c18b_d5116ccd",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-15T10:03:24Z",
+      "side": 1,
+      "message": "My earlier comment about a dangling pointer still applies here. The return value of a `std::filesystem::path::c_str()` is not guaranteed to remain valid indefinitely as far as I understand the C++ STL.",
+      "range": {
+        "startLine": 59,
+        "startChar": 55,
+        "endLine": 59,
+        "endChar": 78
+      },
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8367867f_cd494c61",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-15T10:03:24Z",
+      "side": 1,
+      "message": "Another dangling pointer here.",
+      "range": {
+        "startLine": 60,
+        "startChar": 74,
+        "endLine": 60,
+        "endChar": 89
+      },
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cbbe1ec_4fbd1289",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-15T10:03:24Z",
+      "side": 1,
+      "message": "There is no such member, so the compilation would fail if it reached this place in the CI.",
+      "range": {
+        "startLine": 61,
+        "startChar": 40,
+        "endLine": 61,
+        "endChar": 50
+      },
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ef79c13_25676a80",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-15T10:03:24Z",
+      "side": 1,
+      "message": "nit: wrap this line, please",
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35e7e871_2a3bc2f5",
+        "filename": "tests/session.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-15T10:03:24Z",
+      "side": 1,
+      "message": "Please add another invocation where you try to install several modules at once.",
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b53dc199_778922bd",
+        "filename": "tests/session.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-15T10:03:24Z",
+      "side": 1,
+      "message": "please test this with an empty list of features and with several features as well",
+      "range": {
+        "startLine": 33,
+        "startChar": 86,
+        "endLine": 33,
+        "endChar": 106
+      },
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4e80181_dd2f2ee6",
+        "filename": "tests/session.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-15T10:03:24Z",
+      "side": 1,
+      "message": "Please test passing the initial data to some of these invocations, too.",
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08c0121e_c90cd5bf",
+        "filename": "tests/session.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-15T10:03:24Z",
+      "side": 1,
+      "message": "nit: please remove these unrelated changes from this commit",
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}

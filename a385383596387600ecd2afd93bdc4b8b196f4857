@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c2580e96_b3fd905b",
+        "filename": "CMakeLists.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-15T10:03:24Z",
+      "side": 1,
+      "message": "That extra `-D` needs to be removed now.",
+      "parentUuid": "d5644971_21b7cb72",
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "89d68596_c011208e",
         "filename": "include/sysrepo-cpp/Connection.hpp",
         "patchSetId": 1

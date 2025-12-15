@@ -24,6 +24,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "720a7fd1_64008163",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-15T10:03:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1d8fd9d_a36420b6",
+      "range": {
+        "startLine": 45,
+        "startChar": 24,
+        "endLine": 47,
+        "endChar": 95
+      },
+      "revId": "99f95faa3ba89a58f726095e7a572eb64eae1e23",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dcadfe76_48aadf4f",
@@ -116,6 +140,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c6cdc4e_d103104e",
+        "filename": "tests/session.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-15T10:03:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60610888_341406c2",
+      "revId": "99f95faa3ba89a58f726095e7a572eb64eae1e23",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb7e08cc_bc1727de",
@@ -129,6 +171,24 @@
       "writtenOn": "2025-12-10T15:35:30Z",
       "side": 1,
       "message": "consider using `leaf` variable declared in line 23 like other tests",
+      "revId": "99f95faa3ba89a58f726095e7a572eb64eae1e23",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c863e25_b80c1b73",
+        "filename": "tests/session.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-15T10:03:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb7e08cc_bc1727de",
       "revId": "99f95faa3ba89a58f726095e7a572eb64eae1e23",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
