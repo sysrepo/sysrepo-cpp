@@ -10,6 +10,14 @@ module test_module {
     prefix sn;
   }
 
+  feature dummy {
+    description "It does absolutely nothing.";
+  }
+
+  feature dummy2 {
+    description "It does absolutely nothing too.";
+  }
+
   leaf leafInt32 {
     type int32;
   }
