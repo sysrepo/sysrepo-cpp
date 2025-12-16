@@ -28,7 +28,7 @@ option(WITH_EXAMPLES "Build examples" ON)
 
 find_package(PkgConfig)
 pkg_check_modules(LIBYANG_CPP REQUIRED libyang-cpp>=11 IMPORTED_TARGET)
-pkg_check_modules(SYSREPO REQUIRED sysrepo>=5.0.0 IMPORTED_TARGET)
+pkg_check_modules(SYSREPO REQUIRED sysrepo>=5.1.5 IMPORTED_TARGET)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
@@ -55,6 +55,7 @@ if(BUILD_TESTING)
     set(THREADS_PREFER_PTHREAD_FLAG ON)
     find_package(Threads REQUIRED)
 
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tests/configure.cmake.h.in ${CMAKE_CURRENT_BINARY_DIR}/tests/configure.cmake.h)
     add_library(DoctestIntegration STATIC
         tests/doctest-integration.cpp
         tests/utils.cpp
@@ -72,6 +73,10 @@ if(BUILD_TESTING)
         sysrepo_test(NAME ${TEST_NAME} LIBRARIES DoctestIntegration sysrepo-cpp ${TEST_LIBRARIES} ${TEST_UNPARSED_ARGUMENTS})
     endfunction()
 
+    set(fixture-connection
+        # no installation, just the init and cleanup of a separate repository
+        --list
+        )
     set(fixture-test-module
         --install ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_module.yang
         )
@@ -85,6 +90,7 @@ if(BUILD_TESTING)
         --install ${CMAKE_CURRENT_SOURCE_DIR}/tests/yang/ietf-yang-push@2019-09-09.yang -e on-change
         )
 
+    sysrepo_cpp_test(NAME connection FIXTURE fixture-connection)
     sysrepo_cpp_test(NAME session FIXTURE fixture-test-module)
     sysrepo_cpp_test(NAME subscriptions FIXTURE fixture-test-module LIBRARIES Threads::Threads)
     sysrepo_cpp_test(NAME subscriptions-dynamic FIXTURE fixture-dynamic-subscriptions LIBRARIES PkgConfig::SYSREPO)
