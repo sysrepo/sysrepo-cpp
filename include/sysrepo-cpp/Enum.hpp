@@ -4,7 +4,7 @@
  * Written by Václav Kubernát <kubernat@cesnet.cz>
  *
  * SPDX-License-Identifier: BSD-3-Clause
-*/
+ */
 #pragma once
 
 #include <cstdint>
@@ -206,6 +206,14 @@ constexpr ConnectionFlags operator|(const ConnectionFlags a, const ConnectionFla
 {
     return implEnumBitOr(a, b);
 }
+
+/**
+ * Wraps the force parameter for `sr_remove_modules`.
+ */
+enum ModuleRemoval {
+    Default = 0,
+    FailOnDependencies = 1
+};
 
 /**
  * @brief Wraps `sr_get_options_t`, which comprises `sr_get_flag_t` and `sr_get_oper_flag_t`.
