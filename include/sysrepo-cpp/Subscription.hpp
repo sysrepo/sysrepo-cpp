@@ -95,6 +95,8 @@ public:
     std::optional<NotificationTimeStamp> replayStartTime() const;
     void processEvent(YangPushNotifCb cb) const;
     void terminate(const std::optional<std::string>& reason = std::nullopt);
+    void modifyStopTime(const std::optional<NotificationTimeStamp>& stopTime);
+    void modifyFilter(const std::optional<SubscribedNotificationsFilter>& filter);
 
 private:
     DynamicSubscription(sysrepo::Session sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime = std::nullopt);
