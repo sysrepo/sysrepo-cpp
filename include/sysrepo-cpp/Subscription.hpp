@@ -97,6 +97,8 @@ public:
     void terminate(const std::optional<std::string>& reason = std::nullopt);
     void modifyStopTime(const std::optional<NotificationTimeStamp>& stopTime);
     void modifyFilter(const std::optional<SubscribedNotificationsFilter>& filter);
+    void modifyYangPushPeriodic(const std::chrono::milliseconds period, const std::optional<NotificationTimeStamp>& anchorTime);
+    void modifyYangPushOnChange(const std::chrono::milliseconds dampeningPeriod);
 
 private:
     DynamicSubscription(sysrepo::Session sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime = std::nullopt);

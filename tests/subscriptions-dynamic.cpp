@@ -376,6 +376,16 @@ TEST_CASE("Dynamic subscriptions")
             std::vector<std::unique_ptr<trompeloeil::expectation>> expectations;
             auto sub = sess.subscribeNotifications("/test_module:ping");
 
+            // this is subscribed notification, unable to modify as YP periodic
+            REQUIRE_THROWS_WITH_AS(sub.modifyYangPushPeriodic(std::chrono::milliseconds(1000), std::nullopt),
+                                   "Couldn't modify yang-push periodic subscription with id 13: SR_ERR_NOT_FOUND",
+                                   sysrepo::ErrorWithCode);
+
+            // this is subscribed notification, unable to modify as YP on-change
+            REQUIRE_THROWS_WITH_AS(sub.modifyYangPushOnChange(std::chrono::milliseconds(11)),
+                                   "Couldn't modify yang-push on-change subscription with id 13: SR_ERR_NOT_FOUND",
+                                   sysrepo::ErrorWithCode);
+
             {
                 CLIENT_SEND_NOTIFICATION(notificationPingWith1);
                 CLIENT_SEND_NOTIFICATION(notificationPingWith2);
@@ -514,16 +524,28 @@ TEST_CASE("Dynamic subscriptions")
             REQUIRE_PIPE_HANGUP(*sub);
         }
 
-        DOCTEST_SUBCASE("Modifying filter")
+        DOCTEST_SUBCASE("Modifying the subscription")
         {
-            std::vector<std::unique_ptr<trompeloeil::expectation>> expectations;
-            auto sub = sess.yangPushOnChange("/test_module:leafInt32");
+            DOCTEST_SUBCASE("Invalid calls")
+            {
+                auto sub = sess.yangPushOnChange("/test_module:leafInt32");
 
-            client.setItem("/test_module:leafInt32", "42");
-            client.setItem("/test_module:popelnice/content/trash[name='asd']", std::nullopt);
-            client.applyChanges();
+                // this is YP on-change, unable to modify YP periodic
+                REQUIRE_THROWS_WITH_AS(sub.modifyYangPushPeriodic(std::chrono::milliseconds(1000), std::nullopt),
+                                       "Couldn't modify yang-push periodic subscription with id 17: SR_ERR_NOT_FOUND",
+                                       sysrepo::ErrorWithCode);
+            }
 
-            REQUIRE_YANG_PUSH_UPDATE(sub, R"({
+            DOCTEST_SUBCASE("Modifying the filter")
+            {
+                auto sub = sess.yangPushOnChange("/test_module:leafInt32");
+                std::vector<std::unique_ptr<trompeloeil::expectation>> expectations;
+
+                client.setItem("/test_module:leafInt32", "42");
+                client.setItem("/test_module:popelnice/content/trash[name='asd']", std::nullopt);
+                client.applyChanges();
+
+                REQUIRE_YANG_PUSH_UPDATE(sub, R"({
   "ietf-yang-push:push-change-update": {
     "datastore-changes": {
       "yang-patch": {
@@ -543,14 +565,14 @@ TEST_CASE("Dynamic subscriptions")
   }
 }
 )");
-            READ_YANG_PUSH_UPDATE(sub);
+                READ_YANG_PUSH_UPDATE(sub);
 
-            sub.modifyFilter("/test_module:popelnice");
-            client.deleteItem("/test_module:leafInt32");
-            client.deleteItem("/test_module:popelnice/content/trash[name='asd']");
-            client.applyChanges();
+                sub.modifyFilter("/test_module:popelnice");
+                client.deleteItem("/test_module:leafInt32");
+                client.deleteItem("/test_module:popelnice/content/trash[name='asd']");
+                client.applyChanges();
 
-            REQUIRE_YANG_PUSH_UPDATE(sub, R"({
+                REQUIRE_YANG_PUSH_UPDATE(sub, R"({
   "ietf-yang-push:push-change-update": {
     "datastore-changes": {
       "yang-patch": {
@@ -577,10 +599,86 @@ TEST_CASE("Dynamic subscriptions")
   }
 }
 )");
-            READ_YANG_PUSH_UPDATE(sub);
+                READ_YANG_PUSH_UPDATE(sub);
 
-            sub.terminate();
-            REQUIRE_PIPE_HANGUP(sub);
+                sub.terminate();
+                REQUIRE_PIPE_HANGUP(sub);
+            }
+
+            DOCTEST_SUBCASE("Modifying dampening period")
+            {
+                constexpr auto dampeningPeriod = 1000ms;
+                auto sub = sess.yangPushOnChange("/test_module:leafInt32", 20ms);
+                sub.modifyYangPushOnChange(dampeningPeriod);
+
+                // initial event
+                client.setItem("/test_module:leafInt32", "0");
+                client.applyChanges();
+
+                // series of rapid changes
+                client.setItem("/test_module:leafInt32", "143");
+                client.applyChanges();
+                client.setItem("/test_module:leafInt32", "144");
+                client.applyChanges();
+                client.setItem("/test_module:leafInt32", "145");
+                client.applyChanges();
+                client.setItem("/test_module:leafInt32", "146");
+                client.applyChanges();
+
+                // initial event
+                REQUIRE_YANG_PUSH_UPDATE(sub, R"({
+  "ietf-yang-push:push-change-update": {
+    "datastore-changes": {
+      "yang-patch": {
+        "patch-id": "patch-1",
+        "edit": [
+          {
+            "edit-id": "edit-1",
+            "operation": "create",
+            "target": "/test_module:leafInt32",
+            "value": {
+              "test_module:leafInt32": 0
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+)");
+                READ_YANG_PUSH_UPDATE(sub);
+
+                // we are in about 500-600ms of the 1000ms dampening period, so no data should be ready yet
+                std::this_thread::sleep_for(dampeningPeriod / 2);
+                REQUIRE(pipeStatus(sub.fd()) == PipeStatus::NoData);
+
+                // after the full dampening period, we should get the last change
+                std::this_thread::sleep_for(dampeningPeriod / 2);
+                REQUIRE_YANG_PUSH_UPDATE(sub, R"({
+  "ietf-yang-push:push-change-update": {
+    "datastore-changes": {
+      "yang-patch": {
+        "patch-id": "patch-2",
+        "edit": [
+          {
+            "edit-id": "edit-4",
+            "operation": "replace",
+            "target": "/test_module:leafInt32",
+            "value": {
+              "test_module:leafInt32": 146
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+)");
+                READ_YANG_PUSH_UPDATE(sub);
+
+                sub.terminate();
+                REQUIRE_PIPE_HANGUP(sub);
+            }
         }
 
         DOCTEST_SUBCASE("Sync on start")
@@ -711,17 +809,19 @@ TEST_CASE("Dynamic subscriptions")
 
     DOCTEST_SUBCASE("YANG Push periodic")
     {
-        /*
-         * Periodic yang push sends the whole data tree every interval, we can't read manually, so
-         * we create another thread that modifies the data tree and this thread will read the notifications.
-         *
-         * Also, we don't know the subscription id in advance, so we have to read it from the first notification
-         * and use it in the following notifications. That requires some trompeloeil magic with LR_SIDE_EFFECT and LR_WITH.
-         */
+        DOCTEST_SUBCASE("Basic test")
+        {
+            /*
+             * Periodic yang push sends the whole data tree every interval, we can't read manually, so
+             * we create another thread that modifies the data tree and this thread will read the notifications.
+             *
+             * Also, we don't know the subscription id in advance, so we have to read it from the first notification
+             * and use it in the following notifications. That requires some trompeloeil magic with LR_SIDE_EFFECT and LR_WITH.
+             */
 
-        std::invoke_result_t<decltype(&sysrepo::DynamicSubscription::subscriptionId), sysrepo::DynamicSubscription> subId;
+            std::invoke_result_t<decltype(&sysrepo::DynamicSubscription::subscriptionId), sysrepo::DynamicSubscription> subId;
 
-        TROMPELOEIL_REQUIRE_CALL(rec, recordYangPushUpdate(ANY(uint32_t), R"({
+            TROMPELOEIL_REQUIRE_CALL(rec, recordYangPushUpdate(ANY(uint32_t), R"({
   "ietf-yang-push:push-update": {
     "datastore-contents": {
       "test_module:values": [
@@ -732,11 +832,11 @@ TEST_CASE("Dynamic subscriptions")
   }
 }
 )"))
-            .IN_SEQUENCE(seq)
-            .TIMES(AT_LEAST(1))
-            .LR_SIDE_EFFECT(subId = _1);
+                .IN_SEQUENCE(seq)
+                .TIMES(AT_LEAST(1))
+                .LR_SIDE_EFFECT(subId = _1);
 
-        TROMPELOEIL_REQUIRE_CALL(rec, recordYangPushUpdate(ANY(uint32_t), R"({
+            TROMPELOEIL_REQUIRE_CALL(rec, recordYangPushUpdate(ANY(uint32_t), R"({
   "ietf-yang-push:push-update": {
     "datastore-contents": {
       "test_module:leafInt32": 123,
@@ -748,11 +848,11 @@ TEST_CASE("Dynamic subscriptions")
   }
 }
 )"))
-            .IN_SEQUENCE(seq)
-            .TIMES(AT_LEAST(1))
-            .LR_WITH(subId == _1);
+                .IN_SEQUENCE(seq)
+                .TIMES(AT_LEAST(1))
+                .LR_WITH(subId == _1);
 
-        TROMPELOEIL_REQUIRE_CALL(rec, recordYangPushUpdate(ANY(uint32_t), R"({
+            TROMPELOEIL_REQUIRE_CALL(rec, recordYangPushUpdate(ANY(uint32_t), R"({
   "ietf-yang-push:push-update": {
     "datastore-contents": {
       "test_module:leafInt32": 123,
@@ -765,11 +865,11 @@ TEST_CASE("Dynamic subscriptions")
   }
 }
 )"))
-            .IN_SEQUENCE(seq)
-            .TIMES(AT_LEAST(1))
-            .LR_WITH(subId == _1);
+                .IN_SEQUENCE(seq)
+                .TIMES(AT_LEAST(1))
+                .LR_WITH(subId == _1);
 
-        TROMPELOEIL_REQUIRE_CALL(rec, recordYangPushUpdate(ANY(uint32_t), R"({
+            TROMPELOEIL_REQUIRE_CALL(rec, recordYangPushUpdate(ANY(uint32_t), R"({
   "ietf-yang-push:push-update": {
     "datastore-contents": {
       "test_module:leafInt32": 123,
@@ -782,55 +882,131 @@ TEST_CASE("Dynamic subscriptions")
   }
 }
 )"))
-            .IN_SEQUENCE(seq)
-            .TIMES(AT_LEAST(1))
-            .LR_WITH(subId == _1);
+                .IN_SEQUENCE(seq)
+                .TIMES(AT_LEAST(1))
+                .LR_WITH(subId == _1);
 
-        TROMPELOEIL_REQUIRE_CALL(rec, recordYangPushUpdate(ANY(uint32_t), R"({
+            TROMPELOEIL_REQUIRE_CALL(rec, recordYangPushUpdate(ANY(uint32_t), R"({
   "ietf-subscribed-notifications:subscription-terminated": {
     "reason": "no-such-subscription"
   }
 }
 )"))
-            .IN_SEQUENCE(seq)
-            .LR_WITH(_1 = subId);
+                .IN_SEQUENCE(seq)
+                .LR_WITH(_1 = subId);
 
-        auto sub = sess.yangPushPeriodic(std::nullopt, std::chrono::milliseconds{66}, std::nullopt, std::chrono::system_clock::now() + 6666ms);
+            auto sub = sess.yangPushPeriodic(std::nullopt, std::chrono::milliseconds{66}, std::nullopt, std::chrono::system_clock::now() + 6666ms);
 
-        std::jthread srDataEditor([&] {
-            auto sess = conn.sessionStart();
+            std::jthread srDataEditor([&] {
+                auto sess = conn.sessionStart();
 
-            std::this_thread::sleep_for(500ms);
+                std::this_thread::sleep_for(500ms);
 
-            sess.setItem("/test_module:leafInt32", "123");
-            sess.setItem("/test_module:values[.='5']", std::nullopt);
-            sess.deleteItem("/test_module:values[.='3']");
-            sess.applyChanges();
-            std::this_thread::sleep_for(500ms);
+                sess.setItem("/test_module:leafInt32", "123");
+                sess.setItem("/test_module:values[.='5']", std::nullopt);
+                sess.deleteItem("/test_module:values[.='3']");
+                sess.applyChanges();
+                std::this_thread::sleep_for(500ms);
 
-            sess.setItem("/test_module:values[.='6']", std::nullopt);
-            sess.applyChanges();
-            std::this_thread::sleep_for(500ms);
+                sess.setItem("/test_module:values[.='6']", std::nullopt);
+                sess.applyChanges();
+                std::this_thread::sleep_for(500ms);
 
-            sess.setItem("/test_module:values[.='7']", std::nullopt);
-            sess.deleteItem("/test_module:values[.='6']");
-            sess.applyChanges();
-        });
+                sess.setItem("/test_module:values[.='7']", std::nullopt);
+                sess.deleteItem("/test_module:values[.='6']");
+                sess.applyChanges();
+            });
 
-        while (true) {
-            auto status = pipeStatus(sub.fd(), -1 /* block */);
-            if (status == PipeStatus::Hangup) {
-                break;
-            } else if (status == PipeStatus::DataReady) {
-                sub.processEvent(cbYangPushUpdate);
-            } else if (status == PipeStatus::Other) {
-                FAIL("PipeStatus::Other before the subscription was terminated");
-            } else {
-                FAIL("PipeStatus::NoData but poll() should block until an event is available");
+            while (true) {
+                auto status = pipeStatus(sub.fd(), -1 /* block */);
+                if (status == PipeStatus::Hangup) {
+                    break;
+                } else if (status == PipeStatus::DataReady) {
+                    sub.processEvent(cbYangPushUpdate);
+                } else if (status == PipeStatus::Other) {
+                    FAIL("PipeStatus::Other before the subscription was terminated");
+                } else {
+                    FAIL("PipeStatus::NoData but poll() should block until an event is available");
+                }
             }
+
+            REQUIRE(subId == sub.subscriptionId());
+            REQUIRE_PIPE_HANGUP(sub);
         }
 
-        REQUIRE(subId == sub.subscriptionId());
-        REQUIRE_PIPE_HANGUP(sub);
+        DOCTEST_SUBCASE("Modifying the subscription")
+        {
+            std::vector<sysrepo::NotificationTimeStamp> timestamps;
+            auto cbYangPushUpdateWithTimestamps = [&](const std::optional<libyang::DataNode>& tree, auto timestamp) {
+                cbYangPushUpdate(tree, timestamp);
+                timestamps.push_back(timestamp);
+            };
+
+            TROMPELOEIL_REQUIRE_CALL(rec, recordYangPushUpdate(ANY(uint32_t), R"({
+  "ietf-yang-push:push-update": {
+    "datastore-contents": {
+      "test_module:leafInt32": 1
+    }
+  }
+}
+)"))
+                .IN_SEQUENCE(seq)
+                .TIMES(AT_LEAST(1));
+            sess.setItem("/test_module:leafInt32", "1");
+            sess.applyChanges();
+
+            auto sub = sess.yangPushPeriodic("/test_module:leafInt32", 20ms, std::nullopt, std::chrono::system_clock::now() + 3s);
+
+            // this is YP periodic, unable to modify YP on-change
+            REQUIRE_THROWS_WITH_AS(sub.modifyYangPushOnChange(1000ms),
+                                   "Couldn't modify yang-push on-change subscription with id 23: SR_ERR_NOT_FOUND",
+                                   sysrepo::ErrorWithCode);
+
+            TROMPELOEIL_REQUIRE_CALL(rec, recordYangPushUpdate(ANY(uint32_t), R"({
+  "ietf-subscribed-notifications:subscription-terminated": {
+    "reason": "no-such-subscription"
+  }
+}
+)"))
+                .IN_SEQUENCE(seq)
+                .TIMES(1);
+
+            // wait a bit, so we get at least some notifications with ~20ms period and then increase the period to 1s
+            // set anchor to current second (round down)
+            std::this_thread::sleep_for(100ms);
+
+            auto anchor = std::chrono::time_point_cast<std::chrono::seconds>(std::chrono::system_clock::now());
+            sub.modifyYangPushPeriodic(1s, anchor);
+
+            while (true) {
+                auto status = pipeStatus(sub.fd(), -1 /* block */);
+                if (status == PipeStatus::Hangup) {
+                    break;
+                } else if (status == PipeStatus::DataReady) {
+                    sub.processEvent(cbYangPushUpdateWithTimestamps);
+                } else if (status == PipeStatus::Other) {
+                    FAIL("PipeStatus::Other before the subscription was terminated");
+                } else {
+                    FAIL("PipeStatus::NoData but poll() should block until an event is available");
+                }
+            }
+
+            REQUIRE_PIPE_HANGUP(sub);
+
+            // check that some messages came with ~20ms delay and some with ~1000ms delay
+            // be very permissive in the minimal delays, so that the test is not flaky
+            bool delay20 = false;
+            bool delay1000 = false;
+            for (auto it = std::next(timestamps.begin()); it != timestamps.end(); ++it) {
+                const auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(*it - *std::prev(it)).count();
+                if (diff < 500) {
+                    delay20 = true;
+                } else {
+                    delay1000 = true;
+                }
+            }
+            REQUIRE(delay20);
+            REQUIRE(delay1000);
+        }
     }
 }
