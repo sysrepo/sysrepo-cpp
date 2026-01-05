@@ -44,7 +44,7 @@ libyang::DataNode wrapSrData(std::shared_ptr<sr_session_ctx_s> sess, sr_data_t* 
     }));
 }
 
-std::optional<std::string> constructXPathFilter(const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter)
+std::optional<std::string> constructXPathFilter(const std::optional<SubscribedNotificationsFilter>& filter)
 {
     if (!filter) {
         return std::nullopt;
@@ -593,7 +593,7 @@ Subscription Session::onNotification(
  * @return A DynamicSubscription handle.
  */
 DynamicSubscription Session::yangPushPeriodic(
-    const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter,
+    const std::optional<SubscribedNotificationsFilter>& filter,
     std::chrono::milliseconds periodTime,
     const std::optional<NotificationTimeStamp>& anchorTime,
     const std::optional<NotificationTimeStamp>& stopTime)
@@ -631,7 +631,7 @@ DynamicSubscription Session::yangPushPeriodic(
  * @return A DynamicSubscription handle.
  */
 DynamicSubscription Session::yangPushOnChange(
-    const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter,
+    const std::optional<SubscribedNotificationsFilter>& filter,
     const std::optional<std::chrono::milliseconds>& dampeningPeriod,
     SyncOnStart syncOnStart,
     const std::set<YangPushChange>& excludedChanges,
@@ -681,7 +681,7 @@ DynamicSubscription Session::yangPushOnChange(
  * @return A DynamicSubscription handle.
  */
 DynamicSubscription Session::subscribeNotifications(
-    const std::optional<std::variant<std::string, libyang::DataNodeAny>>& filter,
+    const std::optional<SubscribedNotificationsFilter>& filter,
     const std::optional<std::string>& stream,
     const std::optional<NotificationTimeStamp>& stopTime,
     const std::optional<NotificationTimeStamp>& startTime)
