@@ -434,6 +434,9 @@ struct DynamicSubscription::Data {
     Data(sysrepo::Session sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime, bool terminated);
     ~Data();
     void terminate(const std::optional<std::string>& reason = std::nullopt);
+
+    void modifyStopTime(const std::optional<NotificationTimeStamp>& stopTime);
+    void modifyFilter(const std::optional<SubscribedNotificationsFilter>& filter);
 };
 
 DynamicSubscription::DynamicSubscription(sysrepo::Session sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime)
@@ -504,6 +507,16 @@ void DynamicSubscription::processEvent(YangPushNotifCb cb) const
     cb(wrappedNotification, toTimePoint(timestamp));
 }
 
+void DynamicSubscription::modifyStopTime(const std::optional<NotificationTimeStamp>& stopTime)
+{
+    m_data->modifyStopTime(stopTime);
+}
+
+void DynamicSubscription::modifyFilter(const std::optional<SubscribedNotificationsFilter>& filter)
+{
+    m_data->modifyFilter(filter);
+}
+
 DynamicSubscription::Data::Data(sysrepo::Session sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime, bool terminated)
     : sess(std::move(sess))
     , fd(fd)
@@ -526,5 +539,19 @@ void DynamicSubscription::Data::terminate(const std::optional<std::string>& reas
     auto err = srsn_terminate(subId, reason ? reason->c_str() : nullptr);
     throwIfError(err, "Couldn't terminate yang-push subscription with id " + std::to_string(subId));
     m_terminated = true;
+}
+
+void DynamicSubscription::Data::modifyStopTime(const std::optional<NotificationTimeStamp>& stopTime)
+{
+    auto stopSpec = stopTime ? std::optional{toTimespec(*stopTime)} : std::nullopt;
+    auto err = srsn_modify_stop_time(subId, stopSpec ? &stopSpec.value() : nullptr);
+    throwIfError(err, "Couldn't modify stop time of yang-push subscription with id " + std::to_string(subId));
+}
+
+void DynamicSubscription::Data::modifyFilter(const std::optional<SubscribedNotificationsFilter>& filter)
+{
+    auto xpathFilter = constructXPathFilter(filter);
+    auto err = srsn_modify_xpath_filter(subId, xpathFilter ? xpathFilter->data() : nullptr);
+    throwIfError(err, "Couldn't modify filter of yang-push subscription with id " + std::to_string(subId));
 }
 }

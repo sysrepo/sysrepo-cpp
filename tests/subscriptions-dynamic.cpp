@@ -24,6 +24,8 @@
 
 #define REQUIRE_PIPE_HANGUP(SUBSCRIPTION) \
     REQUIRE(pipeStatus((SUBSCRIPTION).fd()) == PipeStatus::Hangup)
+#define REQUIRE_PIPE_NODATA(SUBSCRIPTION) \
+    REQUIRE(pipeStatus((SUBSCRIPTION).fd()) == PipeStatus::NoData)
 
 #define REQUIRE_NOTIFICATION(SUBSCRIPTION, NOTIFICATION) \
     TROMPELOEIL_REQUIRE_CALL(rec, recordNotification(NOTIFICATION)).IN_SEQUENCE(seq);
@@ -368,6 +370,79 @@ TEST_CASE("Dynamic subscriptions")
             // ensure no more notifications were sent
             REQUIRE_PIPE_HANGUP(*sub);
         }
+
+        DOCTEST_SUBCASE("Modifying filter")
+        {
+            std::vector<std::unique_ptr<trompeloeil::expectation>> expectations;
+            auto sub = sess.subscribeNotifications("/test_module:ping");
+
+            {
+                CLIENT_SEND_NOTIFICATION(notificationPingWith1);
+                CLIENT_SEND_NOTIFICATION(notificationPingWith2);
+                CLIENT_SEND_NOTIFICATION(notificationSilentPing);
+                REQUIRE_NAMED_NOTIFICATION(sub, notificationPingWith1);
+                REQUIRE_NAMED_NOTIFICATION(sub, notificationPingWith2);
+
+                READ_NOTIFICATION_BLOCKING(sub);
+                READ_NOTIFICATION_BLOCKING(sub);
+                REQUIRE_PIPE_NODATA(sub);
+            }
+
+            REQUIRE_THROWS_WITH_AS(sub.modifyFilter("/blabla:blabla"),
+                                   "Couldn't modify filter of yang-push subscription with id 13: SR_ERR_LY",
+                                   sysrepo::ErrorWithCode);
+
+            {
+                sub.modifyFilter("/test_module:silent-ping");
+                CLIENT_SEND_NOTIFICATION(notificationPingWith1);
+                CLIENT_SEND_NOTIFICATION(notificationPingWith2);
+                CLIENT_SEND_NOTIFICATION(notificationSilentPing);
+                REQUIRE_NAMED_NOTIFICATION(sub, notificationSilentPing);
+
+                READ_NOTIFICATION_BLOCKING(sub);
+                REQUIRE_PIPE_NODATA(sub);
+            }
+
+            {
+                sub.modifyFilter(std::nullopt);
+                CLIENT_SEND_NOTIFICATION(notificationPingWith1);
+                CLIENT_SEND_NOTIFICATION(notificationPingWith2);
+                CLIENT_SEND_NOTIFICATION(notificationSilentPing);
+                REQUIRE_NAMED_NOTIFICATION(sub, notificationPingWith1);
+                REQUIRE_NAMED_NOTIFICATION(sub, notificationPingWith2);
+                REQUIRE_NAMED_NOTIFICATION(sub, notificationSilentPing);
+
+                READ_NOTIFICATION_BLOCKING(sub);
+                READ_NOTIFICATION_BLOCKING(sub);
+                READ_NOTIFICATION_BLOCKING(sub);
+                REQUIRE_PIPE_NODATA(sub);
+            }
+
+            sub.terminate();
+            REQUIRE_PIPE_HANGUP(sub);
+        }
+
+        DOCTEST_SUBCASE("Modifying stop-time")
+        {
+            auto stopTime = std::chrono::system_clock::now() + 300ms;
+            auto sub = sess.subscribeNotifications("/test_module:*", std::nullopt, stopTime);
+
+            // wait for some time before modifying the stop time
+            std::this_thread::sleep_for(50ms);
+            auto newStopTime = stopTime + 300ms;
+            sub.modifyStopTime(newStopTime);
+
+            // after stopTime the subscription is still alive with no notifications queueing
+            std::this_thread::sleep_until(stopTime + 100ms);
+            REQUIRE_PIPE_NODATA(sub);
+
+            // but after newStopTime the subscription is terminated as expected
+            std::this_thread::sleep_until(newStopTime + 100ms);
+            REQUIRE_NOTIFICATION(sub, SUBSCRIPTION_TERMINATED(sub));
+            READ_NOTIFICATION(sub);
+
+            REQUIRE_PIPE_HANGUP(sub);
+        }
     }
 
     DOCTEST_SUBCASE("YANG Push on change")
@@ -437,6 +512,75 @@ TEST_CASE("Dynamic subscriptions")
 
             sub->terminate();
             REQUIRE_PIPE_HANGUP(*sub);
+        }
+
+        DOCTEST_SUBCASE("Modifying filter")
+        {
+            std::vector<std::unique_ptr<trompeloeil::expectation>> expectations;
+            auto sub = sess.yangPushOnChange("/test_module:leafInt32");
+
+            client.setItem("/test_module:leafInt32", "42");
+            client.setItem("/test_module:popelnice/content/trash[name='asd']", std::nullopt);
+            client.applyChanges();
+
+            REQUIRE_YANG_PUSH_UPDATE(sub, R"({
+  "ietf-yang-push:push-change-update": {
+    "datastore-changes": {
+      "yang-patch": {
+        "patch-id": "patch-1",
+        "edit": [
+          {
+            "edit-id": "edit-1",
+            "operation": "create",
+            "target": "/test_module:leafInt32",
+            "value": {
+              "test_module:leafInt32": 42
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+)");
+            READ_YANG_PUSH_UPDATE(sub);
+
+            sub.modifyFilter("/test_module:popelnice");
+            client.deleteItem("/test_module:leafInt32");
+            client.deleteItem("/test_module:popelnice/content/trash[name='asd']");
+            client.applyChanges();
+
+            REQUIRE_YANG_PUSH_UPDATE(sub, R"({
+  "ietf-yang-push:push-change-update": {
+    "datastore-changes": {
+      "yang-patch": {
+        "patch-id": "patch-2",
+        "edit": [
+          {
+            "edit-id": "edit-1",
+            "operation": "delete",
+            "target": "/test_module:popelnice/content/trash[name='asd']"
+          },
+          {
+            "edit-id": "edit-2",
+            "operation": "delete",
+            "target": "/test_module:popelnice/content/trash[name='asd']/name"
+          },
+          {
+            "edit-id": "edit-3",
+            "operation": "delete",
+            "target": "/test_module:popelnice/content/trash[name='asd']/cont"
+          }
+        ]
+      }
+    }
+  }
+}
+)");
+            READ_YANG_PUSH_UPDATE(sub);
+
+            sub.terminate();
+            REQUIRE_PIPE_HANGUP(sub);
         }
 
         DOCTEST_SUBCASE("Sync on start")
