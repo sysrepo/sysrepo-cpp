@@ -437,6 +437,8 @@ struct DynamicSubscription::Data {
 
     void modifyStopTime(const std::optional<NotificationTimeStamp>& stopTime);
     void modifyFilter(const std::optional<SubscribedNotificationsFilter>& filter);
+    void modifyYangPushPeriodic(const std::chrono::milliseconds period, const std::optional<NotificationTimeStamp>& anchorTime);
+    void modifyYangPushOnChange(const std::chrono::milliseconds dampeningPeriod);
 };
 
 DynamicSubscription::DynamicSubscription(sysrepo::Session sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime)
@@ -517,6 +519,16 @@ void DynamicSubscription::modifyFilter(const std::optional<SubscribedNotificatio
     m_data->modifyFilter(filter);
 }
 
+void DynamicSubscription::modifyYangPushPeriodic(const std::chrono::milliseconds period, const std::optional<NotificationTimeStamp>& anchorTime)
+{
+    m_data->modifyYangPushPeriodic(period, anchorTime);
+}
+
+void DynamicSubscription::modifyYangPushOnChange(const std::chrono::milliseconds dampeningPeriod)
+{
+    m_data->modifyYangPushOnChange(dampeningPeriod);
+}
+
 DynamicSubscription::Data::Data(sysrepo::Session sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime, bool terminated)
     : sess(std::move(sess))
     , fd(fd)
@@ -553,5 +565,18 @@ void DynamicSubscription::Data::modifyFilter(const std::optional<SubscribedNotif
     auto xpathFilter = constructXPathFilter(filter);
     auto err = srsn_modify_xpath_filter(subId, xpathFilter ? xpathFilter->data() : nullptr);
     throwIfError(err, "Couldn't modify filter of yang-push subscription with id " + std::to_string(subId));
+}
+
+void DynamicSubscription::Data::modifyYangPushPeriodic(const std::chrono::milliseconds period, const std::optional<NotificationTimeStamp>& anchorTime)
+{
+    auto anchorSpec = anchorTime ? std::optional{toTimespec(*anchorTime)} : std::nullopt;
+    auto err = srsn_yang_push_modify_periodic(subId, period.count(), anchorSpec ? &anchorSpec.value() : nullptr);
+    throwIfError(err, "Couldn't modify yang-push periodic subscription with id " + std::to_string(subId));
+}
+
+void DynamicSubscription::Data::modifyYangPushOnChange(const std::chrono::milliseconds dampeningPeriod)
+{
+    auto err = srsn_yang_push_modify_on_change(subId, dampeningPeriod.count());
+    throwIfError(err, "Couldn't modify yang-push on-change subscription with id " + std::to_string(subId));
 }
 }

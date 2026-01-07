@@ -375,6 +375,16 @@ TEST_CASE("Dynamic subscriptions")
             std::vector<std::unique_ptr<trompeloeil::expectation>> expectations;
             auto sub = sess.subscribeNotifications("/test_module:ping");
 
+            // this is subscribed notification, unable to modify YP periodic
+            REQUIRE_THROWS_WITH_AS(sub.modifyYangPushPeriodic(std::chrono::milliseconds(1000), std::nullopt),
+                                   "Couldn't modify yang-push periodic subscription with id 13: SR_ERR_NOT_FOUND",
+                                   sysrepo::ErrorWithCode);
+
+            // this is subscribed notification, unable to modify YP on-change
+            REQUIRE_THROWS_WITH_AS(sub.modifyYangPushOnChange(std::chrono::milliseconds(11)),
+                                   "Couldn't modify yang-push on-change subscription with id 13: SR_ERR_NOT_FOUND",
+                                   sysrepo::ErrorWithCode);
+
             REQUIRE_NAMED_NOTIFICATION(sub, notifications[0]);
             CLIENT_SEND_NOTIFICATION(notifications[0]);
             CLIENT_SEND_NOTIFICATION(notifications[1]);
@@ -475,10 +485,15 @@ TEST_CASE("Dynamic subscriptions")
             REQUIRE_PIPE_HANGUP(*sub);
         }
 
-        DOCTEST_SUBCASE("Modifying filter")
+        DOCTEST_SUBCASE("Modifying the subscription")
         {
             std::vector<std::unique_ptr<trompeloeil::expectation>> expectations;
             auto sub = sess.yangPushOnChange("/test_module:leafInt32");
+
+            // this is YP on-change, unable to modify periodic
+            REQUIRE_THROWS_WITH_AS(sub.modifyYangPushPeriodic(std::chrono::milliseconds(1000), std::nullopt),
+                                   "Couldn't modify yang-push periodic subscription with id 16: SR_ERR_NOT_FOUND",
+                                   sysrepo::ErrorWithCode);
 
             client.setItem("/test_module:leafInt32", "42");
             client.setItem("/test_module:popelnice/content/trash[name='asd']", std::nullopt);
@@ -757,6 +772,14 @@ TEST_CASE("Dynamic subscriptions")
             .LR_WITH(_1 = subId);
 
         auto sub = sess.yangPushPeriodic(std::nullopt, std::chrono::milliseconds{66}, std::nullopt, std::chrono::system_clock::now() + 6666ms);
+
+        // // TODO: we are not testing period, so for now just test that this actually does not throw
+        sub.modifyYangPushPeriodic(std::chrono::milliseconds{77}, std::nullopt);
+
+        // this is YP periodic, unable to modify on-change
+        REQUIRE_THROWS_WITH_AS(sub.modifyYangPushOnChange(std::chrono::milliseconds(1000)),
+                               "Couldn't modify yang-push periodic subscription with id 16: SR_ERR_NOT_FOUND",
+                               sysrepo::ErrorWithCode);
 
         std::jthread srDataEditor([&] {
             auto sess = conn.sessionStart();
