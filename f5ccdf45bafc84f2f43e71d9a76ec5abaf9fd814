@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c11dfbfd_18cfd46f",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-01-08T12:34:44Z",
+      "side": 1,
+      "message": "Let me think about how can I test this using the current test suite...\nIf this would be difficult then I explain it in the code",
+      "parentUuid": "6bcb7d87_5994ba74",
+      "revId": "f5ccdf45bafc84f2f43e71d9a76ec5abaf9fd814",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f125b466_4aa95bd0",
         "filename": "tests/subscriptions-dynamic.cpp",
         "patchSetId": 2
@@ -48,6 +66,24 @@
       "writtenOn": "2026-01-08T08:44:40Z",
       "side": 1,
       "message": "I had to re-read this test a few times. When exactly are notifications processed (i.e., when is that time that \"something\" retrieves a dynamic notification from sysrepo and passes that to the trompeloeil handlers which were set up by `REQUIRE_NAMED_NOTIFICATION`)? If it only happens at the time `READ_NOTIFICATION*` is called, don\u0027t you need to poll for these notifications after lines 380 and 385 as well?\n\nDon\u0027t you need to \"poll if there\u0027s any unexpected notification\" after this loop has run? Hmm, probably not, because there\u0027s a `REQUIRE_PIPE_HANGUP` at the very end, and (I guess) any pending notifications would cause that check to fail with an error \"yup, it\u0027s hang up, but there were also pending notifications\" or something like that...\n\nFinally, I think that instead of having a vector of notifications (which, to me, implies that it\u0027s a *sequence* of notification events, that you\u0027ll always generate them all and in-order, etc), it would make sense to have three \"totally independent\" notifications with names, e.g., `pingWith42`, `pingWith666` and `silentPing`. Just a suggestion for a future refactor.",
+      "revId": "f5ccdf45bafc84f2f43e71d9a76ec5abaf9fd814",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c00893a_862b87f2",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-01-08T12:34:44Z",
+      "side": 1,
+      "message": "Re 1st par: I can read from the FD after each batch of notifications but does it matter? I can queue stuff in the FD and then read all at once.\n\nRe 2nd par: I think you answered your own questions :)\n\nRe 3rd par: Hmm agreed. I can try to refactor before this patch.",
+      "parentUuid": "f125b466_4aa95bd0",
       "revId": "f5ccdf45bafc84f2f43e71d9a76ec5abaf9fd814",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
