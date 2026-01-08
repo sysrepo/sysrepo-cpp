@@ -53,6 +53,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d651044e_2a0ec8d3",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-01-08T19:09:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c11dfbfd_18cfd46f",
+      "revId": "f5ccdf45bafc84f2f43e71d9a76ec5abaf9fd814",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f125b466_4aa95bd0",
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "\u003e I can read from the FD after each batch of notifications but does it matter?\n\nWhen the defers notification processing to the end of the block, then you cannot (easily) tell whether a stored notification happened before of after the filter has been modified. During the call I acknowledged that you *could* work that around via, e.g., using a unique integer within the received notification, but I think that doing that would make the test harder to read.",
       "parentUuid": "9c00893a_862b87f2",
+      "revId": "f5ccdf45bafc84f2f43e71d9a76ec5abaf9fd814",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d189e24_1709bfa2",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-01-08T19:09:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8db13f75_a00e04ba",
       "revId": "f5ccdf45bafc84f2f43e71d9a76ec5abaf9fd814",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
