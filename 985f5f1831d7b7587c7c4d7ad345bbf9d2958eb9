@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee6ee7b5_69a30b50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-08T08:12:40Z",
+      "side": 1,
+      "message": "recheck https://github.com/CESNET/libyang/issues/2464",
+      "revId": "985f5f1831d7b7587c7c4d7ad345bbf9d2958eb9",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
