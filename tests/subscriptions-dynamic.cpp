@@ -157,47 +157,46 @@ TEST_CASE("Dynamic subscriptions")
     {
         /* notification JSONs are very verbose, let's give them names even if they are not very descriptive
          * but still better than polluting the tests below with repeated long R-strings */
-        const std::vector<std::string> notifications = {
-            R"({
+        static const auto notificationPingWith1 = R"({
   "test_module:ping": {
     "myLeaf": 1
   }
 }
-)",
-            R"({
+)"s;
+        static const auto notificationSilentPing = R"({
   "test_module:silent-ping": {}
 }
-)",
-            R"({
+)"s;
+        static const auto notificationPingWith2 = R"({
   "test_module:ping": {
     "myLeaf": 2
   }
 }
-)"};
+)"s;
 
         DOCTEST_SUBCASE("Subscribe to everything from test_module")
         {
             auto sub = sess.subscribeNotifications("/test_module:*", std::nullopt);
             REQUIRE(!sub.replayStartTime());
 
-            CLIENT_SEND_NOTIFICATION(notifications[0]);
-            CLIENT_SEND_NOTIFICATION(notifications[1]);
+            CLIENT_SEND_NOTIFICATION(notificationPingWith1);
+            CLIENT_SEND_NOTIFICATION(notificationSilentPing);
 
-            REQUIRE_NOTIFICATION(sub, notifications[0]);
+            REQUIRE_NOTIFICATION(sub, notificationPingWith1);
             READ_NOTIFICATION(sub);
 
-            CLIENT_SEND_NOTIFICATION(notifications[2]);
+            CLIENT_SEND_NOTIFICATION(notificationPingWith2);
 
-            REQUIRE_NOTIFICATION(sub, notifications[1]);
+            REQUIRE_NOTIFICATION(sub, notificationSilentPing);
             READ_NOTIFICATION(sub);
 
-            REQUIRE_NOTIFICATION(sub, notifications[2]);
+            REQUIRE_NOTIFICATION(sub, notificationPingWith2);
             READ_NOTIFICATION(sub);
 
             sub.terminate();
 
             // Notification was sent after the subscription was terminated, so it should not be received
-            CLIENT_SEND_NOTIFICATION(notifications[0]);
+            CLIENT_SEND_NOTIFICATION(notificationPingWith1);
 
             REQUIRE_PIPE_HANGUP(sub);
         }
@@ -209,7 +208,7 @@ TEST_CASE("Dynamic subscriptions")
             REQUIRE(!sub.replayStartTime());
 
             // this notification is not subscribed, sysrepo should filter it
-            CLIENT_SEND_NOTIFICATION(notifications[0]);
+            CLIENT_SEND_NOTIFICATION(notificationPingWith1);
 
             // wait until stop time and bit more
             std::this_thread::sleep_until(stopTime + 500ms);
@@ -226,7 +225,7 @@ TEST_CASE("Dynamic subscriptions")
 
             // one notification for replay
             auto before = std::chrono::system_clock::now();
-            CLIENT_SEND_NOTIFICATION(notifications[0]);
+            CLIENT_SEND_NOTIFICATION(notificationPingWith1);
             auto after = std::chrono::system_clock::now();
 
             auto sub = sess.subscribeNotifications("/test_module:*", std::nullopt, std::nullopt, std::chrono::system_clock::now() - 666s /* replay everything that happened at most 666s ago */);
@@ -237,7 +236,7 @@ TEST_CASE("Dynamic subscriptions")
             REQUIRE(sub.replayStartTime() <= after);
 
             // wait for the replayed notification and replay-completed notification
-            REQUIRE_NOTIFICATION(sub, notifications[0]);
+            REQUIRE_NOTIFICATION(sub, notificationPingWith1);
             READ_NOTIFICATION_BLOCKING(sub);
             REQUIRE_NOTIFICATION(sub, REPLAY_COMPLETED(sub));
             READ_NOTIFICATION_BLOCKING(sub);
@@ -296,7 +295,7 @@ TEST_CASE("Dynamic subscriptions")
             {
                 sub = sess.subscribeNotifications("/test_module:ping");
 
-                REQUIRE_NAMED_NOTIFICATION(sub, notifications[0]);
+                REQUIRE_NAMED_NOTIFICATION(sub, notificationPingWith1);
             }
 
             DOCTEST_SUBCASE("subtree filter")
@@ -319,7 +318,7 @@ TEST_CASE("Dynamic subscriptions")
                             libyang::JSON{R"({"test_module:ping": {}})"});
                     }
 
-                    REQUIRE_NAMED_NOTIFICATION(sub, notifications[0]);
+                    REQUIRE_NAMED_NOTIFICATION(sub, notificationPingWith1);
                 }
 
                 DOCTEST_SUBCASE("filter more top level nodes")
@@ -342,8 +341,8 @@ TEST_CASE("Dynamic subscriptions")
                             })"});
                     }
 
-                    REQUIRE_NAMED_NOTIFICATION(sub, notifications[0]);
-                    REQUIRE_NAMED_NOTIFICATION(sub, notifications[1]);
+                    REQUIRE_NAMED_NOTIFICATION(sub, notificationPingWith1);
+                    REQUIRE_NAMED_NOTIFICATION(sub, notificationSilentPing);
                 }
 
                 DOCTEST_SUBCASE("empty filter selects nothing")
@@ -356,8 +355,8 @@ TEST_CASE("Dynamic subscriptions")
                 sub = sess.subscribeNotifications(createdNodes.createdNode->asAny());
             }
 
-            CLIENT_SEND_NOTIFICATION(notifications[0]);
-            CLIENT_SEND_NOTIFICATION(notifications[1]);
+            CLIENT_SEND_NOTIFICATION(notificationPingWith1);
+            CLIENT_SEND_NOTIFICATION(notificationSilentPing);
 
             // read as many notifications as we expect
             for (size_t i = 0; i < expectations.size(); ++i) {
