@@ -88,11 +88,15 @@ TEST_CASE("session")
                 sysrepo::ErrorWithCode);
 
         REQUIRE_THROWS_WITH_AS(sess.getData("/test_module:non-existent"),
-                "Session::getData: Couldn't get '/test_module:non-existent': SR_ERR_NOT_FOUND",
+                "Session::getData: Couldn't get '/test_module:non-existent': SR_ERR_NOT_FOUND\n"
+                " Schema node \"non-existent\" for parent \"<root>\" not found;"
+                " in expr \"/test_module:non-existent\" with context node \"/\". (SR_ERR_NOT_FOUND)",
                 sysrepo::ErrorWithCode);
 
         REQUIRE_THROWS_WITH_AS(sess.getOneNode("/test_module:non-existent"),
-                "Session::getOneNode: Couldn't get '/test_module:non-existent': SR_ERR_NOT_FOUND",
+                "Session::getOneNode: Couldn't get '/test_module:non-existent': SR_ERR_NOT_FOUND\n"
+                " Schema node \"non-existent\" for parent \"<root>\" not found;"
+                " in expr \"/test_module:non-existent\" with context node \"/\". (SR_ERR_NOT_FOUND)",
                 sysrepo::ErrorWithCode);
     }
 
