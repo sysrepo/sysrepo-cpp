@@ -90,6 +90,7 @@ static_assert(toLogLevel(LogLevel::None) == SR_LL_NONE);
 static_assert(toLogLevel(LogLevel::Error) == SR_LL_ERR);
 static_assert(toLogLevel(LogLevel::Warning) == SR_LL_WRN);
 static_assert(toLogLevel(LogLevel::Information) == SR_LL_INF);
+static_assert(toLogLevel(LogLevel::Verbose) == SR_LL_VRB);
 static_assert(toLogLevel(LogLevel::Debug) == SR_LL_DBG);
 
 static_assert(std::is_same_v<std::underlying_type_t<sr_error_t>, std::underlying_type_t<ErrorCode>>);

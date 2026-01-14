@@ -159,6 +159,7 @@ enum class LogLevel : uint32_t {
     Error,
     Warning,
     Information,
+    Verbose,
     Debug
 };
 
