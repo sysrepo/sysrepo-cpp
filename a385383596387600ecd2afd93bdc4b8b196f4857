@@ -72,6 +72,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9717dbe6_7d1967d7",
+        "filename": "CMakeLists.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "It\u0027s there because of the tests.",
+      "parentUuid": "1427e73d_4fd4ef80",
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89d68596_c011208e",
@@ -100,6 +118,24 @@
         "id": 1000000
       },
       "writtenOn": "2025-12-10T15:58:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89d68596_c011208e",
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51adbb8e_86b90bbc",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "89d68596_c011208e",
@@ -189,6 +225,48 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b68368f0_6c3b5c95",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "311bd3a7_aeaf65c7",
+      "range": {
+        "startLine": 45,
+        "startChar": 42,
+        "endLine": 45,
+        "endChar": 53
+      },
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb669eec_9cba4673",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb283638_f008d8b2",
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a474d26_dd28fb88",
@@ -223,6 +301,30 @@
         "id": 1000000
       },
       "writtenOn": "2025-12-10T15:58:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a474d26_dd28fb88",
+      "range": {
+        "startLine": 46,
+        "startChar": 32,
+        "endLine": 46,
+        "endChar": 43
+      },
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb4bb1c8_615e1819",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "5a474d26_dd28fb88",
@@ -271,6 +373,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a852c54f_631eafed",
+        "filename": "include/sysrepo-cpp/Session.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "Done - deleted the new unnecessary replaceConfig",
+      "parentUuid": "c962e54d_c2aa9dc6",
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a2e80ea_6eb010f5",
@@ -305,6 +425,30 @@
         "id": 1000000
       },
       "writtenOn": "2025-12-10T15:58:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a2e80ea_6eb010f5",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 22,
+        "endChar": 3
+      },
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "941e9216_124ee620",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "4a2e80ea_6eb010f5",
@@ -399,6 +543,54 @@
         "id": 1000000
       },
       "writtenOn": "2025-12-10T15:58:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c766cc86_3c166a11",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 6
+      },
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2d1c233_a53e19e0",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4994fe31_821f7775",
+      "range": {
+        "startLine": 26,
+        "startChar": 32,
+        "endLine": 26,
+        "endChar": 44
+      },
+      "revId": "a385383596387600ecd2afd93bdc4b8b196f4857",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b53d0c2d_e063cc87",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "c766cc86_3c166a11",

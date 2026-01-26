@@ -24,6 +24,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c1e216b_89050d7e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "135f02e9_cd8c8a49",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "86868713_fc1832c5",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-12-15T10:03:24Z",
       "side": 1,
       "message": "this file has not been added to git, so the compilation fails in the CI",
+      "range": {
+        "startLine": 58,
+        "startChar": 19,
+        "endLine": 58,
+        "endChar": 73
+      },
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33d9ce6e_cb294458",
+        "filename": "CMakeLists.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86868713_fc1832c5",
       "range": {
         "startLine": 58,
         "startChar": 19,
@@ -70,6 +118,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bf510f0_b37a456c",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "610a300f_30689fda",
+      "range": {
+        "startLine": 23,
+        "startChar": 28,
+        "endLine": 23,
+        "endChar": 37
+      },
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd18802c_9185adc6",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-12-15T10:03:24Z",
       "side": 1,
       "message": "nit: you can zero-initialize the vector and save that later call to `push_back` like this:\n```\nstd::vector\u003ccont char *\u003e res(vec.size() + 1 /* trailing nullptr */, nullptr);\n```",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 55
+      },
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21f9216f_e71c84f0",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "It cannot since the next line just pushes strings in... so in your case the beginning of the std::vector would be always a nullptr.",
+      "parentUuid": "dd18802c_9185adc6",
       "range": {
         "startLine": 31,
         "startChar": 0,
@@ -110,6 +206,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fd673b7_c22f2905",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d959e4e1_05e998be",
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8586c18b_d5116ccd",
@@ -123,6 +237,30 @@
       "writtenOn": "2025-12-15T10:03:24Z",
       "side": 1,
       "message": "My earlier comment about a dangling pointer still applies here. The return value of a `std::filesystem::path::c_str()` is not guaranteed to remain valid indefinitely as far as I understand the C++ STL.",
+      "range": {
+        "startLine": 59,
+        "startChar": 55,
+        "endLine": 59,
+        "endChar": 78
+      },
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69e0f256_1389de28",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8586c18b_d5116ccd",
       "range": {
         "startLine": 59,
         "startChar": 55,
@@ -156,6 +294,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30f06875_e22bb2d2",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8367867f_cd494c61",
+      "range": {
+        "startLine": 60,
+        "startChar": 74,
+        "endLine": 60,
+        "endChar": 89
+      },
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2cbbe1ec_4fbd1289",
@@ -179,6 +341,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdd53c82_c2fa7592",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "typedef struct {\n    union {\n        const char *schema_path;\n        const char *schema_yang;\n    };\n    const char **features;\n    sr_module_ds_t module_ds;\n    const char *owner;\n    const char *group;\n    mode_t perm;\n} sr_install_mod_t;\n\nThis is the current state in the sysrepo devel.",
+      "parentUuid": "2cbbe1ec_4fbd1289",
+      "range": {
+        "startLine": 61,
+        "startChar": 40,
+        "endLine": 61,
+        "endChar": 50
+      },
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ef79c13_25676a80",
@@ -192,6 +378,24 @@
       "writtenOn": "2025-12-15T10:03:24Z",
       "side": 1,
       "message": "nit: wrap this line, please",
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e8c4e93_6c22a8cd",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ef79c13_25676a80",
       "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
@@ -236,6 +440,48 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2681e207_8732e677",
+        "filename": "tests/session.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35e7e871_2a3bc2f5",
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2638e2d6_825507e7",
+        "filename": "tests/session.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b53dc199_778922bd",
+      "range": {
+        "startLine": 33,
+        "startChar": 86,
+        "endLine": 33,
+        "endChar": 106
+      },
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4e80181_dd2f2ee6",
@@ -253,6 +499,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64183666_13244116",
+        "filename": "tests/session.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4e80181_dd2f2ee6",
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08c0121e_c90cd5bf",
@@ -266,6 +530,24 @@
       "writtenOn": "2025-12-15T10:03:24Z",
       "side": 1,
       "message": "nit: please remove these unrelated changes from this commit",
+      "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c130898_21196f92",
+        "filename": "tests/session.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-01-26T20:58:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08c0121e_c90cd5bf",
       "revId": "47f996461eec57121a57f44c5cbed8f546fc8f70",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
