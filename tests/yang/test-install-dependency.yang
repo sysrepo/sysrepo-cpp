@@ -1,0 +1,17 @@
+module test-install-dependency {
+  yang-version 1.1;
+  namespace "http://example.com/test-install-dependency";
+  prefix "tid";
+
+  import test-install {
+    prefix "ti";
+  }
+
+  revision 2024-01-01 {
+    description "Dependency module that imports test-install";
+  }
+
+  leaf dependent-leaf {
+    type ti:my-string;
+  }
+}
