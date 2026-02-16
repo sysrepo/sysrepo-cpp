@@ -1,0 +1,5 @@
+#pragma once
+
+#include <filesystem>
+
+#define TESTS_DIR std::filesystem::path("@CMAKE_CURRENT_SOURCE_DIR@/tests")

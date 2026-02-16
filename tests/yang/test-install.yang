@@ -1,0 +1,42 @@
+module test-install {
+  yang-version 1.1;
+  namespace "http://example.com/test-install";
+  prefix "ti";
+
+  revision 2024-01-01 {
+    description "Test module for install/remove tests";
+  }
+
+  feature feature-one {
+    description "First feature";
+  }
+
+  feature feature-two {
+    description "Second feature";
+  }
+
+  feature feature-three {
+    description "Third feature";
+  }
+
+  typedef my-string {
+    type string {
+      length "1..100";
+    }
+  }
+
+  leaf simple-leaf {
+    if-feature "feature-one";
+    type my-string;
+  }
+
+  leaf another-leaf {
+    if-feature "feature-two";
+    type int32;
+  }
+
+  leaf yet-another-leaf {
+    if-feature "feature-three";
+    type int32;
+  }
+}

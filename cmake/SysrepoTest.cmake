@@ -3,6 +3,8 @@ find_program(SYSREPOCTL sysrepoctl)
 function(sysrepo_test)
     cmake_parse_arguments(TEST "" "NAME;FIXTURE;RESOURCE_LOCK" "COMMAND;LIBRARIES" ${ARGN})
 
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tests/tests-vars.hpp.in ${CMAKE_CURRENT_BINARY_DIR}/tests-vars.hpp @ONLY)
+
     add_executable(test-${TEST_NAME} ${CMAKE_SOURCE_DIR}/tests/${TEST_NAME}.cpp)
     target_link_libraries(test-${TEST_NAME} ${TEST_LIBRARIES})
     target_include_directories(test-${TEST_NAME}

@@ -9,8 +9,9 @@
 #include <doctest/doctest.h>
 #include <optional>
 #include <sysrepo-cpp/Subscription.hpp>
-#include <sysrepo-cpp/utils/utils.hpp>
 #include <sysrepo-cpp/utils/exception.hpp>
+#include <sysrepo-cpp/utils/utils.hpp>
+#include "tests-vars.hpp"
 
 using namespace std::literals;
 
@@ -682,5 +683,122 @@ TEST_CASE("session")
         s = conn->getModuleReplaySupport("test_module");
         REQUIRE(s.enabled);
         REQUIRE(s.earliestNotification);
+    }
+
+    DOCTEST_SUBCASE("install and remove module")
+    {
+        const std::string moduleName = "test-install";
+        const auto schemaPath = TESTS_DIR / "yang" / "test-install.yang";
+
+        const std::string depModuleName = "test-install-dependency";
+        const auto depSchemaPath = TESTS_DIR / "yang" / "test-install-dependency.yang";
+
+        // Ensure modules are not installed before test
+        try {
+            conn->removeModule(depModuleName, false);
+        } catch (...) {
+        }
+        try {
+            conn->removeModule(moduleName, false);
+        } catch (...) {
+        }
+
+        DOCTEST_SUBCASE("install module without features")
+        {
+            conn->installModule(schemaPath, {}, {});
+
+            auto testSess = conn->sessionStart();
+            auto ctx = testSess.getContext();
+            auto module = ctx.getModuleLatest(moduleName);
+            REQUIRE(module);
+            REQUIRE(module->name() == moduleName);
+
+            // Verify features are disabled
+            REQUIRE(!module->featureEnabled("feature-one"));
+            REQUIRE(!module->featureEnabled("feature-two"));
+            REQUIRE(!module->featureEnabled("feature-three"));
+        }
+
+        DOCTEST_SUBCASE("install module with features")
+        {
+            std::vector<std::string> features = {"feature-one", "feature-three"};
+            conn->installModule(schemaPath, {}, features);
+
+            auto testSess = conn->sessionStart();
+            auto ctx = testSess.getContext();
+            auto module = ctx.getModuleLatest(moduleName);
+            REQUIRE(module);
+            REQUIRE(module->name() == moduleName);
+
+            // Verify that the correct features are enabled only
+            REQUIRE(module->featureEnabled("feature-one"));
+            REQUIRE(!module->featureEnabled("feature-two"));
+            REQUIRE(module->featureEnabled("feature-three"));
+        }
+
+        DOCTEST_SUBCASE("remove module")
+        {
+            conn->installModule(schemaPath, {}, {});
+
+            {
+                auto testSess = conn->sessionStart();
+                auto ctx = testSess.getContext();
+                REQUIRE(ctx.getModuleLatest(moduleName));
+            }
+
+            conn->removeModule(moduleName, false);
+
+            // Verify it's removed - should throw or return null
+            {
+                auto testSess = conn->sessionStart();
+                auto ctx = testSess.getContext();
+                REQUIRE(!ctx.getModuleLatest(moduleName));
+            }
+        }
+
+        DOCTEST_SUBCASE("install non-existent module")
+        {
+            REQUIRE_THROWS_WITH_AS(
+                conn->installModule("/non/existent/path.yang", {}, {}),
+                "Installing module '/non/existent/path.yang' failed: SR_ERR_LY",
+                sysrepo::ErrorWithCode);
+        }
+
+        DOCTEST_SUBCASE("remove non-existent module")
+        {
+            REQUIRE_THROWS_WITH_AS(
+                conn->removeModule("non-existent-module", false),
+                "Removing module 'non-existent-module' failed: SR_ERR_NOT_FOUND",
+                sysrepo::ErrorWithCode);
+        }
+
+        DOCTEST_SUBCASE("install and remove module with dependent module")
+        {
+            DOCTEST_SUBCASE("install dependency module without search dirs fails")
+            {
+                const auto depSchemaPath = TESTS_DIR / "yang" / "test-install-dependency.yang";
+
+                // Try to install test-install-dependency without search dirs - should fail
+                // because it can't find test-install in the search path
+                const auto expected = "Installing module '" + depSchemaPath.string() + "' failed: SR_ERR_LY";
+                REQUIRE_THROWS_WITH_AS(
+                    conn->installModule(depSchemaPath, {}, {}),
+                    expected.c_str(),
+                    sysrepo::ErrorWithCode);
+            }
+
+            DOCTEST_SUBCASE("install dependency module with search dirs succeeds")
+            {
+                const std::vector<std::filesystem::path> searchDirs = {TESTS_DIR / "yang"};
+
+                conn->installModule(depSchemaPath, searchDirs, {});
+
+                // Verify both modules are installed
+                auto testSess = conn->sessionStart();
+                auto ctx = testSess.getContext();
+                REQUIRE(ctx.getModuleLatest(moduleName));
+                REQUIRE(ctx.getModuleLatest(depModuleName));
+            }
+        }
     }
 }

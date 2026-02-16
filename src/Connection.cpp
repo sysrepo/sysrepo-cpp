@@ -9,6 +9,7 @@
 extern "C" {
 #include <sysrepo.h>
 }
+#include <numeric>
 #include <sysrepo-cpp/Connection.hpp>
 #include <sysrepo-cpp/utils/exception.hpp>
 #include "utils/enum.hpp"
@@ -95,5 +96,42 @@ ModuleReplaySupport Connection::getModuleReplaySupport(const std::string& module
 uint32_t Connection::getId() const
 {
     return sr_get_cid(ctx.get());
+}
+
+/**
+ * Installs a YANG schema.
+ *
+ * Wraps `sr_install_module`,
+ * @param schemaPath path to the schema which should be installed
+ * @param searchDirs directory to search for dependent YANG schemas
+ * @param features feature which should be enabled
+ */
+void Connection::installModule(const std::filesystem::path& schemaPath, const std::vector<std::filesystem::path>& searchDirs, const std::vector<std::string>& features)
+{
+    // Concatenate searchDirs into a colon-separated string -> sysrepo API format
+    std::string searchDirsStr = std::accumulate(
+        searchDirs.begin(), searchDirs.end(), std::string(), [](const std::string& acc, const std::filesystem::path& dir) {
+            return acc.empty() ? dir.string() : acc + ":" + dir.string();
+        });
+
+    std::vector<const char*> c_strs;
+    std::transform(
+        features.begin(), features.end(), std::back_inserter(c_strs), std::mem_fn(&std::string::c_str));
+    c_strs.push_back(nullptr); // Add null terminator
+    auto res = sr_install_module(ctx.get(), schemaPath.c_str(), searchDirsStr.c_str(), c_strs.data());
+    throwIfError(res, "Installing module '" + schemaPath.string() + "' failed");
+}
+
+/**
+ * Removes an installed module.
+ *
+ * Wraps `sr_remove_module`,
+ * @param moduleName name of the module to remove
+ * @param force remove other installed modules as well that depend on @p moduleName
+ */
+void Connection::removeModule(const std::string& moduleName, bool force)
+{
+    auto res = sr_remove_module(ctx.get(), moduleName.c_str(), force);
+    throwIfError(res, "Removing module '" + moduleName + "' failed");
 }
 }

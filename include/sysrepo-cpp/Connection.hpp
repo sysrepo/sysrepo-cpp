@@ -7,9 +7,10 @@
 */
 #pragma once
 
-#include <optional>
 #include <chrono>
+#include <filesystem>
 #include <memory>
+#include <optional>
 #include <string>
 #include <sysrepo-cpp/Enum.hpp>
 
@@ -40,6 +41,8 @@ public:
 
     ModuleReplaySupport getModuleReplaySupport(const std::string& moduleName);
     void setModuleReplaySupport(const std::string& moduleName, bool enabled);
+    void installModule(const std::filesystem::path& schemaPath, const std::vector<std::filesystem::path>& searchDirs, const std::vector<std::string>& features);
+    void removeModule(const std::string& moduleName, bool force);
 
     friend Connection wrapUnmanagedConnection(std::shared_ptr<sr_conn_ctx_s> conn);
     friend Session;
