@@ -4,13 +4,13 @@
  * Written by Jan Kundrát <jan.kundrat@cesnet.cz>
  *
  * SPDX-License-Identifier: BSD-3-Clause
-*/
+ */
 
 #include <doctest/doctest.h>
 #include <optional>
 #include <sysrepo-cpp/Subscription.hpp>
-#include <sysrepo-cpp/utils/utils.hpp>
 #include <sysrepo-cpp/utils/exception.hpp>
+#include <sysrepo-cpp/utils/utils.hpp>
 
 using namespace std::literals;
 
@@ -63,8 +63,8 @@ TEST_CASE("session")
         data = sess.getData(leaf);
         REQUIRE(!data);
         REQUIRE_THROWS_WITH_AS(sess.getOneNode(leaf),
-                "Session::getOneNode: Couldn't get '/test_module:leafInt32': SR_ERR_NOT_FOUND",
-                sysrepo::ErrorWithCode);
+                               "Session::getOneNode: Couldn't get '/test_module:leafInt32': SR_ERR_NOT_FOUND",
+                               sysrepo::ErrorWithCode);
 
         sess.setItem("/test_module:popelnice/s", "yay 42");
         data = sess.getData("/test_module:popelnice/s");
@@ -83,21 +83,21 @@ TEST_CASE("session")
         sess.discardChanges();
 
         REQUIRE_THROWS_WITH_AS(sess.setItem("/test_module:non-existent", std::nullopt),
-                "Session::setItem: Couldn't set '/test_module:non-existent': SR_ERR_LY\n"
-                " Not found node \"non-existent\" in path. (SR_ERR_LY)",
-                sysrepo::ErrorWithCode);
+                               "Session::setItem: Couldn't set '/test_module:non-existent': SR_ERR_LY\n"
+                               " Not found node \"non-existent\" in path. (SR_ERR_LY)",
+                               sysrepo::ErrorWithCode);
 
         REQUIRE_THROWS_WITH_AS(sess.getData("/test_module:non-existent"),
-                "Session::getData: Couldn't get '/test_module:non-existent': SR_ERR_NOT_FOUND\n"
-                " Schema node \"non-existent\" for parent \"<root>\" not found;"
-                " in expr \"/test_module:non-existent\" with context node \"/\". (SR_ERR_NOT_FOUND)",
-                sysrepo::ErrorWithCode);
+                               "Session::getData: Couldn't get '/test_module:non-existent': SR_ERR_NOT_FOUND\n"
+                               " Schema node \"non-existent\" for parent \"<root>\" not found;"
+                               " in expr \"/test_module:non-existent\" with context node \"/\". (SR_ERR_NOT_FOUND)",
+                               sysrepo::ErrorWithCode);
 
         REQUIRE_THROWS_WITH_AS(sess.getOneNode("/test_module:non-existent"),
-                "Session::getOneNode: Couldn't get '/test_module:non-existent': SR_ERR_NOT_FOUND\n"
-                " Schema node \"non-existent\" for parent \"<root>\" not found;"
-                " in expr \"/test_module:non-existent\" with context node \"/\". (SR_ERR_NOT_FOUND)",
-                sysrepo::ErrorWithCode);
+                               "Session::getOneNode: Couldn't get '/test_module:non-existent': SR_ERR_NOT_FOUND\n"
+                               " Schema node \"non-existent\" for parent \"<root>\" not found;"
+                               " in expr \"/test_module:non-existent\" with context node \"/\". (SR_ERR_NOT_FOUND)",
+                               sysrepo::ErrorWithCode);
     }
 
     DOCTEST_SUBCASE("Session::getData")
@@ -237,7 +237,7 @@ TEST_CASE("session")
 
         // When we create a subscription, the leaf is accesible from the operational datastore.
         sess.switchDatastore(sysrepo::Datastore::Running);
-        auto sub = sess.onModuleChange("test_module", [] (auto, auto, auto, auto, auto, auto) { return sysrepo::ErrorCode::Ok; });
+        auto sub = sess.onModuleChange("test_module", [](auto, auto, auto, auto, auto, auto) { return sysrepo::ErrorCode::Ok; });
         sess.switchDatastore(sysrepo::Datastore::Operational);
         REQUIRE(sess.getData(leaf)->asTerm().valueStr() == "123");
 
@@ -409,11 +409,11 @@ TEST_CASE("session")
             // And we can't set its value.
             sess.setItem("/test_module:denyAllLeaf", "someValue");
             REQUIRE_THROWS_WITH_AS(sess.applyChanges(),
-                    "Session::applyChanges: Couldn't apply changes: SR_ERR_UNAUTHORIZED\n"
-                    " Access to the data model \"test_module\" is denied because \"nobody\" NACM authorization failed. (SR_ERR_UNAUTHORIZED)\n"
-                    " NETCONF: protocol: access-denied: /test_module:denyAllLeaf: "
-                    "Access to the data model \"test_module\" is denied because \"nobody\" NACM authorization failed.",
-                    sysrepo::ErrorWithCode);
+                                   "Session::applyChanges: Couldn't apply changes: SR_ERR_UNAUTHORIZED\n"
+                                   " Access to the data model \"test_module\" is denied because \"nobody\" NACM authorization failed. (SR_ERR_UNAUTHORIZED)\n"
+                                   " NETCONF: protocol: access-denied: /test_module:denyAllLeaf: "
+                                   "Access to the data model \"test_module\" is denied because \"nobody\" NACM authorization failed.",
+                                   sysrepo::ErrorWithCode);
         }
 
         REQUIRE(!!sess.getNacmUser());
@@ -422,9 +422,9 @@ TEST_CASE("session")
         // duplicate NACM initialization should throw
         auto nacm = sess.initNacm();
         REQUIRE_THROWS_WITH_AS(auto x = sess.initNacm(),
-                "Couldn't initialize NACM: SR_ERR_INVAL_ARG\n"
-                " Invalid arguments for function \"sr_nacm_init\". (SR_ERR_INVAL_ARG)",
-                sysrepo::ErrorWithCode);
+                               "Couldn't initialize NACM: SR_ERR_INVAL_ARG\n"
+                               " Invalid arguments for function \"sr_nacm_init\". (SR_ERR_INVAL_ARG)",
+                               sysrepo::ErrorWithCode);
     }
 
     DOCTEST_SUBCASE("Session::checkNacmOperation")
@@ -682,5 +682,138 @@ TEST_CASE("session")
         s = conn->getModuleReplaySupport("test_module");
         REQUIRE(s.enabled);
         REQUIRE(s.earliestNotification);
+    }
+
+    DOCTEST_SUBCASE("install and remove module")
+    {
+        const std::string moduleName = "test-install";
+        const std::filesystem::path schemaPath = CMAKE_CURRENT_SOURCE_DIR "/tests/yang/test-install.yang";
+
+        const std::string depModuleName = "test-install-dependency";
+        const std::filesystem::path depSchemaPath = CMAKE_CURRENT_SOURCE_DIR "/tests/yang/test-install-dependency.yang";
+
+        // Ensure modules are not installed before test
+        try {
+            conn->removeModule(depModuleName, false);
+        } catch (...) {
+        }
+        try {
+            conn->removeModule(moduleName, false);
+        } catch (...) {
+        }
+
+        DOCTEST_SUBCASE("install module without features")
+        {
+            conn->installModule(schemaPath, {}, {});
+
+            {
+                auto testSess = conn->sessionStart();
+                auto ctx = testSess.getContext();
+                auto module = ctx.getModuleLatest(moduleName);
+                REQUIRE(module);
+                REQUIRE(module->name() == moduleName);
+
+                // Verify features are disabled
+                REQUIRE(!module->featureEnabled("feature-one"));
+                REQUIRE(!module->featureEnabled("feature-two"));
+                REQUIRE(!module->featureEnabled("feature-three"));
+            }
+
+            // Clean up
+            conn->removeModule(moduleName, false);
+        }
+
+        DOCTEST_SUBCASE("install module with features")
+        {
+            std::vector<std::string> features = {"feature-one", "feature-three"};
+            conn->installModule(schemaPath, {}, features);
+
+            {
+                auto testSess = conn->sessionStart();
+                auto ctx = testSess.getContext();
+                auto module = ctx.getModuleLatest(moduleName);
+                REQUIRE(module);
+                REQUIRE(module->name() == moduleName);
+
+                // Verify that the correct features are enabled only
+                REQUIRE(module->featureEnabled("feature-one"));
+                REQUIRE(!module->featureEnabled("feature-two"));
+                REQUIRE(module->featureEnabled("feature-three"));
+            }
+
+            // Clean up
+            conn->removeModule(moduleName, false);
+        }
+
+        DOCTEST_SUBCASE("remove module")
+        {
+            conn->installModule(schemaPath, {}, {});
+
+            {
+                auto testSess = conn->sessionStart();
+                auto ctx = testSess.getContext();
+                REQUIRE(ctx.getModuleLatest(moduleName));
+            }
+
+            conn->removeModule(moduleName, false);
+
+            // Verify it's removed - should throw or return null
+            {
+                auto testSess = conn->sessionStart();
+                auto ctx = testSess.getContext();
+                REQUIRE(!ctx.getModuleLatest(moduleName));
+            }
+        }
+
+        DOCTEST_SUBCASE("install non-existent module")
+        {
+            REQUIRE_THROWS_WITH_AS(
+                conn->installModule("/non/existent/path.yang", {}, {}),
+                "Installing module '/non/existent/path.yang' failed: SR_ERR_INVAL_ARG",
+                sysrepo::ErrorWithCode);
+        }
+
+        DOCTEST_SUBCASE("remove non-existent module")
+        {
+            REQUIRE_THROWS_WITH_AS(
+                conn->removeModule("non-existent-module", false),
+                "Removing module 'non-existent-module' failed: SR_ERR_NOT_FOUND",
+                sysrepo::ErrorWithCode);
+        }
+
+        DOCTEST_SUBCASE("install and remove module with dependent module")
+        {
+            DOCTEST_SUBCASE("install dependency module without search dirs fails")
+            {
+                const std::filesystem::path depSchemaPath = CMAKE_CURRENT_SOURCE_DIR "/tests/yang/test-install-dependency.yang";
+
+                // Try to install test-install-dependency without search dirs - should fail
+                // because it can't find test-install in the search path
+                const auto expected = "Installing module '" + depSchemaPath.string() + "' failed: SR_ERR_LY";
+                REQUIRE_THROWS_WITH_AS(
+                    conn->installModule(depSchemaPath, {}, {}),
+                    expected.c_str(),
+                    sysrepo::ErrorWithCode);
+            }
+
+            DOCTEST_SUBCASE("install dependency module with search dirs succeeds")
+            {
+                const std::vector<std::filesystem::path> searchDirs = {CMAKE_CURRENT_SOURCE_DIR "/tests/yang"};
+
+                conn->installModule(depSchemaPath, searchDirs, {});
+
+                {
+                    // Verify both modules are installed
+                    auto testSess = conn->sessionStart();
+                    auto ctx = testSess.getContext();
+                    REQUIRE(ctx.getModuleLatest(moduleName));
+                    REQUIRE(ctx.getModuleLatest(depModuleName));
+                }
+
+                // Clean up (remove in reverse order due to dependency)
+                conn->removeModule(depModuleName, false);
+                conn->removeModule(moduleName, false);
+            }
+        }
     }
 }
