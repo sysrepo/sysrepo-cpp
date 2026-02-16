@@ -11,6 +11,7 @@ function(sysrepo_test)
         PRIVATE
             ${CMAKE_BINARY_DIR}
     )
+    target_compile_definitions(test-${TEST_NAME} PRIVATE CMAKE_CURRENT_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
 
     if(NOT CMAKE_CROSSCOMPILING)
         if(TEST_COMMAND)
