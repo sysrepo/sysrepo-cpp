@@ -33,6 +33,23 @@
       "message": "I saw there was a commit on Monday that pins the libyang version. So is this patch now supposed to build? If so how do I trigger a rebuild?",
       "revId": "023150459024b078268fc15ade39a3da60bc9628",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b4350cf_89c8d38f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-02-26T14:00:08Z",
+      "side": 1,
+      "message": "Please rebase unto https://gerrit.cesnet.cz/c/CzechLight/sysrepo-cpp/+/9124 and push your changes.",
+      "revId": "023150459024b078268fc15ade39a3da60bc9628",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
