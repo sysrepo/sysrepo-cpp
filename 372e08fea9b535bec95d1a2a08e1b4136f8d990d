@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0d4dedb_6e9edbce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000217
+      },
+      "writtenOn": "2026-03-02T11:10:22Z",
+      "side": 1,
+      "message": "Is the coverage good enough or do you want me to increase it e.g. by testing multiple search directories?",
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
