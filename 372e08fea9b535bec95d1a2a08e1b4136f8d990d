@@ -16,6 +16,155 @@
       "message": "Is the coverage good enough or do you want me to increase it e.g. by testing multiple search directories?",
       "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a4c91cb_6dc14d17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-03-02T15:51:10Z",
+      "side": 1,
+      "message": "Thanks for the submission!",
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99c1b8cb_e21155b5",
+        "filename": "cmake/SysrepoTest.cmake",
+        "patchSetId": 10
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-03-02T15:51:10Z",
+      "side": 1,
+      "message": "I would rather see a configure_file that configures TESTS_DIR, something like this: https://github.com/CESNET/libyang-cpp/blob/master/CMakeLists.txt#L100",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 30
+      },
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b96e0c9_7c3cc56e",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-03-02T15:51:10Z",
+      "side": 1,
+      "message": "Please do not touch lines you did not edit, it creates mess when using git blame. This was probably triggered by autoformatter using the provided .clang-format but some of our files are not yet adapted. It should be done in separate commit(s).\nSome everywhere throughout the commit",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 2
+      },
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0438339c_1fd18f23",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-03-02T15:51:10Z",
+      "side": 1,
+      "message": "could you move this after extern C?",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 2
+      },
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8eb862ec_3dd2eb4b",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-03-02T15:51:10Z",
+      "side": 1,
+      "message": "This is some wild type abusing here. The left parameter (`a`) of the operator should be the accumulated type (you start with `std::string` here), right parameter (`b`) is the actual path (type of the vector data).\nYou take those two `path`s and create a string from them, effectively creating `string` which is then implicitly converted into a `path` again in next iteration.\n\nI recommend changing the op to something like\n\n```\n[](const std::string\u0026 acc, const std::filesystem::path\u0026 dir) {\n    return acc.empty() ? dir.string() : acc + \":\" + dir.string();\n});\n```",
+      "range": {
+        "startLine": 113,
+        "startChar": 61,
+        "endLine": 115,
+        "endChar": 9
+      },
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c415f0e3_9a25c0bf",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-03-02T15:51:10Z",
+      "side": 1,
+      "message": "Please be consistent, few lines above you used vector::begin / vector::end. Pick one",
+      "range": {
+        "startLine": 119,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 48
+      },
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d68b26fc_11d41c53",
+        "filename": "tests/session.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-03-02T15:51:10Z",
+      "side": 1,
+      "message": "This is not needed.",
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
