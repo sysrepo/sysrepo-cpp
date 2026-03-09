@@ -50,6 +50,24 @@
       "message": "Please rebase unto https://gerrit.cesnet.cz/c/CzechLight/sysrepo-cpp/+/9124 and push your changes.",
       "revId": "023150459024b078268fc15ade39a3da60bc9628",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af3dce7d_b7451dc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-03-09T10:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bb9c9de_cb174fbc",
+      "revId": "023150459024b078268fc15ade39a3da60bc9628",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }

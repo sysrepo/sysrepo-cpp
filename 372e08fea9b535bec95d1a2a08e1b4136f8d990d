@@ -58,6 +58,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b5c27ec_70913b7f",
+        "filename": "cmake/SysrepoTest.cmake",
+        "patchSetId": 10
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-03-09T10:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99c1b8cb_e21155b5",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 30
+      },
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b96e0c9_7c3cc56e",
@@ -71,6 +95,30 @@
       "writtenOn": "2026-03-02T15:51:10Z",
       "side": 1,
       "message": "Please do not touch lines you did not edit, it creates mess when using git blame. This was probably triggered by autoformatter using the provided .clang-format but some of our files are not yet adapted. It should be done in separate commit(s).\nSome everywhere throughout the commit",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 2
+      },
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21ae64a6_f7fb9503",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-03-09T10:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b96e0c9_7c3cc56e",
       "range": {
         "startLine": 7,
         "startChar": 0,
@@ -104,6 +152,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "317c050d_b2b17fa0",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-03-09T10:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0438339c_1fd18f23",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 2
+      },
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8eb862ec_3dd2eb4b",
@@ -117,6 +189,30 @@
       "writtenOn": "2026-03-02T15:51:10Z",
       "side": 1,
       "message": "This is some wild type abusing here. The left parameter (`a`) of the operator should be the accumulated type (you start with `std::string` here), right parameter (`b`) is the actual path (type of the vector data).\nYou take those two `path`s and create a string from them, effectively creating `string` which is then implicitly converted into a `path` again in next iteration.\n\nI recommend changing the op to something like\n\n```\n[](const std::string\u0026 acc, const std::filesystem::path\u0026 dir) {\n    return acc.empty() ? dir.string() : acc + \":\" + dir.string();\n});\n```",
+      "range": {
+        "startLine": 113,
+        "startChar": 61,
+        "endLine": 115,
+        "endChar": 9
+      },
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1809b9d1_36b0cbae",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-03-09T10:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8eb862ec_3dd2eb4b",
       "range": {
         "startLine": 113,
         "startChar": 61,
@@ -150,6 +246,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51eaf6dc_0c424280",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-03-09T10:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c415f0e3_9a25c0bf",
+      "range": {
+        "startLine": 119,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 48
+      },
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d68b26fc_11d41c53",
@@ -163,6 +283,24 @@
       "writtenOn": "2026-03-02T15:51:10Z",
       "side": 1,
       "message": "This is not needed.",
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32226e9f_d3c10403",
+        "filename": "tests/session.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-03-09T10:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d68b26fc_11d41c53",
       "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
