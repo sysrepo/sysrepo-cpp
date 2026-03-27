@@ -35,6 +35,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf333a02_e797a043",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000217
+      },
+      "writtenOn": "2026-03-27T09:54:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0d4dedb_6e9edbce",
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99c1b8cb_e21155b5",
@@ -69,6 +87,30 @@
         "id": 1000070
       },
       "writtenOn": "2026-03-09T10:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99c1b8cb_e21155b5",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 30
+      },
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75abca68_a29a4303",
+        "filename": "cmake/SysrepoTest.cmake",
+        "patchSetId": 10
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000217
+      },
+      "writtenOn": "2026-03-27T09:54:39Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "99c1b8cb_e21155b5",
@@ -129,6 +171,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f694d76c_4b6f3700",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000217
+      },
+      "writtenOn": "2026-03-27T09:54:39Z",
+      "side": 1,
+      "message": "Ok I\u0027ll remove the auto-formatting from my workspace and revert those formatting changes.",
+      "parentUuid": "0b96e0c9_7c3cc56e",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 2
+      },
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0438339c_1fd18f23",
@@ -163,6 +229,30 @@
         "id": 1000070
       },
       "writtenOn": "2026-03-09T10:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0438339c_1fd18f23",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 2
+      },
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e91c1c62_c04cde93",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000217
+      },
+      "writtenOn": "2026-03-27T09:54:39Z",
       "side": 1,
       "message": "Done",
       "parentUuid": "0438339c_1fd18f23",
@@ -223,6 +313,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "245013c8_22453746",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000217
+      },
+      "writtenOn": "2026-03-27T09:54:39Z",
+      "side": 1,
+      "message": "You\u0027re right!",
+      "parentUuid": "8eb862ec_3dd2eb4b",
+      "range": {
+        "startLine": 113,
+        "startChar": 61,
+        "endLine": 115,
+        "endChar": 9
+      },
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c415f0e3_9a25c0bf",
@@ -270,6 +384,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "66294541_90914bf4",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000217
+      },
+      "writtenOn": "2026-03-27T09:54:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c415f0e3_9a25c0bf",
+      "range": {
+        "startLine": 119,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 48
+      },
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d68b26fc_11d41c53",
@@ -300,6 +438,24 @@
       "writtenOn": "2026-03-09T10:38:51Z",
       "side": 1,
       "message": "Done",
+      "parentUuid": "d68b26fc_11d41c53",
+      "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51e38b34_b65a1119",
+        "filename": "tests/session.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1000217
+      },
+      "writtenOn": "2026-03-27T09:54:39Z",
+      "side": 1,
+      "message": "I removed the clean-up from all tests, except where I want to test removeModule explicitly. Is that what you expected?",
       "parentUuid": "d68b26fc_11d41c53",
       "revId": "372e08fea9b535bec95d1a2a08e1b4136f8d990d",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
