@@ -36,7 +36,7 @@
     (SUBSCRIPTION).processEvent(cbNotif);
 
 #define READ_NOTIFICATION_BLOCKING(SUBSCRIPTION)                           \
-    REQUIRE(pipeStatus((SUBSCRIPTION).fd(), -1) == PipeStatus::DataReady); \
+    REQUIRE(pipeStatus((SUBSCRIPTION).fd(), 5000) == PipeStatus::DataReady); \
     (SUBSCRIPTION).processEvent(cbNotif);
 
 auto SUBSCRIPTION_TERMINATED(const auto& SUBSCRIPTION)
