@@ -308,14 +308,14 @@ TEST_CASE("Dynamic subscriptions")
                     {
                         createdNodes = sess.getContext().newPath2(
                             "/ietf-subscribed-notifications:establish-subscription/stream-subtree-filter",
-                            libyang::XML{"<ping xmlns='urn:ietf:params:xml:ns:yang:test_module' />"});
+                            "<ping xmlns='urn:ietf:params:xml:ns:yang:test_module' />");
                     }
 
                     DOCTEST_SUBCASE("JSON")
                     {
                         createdNodes = sess.getContext().newPath2(
                             "/ietf-subscribed-notifications:establish-subscription/stream-subtree-filter",
-                            libyang::JSON{R"({"test_module:ping": {}})"});
+                            R"({"test_module:ping": {}})");
                     }
 
                     REQUIRE_NAMED_NOTIFICATION(sub, notificationPingWith1);
@@ -327,18 +327,18 @@ TEST_CASE("Dynamic subscriptions")
                     {
                         createdNodes = sess.getContext().newPath2(
                             "/ietf-subscribed-notifications:establish-subscription/stream-subtree-filter",
-                            libyang::XML{"<ping xmlns='urn:ietf:params:xml:ns:yang:test_module' />"
-                                         "<silent-ping xmlns='urn:ietf:params:xml:ns:yang:test_module' />"});
+                            "<ping xmlns='urn:ietf:params:xml:ns:yang:test_module' />"
+                            "<silent-ping xmlns='urn:ietf:params:xml:ns:yang:test_module' />");
                     }
 
                     DOCTEST_SUBCASE("JSON")
                     {
                         createdNodes = sess.getContext().newPath2(
                             "/ietf-subscribed-notifications:establish-subscription/stream-subtree-filter",
-                            libyang::JSON{R"({
+                            R"({
                                 "test_module:ping": {},
                                 "test_module:silent-ping": {}
-                            })"});
+                            })");
                     }
 
                     REQUIRE_NAMED_NOTIFICATION(sub, notificationPingWith1);
@@ -390,8 +390,8 @@ TEST_CASE("Dynamic subscriptions")
             {
                 auto createdNodes = sess.getContext().newPath2(
                     "/ietf-subscribed-notifications:establish-subscription/ietf-yang-push:datastore-subtree-filter",
-                    libyang::XML{"<leafInt32 xmlns='http://example.com/' />"
-                                 "<popelnice xmlns='http://example.com/'><content><trash><name>asd</name></trash></content></popelnice>"});
+                    "<leafInt32 xmlns='http://example.com/' />"
+                    "<popelnice xmlns='http://example.com/'><content><trash><name>asd</name></trash></content></popelnice>");
                 sub = sess.yangPushOnChange(createdNodes.createdNode->asAny());
             }
 

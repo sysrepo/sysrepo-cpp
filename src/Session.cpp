@@ -55,24 +55,17 @@ std::optional<std::string> constructXPathFilter(const std::optional<SubscribedNo
     }
 
     auto node = std::get<libyang::DataNodeAny>(*filter);
-    auto value = node.releaseValue();
+    auto filterTree = node.node();
 
-    if (!value) {
+    if (!filterTree) {
         return "/"; // select nothing, RFC 6241, 6.4.2
     }
 
-    if (std::holds_alternative<libyang::DataNode>(*value)) {
-        char* str;
-
-        auto filterTree = std::get<libyang::DataNode>(*value);
-        auto res = srsn_filter_subtree2xpath(libyang::getRawNode(filterTree), nullptr, &str);
-        std::unique_ptr<char, decltype([](auto* p) constexpr { std::free(p); })> strDeleter(str); // pass ownership of c-string to the deleter
-
-        throwIfError(res, "Unable to convert subtree filter to xpath");
-        return str;
-    }
-
-    throw Error("Subtree filter anydata node must contain (possibly empty) libyang tree");
+    char* str;
+    auto res = srsn_filter_subtree2xpath(libyang::getRawNode(*filterTree), nullptr, &str);
+    std::unique_ptr<char, decltype([](auto* p) constexpr { std::free(p); })> strDeleter(str); // pass ownership of c-string to the deleter
+    throwIfError(res, "Unable to convert subtree filter to xpath");
+    return str;
 }
 }
 
