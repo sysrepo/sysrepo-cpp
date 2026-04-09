@@ -31,6 +31,7 @@ enum class ErrorCode : uint32_t {
     Timeout,
     CallbackFailed,
     CallbackShelve,
+    CallbackFailedAfterCommit,
 };
 
 /**
@@ -68,6 +69,9 @@ enum class SubscribeOptions : uint32_t {
     Update = 0x10, /**< SR_SUBSCR_UPDATE */
     OperMerge = 0x20, /**< SR_SUBSCR_OPER_MERGE */
     ThreadSuspend = 0x40, /**< SR_SUBSCR_THREAD_SUSPEND */
+    OpsPollDiff = 0x80, /**< SR_SUBSCR_OPER_POLL_DIFF */
+    FilterByOriginator = 0x0100, /**< SR_SUBSCR_FILTER_ORIG */
+    ChangesForAllModules = 0x0200, /**< SR_SUBSCR_CHANGE_ALL_MODULES */
 };
 
 template <typename Enum>
@@ -183,6 +187,7 @@ enum class ContextFlags : uint32_t {
     Default = 0x00, /**< SR_CTX_DEFAULT */
     NoPrinted = 0x01, /**< SR_CTX_NO_PRINTED */
     LibYangPrivParsed = 0x02, /**< SR_CTX_SET_PRIV_PARSED */
+    CompileObsolete = 0x03, /**< SR_CTX_COMPILE_OBSOLETE */
 };
 
 constexpr ContextFlags operator|(const ContextFlags a, const ContextFlags b)
@@ -214,6 +219,7 @@ enum class GetOptions : uint32_t {
     OperWithOrigin = 0x10, /**< SR_OPER_WITH_ORIGIN */
     OperNoPollSubscriptionsCached = 0x20, /**< SR_OPER_NO_POLL_CACHED */
     OperNoRunningCached = 0x40, /**< SR_OPER_NO_RUN_CACHED */
+    OperPushDontAddNonPresenceContainers = 0x80, /**< SR_OPER_NO_PUSH_NP_CONT */
     NoFilter = 0x010000, /**< SR_GET_NO_FILTER */
 };
 

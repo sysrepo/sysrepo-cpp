@@ -66,6 +66,9 @@ static_assert(toSubscribeOptions(SubscribeOptions::Enabled) == SR_SUBSCR_ENABLED
 static_assert(toSubscribeOptions(SubscribeOptions::Update) == SR_SUBSCR_UPDATE);
 static_assert(toSubscribeOptions(SubscribeOptions::OperMerge) == SR_SUBSCR_OPER_MERGE);
 static_assert(toSubscribeOptions(SubscribeOptions::ThreadSuspend) == SR_SUBSCR_THREAD_SUSPEND);
+static_assert(toSubscribeOptions(SubscribeOptions::OpsPollDiff) == SR_SUBSCR_OPER_POLL_DIFF);
+static_assert(toSubscribeOptions(SubscribeOptions::FilterByOriginator) == SR_SUBSCR_FILTER_ORIG);
+static_assert(toSubscribeOptions(SubscribeOptions::ChangesForAllModules) == SR_SUBSCR_CHANGE_ALL_MODULES);
 
 constexpr ChangeOperation toChangeOper(const sr_change_oper_t oper)
 {
@@ -111,6 +114,7 @@ static_assert(static_cast<ErrorCode>(SR_ERR_LOCKED) == ErrorCode::Locked);
 static_assert(static_cast<ErrorCode>(SR_ERR_TIME_OUT) == ErrorCode::Timeout);
 static_assert(static_cast<ErrorCode>(SR_ERR_CALLBACK_FAILED) == ErrorCode::CallbackFailed);
 static_assert(static_cast<ErrorCode>(SR_ERR_CALLBACK_SHELVE) == ErrorCode::CallbackShelve);
+static_assert(static_cast<ErrorCode>(SR_ERR_OK_CALLBACK_FAILED) == ErrorCode::CallbackFailedAfterCommit);
 
 constexpr sr_move_position_t toMovePosition(const MovePosition opts)
 {
@@ -158,6 +162,7 @@ static_assert(static_cast<ConnectionFlags>(SR_CONN_DEFAULT) == ConnectionFlags::
 static_assert(std::is_same_v<std::underlying_type_t<sr_context_flag_t>, std::underlying_type_t<ContextFlags>>);
 static_assert(static_cast<ContextFlags>(SR_CTX_DEFAULT) == ContextFlags::Default);
 static_assert(static_cast<ContextFlags>(SR_CTX_SET_PRIV_PARSED) == ContextFlags::LibYangPrivParsed);
+static_assert(static_cast<ContextFlags>(SR_CTX_COMPILE_OBSOLETE) == ContextFlags::CompileObsolete);
 static_assert(static_cast<ContextFlags>(SR_CTX_NO_PRINTED) == ContextFlags::NoPrinted);
 static_assert(static_cast<ContextFlags>(SR_CTX_SET_PRIV_PARSED | SR_CTX_NO_PRINTED) == (ContextFlags::LibYangPrivParsed | ContextFlags::NoPrinted));
 
@@ -170,6 +175,7 @@ static_assert(static_cast<GetOptions>(SR_OPER_NO_STORED) == GetOptions::OperNoPu
 static_assert(static_cast<GetOptions>(SR_OPER_WITH_ORIGIN) == GetOptions::OperWithOrigin);
 static_assert(static_cast<GetOptions>(SR_OPER_NO_POLL_CACHED) == GetOptions::OperNoPollSubscriptionsCached);
 static_assert(static_cast<GetOptions>(SR_OPER_NO_RUN_CACHED) == GetOptions::OperNoRunningCached);
+static_assert(static_cast<GetOptions>(SR_OPER_NO_PUSH_NP_CONT) == GetOptions::OperPushDontAddNonPresenceContainers);
 static_assert(static_cast<GetOptions>(SR_GET_NO_FILTER) == GetOptions::NoFilter);
 
 // upstream project provides no dedicated type for these
