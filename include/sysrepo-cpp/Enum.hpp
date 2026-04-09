@@ -30,7 +30,7 @@ enum class ErrorCode : uint32_t {
     Locked,
     Timeout,
     CallbackFailed,
-    CallbackShelve
+    CallbackShelve,
 };
 
 /**
@@ -101,7 +101,7 @@ enum class EditOptions : uint32_t {
     Default = 0,
     NonRecursive = 1,
     Strict = 2,
-    Isolate = 4
+    Isolate = 4,
 };
 
 constexpr EditOptions operator|(const EditOptions a, const EditOptions b)
@@ -116,7 +116,7 @@ enum class MovePosition : uint32_t {
     Before,
     After,
     First,
-    Last
+    Last,
 };
 
 /**
@@ -148,7 +148,7 @@ enum class ChangeOperation : uint32_t {
 enum class DefaultOperation {
     Merge,
     Replace,
-    None
+    None,
 };
 
 /**
@@ -160,7 +160,7 @@ enum class LogLevel : uint32_t {
     Warning,
     Information,
     Verbose,
-    Debug
+    Debug,
 };
 
 /**
@@ -173,7 +173,7 @@ enum class NotificationType : uint32_t {
     Terminated,
     Modified,
     Suspended,
-    Resumed
+    Resumed,
 };
 
 /**
