@@ -93,6 +93,7 @@ std::string stringify(const ErrorCode err)
     CHECK_AND_STRINGIFY(ErrorCode::Timeout, SR_ERR_TIME_OUT);
     CHECK_AND_STRINGIFY(ErrorCode::CallbackFailed, SR_ERR_CALLBACK_FAILED);
     CHECK_AND_STRINGIFY(ErrorCode::CallbackShelve, SR_ERR_CALLBACK_SHELVE);
+    CHECK_AND_STRINGIFY(ErrorCode::CallbackFailedAfterCommit, SR_ERR_OK_CALLBACK_FAILED);
     }
 
     return "[unknown error code (" + std::to_string(static_cast<std::underlying_type_t<ErrorCode>>(err)) + ")]";

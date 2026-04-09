@@ -19,7 +19,7 @@ add_custom_target(sysrepo-cpp-version-cmake
         cmake/ProjectGitVersionRunner.cmake
         )
 include(cmake/ProjectGitVersion.cmake)
-set(SYSREPO_CPP_PKG_VERSION "8")
+set(SYSREPO_CPP_PKG_VERSION "9")
 prepare_git_version(SYSREPO_CPP_VERSION ${SYSREPO_CPP_PKG_VERSION})
 
 find_package(Doxygen)
@@ -28,7 +28,7 @@ option(WITH_EXAMPLES "Build examples" ON)
 
 find_package(PkgConfig)
 pkg_check_modules(LIBYANG_CPP REQUIRED libyang-cpp>=9 IMPORTED_TARGET)
-pkg_check_modules(SYSREPO REQUIRED sysrepo>=4.5.4 IMPORTED_TARGET)
+pkg_check_modules(SYSREPO REQUIRED sysrepo>=4.6.2 IMPORTED_TARGET)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
