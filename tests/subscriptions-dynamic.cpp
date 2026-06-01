@@ -221,10 +221,8 @@ TEST_CASE("Dynamic subscriptions")
 
         DOCTEST_SUBCASE("Replays revise replay start time value")
         {
-            conn.setModuleReplaySupport("test_module", true);
-
-            // one notification for replay
             auto before = std::chrono::system_clock::now();
+            conn.setModuleReplaySupport("test_module", true);
             CLIENT_SEND_NOTIFICATION(notificationPingWith1);
             auto after = std::chrono::system_clock::now();
 
@@ -232,8 +230,8 @@ TEST_CASE("Dynamic subscriptions")
 
             // replay start time is revised according to the first notification
             REQUIRE(sub.replayStartTime());
-            REQUIRE(sub.replayStartTime() >= before);
-            REQUIRE(sub.replayStartTime() <= after);
+            REQUIRE(*sub.replayStartTime() >= before);
+            REQUIRE(*sub.replayStartTime() <= after);
 
             // wait for the replayed notification and replay-completed notification
             REQUIRE_NOTIFICATION(sub, notificationPingWith1);
