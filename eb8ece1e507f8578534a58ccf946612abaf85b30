@@ -22,6 +22,30 @@
       },
       "revId": "eb8ece1e507f8578534a58ccf946612abaf85b30",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "463e1995_c7995979",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-02T18:57:02Z",
+      "side": 1,
+      "message": "I did that as a first step during debugging when I saw doctest printing that `optional` as `{?}`. OTOH, I like it that the old version had no potential of dereferencing a `nullopt` :) (and yeah, I see the check on the previous line).",
+      "parentUuid": "27ce4c29_6a95aaa3",
+      "range": {
+        "startLine": 233,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 2
+      },
+      "revId": "eb8ece1e507f8578534a58ccf946612abaf85b30",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
