@@ -16,6 +16,24 @@
       "message": "I would prefer to just check that `/ietf-subscribed-notifications:streams/stream[name\u003d\u0027NETCONF\u0027]` exists. Checking the entire content of this container feels a bit superfluous to me.",
       "revId": "655f73bcbb4bb8a044bf0ad9bd9e3d12383b0256",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7a27dcd_6ddb9657",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-06-02T16:30:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b29b370b_0a1f8e63",
+      "revId": "655f73bcbb4bb8a044bf0ad9bd9e3d12383b0256",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ]
 }
