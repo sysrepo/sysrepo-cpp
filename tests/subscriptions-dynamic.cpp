@@ -148,6 +148,15 @@ TEST_CASE("Dynamic subscriptions")
         rec.recordNotification(tree->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::Siblings));
     };
 
+    DOCTEST_SUBCASE("onOperGet for ietf-subscribed-notifications:streams")
+    {
+        auto sub = sess.onOperGet("ietf-subscribed-notifications", sysrepo::subscribedNotificationsStreams, "/ietf-subscribed-notifications:streams");
+        sess.switchDatastore(sysrepo::Datastore::Operational);
+        auto data = sess.getData("/ietf-subscribed-notifications:streams");
+        REQUIRE(data);
+        REQUIRE(!data->findXPath("/ietf-subscribed-notifications:streams/stream[name='NETCONF']").empty());
+    }
+
     // write some initial data
     client.setItem("/test_module:values[.='2']", std::nullopt);
     client.setItem("/test_module:values[.='3']", std::nullopt);

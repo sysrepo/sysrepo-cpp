@@ -104,4 +104,6 @@ private:
 
     friend class Session;
 };
+
+ErrorCode subscribedNotificationsStreams(Session session, uint32_t subscriptionId, const std::string& moduleName, const std::optional<std::string>& subXPath, const std::optional<std::string>& requestXPath, uint32_t requestId, std::optional<libyang::DataNode>& output);
 }
