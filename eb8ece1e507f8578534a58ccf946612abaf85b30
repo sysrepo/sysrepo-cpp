@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27ce4c29_6a95aaa3",
+        "filename": "tests/subscriptions-dynamic.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-06-02T17:19:09Z",
+      "side": 1,
+      "message": "Not necessary but maybe better",
+      "range": {
+        "startLine": 233,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 2
+      },
+      "revId": "eb8ece1e507f8578534a58ccf946612abaf85b30",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
