@@ -527,4 +527,26 @@ void DynamicSubscription::Data::terminate(const std::optional<std::string>& reas
     throwIfError(err, "Couldn't terminate yang-push subscription with id " + std::to_string(subId));
     m_terminated = true;
 }
+
+/** @brief An onOperGet callback for '/ietf-subscribed-notification:streams'.
+ *
+ * Wraps `srsn_oper_data_streams_cb`
+ */
+ErrorCode subscribedNotificationsStreams(Session session, uint32_t subscriptionId, const std::string& moduleName, const std::optional<std::string>& subXPath, const std::optional<std::string>& requestXPath, uint32_t requestId, std::optional<libyang::DataNode>& output)
+{
+    lyd_node* rawOutput = output ? libyang::releaseRawNode(*output) : nullptr;
+
+    auto ret = static_cast<ErrorCode>(srsn_oper_data_streams_cb(
+        getRawSession(session),
+        subscriptionId,
+        moduleName.c_str(),
+        subXPath ? subXPath->c_str() : nullptr,
+        requestXPath ? requestXPath->c_str() : nullptr,
+        requestId,
+        &rawOutput,
+        nullptr));
+
+    output = rawOutput ? std::optional{libyang::wrapRawNode(rawOutput)} : std::nullopt;
+    return ret;
+}
 }

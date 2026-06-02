@@ -148,6 +148,54 @@ TEST_CASE("Dynamic subscriptions")
         rec.recordNotification(tree->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::Siblings));
     };
 
+    DOCTEST_SUBCASE("onOperGet for ietf-subscribed-notifications:streams")
+    {
+        auto sub = sess.onOperGet("ietf-subscribed-notifications", sysrepo::subscribedNotificationsStreams, "/ietf-subscribed-notifications:streams");
+        sess.switchDatastore(sysrepo::Datastore::Operational);
+        auto data = sess.getData("/ietf-subscribed-notifications:streams");
+        REQUIRE(data);
+        REQUIRE(*data->printStr(libyang::DataFormat::JSON, libyang::PrintFlags::Siblings) == R"({
+  "ietf-subscribed-notifications:streams": {
+    "stream": [
+      {
+        "name": "NETCONF",
+        "description": "Default NETCONF stream containing notifications from all the modules. Replays only notifications for modules that support replay.",
+        "replay-support": [null]
+      },
+      {
+        "name": "ietf-yang-library",
+        "description": "Stream with all notifications of a module."
+      },
+      {
+        "name": "sysrepo-notifications",
+        "description": "Stream with all notifications of a module."
+      },
+      {
+        "name": "ietf-netconf-notifications",
+        "description": "Stream with all notifications of a module."
+      },
+      {
+        "name": "test_module",
+        "description": "Stream with all notifications of a module."
+      },
+      {
+        "name": "ietf-subscribed-notifications",
+        "description": "Stream with all notifications of a module."
+      },
+      {
+        "name": "ietf-network-instance",
+        "description": "Stream with all notifications of a module."
+      },
+      {
+        "name": "ietf-yang-push",
+        "description": "Stream with all notifications of a module."
+      }
+    ]
+  }
+}
+)");
+    }
+
     // write some initial data
     client.setItem("/test_module:values[.='2']", std::nullopt);
     client.setItem("/test_module:values[.='3']", std::nullopt);
