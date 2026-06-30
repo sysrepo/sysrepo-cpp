@@ -240,6 +240,15 @@ enum class YangPushChange : uint32_t {
     EnumCount = 5, /**< SRSN_COUNT_YP_CHANGE */
 };
 
+/**
+ * @brief Wraps `srsn_sub_type_t`
+ */
+enum class DynamicSubscriptionType : uint32_t {
+    SubscribedNotifications = 0, /**< SRSN_SUB_NOTIF */
+    YangPushPeriodic = 1, /**< SRSN_YANG_PUSH_PERIODIC */
+    YangPushOnChange = 2, /**< SRSN_YANG_PUSH_ON_CHANGE */
+};
+
 std::ostream& operator<<(std::ostream& os, const NotificationType& type);
 std::ostream& operator<<(std::ostream& os, const Event& event);
 std::ostream& operator<<(std::ostream& os, const ChangeOperation& changeOp);

@@ -96,11 +96,14 @@ public:
     void processEvent(YangPushNotifCb cb) const;
     void terminate(const std::optional<std::string>& reason = std::nullopt);
 
+    DynamicSubscriptionType type() const;
     void modifyFilter(const std::optional<SubscribedNotificationsFilter>& newFilter) const;
     void modifyStopTime(const std::optional<NotificationTimeStamp>& newStopTime) const;
+    void modifyPeriod(std::chrono::milliseconds period, const std::optional<NotificationTimeStamp>& anchorTime = std::nullopt) const;
+    void modifyDampeningPeriod(const std::optional<std::chrono::milliseconds>& dampeningPeriod) const;
 
 private:
-    DynamicSubscription(sysrepo::Session sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime = std::nullopt);
+    DynamicSubscription(sysrepo::Session sess, int fd, uint64_t subId, DynamicSubscriptionType type, const std::optional<NotificationTimeStamp>& replayStartTime = std::nullopt);
 
     struct Data;
     std::unique_ptr<Data> m_data;
