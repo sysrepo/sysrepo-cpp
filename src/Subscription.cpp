@@ -428,16 +428,17 @@ struct DynamicSubscription::Data {
     sysrepo::Session sess;
     int fd;
     uint64_t subId;
+    DynamicSubscriptionType type;
     std::optional<NotificationTimeStamp> m_replayStartTime;
     bool m_terminated;
 
-    Data(sysrepo::Session sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime, bool terminated);
+    Data(sysrepo::Session sess, int fd, uint64_t subId, DynamicSubscriptionType type, const std::optional<NotificationTimeStamp>& replayStartTime, bool terminated);
     ~Data();
     void terminate(const std::optional<std::string>& reason = std::nullopt);
 };
 
-DynamicSubscription::DynamicSubscription(sysrepo::Session sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime)
-    : m_data(std::make_unique<Data>(std::move(sess), fd, subId, replayStartTime, false))
+DynamicSubscription::DynamicSubscription(sysrepo::Session sess, int fd, uint64_t subId, DynamicSubscriptionType type, const std::optional<NotificationTimeStamp>& replayStartTime)
+    : m_data(std::make_unique<Data>(std::move(sess), fd, subId, type, replayStartTime, false))
 {
 }
 
@@ -467,6 +468,12 @@ uint64_t DynamicSubscription::subscriptionId() const
 std::optional<NotificationTimeStamp> DynamicSubscription::replayStartTime() const
 {
     return m_data->m_replayStartTime;
+}
+
+/** @brief Returns the type of this subscription. */
+DynamicSubscriptionType DynamicSubscription::type() const
+{
+    return m_data->type;
 }
 
 /** @brief Terminates the subscription.
@@ -504,10 +511,11 @@ void DynamicSubscription::processEvent(YangPushNotifCb cb) const
     cb(wrappedNotification, toTimePoint(timestamp));
 }
 
-DynamicSubscription::Data::Data(sysrepo::Session sess, int fd, uint64_t subId, const std::optional<NotificationTimeStamp>& replayStartTime, bool terminated)
+DynamicSubscription::Data::Data(sysrepo::Session sess, int fd, uint64_t subId, DynamicSubscriptionType type, const std::optional<NotificationTimeStamp>& replayStartTime, bool terminated)
     : sess(std::move(sess))
     , fd(fd)
     , subId(subId)
+    , type(type)
     , m_replayStartTime(replayStartTime)
     , m_terminated(terminated)
 {
@@ -552,6 +560,44 @@ void DynamicSubscription::modifyStopTime(const std::optional<NotificationTimeSta
     auto stopSpec = newStopTime ? std::optional{toTimespec(*newStopTime)} : std::nullopt;
     auto err = srsn_modify_stop_time(m_data->subId, stopSpec ? &stopSpec.value() : nullptr);
     throwIfError(err, "Couldn't modify stop time of yang-push subscription with id " + std::to_string(m_data->subId));
+}
+
+/** @brief Modifies the period (and optional anchor time) of a yang-push periodic subscription.
+ *
+ * @param period The new notification period.
+ * @param anchorTime The new anchor time of the period, or std::nullopt to unset any previous anchor time.
+ *
+ * @throws Error if this is not a yang-push periodic subscription.
+ *
+ * Wraps `srsn_yang_push_modify_periodic`.
+ */
+void DynamicSubscription::modifyPeriod(std::chrono::milliseconds period, const std::optional<NotificationTimeStamp>& anchorTime) const
+{
+    if (m_data->type != DynamicSubscriptionType::YangPushPeriodic) {
+        throw Error("Cannot modify period: subscription with id " + std::to_string(m_data->subId) + " is not a yang-push periodic subscription");
+    }
+
+    auto anchorSpec = anchorTime ? std::optional{toTimespec(*anchorTime)} : std::nullopt;
+    auto err = srsn_yang_push_modify_periodic(m_data->subId, period.count(), anchorSpec ? &anchorSpec.value() : nullptr);
+    throwIfError(err, "Couldn't modify period of yang-push subscription with id " + std::to_string(m_data->subId));
+}
+
+/** @brief Modifies the dampening period of a yang-push on-change subscription.
+ *
+ * @param dampeningPeriod The new dampening period, or std::nullopt to disable dampening.
+ *
+ * @throws Error if this is not a yang-push on-change subscription.
+ *
+ * Wraps `srsn_yang_push_modify_on_change`.
+ */
+void DynamicSubscription::modifyDampeningPeriod(const std::optional<std::chrono::milliseconds>& dampeningPeriod) const
+{
+    if (m_data->type != DynamicSubscriptionType::YangPushOnChange) {
+        throw Error("Cannot modify dampening period: subscription with id " + std::to_string(m_data->subId) + " is not a yang-push on-change subscription");
+    }
+
+    auto err = srsn_yang_push_modify_on_change(m_data->subId, dampeningPeriod ? dampeningPeriod->count() : 0);
+    throwIfError(err, "Couldn't modify dampening period of yang-push subscription with id " + std::to_string(m_data->subId));
 }
 
 /** @brief An onOperGet callback for '/ietf-subscribed-notification:streams'.

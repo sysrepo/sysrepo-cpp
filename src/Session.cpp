@@ -585,7 +585,7 @@ DynamicSubscription Session::yangPushPeriodic(
                                        &subId);
     throwIfError(res, "Couldn't create yang-push periodic subscription", m_sess.get());
 
-    return {*this, fd, subId};
+    return {*this, fd, subId, DynamicSubscriptionType::YangPushPeriodic};
 }
 
 /**
@@ -635,7 +635,7 @@ DynamicSubscription Session::yangPushOnChange(
                                         &subId);
     throwIfError(res, "Couldn't create yang-push on-change subscription", m_sess.get());
 
-    return {*this, fd, subId};
+    return {*this, fd, subId, DynamicSubscriptionType::YangPushOnChange};
 }
 
 /**
@@ -682,7 +682,7 @@ DynamicSubscription Session::subscribeNotifications(
         replayStart = toTimePoint(replayStartSpec);
     }
 
-    return {*this, fd, subId, replayStart};
+    return {*this, fd, subId, DynamicSubscriptionType::SubscribedNotifications, replayStart};
 }
 
 /**

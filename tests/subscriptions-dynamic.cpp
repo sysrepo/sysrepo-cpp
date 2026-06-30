@@ -16,6 +16,8 @@
 #include "sysrepo-cpp/Subscription.hpp"
 #include "utils.hpp"
 
+#include <iostream>
+
 #define CLIENT_SEND_NOTIFICATION(NOTIFICATION)                                                                                       \
     {                                                                                                                                \
         auto notif = client.getContext().parseOp(NOTIFICATION, libyang::DataFormat::JSON, libyang::OperationType::NotificationYang); \
@@ -757,5 +759,100 @@ TEST_CASE("Dynamic subscriptions")
 
         REQUIRE(subId == sub.subscriptionId());
         REQUIRE_PIPE_HANGUP(sub);
+    }
+
+    DOCTEST_SUBCASE("Modify yang-push periodic period")
+    {
+        std::vector<sysrepo::NotificationTimeStamp> stamps;
+        auto collect = [&](const std::optional<libyang::DataNode>& tree, sysrepo::NotificationTimeStamp ts) {
+            REQUIRE(tree);
+            stamps.push_back(ts);
+        };
+
+        auto sub = sess.yangPushPeriodic(std::nullopt, 500ms);
+        REQUIRE(sub.type() == sysrepo::DynamicSubscriptionType::YangPushPeriodic);
+
+        REQUIRE(pipeStatus(sub.fd(), 5000) == PipeStatus::DataReady);
+        sub.processEvent(collect);
+        REQUIRE(pipeStatus(sub.fd(), 5000) == PipeStatus::DataReady);
+        sub.processEvent(collect);
+        REQUIRE(std::chrono::duration_cast<std::chrono::milliseconds>(stamps[1] - stamps[0]).count() >= 300);
+
+        stamps.clear();
+        sub.modifyPeriod(25ms);
+
+        // Read a handful of updates and look at the smallest gap between consecutive timestamps.
+        for (int i = 0; i < 6; ++i) {
+            REQUIRE(pipeStatus(sub.fd(), 5000) == PipeStatus::DataReady);
+            sub.processEvent(collect);
+        }
+        auto minGap = std::chrono::milliseconds::max();
+        for (size_t i = 1; i < stamps.size(); ++i) {
+            auto gap = std::chrono::duration_cast<std::chrono::milliseconds>(stamps[i] - stamps[i - 1]);
+            if (gap < minGap) {
+                minGap = gap;
+            }
+        }
+        REQUIRE(minGap.count() <= 200);
+
+        sub.terminate();
+        REQUIRE_PIPE_HANGUP(sub);
+    }
+
+    DOCTEST_SUBCASE("Modify yang-push on-change dampening period")
+    {
+        auto noopUpdate = [](const std::optional<libyang::DataNode>& tree, sysrepo::NotificationTimeStamp) {
+            REQUIRE(tree);
+        };
+
+        // start with no dampening, so every change transaction is reported on its own
+        auto sub = sess.yangPushOnChange(std::nullopt);
+        REQUIRE(sub.type() == sysrepo::DynamicSubscriptionType::YangPushOnChange);
+
+        // a single transaction yields a single push-change-update
+        client.setItem("/test_module:leafInt32", "100");
+        client.applyChanges();
+        REQUIRE(pipeStatus(sub.fd(), 5000) == PipeStatus::DataReady);
+        sub.processEvent(noopUpdate);
+
+        // enable a generous dampening window
+        sub.modifyDampeningPeriod(2000ms);
+
+        // two *separate* transactions within the window must be coalesced into one update
+        client.setItem("/test_module:leafInt32", "200");
+        client.applyChanges();
+        client.setItem("/test_module:leafInt32", "300");
+        client.applyChanges();
+
+        // exactly one update is delivered for both transactions
+        REQUIRE(pipeStatus(sub.fd(), 5000) == PipeStatus::DataReady);
+        sub.processEvent(noopUpdate);
+        REQUIRE(pipeStatus(sub.fd(), 300) == PipeStatus::NoData);
+
+        sub.terminate();
+        REQUIRE_PIPE_HANGUP(sub);
+    }
+
+    DOCTEST_SUBCASE("Modifying the wrong subscription type throws")
+    {
+        auto periodic = sess.yangPushPeriodic(std::nullopt, 1000ms);
+        auto onChange = sess.yangPushOnChange(std::nullopt);
+        auto subNotif = sess.subscribeNotifications("/test_module:ping");
+
+        REQUIRE(periodic.type() == sysrepo::DynamicSubscriptionType::YangPushPeriodic);
+        REQUIRE(onChange.type() == sysrepo::DynamicSubscriptionType::YangPushOnChange);
+        REQUIRE(subNotif.type() == sysrepo::DynamicSubscriptionType::SubscribedNotifications);
+
+        // modifyPeriod is valid only for periodic subscriptions
+        REQUIRE_THROWS_AS(onChange.modifyPeriod(100ms), sysrepo::Error);
+        REQUIRE_THROWS_AS(subNotif.modifyPeriod(100ms), sysrepo::Error);
+
+        // modifyDampeningPeriod is valid only for on-change subscriptions
+        REQUIRE_THROWS_AS(periodic.modifyDampeningPeriod(100ms), sysrepo::Error);
+        REQUIRE_THROWS_AS(subNotif.modifyDampeningPeriod(100ms), sysrepo::Error);
+
+        periodic.terminate();
+        onChange.terminate();
+        subNotif.terminate();
     }
 }
