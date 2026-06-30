@@ -190,4 +190,8 @@ static_assert(static_cast<YangPushChange>(SRSN_YP_CHANGE_INSERT) == YangPushChan
 static_assert(static_cast<YangPushChange>(SRSN_YP_CHANGE_MOVE) == YangPushChange::Move);
 static_assert(static_cast<YangPushChange>(SRSN_YP_CHANGE_REPLACE) == YangPushChange::Replace);
 static_assert(static_cast<YangPushChange>(SRSN_COUNT_YP_CHANGE) == YangPushChange::EnumCount);
+
+static_assert(static_cast<DynamicSubscriptionType>(SRSN_SUB_NOTIF) == DynamicSubscriptionType::SubscribedNotifications);
+static_assert(static_cast<DynamicSubscriptionType>(SRSN_YANG_PUSH_PERIODIC) == DynamicSubscriptionType::YangPushPeriodic);
+static_assert(static_cast<DynamicSubscriptionType>(SRSN_YANG_PUSH_ON_CHANGE) == DynamicSubscriptionType::YangPushOnChange);
 }
