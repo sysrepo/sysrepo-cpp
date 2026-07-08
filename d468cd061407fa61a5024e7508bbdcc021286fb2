@@ -41,6 +41,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b4c634f_75c8674f",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-08T08:25:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1c23242_3e0cb431",
+      "range": {
+        "startLine": 40,
+        "startChar": 52,
+        "endLine": 40,
+        "endChar": 71
+      },
+      "revId": "d468cd061407fa61a5024e7508bbdcc021286fb2",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f34bf11_7a816cdc",
@@ -54,6 +78,30 @@
       "writtenOn": "2026-06-26T13:49:09Z",
       "side": 1,
       "message": "Why this allows only zero or one path? The C-library specifies this as a colon-separated paths. Shouldn\u0027t this be a vector of paths?",
+      "range": {
+        "startLine": 45,
+        "startChar": 32,
+        "endLine": 45,
+        "endChar": 87
+      },
+      "revId": "d468cd061407fa61a5024e7508bbdcc021286fb2",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4523468c_9577ea08",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-08T08:25:53Z",
+      "side": 1,
+      "message": "True, I replaced it with a vector of paths and transform it into the correct format accepted by sysrepo in the function.",
+      "parentUuid": "8f34bf11_7a816cdc",
       "range": {
         "startLine": 45,
         "startChar": 32,
@@ -81,6 +129,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a60632e_03ded779",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-08T08:25:53Z",
+      "side": 1,
+      "message": "True",
+      "parentUuid": "58cb9bc3_0e1026bc",
+      "revId": "d468cd061407fa61a5024e7508bbdcc021286fb2",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b56e343_71a3e0b0",
@@ -98,6 +164,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b258bd04_8299fb49",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-08T08:25:53Z",
+      "side": 1,
+      "message": "True",
+      "parentUuid": "1b56e343_71a3e0b0",
+      "revId": "d468cd061407fa61a5024e7508bbdcc021286fb2",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e44b0e2_9541b688",
@@ -111,6 +195,30 @@
       "writtenOn": "2026-06-26T13:49:09Z",
       "side": 1,
       "message": "It is not a list, this could be misleading. I think you can remove this word.",
+      "range": {
+        "startLine": 84,
+        "startChar": 62,
+        "endLine": 84,
+        "endChar": 66
+      },
+      "revId": "d468cd061407fa61a5024e7508bbdcc021286fb2",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52aefc32_c908a18f",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-08T08:25:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e44b0e2_9541b688",
       "range": {
         "startLine": 84,
         "startChar": 62,
@@ -144,6 +252,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "83c5c3a5_d189218d",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-08T08:25:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "216d0c51_b2d3211c",
+      "range": {
+        "startLine": 91,
+        "startChar": 61,
+        "endLine": 91,
+        "endChar": 62
+      },
+      "revId": "d468cd061407fa61a5024e7508bbdcc021286fb2",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72dcaba4_1735b1e3",
@@ -157,6 +289,30 @@
       "writtenOn": "2026-06-26T13:49:09Z",
       "side": 1,
       "message": "Shouldn\u0027t we check that the modules are indeed removed?",
+      "range": {
+        "startLine": 57,
+        "startChar": 8,
+        "endLine": 57,
+        "endChar": 38
+      },
+      "revId": "d468cd061407fa61a5024e7508bbdcc021286fb2",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2fa2110_2ae23e82",
+        "filename": "tests/connection.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-08T08:25:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72dcaba4_1735b1e3",
       "range": {
         "startLine": 57,
         "startChar": 8,
