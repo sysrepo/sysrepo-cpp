@@ -476,6 +476,79 @@ DynamicSubscriptionType DynamicSubscription::type() const
     return m_data->type;
 }
 
+/** @brief Reads the current operational state of this subscription.
+ *
+ * Wraps `srsn_oper_data_sub`. Throws if the subscription no longer exists (e.g. after it has been terminated).
+ */
+SubscriptionState DynamicSubscription::subscriptionState() const
+{
+    srsn_state_sub_t* raw;
+    auto err = srsn_oper_data_sub(m_data->subId, &raw);
+    throwIfError(err, "Couldn't read state of subscription with id " + std::to_string(m_data->subId));
+
+    using Deleter = decltype([](auto* p) constexpr {
+        srsn_oper_data_subscriptions_free(p, 1 /* a single subscription to free */);
+    });
+    std::unique_ptr<srsn_state_sub_t, Deleter> freeSub(raw);
+
+    auto toOptTime = [](const struct timespec& ts) -> std::optional<NotificationTimeStamp> {
+        if (ts.tv_sec == 0 && ts.tv_nsec == 0) { // a zeroed timespec means "unset"
+            return std::nullopt;
+        }
+        return toTimePoint(ts);
+    };
+
+    // The state struct reports period / dampening-period in centiseconds (as mandated by the ietf-yang-push YANG
+    // model), even though subscriptions are created with a millisecond value. Convert back to milliseconds; the
+    // resolution is therefore 10 ms.
+    using Centiseconds = std::chrono::duration<uint32_t, std::centi>;
+    auto toMilliseconds = [](uint32_t centiseconds) {
+        return std::chrono::duration_cast<std::chrono::milliseconds>(Centiseconds{centiseconds});
+    };
+
+    SubscriptionState state;
+    state.subscriptionId = raw->sub_id;
+    state.xpathFilter = raw->xpath_filter ? std::optional{std::string{raw->xpath_filter}} : std::nullopt;
+    state.stopTime = toOptTime(raw->stop_time);
+    state.sentCount = raw->sent_count;
+    state.excludedCount = raw->excluded_count;
+    state.suspended = raw->suspended;
+
+    switch (raw->type) {
+    case SRSN_SUB_NOTIF:
+        state.params = SubscribedNotifications{
+            raw->sub_notif.stream ? std::string{raw->sub_notif.stream} : std::string{},
+            toOptTime(raw->sub_notif.start_time),
+        };
+        break;
+    case SRSN_YANG_PUSH_PERIODIC:
+        state.params = YangPushPeriodic{
+            static_cast<Datastore>(raw->yp_periodic.ds),
+            toMilliseconds(raw->yp_periodic.period),
+            toOptTime(raw->yp_periodic.anchor_time),
+        };
+        break;
+    case SRSN_YANG_PUSH_ON_CHANGE: {
+        std::set<YangPushChange> excluded;
+        using YangPushChangeUnderlying = std::underlying_type_t<YangPushChange>;
+        for (YangPushChangeUnderlying i = 0; i < static_cast<YangPushChangeUnderlying>(YangPushChange::EnumCount); ++i) {
+            if (raw->yp_on_change.excluded_change[i]) {
+                excluded.insert(static_cast<YangPushChange>(i));
+            }
+        }
+        state.params = YangPushOnChange{
+            static_cast<Datastore>(raw->yp_on_change.ds),
+            toMilliseconds(raw->yp_on_change.dampening_period),
+            raw->yp_on_change.sync_on_start ? SyncOnStart::Yes : SyncOnStart::No,
+            std::move(excluded),
+        };
+        break;
+    }
+    }
+
+    return state;
+}
+
 /** @brief Terminates the subscription.
  *
  * Wraps `srsn_terminate`.
