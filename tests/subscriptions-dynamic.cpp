@@ -855,4 +855,66 @@ TEST_CASE("Dynamic subscriptions")
         onChange.terminate();
         subNotif.terminate();
     }
+
+    DOCTEST_SUBCASE("Reading subscription state")
+    {
+        // The session runs on the default (running) datastore, so that's what the yang-push subscriptions report.
+        const auto stopTime = std::chrono::system_clock::now() + 6666ms;
+
+        DOCTEST_SUBCASE("YANG Push periodic")
+        {
+            auto sub = sess.yangPushPeriodic("/test_module:values", 500ms, std::nullopt, stopTime);
+
+            const auto state = sub.subscriptionState();
+            REQUIRE(state.subscriptionId == sub.subscriptionId());
+            REQUIRE(state.xpathFilter == "/test_module:values");
+            REQUIRE(state.stopTime.has_value());
+            REQUIRE(!state.suspended);
+
+            REQUIRE(std::holds_alternative<sysrepo::YangPushPeriodic>(state.params));
+            const auto& params = std::get<sysrepo::YangPushPeriodic>(state.params);
+            REQUIRE(params.datastore == sysrepo::Datastore::Running);
+            REQUIRE(params.period == 500ms);
+            REQUIRE(!params.anchorTime.has_value());
+        }
+
+        DOCTEST_SUBCASE("YANG Push on-change")
+        {
+            auto sub = sess.yangPushOnChange(std::nullopt, 100ms, sysrepo::SyncOnStart::Yes, {sysrepo::YangPushChange::Create, sysrepo::YangPushChange::Delete});
+
+            const auto state = sub.subscriptionState();
+            REQUIRE(state.subscriptionId == sub.subscriptionId());
+            REQUIRE(!state.xpathFilter.has_value());
+            REQUIRE(!state.stopTime.has_value());
+
+            REQUIRE(std::holds_alternative<sysrepo::YangPushOnChange>(state.params));
+            const auto& params = std::get<sysrepo::YangPushOnChange>(state.params);
+            REQUIRE(params.datastore == sysrepo::Datastore::Running);
+            REQUIRE(params.dampeningPeriod == 100ms);
+            REQUIRE(params.syncOnStart == sysrepo::SyncOnStart::Yes);
+            REQUIRE((params.excludedChanges == std::set<sysrepo::YangPushChange>{sysrepo::YangPushChange::Create, sysrepo::YangPushChange::Delete}));
+        }
+
+        DOCTEST_SUBCASE("Subscribed notifications")
+        {
+            auto sub = sess.subscribeNotifications("/test_module:*", "NETCONF", stopTime);
+
+            const auto state = sub.subscriptionState();
+            REQUIRE(state.subscriptionId == sub.subscriptionId());
+            REQUIRE(state.xpathFilter == "/test_module:*");
+            REQUIRE(state.stopTime.has_value());
+
+            REQUIRE(std::holds_alternative<sysrepo::SubscribedNotifications>(state.params));
+            const auto& params = std::get<sysrepo::SubscribedNotifications>(state.params);
+            REQUIRE(params.stream == "NETCONF");
+            REQUIRE(!params.startTime.has_value());
+        }
+
+        DOCTEST_SUBCASE("Reading state of a terminated subscription throws")
+        {
+            auto sub = sess.subscribeNotifications("/test_module:*", "NETCONF");
+            sub.terminate();
+            REQUIRE_THROWS_AS(sub.subscriptionState(), sysrepo::ErrorWithCode);
+        }
+    }
 }
