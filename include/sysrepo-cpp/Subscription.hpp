@@ -12,6 +12,8 @@
 #include <list>
 #include <memory>
 #include <optional>
+#include <set>
+#include <variant>
 #include <sysrepo-cpp/Enum.hpp>
 #include <sysrepo-cpp/Callbacks.hpp>
 #include <sysrepo-cpp/Session.hpp>
@@ -67,6 +69,45 @@ private:
     bool m_didNacmInit;
 };
 
+using Centiseconds = std::chrono::duration<int64_t, std::centi>;
+
+/** @brief Type-specific state of a subscribed-notifications subscription. */
+struct SubscribedNotifications {
+    std::string stream;
+    std::optional<NotificationTimeStamp> startTime;
+};
+
+/** @brief Type-specific state of a YANG-push periodic subscription. */
+struct YangPushPeriodic {
+    Datastore datastore;
+    Centiseconds period;
+    std::optional<NotificationTimeStamp> anchorTime;
+};
+
+/** @brief Type-specific state of a YANG-push on-change subscription. */
+struct YangPushOnChange {
+    Datastore datastore;
+    Centiseconds dampeningPeriod;
+    SyncOnStart syncOnStart;
+    std::set<YangPushChange> excludedChanges;
+};
+
+/**
+ * @brief Operational state of a dynamic subscription, as reported by sysrepo.
+ *
+ * @note The filter is only ever returned as an inline XPath. Subtree filters are pre-converted to XPath, and
+ * by-reference filter names (`stream-filter-name` / `selection-filter-ref`) are NOT recoverable through this call.
+ */
+struct SubscriptionState {
+    uint32_t subscriptionId;
+    std::optional<std::string> xpathFilter;
+    std::optional<NotificationTimeStamp> stopTime;
+    uint32_t sentCount;
+    uint32_t excludedCount;
+    bool suspended;
+    std::variant<SubscribedNotifications, YangPushPeriodic, YangPushOnChange> params;
+};
+
 /**
  * @brief Manages lifetime of YANG push subscriptions.
  *
@@ -93,6 +134,7 @@ public:
     int fd() const;
     uint64_t subscriptionId() const;
     std::optional<NotificationTimeStamp> replayStartTime() const;
+    SubscriptionState subscriptionState() const;
     void processEvent(YangPushNotifCb cb) const;
     void terminate(const std::optional<std::string>& reason = std::nullopt);
 
