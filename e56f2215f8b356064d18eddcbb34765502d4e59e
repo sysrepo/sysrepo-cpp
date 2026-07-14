@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff28526d_305fdacd",
+        "filename": "CMakeLists.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-14T11:43:45Z",
+      "side": 1,
+      "message": "```suggestion\n        # no installation, just the init and cleanup of a separate repository\n        --list\n```",
+      "revId": "e56f2215f8b356064d18eddcbb34765502d4e59e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7b438ff_2ad2e587",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-14T11:43:45Z",
+      "side": 1,
+      "message": "```suggestion\n    void removeModules(const std::vector\u003cstd::string\u003e\u0026 modules, const sysrepo::ModuleRemoval opt);\n```",
+      "range": {
+        "startLine": 60,
+        "startChar": 64,
+        "endLine": 60,
+        "endChar": 86
+      },
+      "revId": "e56f2215f8b356064d18eddcbb34765502d4e59e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d6a066f_c8cb4d5d",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-14T11:43:45Z",
+      "side": 1,
+      "message": "Please don\u0027t introduce unrelated whitespace changes.\n\n```suggestion\n*/\n```",
+      "revId": "e56f2215f8b356064d18eddcbb34765502d4e59e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28c798c4_1386dda7",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-14T11:43:45Z",
+      "side": 1,
+      "message": "```suggestion\nenum class ModuleRemoval {\n```\n...so that:\n\n- the namespace is not cluttered with a generic name `Default`,\n- this thing is type-safe,\n- you will catch the bug introduced in PS17 where the C++ value `Default` is `force \u003d 0`, which (hopefully) means \"do not remove module if other depend on it\", but then you have an enum value `FailOnDependencies` which actually is `force \u003d 1`, and therefore it actually means \"remove any moduels which depend on this one as well\".",
+      "range": {
+        "startLine": 213,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 2
+      },
+      "revId": "e56f2215f8b356064d18eddcbb34765502d4e59e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e049140_e0bfabbf",
+        "filename": "tests/connection.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-14T11:43:45Z",
+      "side": 1,
+      "message": "Let\u0027s do it like this, so that a reviewer immediately sees what the test is testing:\n```suggestion\n            searchDirs \u003d {\n                std::filesystem::path{\"non/existing/dir\"},\n                dir,\n                std::filesystem::path{\"another/non/existing\"}\n            };\n```\n\nThat way you can also drop the `dir2` variable.",
+      "revId": "e56f2215f8b356064d18eddcbb34765502d4e59e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
