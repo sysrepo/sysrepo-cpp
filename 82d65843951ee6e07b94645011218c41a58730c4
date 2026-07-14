@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd3c553f_90e69a8e",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-14T08:45:17Z",
+      "side": 1,
+      "message": "style: this is sometimes called a [boolean trap](https://ariya.io/2011/08/hall-of-api-shame-boolean-trap/). Let\u0027s not do this:\n```\nconn.removeModules({\"example\"}, true);\n```\n...but at least this:\n```\nconn.removeModules({\"example\"}, sysrepo::ModuleRemoval::Force);\n```\nBut it still isn\u0027t clear what \"forced\" really means without checking the docs. What about this:\n```\nconn.removeModules(..., sysrepo::ModuleRemoval::WithDependent);\nconn.removeModules(..., sysrepo::ModuleRemoval::FailOnDependencies);\n```",
+      "range": {
+        "startLine": 60,
+        "startChar": 64,
+        "endLine": 60,
+        "endChar": 74
+      },
+      "revId": "82d65843951ee6e07b94645011218c41a58730c4",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76821955_d85960e8",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-14T08:45:17Z",
+      "side": 1,
+      "message": "Let\u0027s fix bugs at their origin. It looks like this will be fixed upstream (https://github.com/sysrepo/sysrepo/pull/3775), so please use designated initializers here and depend on a new minimal version of sysrepo via that pkg-config call in CMake.",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 42
+      },
+      "revId": "82d65843951ee6e07b94645011218c41a58730c4",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "572d3bcc_27ad6ce1",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-14T08:45:17Z",
+      "side": 1,
+      "message": "nit: Please add a FIXME comment that this will need a change if we ever port this to Windows. Yeah, it\u0027s unlikely, but I\u0027ve been there with libyang a few years ago.",
+      "revId": "82d65843951ee6e07b94645011218c41a58730c4",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23ebc573_994fc07d",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-14T08:45:17Z",
+      "side": 1,
+      "message": "this branch is not tested, please add a test which uses (and requires) multiple paths",
+      "range": {
+        "startLine": 88,
+        "startChar": 8,
+        "endLine": 90,
+        "endChar": 9
+      },
+      "revId": "82d65843951ee6e07b94645011218c41a58730c4",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dc5b139_b04f6d24",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-14T08:45:17Z",
+      "side": 1,
+      "message": "nit: please wrap this long line (unfortunately clang-format doesn\u0027t really flag this)",
+      "revId": "82d65843951ee6e07b94645011218c41a58730c4",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}

@@ -67,6 +67,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a50e1213_2b51c6be",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-14T08:45:17Z",
+      "side": 1,
+      "message": "nit: in C++, there\u0027s no need to say `struct` here. Please drop that for consistency with the existing code.",
+      "range": {
+        "startLine": 44,
+        "startChar": 50,
+        "endLine": 44,
+        "endChar": 56
+      },
+      "revId": "d468cd061407fa61a5024e7508bbdcc021286fb2",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f34bf11_7a816cdc",
         "filename": "src/Connection.cpp",
         "patchSetId": 12
