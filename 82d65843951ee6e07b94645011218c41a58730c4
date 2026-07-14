@@ -24,6 +24,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dc529ce_4f1dec1b",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-14T10:30:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd3c553f_90e69a8e",
+      "range": {
+        "startLine": 60,
+        "startChar": 64,
+        "endLine": 60,
+        "endChar": 74
+      },
+      "revId": "82d65843951ee6e07b94645011218c41a58730c4",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "76821955_d85960e8",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-07-14T08:45:17Z",
       "side": 1,
       "message": "Let\u0027s fix bugs at their origin. It looks like this will be fixed upstream (https://github.com/sysrepo/sysrepo/pull/3775), so please use designated initializers here and depend on a new minimal version of sysrepo via that pkg-config call in CMake.",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 42
+      },
+      "revId": "82d65843951ee6e07b94645011218c41a58730c4",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1579e2d_4b4ca961",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-14T10:30:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76821955_d85960e8",
       "range": {
         "startLine": 69,
         "startChar": 0,
@@ -64,6 +112,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3aa847f0_00574fc1",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-14T10:30:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "572d3bcc_27ad6ce1",
+      "revId": "82d65843951ee6e07b94645011218c41a58730c4",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23ebc573_994fc07d",
@@ -87,6 +153,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88043ecf_7a1752be",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-14T10:30:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23ebc573_994fc07d",
+      "range": {
+        "startLine": 88,
+        "startChar": 8,
+        "endLine": 90,
+        "endChar": 9
+      },
+      "revId": "82d65843951ee6e07b94645011218c41a58730c4",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3dc5b139_b04f6d24",
@@ -100,6 +190,24 @@
       "writtenOn": "2026-07-14T08:45:17Z",
       "side": 1,
       "message": "nit: please wrap this long line (unfortunately clang-format doesn\u0027t really flag this)",
+      "revId": "82d65843951ee6e07b94645011218c41a58730c4",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c46db8b_18355ecc",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-14T10:30:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3dc5b139_b04f6d24",
       "revId": "82d65843951ee6e07b94645011218c41a58730c4",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
