@@ -18,6 +18,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1eb3a417_65c9ed03",
+        "filename": "CMakeLists.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-14T12:08:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff28526d_305fdacd",
+      "revId": "e56f2215f8b356064d18eddcbb34765502d4e59e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7b438ff_2ad2e587",
@@ -31,6 +49,30 @@
       "writtenOn": "2026-07-14T11:43:45Z",
       "side": 1,
       "message": "```suggestion\n    void removeModules(const std::vector\u003cstd::string\u003e\u0026 modules, const sysrepo::ModuleRemoval opt);\n```",
+      "range": {
+        "startLine": 60,
+        "startChar": 64,
+        "endLine": 60,
+        "endChar": 86
+      },
+      "revId": "e56f2215f8b356064d18eddcbb34765502d4e59e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "798534f3_7e3224cf",
+        "filename": "include/sysrepo-cpp/Connection.hpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-14T12:08:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7b438ff_2ad2e587",
       "range": {
         "startLine": 60,
         "startChar": 64,
@@ -58,6 +100,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f5a9dcc_5e65229e",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-14T12:08:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d6a066f_c8cb4d5d",
+      "revId": "e56f2215f8b356064d18eddcbb34765502d4e59e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "28c798c4_1386dda7",
@@ -81,6 +141,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a626887_5d15b9f7",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-14T12:08:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28c798c4_1386dda7",
+      "range": {
+        "startLine": 213,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 2
+      },
+      "revId": "e56f2215f8b356064d18eddcbb34765502d4e59e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e049140_e0bfabbf",
@@ -94,6 +178,24 @@
       "writtenOn": "2026-07-14T11:43:45Z",
       "side": 1,
       "message": "Let\u0027s do it like this, so that a reviewer immediately sees what the test is testing:\n```suggestion\n            searchDirs \u003d {\n                std::filesystem::path{\"non/existing/dir\"},\n                dir,\n                std::filesystem::path{\"another/non/existing\"}\n            };\n```\n\nThat way you can also drop the `dir2` variable.",
+      "revId": "e56f2215f8b356064d18eddcbb34765502d4e59e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c39d623f_2635ee1c",
+        "filename": "tests/connection.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-14T12:08:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e049140_e0bfabbf",
       "revId": "e56f2215f8b356064d18eddcbb34765502d4e59e",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }

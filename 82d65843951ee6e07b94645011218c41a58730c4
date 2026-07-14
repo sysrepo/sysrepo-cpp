@@ -119,6 +119,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24f0491f_35d6ffe0",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-14T12:08:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86bffc82_3f6b66cc",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 42
+      },
+      "revId": "82d65843951ee6e07b94645011218c41a58730c4",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "572d3bcc_27ad6ce1",
@@ -215,6 +239,30 @@
       "side": 1,
       "message": "This branch is now *hit by the test suite*, but nothing actually *tests* that multiple paths work properly. If you put a `\\x00` byte there, the tests would still pass. See the suggestion down in the test code on how to fix that.",
       "parentUuid": "88043ecf_7a1752be",
+      "range": {
+        "startLine": 88,
+        "startChar": 8,
+        "endLine": 90,
+        "endChar": 9
+      },
+      "revId": "82d65843951ee6e07b94645011218c41a58730c4",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07ca694d_fcf7e57e",
+        "filename": "src/Connection.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-14T12:08:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23971cd4_3cfde4af",
       "range": {
         "startLine": 88,
         "startChar": 8,
