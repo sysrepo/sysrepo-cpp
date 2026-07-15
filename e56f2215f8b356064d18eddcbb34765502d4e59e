@@ -167,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "41bda391_2548c5bd",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-15T08:08:09Z",
+      "side": 1,
+      "message": "The actual meaning of this flag is still the opposite of what the C documentation is saying. The upstream library takes `1` to mean \"drop this module and all modules which depend on it\". You implemented a C++ wrapper, where saying `Default` does this non-default thing, and saying `FailOnDependencies` makes the wrapper **not** fail on dependencies, but to remove them. This is not good, as I pointed out in my previous comment.\n\n\nThis also means that this feature needs proper testing, so, please, add tests which check what happens when you try to uninstall module A when there\u0027s module B which depends on it.",
+      "parentUuid": "5a626887_5d15b9f7",
+      "range": {
+        "startLine": 213,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 2
+      },
+      "revId": "e56f2215f8b356064d18eddcbb34765502d4e59e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7e049140_e0bfabbf",
         "filename": "tests/connection.cpp",
         "patchSetId": 17
