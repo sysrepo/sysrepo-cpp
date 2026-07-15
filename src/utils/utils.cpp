@@ -6,17 +6,48 @@
  * SPDX-License-Identifier: BSD-3-Clause
 */
 
+#include <cstdlib>
+#include <memory>
 #include <sysrepo-cpp/Connection.hpp>
 #include <sysrepo-cpp/utils/exception.hpp>
 #include <sysrepo-cpp/utils/utils.hpp>
 extern "C" {
 #include <sysrepo.h>
+#include <sysrepo/subscribed_notifications.h>
 }
 #include "enum.hpp"
 #include "exception.hpp"
 #include "misc.hpp"
 
 namespace sysrepo {
+/**
+ * Converts an optional subscribed-notifications filter (either an XPath string or a subtree filter) to an XPath filter.
+ *
+ * Wraps `srsn_filter_subtree2xpath` for subtree filters.
+ */
+std::optional<std::string> constructXPathFilter(const std::optional<SubscribedNotificationsFilter>& filter)
+{
+    if (!filter) {
+        return std::nullopt;
+    }
+
+    if (std::holds_alternative<std::string>(*filter)) {
+        return std::get<std::string>(*filter);
+    }
+
+    auto node = std::get<libyang::DataNodeAny>(*filter);
+    auto filterTree = node.node();
+
+    if (!filterTree) {
+        return "/"; // select nothing, RFC 6241, 6.4.2
+    }
+
+    char* str;
+    auto res = srsn_filter_subtree2xpath(libyang::getRawNode(*filterTree), nullptr, &str);
+    std::unique_ptr<char, decltype([](auto* p) constexpr { std::free(p); })> strDeleter(str); // pass ownership of c-string to the deleter
+    throwIfError(res, "Unable to convert subtree filter to xpath");
+    return str;
+}
 /**
  * Wraps a session pointer without managing it. Use at your own risk.
  */

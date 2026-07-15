@@ -293,6 +293,68 @@ TEST_CASE("Dynamic subscriptions")
             REQUIRE_THROWS_WITH_AS(sub->terminate(), excMessage.c_str(), sysrepo::ErrorWithCode);
         }
 
+        DOCTEST_SUBCASE("Modify the XPath filter")
+        {
+            auto sub = sess.subscribeNotifications("/test_module:ping");
+
+            // only ping matches the original filter
+            CLIENT_SEND_NOTIFICATION(notificationPingWith1);
+            CLIENT_SEND_NOTIFICATION(notificationSilentPing);
+            REQUIRE_NOTIFICATION(sub, notificationPingWith1);
+            READ_NOTIFICATION_BLOCKING(sub);
+
+            // narrow the filter to silent-ping, ping is now filtered out by sysrepo
+            sub.modifyFilter("/test_module:silent-ping");
+
+            CLIENT_SEND_NOTIFICATION(notificationPingWith1);
+            CLIENT_SEND_NOTIFICATION(notificationSilentPing);
+            REQUIRE_NOTIFICATION(sub, notificationSilentPing);
+            READ_NOTIFICATION_BLOCKING(sub);
+
+            // remove the filter entirely, everything from the stream passes through now
+            sub.modifyFilter(std::nullopt);
+
+            CLIENT_SEND_NOTIFICATION(notificationPingWith1);
+            CLIENT_SEND_NOTIFICATION(notificationSilentPing);
+            REQUIRE_NOTIFICATION(sub, notificationPingWith1);
+            REQUIRE_NOTIFICATION(sub, notificationSilentPing);
+            READ_NOTIFICATION_BLOCKING(sub);
+            READ_NOTIFICATION_BLOCKING(sub);
+
+            sub.terminate();
+            REQUIRE_PIPE_HANGUP(sub);
+        }
+
+        DOCTEST_SUBCASE("Modify the stop time")
+        {
+            // subscribe with no stop time, the subscription would otherwise live forever
+            auto sub = sess.subscribeNotifications("/ietf-subscribed-notifications:subscription-terminated");
+            REQUIRE(!sub.replayStartTime());
+
+            auto stopTime = std::chrono::system_clock::now() + 200ms /* 200 ms should be enough to set up everything */;
+            sub.modifyStopTime(stopTime);
+
+            // wait until stop time and bit more
+            std::this_thread::sleep_until(stopTime + 100ms);
+
+            REQUIRE_NOTIFICATION(sub, SUBSCRIPTION_TERMINATED(sub));
+            READ_NOTIFICATION(sub);
+
+            REQUIRE_PIPE_HANGUP(sub);
+        }
+
+        DOCTEST_SUBCASE("Modifying a terminated subscription throws")
+        {
+            auto sub = std::make_unique<sysrepo::DynamicSubscription>(sess.subscribeNotifications("/test_module:*", std::nullopt));
+            sub->terminate();
+
+            const auto xpathExc = "Couldn't modify filter of yang-push subscription with id " + std::to_string(sub->subscriptionId()) + ": SR_ERR_NOT_FOUND";
+            REQUIRE_THROWS_WITH_AS(sub->modifyFilter("/test_module:ping"), xpathExc.c_str(), sysrepo::ErrorWithCode);
+
+            const auto stopTimeExc = "Couldn't modify stop time of yang-push subscription with id " + std::to_string(sub->subscriptionId()) + ": SR_ERR_NOT_FOUND";
+            REQUIRE_THROWS_WITH_AS(sub->modifyStopTime(std::chrono::system_clock::now() + 1s), stopTimeExc.c_str(), sysrepo::ErrorWithCode);
+        }
+
         DOCTEST_SUBCASE("Filtering")
         {
             std::optional<sysrepo::DynamicSubscription> sub;

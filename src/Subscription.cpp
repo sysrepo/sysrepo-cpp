@@ -528,6 +528,32 @@ void DynamicSubscription::Data::terminate(const std::optional<std::string>& reas
     m_terminated = true;
 }
 
+/** @brief Modifies the filter of the subscription.
+ *
+ * @param newFilter The new filter to use (an XPath string or a subtree filter), or std::nullopt to remove any previous filter.
+ *
+ * Wraps `srsn_modify_xpath_filter` (and `srsn_filter_subtree2xpath` for subtree filters).
+ */
+void DynamicSubscription::modifyFilter(const std::optional<SubscribedNotificationsFilter>& newFilter) const
+{
+    auto xpathFilter = constructXPathFilter(newFilter);
+    auto err = srsn_modify_xpath_filter(m_data->subId, xpathFilter ? xpathFilter->c_str() : nullptr);
+    throwIfError(err, "Couldn't modify filter of yang-push subscription with id " + std::to_string(m_data->subId));
+}
+
+/** @brief Modifies the stop time of the subscription.
+ *
+ * @param newStopTime The new stop time of the subscription, or std::nullopt to unset any previous stop time.
+ *
+ * Wraps `srsn_modify_stop_time`.
+ */
+void DynamicSubscription::modifyStopTime(const std::optional<NotificationTimeStamp>& newStopTime) const
+{
+    auto stopSpec = newStopTime ? std::optional{toTimespec(*newStopTime)} : std::nullopt;
+    auto err = srsn_modify_stop_time(m_data->subId, stopSpec ? &stopSpec.value() : nullptr);
+    throwIfError(err, "Couldn't modify stop time of yang-push subscription with id " + std::to_string(m_data->subId));
+}
+
 /** @brief An onOperGet callback for '/ietf-subscribed-notification:streams'.
  *
  * Wraps `srsn_oper_data_streams_cb`
