@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36dad189_5fba45a6",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-15T08:36:04Z",
+      "side": 1,
+      "message": "Given that the standard and the C library provides this in centiseconds, why not use that as the data type?\n\n(same below)",
+      "revId": "b6f56d4475d93a0b93232142bd069291fdbfff63",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfc05663_d8fb9c47",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-15T08:36:04Z",
+      "side": 1,
+      "message": "IMHO, it\u0027s worth adding an explanation to what this `count` refers. I just got back from a detour which took me through our code, while the situation (AFAIK) simply is that it\u0027s freeing the result of `srsn_oper_data_sub` and not `srsn_oper_data_subscriptions`, which means that it\u0027s holding info about a single subscription.",
+      "range": {
+        "startLine": 488,
+        "startChar": 108,
+        "endLine": 488,
+        "endChar": 109
+      },
+      "revId": "b6f56d4475d93a0b93232142bd069291fdbfff63",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    }
+  ]
+}
