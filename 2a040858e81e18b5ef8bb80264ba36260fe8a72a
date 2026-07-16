@@ -18,6 +18,24 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "145d59fe_c11a1a52",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-16T07:09:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ba0fa50_d2863ec3",
+      "revId": "2a040858e81e18b5ef8bb80264ba36260fe8a72a",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8591d607_1c5a0acf",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-07-15T08:08:09Z",
       "side": 1,
       "message": "Please remove this comment and all similar comments below. Saying, e.g., \"remove the modules\" before a call to a function that is called `removeModules` does not add value, it only adds noise.",
+      "revId": "2a040858e81e18b5ef8bb80264ba36260fe8a72a",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec890bf8_c140d744",
+        "filename": "tests/connection.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-16T07:09:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8591d607_1c5a0acf",
       "revId": "2a040858e81e18b5ef8bb80264ba36260fe8a72a",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }

@@ -189,6 +189,30 @@
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37a343f7_51a59e01",
+        "filename": "include/sysrepo-cpp/Enum.hpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2026-07-16T07:09:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41bda391_2548c5bd",
+      "range": {
+        "startLine": 213,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 2
+      },
+      "revId": "e56f2215f8b356064d18eddcbb34765502d4e59e",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e049140_e0bfabbf",
