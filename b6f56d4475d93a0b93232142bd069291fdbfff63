@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d19ec5a2_65a41a84",
+        "filename": "include/sysrepo-cpp/Subscription.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-07-16T12:28:07Z",
+      "side": 1,
+      "message": "Is it worth it? The C library uses ms too (wouldn\u0027t that be confusing?) and we would have to introduce new type in public header.",
+      "parentUuid": "36dad189_5fba45a6",
+      "revId": "b6f56d4475d93a0b93232142bd069291fdbfff63",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dfc05663_d8fb9c47",
         "filename": "src/Subscription.cpp",
         "patchSetId": 3
@@ -31,6 +49,30 @@
       "writtenOn": "2026-07-15T08:36:04Z",
       "side": 1,
       "message": "IMHO, it\u0027s worth adding an explanation to what this `count` refers. I just got back from a detour which took me through our code, while the situation (AFAIK) simply is that it\u0027s freeing the result of `srsn_oper_data_sub` and not `srsn_oper_data_subscriptions`, which means that it\u0027s holding info about a single subscription.",
+      "range": {
+        "startLine": 488,
+        "startChar": 108,
+        "endLine": 488,
+        "endChar": 109
+      },
+      "revId": "b6f56d4475d93a0b93232142bd069291fdbfff63",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86e4a512_c029b95e",
+        "filename": "src/Subscription.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1000070
+      },
+      "writtenOn": "2026-07-16T12:28:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfc05663_d8fb9c47",
       "range": {
         "startLine": 488,
         "startChar": 108,
