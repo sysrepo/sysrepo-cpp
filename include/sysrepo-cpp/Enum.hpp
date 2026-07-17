@@ -208,6 +208,14 @@ constexpr ConnectionFlags operator|(const ConnectionFlags a, const ConnectionFla
 }
 
 /**
+ * Wraps the force parameter for `sr_remove_modules`.
+ */
+enum class ModuleRemoval {
+    Default = 0,
+    WithDependencies = 1,
+};
+
+/**
  * @brief Wraps `sr_get_options_t`, which comprises `sr_get_flag_t` and `sr_get_oper_flag_t`.
  */
 enum class GetOptions : uint32_t {

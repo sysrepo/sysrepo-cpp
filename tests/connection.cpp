@@ -1,0 +1,86 @@
+#include <doctest/doctest.h>
+#include <sysrepo-cpp/utils/exception.hpp>
+#include <sysrepo-cpp/utils/utils.hpp>
+
+#include "tests/configure.cmake.h"
+
+using namespace std::literals;
+
+TEST_CASE("connection")
+{
+    sysrepo::setLogLevelStderr(sysrepo::LogLevel::Information);
+    std::optional<sysrepo::Connection> conn{std::in_place};
+    auto sess = conn->sessionStart();
+    sess.copyConfig(sysrepo::Datastore::Startup);
+    const auto leaf = "/test_module:leafInt32"s;
+
+    DOCTEST_SUBCASE("Connection::installModules, Connection::removeModules")
+    {
+        std::filesystem::path dir{CMAKE_CURRENT_SOURCE_DIR};
+        std::filesystem::path path = dir / "tests" / "test_module.yang";
+        std::string schema = R"(module dummy {
+                                  namespace "http://dummy.com";
+                                  prefix "dummy";
+                                  import test_module {
+                                    prefix "tm";
+                                  }
+                                  augment "/tm:popelnice" {
+                                    leaf dummy-augment-leaf {
+                                      type string;
+                                    }
+                                  }
+                                })";
+        std::vector<struct sysrepo::ModuleInstallation> modules;
+        std::vector<std::filesystem::path> searchDirs;
+        std::variant<std::monostate, std::filesystem::path, std::string> initData;
+        libyang::DataFormat format;
+        std::vector<std::string> toRemove;
+        sysrepo::ModuleRemoval opt;
+
+        DOCTEST_SUBCASE("One module, empty features, no initial data, one search directory")
+        {
+            modules = {{.schema = path}};
+            searchDirs = {dir};
+            format = libyang::DataFormat::Detect;
+            toRemove = {"test_module"};
+            opt = sysrepo::ModuleRemoval::Default;
+        }
+
+        DOCTEST_SUBCASE("Two modules, two features, initial data, two search directories")
+        {
+            modules = {{.schema = path, .features = {"dummy", "dummy2"}}, {.schema = schema}};
+            searchDirs = {
+                std::filesystem::path{"non/existing/dir"},
+                dir,
+                std::filesystem::path{"another/non/existing"}
+            };
+            initData = std::string("<leafInt32 xmlns=\"http://example.com\">2</leafInt32>");
+            format = libyang::DataFormat::XML;
+
+            // Should also remove dummy as a dependency
+            toRemove = {"test_module"};
+            opt = sysrepo::ModuleRemoval::WithDependencies;
+        }
+
+        // Check that it is actually gone!
+        REQUIRE_THROWS_WITH_AS(sess.getOneNode(leaf),
+                               "Session::getOneNode: Couldn't get '/test_module:leafInt32': SR_ERR_LY\n"
+                               " Unknown/non-implemented module \"test_module\". (SR_ERR_LY)",
+                               sysrepo::ErrorWithCode);
+
+        conn->installModules(modules, searchDirs, initData, format);
+
+        // Check that saving module data works
+        sess.setItem(leaf, "1");
+        sess.applyChanges();
+        REQUIRE(sess.getData(leaf));
+
+        conn->removeModules(toRemove, opt);
+
+        // Check that it is actually gone!
+        REQUIRE_THROWS_WITH_AS(sess.getOneNode(leaf),
+                               "Session::getOneNode: Couldn't get '/test_module:leafInt32': SR_ERR_LY\n"
+                               " Unknown/non-implemented module \"test_module\". (SR_ERR_LY)",
+                               sysrepo::ErrorWithCode);
+    }
+}
