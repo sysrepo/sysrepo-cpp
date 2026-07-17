@@ -541,6 +541,16 @@ SubscriptionState DynamicSubscription::subscriptionState() const
     return state;
 }
 
+/** @brief Increments the sent-notifications counter of this subscription.
+ *
+ * Wraps `srsn_notif_sent`.
+ */
+void DynamicSubscription::notifSent() const
+{
+    auto err = srsn_notif_sent(m_data->subId);
+    throwIfError(err, "Couldn't increment the sent notifications counter of subscription id " + std::to_string(m_data->subId));
+}
+
 /** @brief Terminates the subscription.
  *
  * Wraps `srsn_terminate`.

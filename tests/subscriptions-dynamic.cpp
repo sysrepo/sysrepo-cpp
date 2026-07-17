@@ -923,4 +923,16 @@ TEST_CASE("Dynamic subscriptions")
             REQUIRE_THROWS_AS(sub.subscriptionState(), sysrepo::ErrorWithCode);
         }
     }
+
+    DOCTEST_SUBCASE("Incrementing the sent-notifications counter")
+    {
+        auto sub = sess.subscribeNotifications("/test_module:*", "NETCONF");
+        REQUIRE(sub.subscriptionState().sentCount == 0);
+
+        sub.notifSent();
+        REQUIRE(sub.subscriptionState().sentCount == 1);
+
+        sub.terminate();
+        REQUIRE_THROWS_AS(sub.notifSent(), sysrepo::ErrorWithCode);
+    }
 }

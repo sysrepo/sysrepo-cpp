@@ -135,6 +135,7 @@ public:
     uint64_t subscriptionId() const;
     std::optional<NotificationTimeStamp> replayStartTime() const;
     SubscriptionState subscriptionState() const;
+    void notifSent() const;
     void processEvent(YangPushNotifCb cb) const;
     void terminate(const std::optional<std::string>& reason = std::nullopt);
 
