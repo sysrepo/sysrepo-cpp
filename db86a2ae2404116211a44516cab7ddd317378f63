@@ -16,6 +16,23 @@
       "message": "Am I missing something or is this PR still pending on an additional review?\nQuite frustrating not knowing why is going foward here.",
       "revId": "db86a2ae2404116211a44516cab7ddd317378f63",
       "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "655bfd06_3769f2ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000217
+      },
+      "writtenOn": "2026-07-21T14:11:00Z",
+      "side": 1,
+      "message": "I\u0027m giving up. Looks like contributions are not welcome.",
+      "revId": "db86a2ae2404116211a44516cab7ddd317378f63",
+      "serverId": "e32f8df8-3db0-4f76-a6c6-fe9d6e69dd68"
     }
   ],
   "submitRequirementResults": []
