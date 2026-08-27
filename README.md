@@ -8,8 +8,11 @@
 It uses RAII for automatic memory management.
 
 ## Dependencies
-- [sysrepo](https://github.com/sysrepo/sysrepo) - the `devel` branch (even for the `master` branch of *sysrepo-cpp*)
+- [sysrepo](https://github.com/sysrepo/sysrepo)
+  - for the minimal required version, check the [`CMakeLists.txt`](./CMakeLists.txt)
+  - during development, our `master` branch is CI-checked against the `devel` branch of *sysrepo*
 - [libyang-cpp](https://github.com/CESNET/libyang-cpp) - C++ bindings for *libyang*
+  - for the minimal required version, check the [`CMakeLists.txt`](./CMakeLists.txt)
 - C++23 compiler (e.g., GCC 13.x+, clang 16+)
 - CMake 3.22+
 - optionally for built-in tests, [Doctest](https://github.com/doctest/doctest/) as a C++ unit test framework
