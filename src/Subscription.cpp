@@ -675,6 +675,22 @@ void DynamicSubscription::modifyDampeningPeriod(const std::optional<std::chrono:
     throwIfError(err, "Couldn't modify dampening period of yang-push subscription with id " + std::to_string(m_data->subId));
 }
 
+/** @brief Resynchronizes a yang-push on-change subscription.
+ *
+ * @throws Error if this is not a yang-push on-change subscription.
+ *
+ * Wraps `srsn_yang_push_on_change_resync`.
+ */
+void DynamicSubscription::resyncOnChange() const
+{
+    if (m_data->type != DynamicSubscriptionType::YangPushOnChange) {
+        throw Error("Cannot resync: subscription with id " + std::to_string(m_data->subId) + " is not a yang-push on-change subscription");
+    }
+
+    auto err = srsn_yang_push_on_change_resync(m_data->subId);
+    throwIfError(err, "Couldn't resync yang-push on-change subscription with id " + std::to_string(m_data->subId));
+}
+
 /** @brief An onOperGet callback for '/ietf-subscribed-notification:streams'.
  *
  * Wraps `srsn_oper_data_streams_cb`

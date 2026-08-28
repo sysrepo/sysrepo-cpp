@@ -833,6 +833,58 @@ TEST_CASE("Dynamic subscriptions")
         REQUIRE_PIPE_HANGUP(sub);
     }
 
+    DOCTEST_SUBCASE("Resync a yang-push on-change subscription")
+    {
+        auto sub = sess.yangPushOnChange(std::nullopt, std::nullopt, sysrepo::SyncOnStart::No);
+
+        // no sync on start, so nothing is sent until the data actually change
+        client.setItem("/test_module:leafInt32", "123");
+        client.applyChanges();
+
+        REQUIRE_YANG_PUSH_UPDATE(sub, R"({
+  "ietf-yang-push:push-change-update": {
+    "datastore-changes": {
+      "yang-patch": {
+        "patch-id": "patch-1",
+        "edit": [
+          {
+            "edit-id": "edit-1",
+            "operation": "create",
+            "target": "/test_module:leafInt32",
+            "value": {
+              "test_module:leafInt32": 123
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+)");
+        READ_YANG_PUSH_UPDATE(sub);
+
+        // a resync pushes the complete datastore contents, not just a patch
+        sub.resyncOnChange();
+
+        REQUIRE_YANG_PUSH_UPDATE(sub, R"({
+  "ietf-yang-push:push-update": {
+    "datastore-contents": {
+      "test_module:leafInt32": 123,
+      "test_module:values": [
+        2,
+        3
+      ]
+    }
+  }
+}
+)");
+        READ_YANG_PUSH_UPDATE(sub);
+
+        sub.terminate();
+        REQUIRE_PIPE_HANGUP(sub);
+        REQUIRE_THROWS_AS(sub.resyncOnChange(), sysrepo::ErrorWithCode);
+    }
+
     DOCTEST_SUBCASE("Modifying the wrong subscription type throws")
     {
         auto periodic = sess.yangPushPeriodic(std::nullopt, 1000ms);
@@ -850,6 +902,10 @@ TEST_CASE("Dynamic subscriptions")
         // modifyDampeningPeriod is valid only for on-change subscriptions
         REQUIRE_THROWS_AS(periodic.modifyDampeningPeriod(100ms), sysrepo::Error);
         REQUIRE_THROWS_AS(subNotif.modifyDampeningPeriod(100ms), sysrepo::Error);
+
+        // resyncOnChange is valid only for on-change subscriptions
+        REQUIRE_THROWS_AS(periodic.resyncOnChange(), sysrepo::Error);
+        REQUIRE_THROWS_AS(subNotif.resyncOnChange(), sysrepo::Error);
 
         periodic.terminate();
         onChange.terminate();

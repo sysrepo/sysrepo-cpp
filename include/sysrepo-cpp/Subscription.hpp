@@ -144,6 +144,7 @@ public:
     void modifyStopTime(const std::optional<NotificationTimeStamp>& newStopTime) const;
     void modifyPeriod(std::chrono::milliseconds period, const std::optional<NotificationTimeStamp>& anchorTime = std::nullopt) const;
     void modifyDampeningPeriod(const std::optional<std::chrono::milliseconds>& dampeningPeriod) const;
+    void resyncOnChange() const;
 
 private:
     DynamicSubscription(sysrepo::Session sess, int fd, uint64_t subId, DynamicSubscriptionType type, const std::optional<NotificationTimeStamp>& replayStartTime = std::nullopt);
