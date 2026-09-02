@@ -550,7 +550,7 @@ TEST_CASE("Dynamic subscriptions")
             "edit-id": "edit-2",
             "operation": "insert",
             "target": "/test_module:values[.='5']",
-            "point": "/test_module:values[.='5'][.='3']",
+            "point": "/test_module:values[.='3']",
             "where": "after",
             "value": {
               "test_module:values": [

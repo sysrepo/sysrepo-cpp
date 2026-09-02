@@ -28,7 +28,7 @@ option(WITH_EXAMPLES "Build examples" ON)
 
 find_package(PkgConfig)
 pkg_check_modules(LIBYANG_CPP REQUIRED libyang-cpp>=11 IMPORTED_TARGET)
-pkg_check_modules(SYSREPO REQUIRED sysrepo>=5.2.12 IMPORTED_TARGET)
+pkg_check_modules(SYSREPO REQUIRED sysrepo>=5.2.17 IMPORTED_TARGET)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
