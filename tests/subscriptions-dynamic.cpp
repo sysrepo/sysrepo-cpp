@@ -71,6 +71,10 @@ auto REPLAY_COMPLETED(const auto& SUBSCRIPTION)
     REQUIRE(pipeStatus((SUBSCRIPTION).fd()) == PipeStatus::DataReady); \
     (SUBSCRIPTION).processEvent(cbYangPushUpdate);
 
+#define READ_YANG_PUSH_UPDATE_BLOCKING(SUBSCRIPTION)                         \
+    REQUIRE(pipeStatus((SUBSCRIPTION).fd(), 5000) == PipeStatus::DataReady); \
+    (SUBSCRIPTION).processEvent(cbYangPushUpdate);
+
 
 using namespace std::chrono_literals;
 
@@ -525,7 +529,7 @@ TEST_CASE("Dynamic subscriptions")
   }
 }
 )");
-            READ_YANG_PUSH_UPDATE(sub);
+            READ_YANG_PUSH_UPDATE_BLOCKING(sub);
 
             client.setItem("/test_module:leafInt32", "123");
             client.setItem("/test_module:values[.='5']", std::nullopt);
@@ -863,7 +867,8 @@ TEST_CASE("Dynamic subscriptions")
 )");
         READ_YANG_PUSH_UPDATE(sub);
 
-        // a resync pushes the complete datastore contents, not just a patch
+        // a resync pushes the complete datastore contents, not just a patch,
+        // and it does so asynchronously from a background thread
         sub.resyncOnChange();
 
         REQUIRE_YANG_PUSH_UPDATE(sub, R"({
@@ -878,7 +883,7 @@ TEST_CASE("Dynamic subscriptions")
   }
 }
 )");
-        READ_YANG_PUSH_UPDATE(sub);
+        READ_YANG_PUSH_UPDATE_BLOCKING(sub);
 
         sub.terminate();
         REQUIRE_PIPE_HANGUP(sub);
