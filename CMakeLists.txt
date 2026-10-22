@@ -19,7 +19,7 @@ add_custom_target(sysrepo-cpp-version-cmake
         cmake/ProjectGitVersionRunner.cmake
         )
 include(cmake/ProjectGitVersion.cmake)
-set(SYSREPO_CPP_PKG_VERSION "10")
+set(SYSREPO_CPP_PKG_VERSION "11")
 prepare_git_version(SYSREPO_CPP_VERSION ${SYSREPO_CPP_PKG_VERSION})
 
 find_package(Doxygen)
