@@ -229,6 +229,7 @@ enum class GetOptions : uint32_t {
     OperNoRunningCached = 0x40, /**< SR_OPER_NO_RUN_CACHED */
     OperPushDontAddNonPresenceContainers = 0x80, /**< SR_OPER_NO_PUSH_NP_CONT */
     NoFilter = 0x010000, /**< SR_GET_NO_FILTER */
+    WithLastModification = 0x020000, /**< SR_GET_WITH_LAST_MODIF */
 };
 
 constexpr GetOptions operator|(const GetOptions a, const GetOptions b)
