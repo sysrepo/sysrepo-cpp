@@ -177,6 +177,7 @@ static_assert(static_cast<GetOptions>(SR_OPER_NO_POLL_CACHED) == GetOptions::Ope
 static_assert(static_cast<GetOptions>(SR_OPER_NO_RUN_CACHED) == GetOptions::OperNoRunningCached);
 static_assert(static_cast<GetOptions>(SR_OPER_NO_PUSH_NP_CONT) == GetOptions::OperPushDontAddNonPresenceContainers);
 static_assert(static_cast<GetOptions>(SR_GET_NO_FILTER) == GetOptions::NoFilter);
+static_assert(static_cast<GetOptions>(SR_GET_WITH_LAST_MODIF) == GetOptions::WithLastModification);
 
 // upstream project provides no dedicated type for these
 constexpr uint32_t toGetOptions(const GetOptions opts)

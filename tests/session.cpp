@@ -6,7 +6,10 @@
  * SPDX-License-Identifier: BSD-3-Clause
 */
 
+#include <chrono>
+#include <ctime>
 #include <doctest/doctest.h>
+#include <libyang-cpp/Time.hpp>
 #include <optional>
 #include <sysrepo-cpp/Subscription.hpp>
 #include <sysrepo-cpp/utils/utils.hpp>
@@ -205,6 +208,14 @@ TEST_CASE("session")
                 REQUIRE(!data->findPath("/test_module:stateLeaf"));
                 REQUIRE(data->findPath(leaf));
             }
+
+            DOCTEST_SUBCASE("Last modification timestamp not supported")
+            {
+                REQUIRE_THROWS_WITH_AS(sess.getData("/test_module:*", 0, sysrepo::GetOptions::WithLastModification),
+                                       "Session::getData: Couldn't get '/test_module:*': SR_ERR_INVAL_ARG\n"
+                                       " Invalid arguments for function \"sr_get_data\". (SR_ERR_INVAL_ARG)",
+                                       sysrepo::ErrorWithCode);
+            }
         }
 
         DOCTEST_SUBCASE("options and running ds")
@@ -219,6 +230,64 @@ TEST_CASE("session")
                                    "Session::getData: Couldn't get '/test_module:*': SR_ERR_INVAL_ARG\n"
                                    " Invalid arguments for function \"sr_get_data\". (SR_ERR_INVAL_ARG)",
                                    sysrepo::ErrorWithCode);
+        }
+
+        DOCTEST_SUBCASE("last modification timestamp")
+        {
+            auto lastModif = [](const std::optional<libyang::DataNode>& node) -> std::optional<std::string> {
+                REQUIRE(node);
+                for (const auto& meta : node->meta()) {
+                    if (meta.module().name() == "sysrepo" && meta.name() == "last-modif") {
+                        return meta.valueStr();
+                    }
+                }
+                return std::nullopt;
+            };
+
+            sess.setItem(leaf, "123");
+            sess.setItem("/test_module:popelnice/s", "foo");
+            sess.setItem("/test_module:popelnice/content/trash[name='c++']/cont/l", "hi");
+
+            // The timestamp is the file's mtime. Read the same clock so that the mtime cannot come out earlier.
+            auto coarseNow = [] {
+                timespec ts;
+                clock_gettime(CLOCK_REALTIME_COARSE, &ts);
+                auto sinceEpoch = std::chrono::seconds{ts.tv_sec} + std::chrono::nanoseconds{ts.tv_nsec};
+                return std::chrono::system_clock::time_point{std::chrono::duration_cast<std::chrono::system_clock::duration>(sinceEpoch)};
+            };
+
+            auto before = coarseNow();
+            sess.applyChanges();
+            auto after = std::chrono::system_clock::now();
+
+            DOCTEST_SUBCASE("not requested")
+            {
+                auto data = sess.getData("/test_module:*");
+                REQUIRE(data);
+
+                REQUIRE(!lastModif(data->findPath("/test_module:leafInt32")));
+                REQUIRE(!lastModif(data->findPath("/test_module:leafWithDefault")));
+                REQUIRE(!lastModif(data->findPath("/test_module:popelnice")));
+                REQUIRE(!lastModif(data->findPath("/test_module:popelnice/s")));
+                REQUIRE(!lastModif(data->findPath("/test_module:popelnice/content/trash[name='c++']/cont/l")));
+            }
+
+            DOCTEST_SUBCASE("requested")
+            {
+                auto data = sess.getData("/test_module:*", 0, sysrepo::GetOptions::WithLastModification);
+                REQUIRE(data);
+
+                auto timestamp = lastModif(data->findPath("/test_module:leafInt32"));
+                REQUIRE(timestamp);
+                REQUIRE(lastModif(data->findPath("/test_module:leafWithDefault")) == timestamp);
+                REQUIRE(lastModif(data->findPath("/test_module:popelnice")) == timestamp);
+                REQUIRE(!lastModif(data->findPath("/test_module:popelnice/s")));
+                REQUIRE(!lastModif(data->findPath("/test_module:popelnice/content/trash[name='c++']/cont/l")));
+
+                auto modifTime = libyang::fromYangTimeFormat<std::chrono::system_clock>(*timestamp);
+                REQUIRE(modifTime >= before);
+                REQUIRE(modifTime <= after);
+            }
         }
     }
 
